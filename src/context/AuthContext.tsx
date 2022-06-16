@@ -66,32 +66,20 @@ const AuthProvider = ({ children }: Props) => {
       const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
-        // await axios
-        //   .get(authConfig.meEndpoint, {
-        //     headers: {
-        //       Authorization: storedToken
-        //     }
-        //   })
-        //   .then(async response => {
-        //     setLoading(false)
-        //     setUser({ ...response.data.userData })
-        //   })
-        //   .catch(() => {
-        //     localStorage.removeItem('userData')
-        //     localStorage.removeItem('refreshToken')
-        //     localStorage.removeItem('accessToken')
-        //     setUser(null)
-        //     setLoading(false)
-        //   })
+        const userData = window.localStorage.getItem('userData')
+        if (userData) {
+          setUser({ ...JSON.parse(userData) })
+          setLoading(false)
+        }
       } else {
         setLoading(false)
+        router.push('/login')
       }
     }
     initAuth()
   }, [])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
-
     const user = new CognitoUser({
       Username: params.email,
       Pool: UserPool
@@ -108,20 +96,20 @@ const AuthProvider = ({ children }: Props) => {
       onSuccess: (data) => {
         const userClaims = JSON.parse(JSON.stringify(data));
         console.log(userClaims);
-        const userData : UserDataType = {
+        const userData: UserDataType = {
           id: 1,
           email: userClaims.idToken.payload.email,
           username: userClaims.idToken.payload.email,
-          password : null,
+          password: params.password,
           companyname: userClaims.idToken.payload["custom:companyname"],
           avatar: null,
           fullName: userClaims.idToken.payload["custom:fullname"],
-          role: userClaims.idToken.payload["custom:rolename"]
+          role: 'admin'
         }
         //
-         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.accessToken.jwtToken)
-         setUser({ ...userData })
-         window.localStorage.setItem('userData', JSON.stringify(userData))
+        window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.accessToken.jwtToken)
+        setUser({ ...userData })
+        window.localStorage.setItem('userData', JSON.stringify(userData))
       },
       onFailure: (err) => {
         if (errorCallback) errorCallback({ 'Message': err.message })
@@ -179,19 +167,19 @@ const AuthProvider = ({ children }: Props) => {
   }
 
   const handleConfirmUser = (params: ConfirmUserParams, errorCallback?: ErrCallbackType) => {
-    
+
     const user = new CognitoUser({
       Username: params.email,
       Pool: UserPool
     });
-    user.confirmRegistration(params.code, true, function(err, result) {
+    user.confirmRegistration(params.code, true, function (err, result) {
       if (err) {
         if (errorCallback) errorCallback({ 'Message': err.message })
       }
       else {
-        if(result === "SUCCESS"){
-          router.push('/login' )
-        }else{
+        if (result === "SUCCESS") {
+          router.push('/login')
+        } else {
 
         }
       }
@@ -199,13 +187,13 @@ const AuthProvider = ({ children }: Props) => {
   }
 
   const handleResendCode = (params: ResendCodeParams, errorCallback?: ErrCallbackType) => {
-    
+
     const user = new CognitoUser({
       Username: params.email,
       Pool: UserPool
     });
 
-    user.resendConfirmationCode(function(err, result) {
+    user.resendConfirmationCode(function (err, result) {
       if (err) {
         if (errorCallback) errorCallback({ 'Message': err.message })
       }
@@ -243,10 +231,10 @@ const AuthProvider = ({ children }: Props) => {
     login: handleLogin,
     logout: handleLogout,
     register: handleRegister,
-    confirmUser : handleConfirmUser,
+    confirmUser: handleConfirmUser,
     forgotPassword: handleForgotPassword,
     confirmPassword: handleConfirmPassword,
-    resendCode : handleResendCode,
+    resendCode: handleResendCode,
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
