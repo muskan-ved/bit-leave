@@ -4,7 +4,6 @@ import { ReactNode, SetStateAction, SyntheticEvent, useState } from 'react'
 import OtpInput from "react-otp-input";
 // ** Next Imports
 import Link from 'next/link'
-
 // ** MUI Components
 import MuiLink from '@mui/material/Link'
 import Box, { BoxProps } from '@mui/material/Box'
@@ -29,6 +28,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
+import { string } from 'yup/lib/locale';
 
 // Styled Components
 const UserConfirmationIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -73,32 +73,35 @@ const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: { marginTop: theme.spacing(8) }
 }))
 
+const defaultValues = {
+  email: '',
+  code: '',
+  apiErrors: ''
+}
+
+
 const ConfirmUser = () => {
   // ** Hooks
   const theme = useTheme()
   const { settings } = useSettings()
   const auth = useAuth()
-  const router = useRouter()
-
+  
   // ** Vars
   const { skin } = settings
-  const userEmail= window.localStorage.getItem('userEmail');
+  //const userEmail= window.localStorage.getItem('userEmail');
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
-  const imageSource =
-    skin === 'bordered' ? 'bit.leave' : 'bit.leave'
+  const imageSource = 
+   skin === 'bordered' ? 'bit.leave' : 'bit.leave'
   const [code, setCode] = useState("");
   const handleChange = (code: SetStateAction<string>) => setCode(code);
 
-  const defaultValues = {
-    apiErrors: ''
-  }
   const schema = yup.object().shape({
     code: yup.string().min(6).required(),
     email: yup.string().email().required()
   })
+
   const {
     setError,
-    handleSubmit,
     formState: { errors }
   } = useForm({
     defaultValues,
@@ -107,11 +110,29 @@ const ConfirmUser = () => {
   })
 
 
-  const onSubmit =() => {
+  const router = useRouter()
+
+  const {
+   query: { emailId }
+  } = router
+
+  const props = {
+   emailId
+  }
+
+ const userEmail = props.emailId 
+ 
+
+  const handleSubmit =() => {
+    
+    setCode(() => '')
+    
     if(userEmail != null)
     {
-      const email = userEmail
-      console.log(userEmail)
+      const email = userEmail as string;
+      
+      if(email != null)
+      {
       auth.confirmUser({ email, code }, err => {
         if(err.Message)
       {
@@ -121,6 +142,7 @@ const ConfirmUser = () => {
         })
       }
        })
+      }
     }
     else{
       router.push('/login') 
@@ -128,22 +150,23 @@ const ConfirmUser = () => {
   }
 
     const handleResend =() => {
-    //   if(userEmail != null)
-    //   {
-    //   const email = userEmail
-    //   auth.resendCode({ email }, err => {
-    //     if(err.Message)
-    //   {
-    //     setError('apiErrors', {
-    //       type: 'manual',
-    //       message: err.Message
-    //     })
-    //   }
-    //    })
-    //   }
-    //   else{
-    //     router.push('/login')
-    //   }
+      setCode(() => '')
+      if(userEmail != null)
+      {
+      const email = userEmail as string
+      auth.resendCode({ email }, err => {
+        if(err.Message)
+      {
+        setError('apiErrors', {
+          type: 'manual',
+          message: err.Message
+        })
+      }
+       })
+      }
+      else{
+        router.push('/login')
+      }
     }
   return (
     <Box className='content-right'>
@@ -171,11 +194,11 @@ const ConfirmUser = () => {
         >
           <BoxWrapper>
             <Box sx={{ mb: 6 }}>
-              <TypographyStyled variant='h5' sx={{mb: 6}}>User Confirmation</TypographyStyled>
+              <TypographyStyled variant='h5'>User Confirmation</TypographyStyled>
+              <Typography variant='body2' sx={{mb:6}}>Please enter your verification code for user confirmation.</Typography>
               {errors.apiErrors && <FormHelperText sx={{ color: 'error.main'}}>{errors.apiErrors.message}</FormHelperText>}
             </Box>
            
-      
       <OtpInput
         value={code}
         onChange={handleChange}
@@ -200,7 +223,7 @@ const ConfirmUser = () => {
       />
               <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>    
                 <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7, mt: 7 }}
-                onClick={handleSubmit(onSubmit)}>Verify</Button>
+                onClick={handleSubmit}>Verify</Button>
               </Typography>
               <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Link passHref href='/login'>
@@ -215,7 +238,6 @@ const ConfirmUser = () => {
 
                 <Button  sx={{ml: 30}} onClick={handleResend}>Resend Code</Button>
               </Typography>
-             
           </BoxWrapper>
         </Box>
       </RightWrapper>
@@ -227,4 +249,7 @@ ConfirmUser.guestGuard = true
 ConfirmUser.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
 export default ConfirmUser
+
+
+
 

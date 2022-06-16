@@ -11,7 +11,7 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ErrCallbackType, UserDataType } from './types'
+import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams, ErrCallbackType, UserDataType } from './types'
 
 //Cognito Integration
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
@@ -40,7 +40,8 @@ const defaultProvider: AuthValuesType = {
   register: () => Promise.resolve(),
   confirmUser: () => Promise.resolve(),
   forgotPassword: () => Promise.resolve(),
-  confirmPassword: () => Promise.resolve()
+  confirmPassword: () => Promise.resolve(),
+  resendCode: () => Promise.resolve(),
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -107,27 +108,26 @@ const AuthProvider = ({ children }: Props) => {
       onSuccess: (data) => {
         const userClaims = JSON.parse(JSON.stringify(data));
         console.log(userClaims);
+        const userData : UserDataType = {
+          id: 1,
+          email: userClaims.idToken.payload.email,
+          username: userClaims.idToken.payload.email,
+          password : null,
+          companyname: userClaims.idToken.payload["custom:companyname"],
+          avatar: null,
+          fullName: userClaims.idToken.payload["custom:fullname"],
+          role: userClaims.idToken.payload["custom:rolename"]
+        }
         //
-        // const userData = {
-        //   id: 1,
-        //   email: params.email,
-        //   password: params.password,
-        //   username: params.email,
-        //   companyname: '',
-        //   avatar: null,
-        //   fullName: '',
-        //   role: 'admin'
-        // }
-        // //
-        // window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.accessToken.jwtToken)
-        // setUser({ ...userData })
-        // window.localStorage.setItem('userData', JSON.stringify(userData))
+         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.accessToken.jwtToken)
+         setUser({ ...userData })
+         window.localStorage.setItem('userData', JSON.stringify(userData))
       },
       onFailure: (err) => {
         if (errorCallback) errorCallback({ 'Message': err.message })
       },
       newPasswordRequired: (data) => {
-        console.log("newPasswordrequired: ", data);
+        if (errorCallback) errorCallback({ 'Message': data.message })
       },
     });
   }
@@ -145,7 +145,6 @@ const AuthProvider = ({ children }: Props) => {
   const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
 
     //Check Company Exists
-
     var attributeList = [];
     //
     var fullname = {
@@ -168,8 +167,13 @@ const AuthProvider = ({ children }: Props) => {
         if (errorCallback) errorCallback({ 'Message': err.message })
       }
       else {
-        //Add Organisation and User to DB
-        handleLogin({ email: params.email, password: params.password })
+        const emailId = params.email
+        router.push({
+          pathname: '/confirm-user',
+          query: {
+            emailId
+          }
+        })
       }
     })
   }
@@ -190,6 +194,20 @@ const AuthProvider = ({ children }: Props) => {
         }else{
 
         }
+      }
+    });
+  }
+
+  const handleResendCode = (params: ResendCodeParams, errorCallback?: ErrCallbackType) => {
+    
+    const user = new CognitoUser({
+      Username: params.email,
+      Pool: UserPool
+    });
+
+    user.resendConfirmationCode(function(err, result) {
+      if (err) {
+        if (errorCallback) errorCallback({ 'Message': err.message })
       }
     });
   }
@@ -227,7 +245,8 @@ const AuthProvider = ({ children }: Props) => {
     register: handleRegister,
     confirmUser : handleConfirmUser,
     forgotPassword: handleForgotPassword,
-    confirmPassword: handleConfirmPassword
+    confirmPassword: handleConfirmPassword,
+    resendCode : handleResendCode,
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

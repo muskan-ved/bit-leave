@@ -19,13 +19,17 @@ export type ConfirmUserParams = {
   code : string
 }
 
+export type ResendCodeParams = {
+  email: string 
+}
+
 export type UserDataType = {
   id: number
   role: string
   email: string
   fullName: string
   username: string
-  password: string
+  password: string | null
   companyname: string
   avatar?: string | null
 }
@@ -44,4 +48,5 @@ export type AuthValuesType = {
   confirmUser : (params: ConfirmUserParams, errorCallback?: ErrCallbackType) => void
   forgotPassword : (userName: string, errorCallback?: ErrCallbackType) => void
   confirmPassword : (params: RegisterParams, errorCallback?: ErrCallbackType) => void
+  resendCode : (params: ResendCodeParams, errorCallback?: ErrCallbackType) => void
 }
