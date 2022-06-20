@@ -11,7 +11,7 @@ import axios from 'axios'
 import authConfig from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams, ErrCallbackType, UserDataType } from './types'
+import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams,ConfirmPasswordUserParams, ErrCallbackType, UserDataType } from './types'
 
 //Cognito Integration
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
@@ -42,6 +42,7 @@ const defaultProvider: AuthValuesType = {
   forgotPassword: () => Promise.resolve(),
   confirmPassword: () => Promise.resolve(),
   resendCode: () => Promise.resolve(),
+  confirmUserPassword: () => Promise.resolve(),
 }
 
 const AuthContext = createContext(defaultProvider)
@@ -132,38 +133,48 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
 
-    //Check Company Exists
-    var attributeList = [];
-    //
-    var fullname = {
-      Name: 'custom:fullname',
-      Value: params.username,
-    };
-    var companyname = {
-      Name: 'custom:companyname',
-      Value: params.companyname
-    };
-    var role = {
-      Name: 'custom:rolename',
-      Value: 'Admin'
-    }
-    attributeList.push(new CognitoUserAttribute(fullname));
-    attributeList.push(new CognitoUserAttribute(companyname));
-    attributeList.push(new CognitoUserAttribute(role));
-    UserPool.signUp(params.email, params.password, attributeList, [], (err, result) => {
-      if (err) {
-        if (errorCallback) errorCallback({ 'Message': err.message })
-      }
-      else {
-        const emailId = params.email
-        router.push({
-          pathname: '/confirm-user',
-          query: {
-            emailId
+    axios
+      .get(authConfig.apiBaseEndpoint + 'checkorganisations', {
+        params: { name: params.companyname }
+      })
+      .then(res => {
+        if (res.data.exists) {
+          if (errorCallback)
+            return errorCallback({ 'Message': 'Organisation already exists' })
+        }
+
+        var attributeList = [];
+        var fullname = {
+          Name: 'custom:fullname',
+          Value: params.username,
+        };
+        var companyname = {
+          Name: 'custom:companyname',
+          Value: params.companyname
+        };
+        var role = {
+          Name: 'custom:rolename',
+          Value: 'admin' /*Only admins can sign an organisation*/
+        }
+        attributeList.push(new CognitoUserAttribute(fullname));
+        attributeList.push(new CognitoUserAttribute(companyname));
+        attributeList.push(new CognitoUserAttribute(role));
+        UserPool.signUp(params.email, params.password, attributeList, [], (err, result) => {
+          if (err) {
+            if (errorCallback) errorCallback({ 'Message': err.message })
+          }
+          else {
+            const emailId = params.email
+            router.push({
+              pathname: '/confirm-user',
+              query: {
+                emailId
+              }
+            })
           }
         })
-      }
-    })
+      })
+      .catch((err: { [key: string]: string }) => (errorCallback ? errorCallback({ 'Message': err.message }) : null))
   }
 
   const handleConfirmUser = (params: ConfirmUserParams, errorCallback?: ErrCallbackType) => {
@@ -200,20 +211,61 @@ const AuthProvider = ({ children }: Props) => {
     });
   }
 
-  const handleForgotPassword = (userName: string, errorCallback?: ErrCallbackType) => {
+  const handleForgotPassword = (params: ResendCodeParams, errorCallback?: ErrCallbackType) => {
     const user = new CognitoUser({
-      Username: userName,
+      Username: params.email,
       Pool: UserPool
     });
 
     user.forgotPassword({
       onSuccess: (data) => {
-        console.log(data)
+        const emailId = params.email
+        router.push({
+          pathname: '/confirm-password',
+          query: {
+            emailId
+          }
+        })
       },
       onFailure: (err) => {
-        console.log('ERR:', err)
+        if (err) {
+          if (errorCallback) errorCallback({ 'Message': err.message })
+        }
       },
     })
+  }
+
+  const handleConfirmUserPassword = (params: ConfirmPasswordUserParams, errorCallback?: ErrCallbackType) => {
+    
+    const {
+     query: { emailId }
+    } = router
+  
+    const props = {
+     emailId
+    }
+
+   const userEmail = props.emailId 
+   // const userEmail= window.localStorage.getItem("userEmail")  
+     if(userEmail!= null){
+        const user = new CognitoUser({
+        Username: userEmail as string,
+        Pool: UserPool
+      });
+
+      user.confirmPassword(params.code, params.password, {
+            onFailure(err) {
+              if (err) {
+                if (errorCallback) errorCallback({ 'Message': err.message })
+              }
+              router.push('/forgot-password');
+            },
+            onSuccess() {
+              router.push('/login');
+                resolve();
+            },
+        });
+      }
   }
 
   const handleConfirmPassword = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
@@ -235,6 +287,7 @@ const AuthProvider = ({ children }: Props) => {
     forgotPassword: handleForgotPassword,
     confirmPassword: handleConfirmPassword,
     resendCode: handleResendCode,
+    confirmUserPassword : handleConfirmUserPassword
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

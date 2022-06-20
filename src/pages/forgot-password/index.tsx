@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, SyntheticEvent } from 'react'
+import { ReactNode, SyntheticEvent, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -12,6 +12,8 @@ import Box, { BoxProps } from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
+import Alert from '@mui/material/Alert'
+import { Divider } from '@mui/material';
 
 // ** Icons Imports
 import ChevronLeft from 'mdi-material-ui/ChevronLeft'
@@ -28,6 +30,10 @@ import { useAuth } from 'src/hooks/useAuth'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import { FormControl, FormHelperText } from '@mui/material'
+import { Controller, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 
 // Styled Components
 const ForgotPasswordIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -78,15 +84,54 @@ const ForgotPassword = () => {
   const theme = useTheme()
   const { settings } = useSettings()
   const auth = useAuth()
-
+  const [email, setEmail] = useState('');
   // ** Vars
   const { skin } = settings
+  window.localStorage.setItem("userEmail", "")
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
-  const handleSubmit = (e: SyntheticEvent) => {
-    e.preventDefault()
-    //
-    auth.forgotPassword('kushalvaghani@gmail.com');
+  interface FormData {
+    email: string
+    apiErrors: string
+  }
+
+  const schema = yup.object().shape({
+    email: yup.string().email().required()
+  })
+
+  const defaultValues = {
+    email: '',
+    apiErrors: ''
+  }
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues,
+    mode: 'onBlur',
+    resolver: yupResolver(schema)
+  })
+
+
+  const onSubmit = (data: FormData) => {
+    const { email } = data
+    auth.forgotPassword({ email }, err => {
+      if (err.email) {
+        setError('email', {
+          type: 'manual',
+          message: err.email
+        })
+      }
+      if (err.Message) {
+        setError('apiErrors', {
+          type: 'manual',
+          message: err.Message
+        })
+      }
+    })
   }
 
   const imageSource =
@@ -122,9 +167,34 @@ const ForgotPassword = () => {
               <Typography variant='body2'>
                 Enter your email and we&prime;ll send you instructions to reset your password
               </Typography>
+
+              {errors.apiErrors && <Alert severity='error'>{errors.apiErrors.message}</Alert>}
+            <Divider sx={{ mt: 5, mb: 7.5, '& .MuiDivider-wrapper': { px: 4 } }}></Divider>
+
             </Box>
-            <form noValidate autoComplete='off' onSubmit={handleSubmit}>
-              <TextField autoFocus type='email' label='Email' sx={{ display: 'flex', mb: 4 }} />
+            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+              <FormControl fullWidth sx={{ mb: 4 }}>
+                <Controller
+                  name='email'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <TextField
+                      autoFocus
+                      label='Email'
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      error={Boolean(errors.email)}
+                      placeholder='john@mycompany.com'
+                    />
+                  )}
+                />
+                {errors.apiErrors && <Alert severity='error'>{errors.apiErrors.message}</Alert>}
+                <Divider sx={{ mt: 5, mb: 7.5, '& .MuiDivider-wrapper': { px: 4 } }}></Divider>
+              </FormControl>
+              {/* <TextField autoFocus id = 'email' type='email' label='Email' sx={{ display: 'flex', mb: 4 }}  onChange={event => setEmail(event.target.value)}
+          value={email}/> */}
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 5.25 }}>
                 Send reset link
               </Button>
@@ -151,3 +221,4 @@ ForgotPassword.guestGuard = true
 ForgotPassword.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
 
 export default ForgotPassword
+
