@@ -1,12 +1,9 @@
 // ** React Imports
 import { useState, ReactNode } from 'react';
 
-// ** Next Imports
-import Link from 'next/link'
 
 // ** MUI Components
 import Alert from '@mui/material/Alert'
-import MuiLink from '@mui/material/Link'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'
@@ -19,8 +16,8 @@ import { styled, useTheme } from '@mui/material/styles'
 import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import Typography, { TypographyProps } from '@mui/material/Typography'
-import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
 import { Divider } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton'
 
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
@@ -33,22 +30,19 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
-import useBgColor from 'src/@core/hooks/useBgColor'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
-// ** Configs
-import themeConfig from 'src/configs/themeConfig'
+
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
-import { useRouter } from 'next/router';
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  padding: theme.spacing(20),
+  padding: theme.spacing(50),
   paddingRight: '0 !important',
   [theme.breakpoints.down('lg')]: {
     padding: theme.spacing(10)
@@ -89,12 +83,12 @@ const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: { marginTop: theme.spacing(8) }
 }))
 
-const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ theme }) => ({
-  '& .MuiFormControlLabel-label': {
-    fontSize: '0.875rem',
-    color: theme.palette.text.secondary
-  }
-}))
+// const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ theme }) => ({
+//   '& .MuiFormControlLabel-label': {
+//     fontSize: '0.875rem',
+//     color: theme.palette.text.secondary
+//   }
+// }))
 
 const schema = yup.object().shape({
   code: yup.string().min(6).required(),
@@ -115,11 +109,13 @@ interface FormData {
 
 const ConfirmPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   // ** Hooks
   const auth = useAuth()
   const theme = useTheme()
-  const bgClasses = useBgColor()
+
+  /*const bgClasses = useBgColor()*/
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -139,6 +135,7 @@ const ConfirmPassword = () => {
 
   const onSubmit = (data: FormData) => {
      const { code, password } = data
+     setIsProcessing(true);
      auth.confirmUserPassword({ code, password }, err => {
       if(err.Message)
       {
@@ -147,10 +144,7 @@ const ConfirmPassword = () => {
           message: err.Message
         })
       }
-    //  setError('code', {
-    //    type: 'manual',
-    //     message: 'Email or Password is invalid'
-    //   })
+      setIsProcessing(false);
     })
   }
 
@@ -159,7 +153,7 @@ const ConfirmPassword = () => {
   return (
     <Box className='content-right'>
       {!hidden ? (
-        <Box sx={{ flex: 0.8, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
+        <Box sx={{ flex: 1.0, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
           <LoginIllustrationWrapper>
             <LoginIllustration
               alt='login-illustration'

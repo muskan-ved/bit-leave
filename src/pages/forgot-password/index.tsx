@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, SyntheticEvent, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -14,6 +14,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import { Divider } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // ** Icons Imports
 import ChevronLeft from 'mdi-material-ui/ChevronLeft'
@@ -30,14 +31,14 @@ import { useAuth } from 'src/hooks/useAuth'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
-import { FormControl, FormHelperText } from '@mui/material'
+import { FormControl } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 // Styled Components
 const ForgotPasswordIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  padding: theme.spacing(20),
+  padding: theme.spacing(50),
   paddingRight: '0 !important',
   [theme.breakpoints.down('lg')]: {
     padding: theme.spacing(10)
@@ -84,7 +85,8 @@ const ForgotPassword = () => {
   const theme = useTheme()
   const { settings } = useSettings()
   const auth = useAuth()
-  const [email, setEmail] = useState('');
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
+
   // ** Vars
   const { skin } = settings
   window.localStorage.setItem("userEmail", "")
@@ -118,6 +120,7 @@ const ForgotPassword = () => {
 
   const onSubmit = (data: FormData) => {
     const { email } = data
+    setIsProcessing(true)
     auth.forgotPassword({ email }, err => {
       if (err.email) {
         setError('email', {
@@ -131,6 +134,7 @@ const ForgotPassword = () => {
           message: err.Message
         })
       }
+      setIsProcessing(false)
     })
   }
 
@@ -140,7 +144,7 @@ const ForgotPassword = () => {
   return (
     <Box className='content-right'>
       {!hidden ? (
-        <Box sx={{ flex: 0.8, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
+        <Box sx={{ flex: 1.0, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
           <ForgotPasswordIllustrationWrapper>
             <ForgotPasswordIllustration
               alt='forgot-password-illustration'
@@ -195,9 +199,9 @@ const ForgotPassword = () => {
               </FormControl>
               {/* <TextField autoFocus id = 'email' type='email' label='Email' sx={{ display: 'flex', mb: 4 }}  onChange={event => setEmail(event.target.value)}
           value={email}/> */}
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 5.25 }}>
+              <LoadingButton loading={isProcessing} fullWidth size='large' type='submit' variant='contained' sx={{ mb: 5.25 }}>
                 Send reset link
-              </Button>
+              </LoadingButton>
               <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Link passHref href='/login'>
                   <Typography

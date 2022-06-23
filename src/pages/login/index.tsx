@@ -22,6 +22,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
 import { Divider } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
@@ -34,7 +35,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
-import useBgColor from 'src/@core/hooks/useBgColor'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Configs
@@ -48,8 +48,9 @@ import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  padding: theme.spacing(20),
-  paddingRight: '0 !important',
+  padding: theme.spacing(50),
+  width: '500px',
+  paddingRight: '0 !important', 
   [theme.breakpoints.down('lg')]: {
     padding: theme.spacing(10)
   }
@@ -57,6 +58,7 @@ const LoginIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 
 const LoginIllustration = styled('img')(({ theme }) => ({
   maxWidth: '48rem',
+  alignContent: 'centre',
   [theme.breakpoints.down('xl')]: {
     maxWidth: '38rem'
   },
@@ -115,11 +117,14 @@ interface FormData {
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   // ** Hooks
   const auth = useAuth()
   const theme = useTheme()
-  const bgClasses = useBgColor()
+
+
+  /*const bgClasses = useBgColor()*/
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
@@ -138,6 +143,7 @@ const LoginPage = () => {
   })
 
   const onSubmit = (data: FormData) => {
+    setIsProcessing(true);
      const { email, password } = data
      auth.login({ email, password }, err => {
       if(err.email)
@@ -155,7 +161,7 @@ const LoginPage = () => {
           message: err.Message
         })
       }
-
+      setIsProcessing(false);
     })
   }
 
@@ -164,7 +170,7 @@ const LoginPage = () => {
   return (
     <Box className='content-right'>
       {!hidden ? (
-        <Box sx={{ flex: 0.8, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
+        <Box sx={{ flex: 1.0, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
           <LoginIllustrationWrapper>
             <LoginIllustration
               alt='login-illustration'
@@ -175,7 +181,7 @@ const LoginPage = () => {
           <FooterIllustrationsV2 />
         </Box>
       ) : null}
-      <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}` } : {}}>
+      <RightWrapper sx={skin === 'bordered' && !hidden ? { borderLeft: `1px solid ${theme.palette.divider}`} : {}}>
         <Box
           sx={{
             p: 7,
@@ -264,9 +270,9 @@ const LoginPage = () => {
                   </Typography>
                 </Link>
               </Box>
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              <LoadingButton loading={isProcessing}  fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
                 Login
-              </Button>
+              </LoadingButton>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ mr: 2, color: 'text.secondary' }}>New on our platform?</Typography>
                 <Typography>

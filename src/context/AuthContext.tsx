@@ -132,7 +132,6 @@ const AuthProvider = ({ children }: Props) => {
   }
 
   const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
-
     axios
       .get(authConfig.apiBaseEndpoint + 'checkorganisations', {
         params: { name: params.companyname }
@@ -174,7 +173,9 @@ const AuthProvider = ({ children }: Props) => {
           }
         })
       })
-      .catch((err: { [key: string]: string }) => (errorCallback ? errorCallback({ 'Message': err.message }) : null))
+      .catch(
+        (err: { [key: string]: string }) => (errorCallback ? errorCallback({ 'Message': err.message }) : null)
+      )
   }
 
   const handleConfirmUser = (params: ConfirmUserParams, errorCallback?: ErrCallbackType) => {

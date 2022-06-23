@@ -21,7 +21,8 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
 import { Divider } from '@mui/material';
-import Alert  from '@mui/material/Alert';
+import Alert from '@mui/material/Alert';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
@@ -48,7 +49,7 @@ const defaultValues = {
   password: '',
   companyname: '',
   terms: false,
-  apiErrors : ''
+  apiErrors: ''
 }
 interface FormData {
   email: string
@@ -56,12 +57,12 @@ interface FormData {
   username: string
   password: string
   companyname: string
-  apiErrors : string
+  apiErrors: string
 }
 
 // ** Styled Components
 const RegisterIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  padding: theme.spacing(20),
+  padding: theme.spacing(50),
   paddingRight: '0 !important',
   [theme.breakpoints.down('lg')]: {
     padding: theme.spacing(10)
@@ -112,6 +113,7 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
 const Register = () => {
   // ** States
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   // ** Hooks
   const theme = useTheme()
@@ -142,8 +144,10 @@ const Register = () => {
 
   const onSubmit = (data: FormData) => {
     const { email, username, password, companyname } = data
+   
+    setIsProcessing(true);
 
-     register({ email, username, password, companyname }, err => {
+    register({ email, username, password, companyname }, err => {
       if (err.email) {
         setError('email', {
           type: 'manual',
@@ -162,13 +166,13 @@ const Register = () => {
           message: err.companyname
         })
       }
-      if(err.Message)
-      {
+      if (err.Message) {
         setError('apiErrors', {
           type: 'manual',
           message: err.Message
         })
       }
+      setIsProcessing(false);
     })
   }
 
@@ -177,7 +181,7 @@ const Register = () => {
   return (
     <Box className='content-right'>
       {!hidden ? (
-        <Box sx={{ flex: 0.8, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
+        <Box sx={{ flex: 1.0, display: 'flex', position: 'relative', alignItems: 'center', justifyContent: 'left' }}>
           <RegisterIllustrationWrapper>
             <RegisterIllustration
               alt='register-illustration'
@@ -198,7 +202,7 @@ const Register = () => {
             backgroundColor: 'background.paper'
           }}
         >
-        
+
           <BoxWrapper>
             <Box sx={{ mb: 6 }}>
               <TypographyStyled variant='h5'>Sign up to BitLeave 🚀</TypographyStyled>
@@ -230,23 +234,23 @@ const Register = () => {
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
                 <Controller
-                name='companyname'
-                control={control}
-                rules={{ required: true }}
-                render={({ field: { value, onChange, onBlur } }) => (
-                  <TextField
-                  value={value}
-                  label='Company Name'
-                  onBlur={onBlur}
-                  onChange={onChange}
-                  error={Boolean(errors.companyname)}
-                  placeholder='abc company'
-                  />
-                )}
+                  name='companyname'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field: { value, onChange, onBlur } }) => (
+                    <TextField
+                      value={value}
+                      label='Company Name'
+                      onBlur={onBlur}
+                      onChange={onChange}
+                      error={Boolean(errors.companyname)}
+                      placeholder='abc company'
+                    />
+                  )}
                 />
-                {errors.companyname && <FormHelperText sx={{ color: 'error.main'}}>{errors.companyname.message}</FormHelperText>}
-                </FormControl>
-                <FormControl fullWidth sx={{ mb: 4 }}>
+                {errors.companyname && <FormHelperText sx={{ color: 'error.main' }}>{errors.companyname.message}</FormHelperText>}
+              </FormControl>
+              <FormControl fullWidth sx={{ mb: 4 }}>
                 <Controller
                   name='email'
                   control={control}
@@ -347,15 +351,15 @@ const Register = () => {
                   <FormHelperText sx={{ mt: 0, color: 'error.main' }}>{errors.terms.message}</FormHelperText>
                 )}
               </FormControl>
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              <LoadingButton loading={isProcessing} fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
                 Sign up
-              </Button>
+              </LoadingButton>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ mr: 2, color: 'text.secondary' }}>Already have an account?</Typography>
                 <Typography>
                   <Link passHref href='/login'>
                     <Typography component={MuiLink} sx={{ color: 'primary.main' }}>
-                     Log In
+                      Log In
                     </Typography>
                   </Link>
                 </Typography>

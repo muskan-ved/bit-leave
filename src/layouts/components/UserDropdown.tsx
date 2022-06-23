@@ -29,6 +29,9 @@ import { useAuth } from 'src/hooks/useAuth'
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
 
+// ** Config
+import authConfig from 'src/configs/auth'
+
 interface Props {
   settings: Settings
 }
@@ -43,6 +46,22 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 }))
 
 const UserDropdown = (props: Props) => {
+
+  const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  const userData = window.localStorage.getItem('userData')
+
+  let userName = "";
+  let userRole = "";
+  let userEmail = "";
+  let userCompany = "";
+  if (userData != null && storedToken) {
+    const user = JSON.parse(userData)
+    userName = user.fullName;
+    userEmail = user.email
+    userRole = user.role
+    userCompany = user.companyname
+  }
+
   // ** Props
   const { settings } = props
 
@@ -143,12 +162,12 @@ const UserDropdown = (props: Props) => {
                 flexDirection: 'column'
               }}
             >
-              <Typography sx={{ fontWeight: 600 }}>John Doe</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{userName}</Typography>
               <Typography
                 variant='body2'
                 sx={{ fontSize: '0.8rem', color: 'text.disabled' }}
               >
-                Admin
+                {userRole}
               </Typography>
             </Box>
           </Box>

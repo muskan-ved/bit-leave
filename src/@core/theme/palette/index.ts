@@ -4,7 +4,7 @@ import { Skin } from 'src/@core/layouts/types'
 
 const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
   // ** Vars
-  const lightColor = '76, 78, 100'
+  const lightColor = '76, 78, 100' //45, 204, 167
   const darkColor = '234, 234, 255'
   const mainColor = mode === 'light' ? lightColor : darkColor
 
@@ -35,10 +35,9 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
     },
     mode: mode,
     primary: {
-      light: '#787EFF',
-      main: '#666CFF',
-      dark: '#5A5FE0',
-      contrastText: '#FFF'
+      light: '#4dcbad',
+       main: '#2dcca7',
+      dark: '#19b08d',
     },
     secondary: {
       light: '#7F889B',
