@@ -145,7 +145,7 @@ const UserDropdown = (props: Props) => {
             <EmailOutline sx={{ mr: 2 }} />
             Inbox
           </Box>
-        </MenuItem>
+        </MenuItem> 
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/chat')}>
           <Box sx={styles}>
             <MessageOutline sx={{ mr: 2 }} />

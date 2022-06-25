@@ -6,16 +6,23 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
 const Home = () => {
+
+  const userData = localStorage.getItem("userData")
+  let fullName;
+  if(userData!=null){
+    const data = JSON.parse(userData)
+    fullName = data.fullName;
+  }
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <Card>
-          <CardHeader title='Kick start your project 🚀'></CardHeader>
+          <CardHeader title={`Welcome ${fullName} !`}></CardHeader>
           <CardContent>
-            <Typography sx={{ mb: 2 }}>All the best for your new project.</Typography>
+            <Typography sx={{ mb: 2 }}><strong>Optimise Leave, Well-being and Balance Sheet for your Organisation.</strong></Typography>
             <Typography>
-              Please make sure to read our Template Documentation to understand where to go from here and how to use our
-              template.
+              For any help or support, feel free to contact us.
             </Typography>
           </CardContent>
         </Card>

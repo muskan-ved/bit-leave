@@ -15,8 +15,6 @@ import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendC
 
 //Cognito Integration
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
-import { captureRejectionSymbol } from 'stream'
-import Register from 'src/pages/register'
 import { resolve } from 'path'
 
 //
@@ -68,8 +66,9 @@ const AuthProvider = ({ children }: Props) => {
       if (storedToken) {
         setLoading(true)
         const userData = window.localStorage.getItem('userData')
-        if (userData) {
-          setUser({ ...JSON.parse(userData) })
+        if (userData != null) {
+          const user = JSON.parse(userData)
+          setUser({ ...user })
           setLoading(false)
         }
       } else {
@@ -98,19 +97,24 @@ const AuthProvider = ({ children }: Props) => {
         const userClaims = JSON.parse(JSON.stringify(data));
         console.log(userClaims);
         const userData: UserDataType = {
-          id: 1,
+          id: userClaims.idToken.payload["custom:id"],
           email: userClaims.idToken.payload.email,
-          username: userClaims.idToken.payload.email,
-          password: params.password,
+          username: params.email,
           companyname: userClaims.idToken.payload["custom:companyname"],
           avatar: null,
           fullName: userClaims.idToken.payload["custom:fullname"],
-          role: 'admin'
+          role: userClaims.idToken.payload["custom:rolename"],
+          orgId: userClaims.idToken.payload["custom:orgId"],
+          userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
         //
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.accessToken.jwtToken)
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
+        //
+        const returnUrl = router.query.returnUrl
+         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+         router.replace(redirectURL as string)
       },
       onFailure: (err) => {
         if (errorCallback) errorCallback({ 'Message': err.message })

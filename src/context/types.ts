@@ -34,9 +34,10 @@ export type UserDataType = {
   email: string
   fullName: string
   username: string
-  password: string | null
   companyname: string
   avatar?: string | null
+  orgId :string
+  userOnboarded : boolean
 }
 
 export type AuthValuesType = {
