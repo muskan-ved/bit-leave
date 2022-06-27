@@ -11,20 +11,22 @@ const users: UserDataType[] = [
   {
     id: 1,
     role: 'admin',
-    password: 'admin',
     fullName: 'John Doe',
     username: 'johndoe',
     email: 'admin@materialize.com',
-    companyname: 'demo'
+    companyname: 'demo',
+    orgId:'50',
+    userOnboarded:false
   },
   {
     id: 2,
     role: 'client',
-    password: 'client',
     fullName: 'Jane Doe',
     username: 'janedoe',
     email: 'client@materialize.com',
-    companyname : 'demo'
+    companyname : 'demo',
+    orgId:'50',
+    userOnboarded:false
   }
 ]
 
@@ -41,7 +43,7 @@ mock.onPost('/jwt/login').reply(request => {
     email: ['Something went wrong']
   }
 
-  const user = users.find(u => u.email === email && u.password === password)
+  const user = users.find(u => u.email === email)
 
   if (user) {
     const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret)
@@ -79,12 +81,13 @@ mock.onPost('/jwt/register').reply(request => {
       const userData = {
         id: lastIndex + 1,
         email,
-        password,
         username,
         avatar: null,
         fullName: '',
         role: 'admin',
-        companyname: 'demo'
+        companyname: 'demo',
+        orgId:'50',
+    userOnboarded:false
       }
 
       users.push(userData)
@@ -92,7 +95,6 @@ mock.onPost('/jwt/register').reply(request => {
       const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret)
 
       const user = { ...userData }
-      delete user.password
 
       const response = { accessToken }
 

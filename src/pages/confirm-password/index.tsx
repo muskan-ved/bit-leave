@@ -17,7 +17,6 @@ import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import { Divider } from '@mui/material';
-import LoadingButton from '@mui/lab/LoadingButton'
 
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
@@ -109,7 +108,6 @@ interface FormData {
 
 const ConfirmPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   // ** Hooks
   const auth = useAuth()
@@ -135,7 +133,6 @@ const ConfirmPassword = () => {
 
   const onSubmit = (data: FormData) => {
      const { code, password } = data
-     setIsProcessing(true);
      auth.confirmUserPassword({ code, password }, err => {
       if(err.Message)
       {
@@ -144,7 +141,6 @@ const ConfirmPassword = () => {
           message: err.Message
         })
       }
-      setIsProcessing(false);
     })
   }
 

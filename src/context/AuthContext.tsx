@@ -108,7 +108,8 @@ const AuthProvider = ({ children }: Props) => {
           userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
         //
-        window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.accessToken.jwtToken)
+        console.log(userClaims);
+        window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
         //
@@ -224,6 +225,7 @@ const AuthProvider = ({ children }: Props) => {
 
     user.forgotPassword({
       onSuccess: (data) => {
+        console.log(data);
         const emailId = params.email
         router.push({
           pathname: '/confirm-password',
@@ -233,6 +235,7 @@ const AuthProvider = ({ children }: Props) => {
         })
       },
       onFailure: (err) => {
+        console.log(err);
         if (err) {
           if (errorCallback) errorCallback({ 'Message': err.message })
         }

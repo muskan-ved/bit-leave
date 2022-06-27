@@ -6,7 +6,6 @@ import Link from 'next/link'
 
 // ** MUI Components
 import MuiLink from '@mui/material/Link'
-import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Box, { BoxProps } from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'

@@ -6,7 +6,6 @@ import Link from 'next/link'
 
 // ** MUI Components
 import MuiLink from '@mui/material/Link'
-import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
 import InputLabel from '@mui/material/InputLabel'

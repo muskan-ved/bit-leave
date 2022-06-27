@@ -25,4 +25,9 @@ const Thresholds = () => {
   )
 }
 
+Thresholds.acl = {
+  action: 'manage',
+  subject: 'Thresholds'
+}
+
 export default Thresholds

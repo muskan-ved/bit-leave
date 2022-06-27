@@ -25,4 +25,9 @@ const Templates = () => {
   )
 }
 
+Templates.acl = {
+  action: 'manage',
+  subject: 'Thresholds'
+}
+
 export default Templates
