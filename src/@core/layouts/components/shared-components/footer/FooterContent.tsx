@@ -12,12 +12,12 @@ const FooterContent = () => {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, BitLeave Pty. Ltd.`}
+        {`© ${new Date().getFullYear()}, Bit Leave Pty. Ltd.`}
       </Typography>
       {hidden ? null : (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
           <Link target='_blank' href='https://bitleave.co'>
-            About BitLeave
+            About Bit.Leave
           </Link>
         </Box>
       )}

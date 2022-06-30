@@ -204,7 +204,7 @@ const Register = () => {
 
           <BoxWrapper>
             <Box sx={{ mb: 6 }}>
-              <TypographyStyled variant='h5'>Sign up to BitLeave 🚀</TypographyStyled>
+              <TypographyStyled variant='h5'>Sign up to Bit.Leave 🚀</TypographyStyled>
               <Typography variant='body2'>Start an exciting journey!</Typography>
             </Box>
             {errors.apiErrors && <Alert severity='error'>{errors.apiErrors.message}</Alert>}

@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -12,14 +12,41 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import { ChevronDown } from 'mdi-material-ui'
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button'
+import { styled } from '@mui/material/styles'
+import { GridProps } from '@mui/material/Grid'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
+
+// ** Hook
+import { useSettings } from 'src/@core/hooks/useSettings'
+
+  // Styled Grid component
+  const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      justifyContent: 'center'
+    }
+  }))
+
+// Styled component for the image
+// Styled component for the trophy image
+const TrophyImg = styled('img')(({ theme }) => ({
+  right: 22,
+  bottom: 0,
+  width: 106,
+  position: 'absolute',
+  [theme.breakpoints.down('sm')]: {
+    width: 95
+  }
+}))
 
 const Home = () => {
 
   // ** Hooks
   const ability = useContext(AbilityContext)
+  const { settings } = useSettings()
 
   const userData = localStorage.getItem("userData")
   let fullName;
@@ -28,16 +55,32 @@ const Home = () => {
     fullName = data.fullName;
   }
 
+
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <Card>
-          <CardHeader title={`Welcome ${fullName} !`}></CardHeader>
-          <CardContent>
-            <Typography sx={{ mb: 2 }}><strong>Optimise Leave, Well-being and Balance Sheet for your Organisation.</strong></Typography>
-            <Typography>
-              For any help or support, feel free to contact us.
-            </Typography>
+        <Card sx={{ position: 'relative' }}>
+          <CardContent sx={{ p: theme => `${theme.spacing(7, 7.5)} !important` }}>
+            <Grid container spacing={6}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant='h5' sx={{ mb: 4.5 }}>
+                  Welcome{' '}
+                  <Box component='span' sx={{ fontWeight: 'bold' }}>
+                    {fullName}
+                  </Box>
+                  ! 🎉
+                </Typography>
+                <Typography variant='body2'>How are you today? 🤟🏻</Typography>
+                <Typography sx={{ mb: 4.5 }} variant='body2'>
+                  Refer to FAQs and Resources to get started !
+                </Typography>
+                <Button variant='contained'>View Profile</Button>
+              </Grid>
+              <StyledGrid item xs={12} sm={6}>
+            <TrophyImg alt='Congratulations Daisy' src={`/images/cards/trophy.png`} />
+          </StyledGrid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid>
@@ -83,17 +126,6 @@ const Home = () => {
           </CardContent>
         </Card>
       </Grid>
-      {ability?.can('read', 'analytics') ? (
-        <Grid item md={6} xs={12}>
-          <Card>
-            <CardHeader title='Admin Center' />
-            <CardContent>
-              {/* <Typography sx={{ mb: 4 }}>User with 'Analytics' subject's 'Read' ability can view this card</Typography> */}
-              <Typography sx={{ color: 'error.main' }}>This card is visible to 'admin' only</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      ) : null}
     </Grid>
   )
 }

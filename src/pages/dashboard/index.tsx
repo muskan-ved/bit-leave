@@ -1,5 +1,8 @@
 // ** React Imports
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
+
+// ** Axios
+import axios from 'axios'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -10,35 +13,220 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
+import CircularProgress from '@mui/material/CircularProgress'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableRow from '@mui/material/TableRow'
+import TableHead from '@mui/material/TableHead'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+
+// ** Custom Components
+import CustomAvatar from 'src/@core/components/mui/avatar'
+
+// ** Utils Import
+import { getInitials } from 'src/@core/utils/get-initials'
+
+// ** Types Imports
+import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
+
+// ** Custom Component Import
+import CardStatisticsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
+import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
+
+type leavesbyOrg = {
+  fullname: string
+  department: string
+  excessDays: number
+}
+
+type leavesbyDepartment = {
+  department: string
+  averageExcessDays: number
+}
+
+type team = {
+  name: string
+  department :string
+}
+
+type vitals = {
+  averageSalary : number
+}
+
+type leaveDetails = {
+  cashoutValue : number
+  excessDays : number
+  valueText : string
+}
+
+type employee = {
+  id: number
+  leaveDetails : leaveDetails
+  leavesByOrg: Array<leavesbyOrg>
+  leavesByDepartment : Array<leavesbyDepartment>
+  team : team
+  vitals : vitals
+}
 
 const Dashboard = () => {
   // ** Hooks
   const ability = useContext(AbilityContext)
 
-  return (
-    <Grid container spacing={6}>
-      <Grid item md={6} xs={12}>
-        <Card>
-          <CardHeader title='Common' />
-          <CardContent>
-            <Typography sx={{ mb: 4 }}>No ability is required to view this card</Typography>
-            <Typography sx={{ color: 'primary.main' }}>This card is visible to 'user' and 'admin' both</Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-      {ability?.can('read', 'analytics') ? (
-        <Grid item md={6} xs={12}>
-          <Card>
-            <CardHeader title='Analytics' />
-            <CardContent>
-              <Typography sx={{ mb: 4 }}>User with 'Analytics' subject's 'Read' ability can view this card</Typography>
-              <Typography sx={{ color: 'error.main' }}>This card is visible to 'admin' only</Typography>
-            </CardContent>
-          </Card>
+  const [data, setData] = useState<employee | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const token = localStorage.getItem("accessToken")
+
+  const fetchData = async () => {
+    axios
+      .get('https://api.bitleave.co/employees', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(res => {
+        let data = res.data;
+        console.log(data);
+        setData(data.data)
+        setIsLoading(false);
+      }
+      )
+  };
+
+  useEffect(() => {
+    if (!data) {
+      setIsLoading(true);
+      console.log('Fetching');
+      fetchData();
+    }
+  }, []);
+
+  // return (<div>
+
+  //   {data.leavesByOrg.map(({ fullname }) => (
+  //       <p> {fullname} </p>
+  //     ))}
+
+
+  // </div>)
+  if (isLoading)
+    return (<CircularProgress color="success" />)
+
+  if (!isLoading && data) {
+    return (
+      <div>
+        <Grid container spacing={6}>
+          <Grid item md={5} xs={12}>
+            <Card>
+              <CardHeader title='Your Leave Details' />
+              <CardContent>
+                <Typography sx={{ mb: 4 }}>Excess Days : {data.leaveDetails.excessDays.toFixed(2)}</Typography>
+                <Typography>Cashout Value : ${data.leaveDetails.cashoutValue}</Typography>
+                <br />
+                <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={3} xs={12}>
+            <Card>
+              <CardHeader title='Your Team' />
+              <CardContent>
+                <Typography sx={{ mb: 4 }}>Department : {data.team.department}</Typography>
+                <Typography>Manager name : {data.team.name}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={4} xs={12} sm={6}>
+          <CardStatisticsCharacter
+              data={{
+                stats:`${data.vitals.averageSalary.toFixed(0)}k`,
+                title: 'Average Salary',
+                trend:'positive',
+                chipColor: 'success',
+                trendNumber: 'in AUD $',
+                chipText: 'Average Excess Days',
+                src: '/images/cards/card-stats-img-3.png'
+              }}
+            />
+          </Grid>
         </Grid>
-      ) : null}
-    </Grid>
-  )
+        <br/>
+        <Grid container spacing={6}>
+          {ability?.can('read', 'analytics') ? (
+            <Grid item md={12} xs={12}>
+              <Card>
+                <CardHeader title='Leaves By Organisation' />
+                <CardContent>
+                  <Grid item md={12} xs={12}>
+                    <TableContainer component={Paper}>
+                      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Full Name</TableCell>
+                            <TableCell align='right'>Department</TableCell>
+                            <TableCell align='right'>Excess Days</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {data.leavesByOrg.map(row => (
+                            <TableRow key={row.fullname} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
+                              <TableCell component='th' scope='row' >
+                                <CustomAvatar
+                                  skin='light'
+                                  color={'primary'}
+                                  sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
+                                >
+                                  {getInitials(row.fullname)}
+                                </CustomAvatar>
+                                {row.fullname}
+                              </TableCell>
+                              <TableCell align='right'>{row.department}</TableCell>
+                              <TableCell align='right'>{row.excessDays.toFixed(2)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+        </Grid>
+        <br/>
+        <Grid container spacing={6}>
+          {ability?.can('read', 'analytics') ? (
+            <Grid item md={8} xs={8}>
+              <Card>
+                <CardHeader title='Leaves By Department' />
+                <CardContent>
+                  <Grid item md={12} xs={6}>
+                    <TableContainer component={Paper}>
+                      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell align='right'>Department</TableCell>
+                            <TableCell align='right'>Average Excess Days</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {data.leavesByDepartment.map(row => (
+                            <TableRow key={row.department} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
+                              <TableCell align='right'>{row.department}</TableCell>
+                              <TableCell align='right'>{row.averageExcessDays.toFixed(2)}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+        </Grid>
+      </div>
+    )
+  } 
 }
 
 Dashboard.acl = {

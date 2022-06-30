@@ -80,6 +80,11 @@ const UserDropdown = (props: Props) => {
     setAnchorEl(event.currentTarget)
   }
 
+  const handleContactUs =() =>{
+    window.open("mailto:brett@bitleave.co")
+    setAnchorEl(null)
+  }
+
   const handleDropdownClose = (url?: string) => {
     if (url) {
       router.push(url)
@@ -199,7 +204,7 @@ const UserDropdown = (props: Props) => {
             Settings
           </Box>
         </MenuItem> */}
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        <MenuItem sx={{ p: 0 }} onClick={() => handleContactUs()}>
           <Box sx={styles}>
             <CardAccountPhone sx={{ marginRight: 2 }} />
             Contact Us

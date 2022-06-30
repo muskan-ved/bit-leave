@@ -95,7 +95,6 @@ const AuthProvider = ({ children }: Props) => {
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
         const userClaims = JSON.parse(JSON.stringify(data));
-        console.log(userClaims);
         const userData: UserDataType = {
           id: userClaims.idToken.payload["custom:id"],
           email: userClaims.idToken.payload.email,
@@ -108,7 +107,6 @@ const AuthProvider = ({ children }: Props) => {
           userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
         //
-        console.log(userClaims);
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
@@ -225,7 +223,6 @@ const AuthProvider = ({ children }: Props) => {
 
     user.forgotPassword({
       onSuccess: (data) => {
-        console.log(data);
         const emailId = params.email
         router.push({
           pathname: '/confirm-password',
