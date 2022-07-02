@@ -56,6 +56,9 @@ import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-tsx'
 
+import { store } from 'src/store'
+import { Provider } from 'react-redux'
+
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
@@ -115,7 +118,7 @@ const App = (props: ExtendedAppProps) => {
   const aclAbilities = Component.acl ?? defaultACLObj
 
   return (
-    
+
       <CacheProvider value={emotionCache}>
         <Head>
           <title>{`${themeConfig.templateName} - Optimising your Leave, Well-being and Balance Sheet`}</title>
@@ -126,7 +129,7 @@ const App = (props: ExtendedAppProps) => {
           <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
-
+        <Provider store={store}>
         <AuthProvider>
           <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
             <SettingsConsumer>
@@ -149,8 +152,9 @@ const App = (props: ExtendedAppProps) => {
             </SettingsConsumer>
           </SettingsProvider>
         </AuthProvider>
+        </Provider>
       </CacheProvider>
-   
+
   )
 }
 
