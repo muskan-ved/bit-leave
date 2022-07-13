@@ -222,7 +222,7 @@ const Register = () => {
                       onBlur={onBlur}
                       label='Full Name'
                       onChange={onChange}
-                      placeholder='johndoe'
+                      placeholder='John Doe'
                       error={Boolean(errors.username)}
                     />
                   )}
@@ -261,7 +261,7 @@ const Register = () => {
                       onBlur={onBlur}
                       onChange={onChange}
                       error={Boolean(errors.email)}
-                      placeholder='user@email.com'
+                      placeholder='john@abc.com'
                     />
                   )}
                 />

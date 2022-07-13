@@ -22,3 +22,13 @@ code:not([class*='language-']):after {
 code[class*='language-'] {
   padding: 0;
 }
+
+html body .MuiDataGrid-columnHeaders {
+    background: #2dcca7;
+   color: #061a16;
+  }
+  
+  .MuiBox-root.css-19q7vmd.btndivider{
+  display: flex;
+  justify-content: space-between;
+}

@@ -4,492 +4,488 @@ import Grid from '@mui/material/Grid'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import { useState } from 'react'
+import { Box, Button } from '@mui/material'
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AWS from 'aws-sdk';
+import CSVFileValidator from 'csv-file-validator';
+import authConfig from '../../configs/auth';
+import axios from 'axios'
+import { Null } from 'mdi-material-ui'
 
 const UpdateOrganisation = () => {
 
- const [file, setFile] = useState();
-  const [array, setArray] = useState([]);
+	const [file, setFile] = useState();
+	const [array, setArray] = useState([]);
 
-  console.log(array);
-  const fileReader = new FileReader();
+	const S3_BUCKET = authConfig.bucket_name;
+	const REGION = authConfig.region;
 
-  const handleOnChange = (e: any) => {
-    setFile(e.target.files[0]);
-  };
+	AWS.config.update({
+		accessKeyId: authConfig.accessKeyId,
+		secretAccessKey: authConfig.secretAccessKey,
+	})
 
-  const csvFileToArray = (string: string) => {
-    const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
-    const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
-    const Rows = string.slice(string.indexOf("\n") + 1).split(",");
+	const myBucket = new AWS.S3({
+		params: { Bucket: S3_BUCKET },
+		region: REGION,
+	})
 
-    if (csvHeader.length > 0) {
+	const isIdValid = function (id: any) {
+		const reqExp = /^[0-9A-Z]+$/;
+		return reqExp.test(id)
+	}
 
-      // ** Check StaffId **
-      if (csvHeader.includes("StaffId")) {
-        const index = csvHeader.indexOf("StaffId")
-        const result = StaffIdValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isEmailValid = function (email: any) {
+		const reqExp = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
+		return reqExp.test(email)
+	}
 
-       // ** Check FirstName **
-      if (csvHeader.includes("FirstName")) {
-        const index = csvHeader.indexOf("FirstName")
-        const result = FirstNameValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isNameValid = function (name: any) {
+		const reqExp = /^[A-Za-z]+$/
+		return reqExp.test(name)
+	}
 
-       // ** Check LastName **
-      if (csvHeader.includes("LastName")) {
-        const index = csvHeader.indexOf("LastName")
-        const result = LastNameValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isEmpTypeValid = function (empType: any) {
+		const reqExp = /^[A-Za-z-]+$/
+		return reqExp.test(empType)
+	}
 
-       // ** Check ManagerId**
-      if (csvHeader.includes("ManagerId") || !(csvHeader.includes("ManagerId"))) {
-        const index = csvHeader.indexOf("ManagerId")
-        const result = ManagerIdValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isFullNameValid = function (fullname: any) {
+		const reqExp = /^[A-Za-z]+ [A-Za-z]+$/
+		return reqExp.test(fullname)
+	}
 
-       // ** Check Email **
-      if (csvHeader.includes("Email")) {
-        const index = csvHeader.indexOf("Email")
-        const result = EmailValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isNumValid = function (num: any) {
+		const reqExp = /^[0-9]+$/
+		return reqExp.test(num)
+	}
 
-       // ** Check AwardType **
-      if (csvHeader.includes("AwardType") || !(csvHeader.includes("AwardType"))) {
-        const index = csvHeader.indexOf("AwardType")
-        const result = AwardTypeValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isFloatNumValid = function (num: any) {
+		const reqExp = /^[0-9.0-9]+$/
+		return reqExp.test(num)
+	}
 
-       // ** Check StartDate **
-      if (csvHeader.includes("StartDate")) {
-        const index = csvHeader.indexOf("StartDate")
-        const result = StartDateValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const isDateValid = function (date: any) {
+		var reGoodDate = /^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/;
+		return reGoodDate.test(date);
+	}
 
-       // ** Check AnnualLeaveBalance **
-      if (csvHeader.includes("AnnualLeaveBalance")) {
-        const index = csvHeader.indexOf("AnnualLeaveBalance")
-        const result = AnnualLeaveBalanceValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
 
-       // ** Check Department **
-      if (csvHeader.includes("Department") || !(csvHeader.includes("Department"))) {
-        const index = csvHeader.indexOf("Department")
-        const result = DepartmentValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const columns = {
+		headers: [
+			{
+				name: 'id',
+				inputName: 'id',
+				required: true,
+				validate: isIdValid,
+			},
+			{
+				name: 'firstname',
+				inputName: 'firstname',
+				required: true,
+				validate: isNameValid,
+			},
+			{
+				name: 'lastname',
+				inputName: 'lastname',
+				required: true,
+				validate: isNameValid,
+			},
+			{
+				name: 'fullname',
+				inputName: 'fullname',
+				required: true,
+				validate: isFullNameValid
+			},
+			{
+				name: 'manager_id',
+				inputName: 'manager_id',
+				required: false
+			},
+			{
+				name: 'emailaddress',
+				inputName: 'emailaddress',
+				required: true,
+				unique: true,
+				validate: isEmailValid,
+			},
+			{
+				name: 'awardtype',
+				inputName: 'awardtype',
+				required: true,
+				validate: isNameValid,
+			},
+			{
+				name: 'datejoined',
+				inputName: 'datejoined',
+				required: true,
+				validate: isDateValid,
+			},
+			{
+				name: 'annualleavebalance',
+				inputName: 'annualleavebalance',
+				required: true,
+				validate: isNumValid
+			},
+			{
+				name: 'department',
+				inputName: 'department',
+				required: true,
+				validate: isNameValid,
+			},
+			{
+				name: 'annualsalary',
+				inputName: 'annualsalary',
+				required: true,
+				validate: isNumValid
+			},
+			{
+				name: 'ordinaryhoursperweek',
+				inputName: 'ordinaryhoursperweek',
+				required: true,
+				validate: isFloatNumValid
+			},
+			{
+				name: 'hourlyrate',
+				inputName: 'hourlyrate',
+				required: true,
+				validate: isFloatNumValid
+			},
+			{
+				name: 'employmenttype',
+				inputName: 'employmenttype',
+				required: true,
+				validate: isEmpTypeValid
+			},
+		]
+	}
 
-       // ** Check AnnualSalary **
-      if (csvHeader.includes("AnnualSalary")) {
-        const index = csvHeader.indexOf("AnnualSalary")
-        const result = AnnualSalaryValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
 
-       // ** Check OrdinaryHoursPerWeek **
-      if (csvHeader.includes("OrdinaryHoursPerWeek")) {
-        const index = csvHeader.indexOf("OrdinaryHoursPerWeek")
-        const result = OrdinaryHoursPerWeekValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const headd: GridColDef[] = [
+		{
+			field: 'id',
+			headerName: 'Employee Id',
+			minWidth: 120,
+			sortable: false,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'firstname',
+			headerName: 'First name',
+			minWidth: 120,
+			sortable: false,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'lastname',
+			headerName: 'Last name',
+			minWidth: 120,
+			sortable: false,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'fullname',
+			headerName: 'Full name',
+			sortable: false,
+			minWidth: 160,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'manager_id',
+			headerName: 'Manager Id',
+			type: 'number',
+			minWidth: 110,
+			sortable: false,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'emailaddress',
+			headerName: 'Email Address',
+			sortable: false,
+			minWidth: 200,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'awardtype',
+			headerName: 'Award Type',
+			minWidth: 120,
+			sortable: false,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'datejoined',
+			headerName: 'Date Joined',
+			sortable: false,
+			minWidth: 120,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'annualleavebalance',
+			headerName: 'Annual Leave Balance',
+			sortable: false,
+			minWidth: 190,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'department',
+			headerName: 'Department',
+			sortable: false,
+			minWidth: 160,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'annualsalary',
+			headerName: 'Annual Salary',
+			sortable: false,
+			minWidth: 160,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'ordinaryhoursperweek',
+			headerName: 'Ordinary Hours Per Week',
+			sortable: false,
+			minWidth: 220,
+			disableColumnMenu: true,
+		},
+		{
+			field: 'hourlyrate',
+			headerName: 'Hourly Rate',
+			sortable: false,
+			disableColumnMenu: true,
+			minWidth: 140,
+		},
+		{
+			field: 'employmenttype',
+			headerName: 'Employment Type',
+			sortable: false,
+			disableColumnMenu: true,
+			minWidth: 170,
+		},
+	];
 
-       // ** Check OrdinaryHoursPerMonth **
-      if (csvHeader.includes("OrdinaryHoursPerMonth")) {
-        const index = csvHeader.indexOf("OrdinaryHoursPerMonth")
-        const result = OrdinaryHoursPerMonthValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const fileReader = new FileReader();
 
-       // ** Check HourlyRate **
-      if (csvHeader.includes("HourlyRate") || !(csvHeader.includes("HourlyRate"))) {
-        const index = csvHeader.indexOf("HourlyRate")
-        const result = HourlyRatesValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+	const handleOnChange = (e: any) => {
+		alert('here')
+		setArray([])
+		if (e.target.files[0]) {
+			fileReader.onload = function (event: any) {
+				const text = event.target.result;
+				const fileName = (e.target.files[0].name.replace(e.target.files[0].name), `demo${Math.floor((Math.random() * 1000) + 1)}.csv`)
 
-       // ** Check EmploymentType **
-      if (csvHeader.includes("EmploymentType")) {
-        const index = csvHeader.indexOf("EmploymentType")
-        const result = EmploymentTypeValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+				//csv validation
+				CSVFileValidator(e.target.files[0], columns)
+					.then((csvData) => {
 
-       // ** Check TILBalance **
-      if (csvHeader.includes("TILBalance") || !(csvHeader.includes("TILBalance"))) {
-        const index = csvHeader.indexOf("TILBalance")
-        const result = TILBalanceValid(Rows.at(index))
-        if(result === true) {
-          console.log("Valid CSV")
-        }
-        else {
-          console.log("Invalid CSV")
-        }
-      }
+						csvData.inValidMessages.forEach(message => {
+							toast.error(message)
+						})
 
-      // ** Required Field Missing **
-      else {
-        console.log("One or more Field is missing")
-      }
-    }
+						if (csvData.inValidMessages.length === 0) {
+							csvFileToArray(text);
+							const params = {
+								Body: e.target.files[0],
+								Bucket: S3_BUCKET,
+								Key: fileName,
+							};
 
-    const array = csvRows.map(i => {
-      const values = i.split(",");
-      const obj = csvHeader.reduce((object: any, header: any, index) => {
-        object[header] = values[index];
+							myBucket.putObject(params)
+								.on('httpUploadProgress', (evt) => {
+									setFile(e.target.files[0]);
+									if (evt) {
+										toast.success("Successfully file uploaded to s3", {
+											autoClose: 5000,
+											hideProgressBar: false,
+										})
 
-        return object;
-      }, {});
+										const article = { identifier: fileName };
+										axios.post('https://api.bitleave.co/employees/syncOrg', article)
+											.then(response => {
+												toast.success("Successfully processed the update", {
+													autoClose: 5000,
+													hideProgressBar: false,
+												})
+											})
+											.catch(err => {
+												toast.error("Failed processing the update", {
+													autoClose: 5000,
+													hideProgressBar: false,
+												})
+											})
+									}
+								})
+								.send((err) => {
+									if (err !== null) {
+										toast.error("Sync organisation failed", {
+											autoClose: 5000,
+											hideProgressBar: false,
+										})
+									}
+								})
+						}
+					})
+					.catch(err => { })
+			};
 
-      return obj;
-    });
+			fileReader.readAsText(e.target.files[0]);
+		}
+	};
 
-    setArray(array as any);
-  };
+	const csvFileToArray = (string: string) => {
+		const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
+		const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
+		const Rows = string.slice(string.indexOf("\n") + 1).split(",");
+		csvRows.splice(-1);
+		if (csvHeader.length > 0) {
 
-  const handleOnSubmit = (e: any) => {
-    e.preventDefault();
+			// ** Check EmpId **
+			if (csvHeader.includes("id")) {
+				const index = csvHeader.indexOf("id")
 
-    if (file) {
-      fileReader.onload = function (event: any) {
-        const text = event.target.result;
-        csvFileToArray(text);
-      };
+			}
 
-      fileReader.readAsText(file);
-    }
-  };
+			// ** Check FirstName **
+			if (csvHeader.includes("firstname")) {
+				const index = csvHeader.indexOf("firstname")
 
-  //const headerKeys = Object.keys(Object.assign({}, ...array));
+			}
 
-  return (
-    <Grid container spacing={6}>
-      <Grid item xs={12}>
-        <Card sx={{mt: 15}}>
-          <CardHeader title='Upload CSV'></CardHeader>
-          
-            <div>
+			// ** Check LastName **
+			if (csvHeader.includes("lastname")) {
+				const index = csvHeader.indexOf("lastname")
 
-      <form style={{marginRight: 5, marginLeft: 10}}>
-      <input style={{marginLeft: 60}}
-          type={"file"}
-          id={"csvFileInput"}
-          accept={".csv"}
-          onChange={handleOnChange}
-        />
+			}
 
-        <button style={{marginLeft: 650}}
-          onClick={(e) => {
-            handleOnSubmit(e);
-          }}>
-          Import CSV
-        </button>
-      </form>
-      <CardContent style={{overflowX: 'scroll', marginRight: 20}}>
-      <br/>
-      <table style={{"borderWidth":"4px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'}}>
+			// ** Check FullName **
+			if (csvHeader.includes("fullname")) {
+				const index = csvHeader.indexOf("fullname")
 
-       {/* <thead>
-          <tr key={"header"}>
-            {headerKeys.map((key) => (
-              <th key={key} style={{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'}}>{key}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {array.map((item: any) => (
-            <tr key={item.id}>
-              {Object.values(item).map((val: any) => (
-                <td style={{"borderWidth":"1px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'}}>{val}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>  */}
-      </table>
-          </CardContent>
-          </div>
-        </Card>
-      </Grid>
-    </Grid>
-  )
+			}
+
+			// ** Check ManagerId**
+			if (csvHeader.includes("manager_id") || !(csvHeader.includes("manager_id"))) {
+				const index = csvHeader.indexOf("manager_id")
+
+			}
+
+			// ** Check Email **
+			if (csvHeader.includes("emailaddress")) {
+				const index = csvHeader.indexOf("emailaddress")
+
+
+			}
+
+			// ** Check AwardType **
+			if (csvHeader.includes("awardtype") || !(csvHeader.includes("awardtype"))) {
+				const index = csvHeader.indexOf("awardtype")
+
+			}
+
+			// ** Check StartDate **
+			if (csvHeader.includes("datejoined")) {
+				const index = csvHeader.indexOf("datejoined")
+
+			}
+
+			// ** Check AnnualLeaveBalance **
+			if (csvHeader.includes("annualleavebalance")) {
+				const index = csvHeader.indexOf("annualleavebalance")
+
+			}
+
+			// ** Check Department **
+			if (csvHeader.includes("department") || !(csvHeader.includes("department"))) {
+				const index = csvHeader.indexOf("department")
+
+			}
+
+			// ** Check AnnualSalary **
+			if (csvHeader.includes("annualsalary")) {
+				const index = csvHeader.indexOf("annualsalary")
+
+			}
+
+			// ** Check OrdinaryHoursPerWeek **
+			if (csvHeader.includes("ordinaryhoursperweek")) {
+				const index = csvHeader.indexOf("ordinaryhoursperweek")
+
+			}
+
+			// ** Check HourlyRate **
+			if (csvHeader.includes("hourlyrate") || !(csvHeader.includes("hourlyrate"))) {
+				const index = csvHeader.indexOf("hourlyrate")
+
+			}
+
+			// ** Check EmploymentType **
+			if (csvHeader.includes("employmenttype")) {
+				const index = csvHeader.indexOf("employmenttype")
+
+			}
+
+			// ** Required Field Missing **
+			else {
+				//console.log("One or more Field is missing")
+			}
+
+
+			const array = csvRows.map(i => {
+				const values = i.split(",");
+				const obj = csvHeader.reduce((object: any, header: any, index) => {
+					object[header] = values[index];
+
+					return object;
+				}, {});
+
+				return obj;
+			});
+
+			setArray(array as any);
+		}
+	};
+
+	//const headerKeys = Object.keys(Object.assign({}, ...array));
+
+	return (
+		<Grid container spacing={6}>
+			<ToastContainer position="top-right"
+				autoClose={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable />
+			<Grid item xs={12}>
+				<Card sx={{ mt: 15 }}>
+					<CardHeader title='Upload a CSV file with employee details' style={{ "borderBottom": "2px solid #aaaaaa" }}></CardHeader>
+
+					<Box sx={{ m: 3, p: 3 }} className="btndivider">
+						<Button variant="contained" component="label">
+							Upload File
+							<input style={{ marginLeft: 60 }} type={"file"} id={"csvFileInput"} accept={".csv"} onChange={handleOnChange} hidden />
+						</Button>
+					</Box>
+					<CardContent >
+						<Box sx={{ height: 400, width: '100%' }}>
+							<DataGrid
+								rows={array}
+								columns={headd}
+								pageSize={5}
+								rowsPerPageOptions={[5]}
+								disableSelectionOnClick
+							/>
+						</Box>
+					</CardContent>
+				</Card>
+			</Grid>
+		</Grid>
+	)
 }
 
-
-// ** StaffIdValidation **
-function StaffIdValid(value:any){
-    let result: boolean
-    if (value.match(/^[0-9A-Za-z]+$/) !== null) { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** FirstNameValidation **
-  function FirstNameValid(value:any){
-    let result: boolean
-    if (typeof value === 'string') { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** LastNameValidation **
-  function LastNameValid(value:any){
-    let result: boolean
-    if (typeof value === 'string') { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** ManagerIdValidation **
-  function ManagerIdValid(value:any){
-    let result: boolean
-    if (value.match(/^[0-9A-Za-z]+$/) !== null) { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** EmailValidation **
-  function EmailValid(value:any){
-    let result: boolean
-    if (typeof value === 'string') { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** AwardTypeValidation **
-  function AwardTypeValid(value:any){
-    let result: boolean
-    if (typeof value === 'string') { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** StartDateValidation **
-  function StartDateValid(value:any){
-    let result: boolean
-    if (isNaN(value) && !isNaN(Date.parse(value))) { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** AnnualLeaveBalanceValidation **
-  function AnnualLeaveBalanceValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-      result = false
-      }
-      else {
-        result = true
-      }
-
-    return result
-  }
-  
-  // ** DepartmentValidation **
-  function DepartmentValid(value:any){
-    let result: boolean
-    if (typeof value === 'string') { 
-    result = true
-    }
-    else {
-      result = false
-    }
-
-    return result
-  }
-  
-  // ** AnnualSalaryValidation **
-  function AnnualSalaryValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-      result = false
-      }
-      else {
-        result = true
-      }
-
-    return result
-  }
-  
-  // ** OrdinaryHoursPerWeekValidation **
-  function OrdinaryHoursPerWeekValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-    result = false
-    }
-    else {
-      result = true
-    }
-
-    return result
-  }
-  
-  // ** OrdinaryHoursPerMonthValidation **
-  function OrdinaryHoursPerMonthValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-      result = false
-      }
-      else {
-        result = true
-      }
-
-    return result
-  }
-  
-  // ** HourlyRatesValidation **
-  function HourlyRatesValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-      result = false
-      }
-      else {
-        result = true
-      }
-
-    return result
-  }
-  
-  // ** EmploymentTypeValidation **
-  function EmploymentTypeValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-      result = false
-      }
-      else {
-        result = true
-      }
-
-    return result
-  }
-  
-  // ** TILBalanceValidation **
-  function TILBalanceValid(value:any){
-    let result: boolean
-    if (value.isInteger) { 
-      result = false
-      }
-      else {
-        result = true
-      }
-
-    return result
-  }
-
-  UpdateOrganisation.acl = {
-    action: 'manage',
-    subject: 'UpdateOrganisation'
-  }
-  
+UpdateOrganisation.acl = {
+	action: 'manage',
+	subject: 'UpdateOrganisation'
+}
 export default UpdateOrganisation

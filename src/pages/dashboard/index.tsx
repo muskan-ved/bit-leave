@@ -1,8 +1,11 @@
 // ** React Imports
 import { useContext, useEffect, useState } from 'react'
 
+// ** Context
+import { useAuth } from 'src/hooks/useAuth'
+
 // ** Axios
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -48,46 +51,67 @@ type leavesbyDepartment = {
 
 type team = {
   name: string
-  department :string
+  department: string
 }
 
 type vitals = {
-  averageSalary : number
+  averageSalary: number
 }
 
 type leaveDetails = {
-  cashoutValue : number
-  excessDays : number
-  valueText : string
+  cashoutValue: number
+  excessDays: number
+  valueText: string
+}
+
+type profile = {
+  id: number,
+  fullname: string,
+  onboarded: boolean
 }
 
 type employee = {
   id: number
-  leaveDetails : leaveDetails
+  profile: profile
+  leaveDetails: leaveDetails
   leavesByOrg: Array<leavesbyOrg>
-  leavesByDepartment : Array<leavesbyDepartment>
-  team : team
-  vitals : vitals
+  leavesByDepartment: Array<leavesbyDepartment>
+  team: team
+  vitals: vitals
 }
 
 const Dashboard = () => {
   // ** Hooks
   const ability = useContext(AbilityContext)
+  const {logout} = useAuth()
 
   const [data, setData] = useState<employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const token = localStorage.getItem("accessToken")
 
   const fetchData = async () => {
+    const userData = localStorage.getItem("userData")
+    let employeeId;
+    if (userData != null) {
+      const data = JSON.parse(userData)
+      employeeId = data.id;
+    }
     axios
-      .get('https://api.bitleave.co/employees', {
+      .get('https://api.bitleave.co/employees/' + employeeId, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
         let data = res.data;
-        console.log(data);
         setData(data.data)
         setIsLoading(false);
+      })
+      .catch((reason: AxiosError) => {
+        console.log(reason)
+        if (reason.response!.status === 401) {
+          logout()
+        } else {
+          // Handle else
+        }
       }
       )
   };
@@ -95,23 +119,31 @@ const Dashboard = () => {
   useEffect(() => {
     if (!data) {
       setIsLoading(true);
-      console.log('Fetching');
+
       fetchData();
     }
   }, []);
 
-  // return (<div>
-
-  //   {data.leavesByOrg.map(({ fullname }) => (
-  //       <p> {fullname} </p>
-  //     ))}
-
-
-  // </div>)
   if (isLoading)
     return (<CircularProgress color="success" />)
 
-  if (!isLoading && data) {
+  if (!isLoading && data && !data.profile.onboarded) {
+    return (
+      <Grid container spacing={6}>
+        <Grid item md={12} xs={12}>
+          <Card>
+            <CardHeader title='Your Dashboard' />
+            <CardContent>
+              <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
+              <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
+              <br />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>)
+  }
+
+  if (!isLoading && data && data.profile.onboarded) {
     return (
       <div>
         <Grid container spacing={6}>
@@ -136,11 +168,11 @@ const Dashboard = () => {
             </Card>
           </Grid>
           <Grid item md={4} xs={12} sm={6}>
-          <CardStatisticsCharacter
+            <CardStatisticsCharacter
               data={{
-                stats:`${data.vitals.averageSalary.toFixed(0)}k`,
+                stats: `${data.vitals.averageSalary.toFixed(0)}k`,
                 title: 'Average Salary',
-                trend:'positive',
+                trend: 'positive',
                 chipColor: 'success',
                 trendNumber: 'in AUD $',
                 chipText: 'Average Excess Days',
@@ -149,7 +181,7 @@ const Dashboard = () => {
             />
           </Grid>
         </Grid>
-        <br/>
+        <br />
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
@@ -192,7 +224,7 @@ const Dashboard = () => {
             </Grid>
           ) : null}
         </Grid>
-        <br/>
+        <br />
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
             <Grid item md={8} xs={8}>
@@ -226,7 +258,7 @@ const Dashboard = () => {
         </Grid>
       </div>
     )
-  } 
+  }
 }
 
 Dashboard.acl = {
