@@ -1,11 +1,6 @@
-// ** Context
-import { useAuth } from 'src/hooks/useAuth'
-
-// ** Axios
-import axios, { AxiosError } from 'axios'
-
 // ** React Imports
 import React, { SyntheticEvent, useState, useEffect } from 'react'
+import axios from "axios";
 import dynamic from 'next/dynamic'
 import { EditorProps } from 'react-draft-wysiwyg'
 const Editor = dynamic<EditorProps>(
@@ -16,8 +11,6 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw, ContentState, convertFromRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 const htmlToDraft = typeof window === 'object' && require('html-to-draftjs').default;
-
-
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -29,7 +22,6 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
 import Divider from '@mui/material/Divider'
-
 
 // ** MUI Imports
 import Tab from '@mui/material/Tab'
@@ -45,16 +37,14 @@ import { CosineWave } from 'mdi-material-ui';
 
 const Templates = () => {
   // ** State
-  const [value, setValue] = useState<string>("0")
+  const [value, setValue] = useState<string>('0')
   const [firstexpanded, setFirstExpanded] = useState<string | false>("panel2")
+  const [getTabList, setTabList] = useState<string[]>([])
   const [getdata, setGetData] = useState<any[]>([])
   const [editorState, setEditorState] = useState<any[]>([])
-  const [editor, setEditor] = useState(EditorState.createEmpty())
   const token = localStorage.getItem("accessToken")
   const baseUrl = 'https://api.bitleave.co/organisations/1'
   const updateBaseUrl = "https://api.bitleave.co/organisations/templates"
-  const {logout} = useAuth()
-  
   useEffect(() => {
     fetchData();
   }, []);
@@ -65,31 +55,30 @@ const Templates = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
-        const data = res.data.data.organisation.organisationstemplates;
+        const data = res.data.data.organisation.organisationstemplates
         const editorState: any[] = []
+        const tabList: string[] = []
+        setTabList([]);
         setEditorState([]);
-        data.map((value: any) => {
+        data.map((value: any,i: number) => {
+          if (!tabList.find(x => x === value.templatetype)) {
+            tabList.push(value.templatetype);
+          }
           const contentBlocks = htmlToDraft(value.defaulttext)
           const contentState = ContentState.createFromBlockArray(contentBlocks)
+          
+          value.index = i;
           value.updateEditorState = EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks))
           editorState.push(value.updateEditorState);
         });
         setEditorState(editorState);
+        setTabList(tabList);
         setGetData(data);
-
       })
-      .catch((reason: AxiosError) => {
-        console.log(reason)
-        if (reason.response!.status === 401) {
-          logout()
-        } else {
-          // Handle else
-        }
-      }
-      );
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
-
   const updateData = async () => {
     const organisationstemplates = [];
     for (let i = 0; i < getdata.length; i++) {
@@ -122,62 +111,46 @@ const Templates = () => {
   const handleChangeTab = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
-
-  if (!getdata) {
-    return (
-      <Grid container spacing={6}>
-        <Grid item md={12} xs={12}>
-          <Card>
-            <CardHeader title='Your Dashboard' />
-            <CardContent>
-              <Typography sx={{ mb: 4 }}>No templates exist for your organisation !</Typography>
-              <br />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>)
-  }
-
   return (
     <Card>
       <TabContext value={value}>
         <TabList onChange={handleChangeTab} aria-label='card navigation example'>
-          {getdata && getdata.map((data: any, i: any) =>
-            <Tab value={i} label={data.templatetype} />)}
-
+          {getTabList && getTabList.map((data: string, i: any) =>
+            <Tab key={i} value={i.toString()} label={data} />)}
         </TabList>
         <CardContent>
-          {getdata && getdata.map((data: any, i: any) =>
-            <TabPanel value={i} sx={{ p: 0 }}>
-              <Accordion onChange={handleFirstChange("panel2")}>
-                <AccordionSummary
-                  expandIcon={<ChevronDown />}
-                  id='form-layouts-collapsible-header-1'
-                  aria-controls='form-layouts-collapsible-content-1'
-                >
-                  <Typography key={i} variant='subtitle1' sx={{ fontWeight: 500 }}>
-                    {data.templatename}
-                  </Typography>
-                </AccordionSummary>
+          {getTabList && getTabList.map((data: string, i: any) =>
+            <TabPanel key={i} value={i.toString()} sx={{ p: 0 }}>
+              {getdata && getdata.filter(x => x.templatetype === data ).map((templtedata: any, i: any) =>
+                <Accordion key={templtedata.index} onChange={handleFirstChange("panel2")}>
+                  <AccordionSummary
+                    expandIcon={<ChevronDown />}
+                    id='form-layouts-collapsible-header-1'
+                    aria-controls='form-layouts-collapsible-content-1'
+                  >
+                    <Typography key={templtedata.index} variant='subtitle1' sx={{ fontWeight: 500 }}>
+                      {templtedata.templatename}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ pt: 6, pb: 6 }}>
+                    <Editor editorStyle={{ border: "1px solid", minHeight: '100px' }}
+                      toolbarClassName="toolbarClassName"
+                      wrapperClassName="wrapperClassName"
+                      editorClassName="editorClassName" onEditorStateChange={(e: EditorState) => {
+                        let items = [...editorState];
+                        items[templtedata.index] = e;
+                        setEditorState(items);
 
-                <AccordionDetails sx={{ pt: 6, pb: 6 }}>
-                  <Editor editorStyle={{ border: "1px solid", minHeight: '100px' }}
-                    toolbarClassName="toolbarClassName"
-                    wrapperClassName="wrapperClassName"
-                    editorClassName="editorClassName" onEditorStateChange={(e: EditorState) => {
-                      let items = [...editorState];
-                      items[i] = e;
-                      setEditorState(items);
-                    }} editorState={editorState[i]}></Editor><br />
-                </AccordionDetails>
-              </Accordion>
-            </TabPanel>)}<br />
+                      }} editorState={editorState[templtedata.index]}></Editor><br />
+                  </AccordionDetails><br />
+                </Accordion>
+              )}
+            </TabPanel>
+          )} <br />
           <Button onClick={updateData} variant='contained'>Update</Button>
         </CardContent>
       </TabContext>
-
     </Card >
-
   )
 }
 Templates.acl = {
