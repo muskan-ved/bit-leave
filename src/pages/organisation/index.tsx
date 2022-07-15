@@ -268,7 +268,6 @@ const UpdateOrganisation = () => {
 	const fileReader = new FileReader();
 
 	const handleOnChange = (e: any) => {
-		alert('here')
 		setArray([])
 		if (e.target.files[0]) {
 			fileReader.onload = function (event: any) {
@@ -290,7 +289,7 @@ const UpdateOrganisation = () => {
 								Bucket: S3_BUCKET,
 								Key: fileName,
 							};
-
+							
 							myBucket.putObject(params)
 								.on('httpUploadProgress', (evt) => {
 									setFile(e.target.files[0]);
@@ -300,8 +299,16 @@ const UpdateOrganisation = () => {
 											hideProgressBar: false,
 										})
 
-										const article = { identifier: fileName };
-										axios.post('https://api.bitleave.co/employees/syncOrg', article)
+										const article = { processIdentifier: fileName };
+										const token = localStorage.getItem("accessToken");
+										console.log(token);
+										axios.post('https://api.bitleave.co/employees/syncOrg',article,
+											{
+												headers: {
+													Authorization: `Bearer ${token}`
+												}
+												
+											})
 											.then(response => {
 												toast.success("Successfully processed the update", {
 													autoClose: 5000,
