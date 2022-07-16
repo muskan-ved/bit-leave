@@ -178,7 +178,7 @@ const VerticalNavLink = ({
                   componentType='vertical-menu'
                   iconProps={{
                     sx: {
-                      ...(!parent ? { fontSize: '1.5rem' } : { fontSize: '0.5rem' }),
+                      ...(!parent ? { fontSize: '1.0rem' } : { fontSize: '0.5rem' }),
                       ...(parent && item.icon ? { fontSize: '0.875rem' } : {})
                     }
                   }}

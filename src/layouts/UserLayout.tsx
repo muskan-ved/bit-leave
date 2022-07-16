@@ -43,12 +43,12 @@ const UserLayout = ({ children }: Props) => {
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
 
   return (
-    <Layout
-      hidden={hidden}
-      settings={settings}
-      saveSettings={saveSettings}
-      {...(settings.layout === 'horizontal'
-        ? {
+      <Layout
+        hidden={hidden}
+        settings={settings}
+        saveSettings={saveSettings}
+        {...(settings.layout === 'horizontal'
+          ? {
             // ** Navigation Items
             horizontalNavItems: HorizontalNavItems(),
 
@@ -60,7 +60,7 @@ const UserLayout = ({ children }: Props) => {
               <HorizontalAppBarContent settings={settings} saveSettings={saveSettings} />
             )
           }
-        : {
+          : {
             // ** Navigation Items
             verticalNavItems: VerticalNavItems(),
 
@@ -77,10 +77,10 @@ const UserLayout = ({ children }: Props) => {
               />
             )
           })}
-    >
-      {children}
-      
-    </Layout>
+      >
+        {children}
+
+      </Layout>
   )
 }
 

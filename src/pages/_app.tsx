@@ -126,7 +126,7 @@ const App = (props: ExtendedAppProps) => {
             name='description'
             content={`${themeConfig.templateName} – Optimising your Leave, Well-being and Balance Sheet`}
           />
-          <meta name='keywords' content='Material Design, MUI, Admin Template, React Admin Template' />
+          <meta name='keywords' content='Bit Leave, Leave, Well-being, Balance Sheet' />
           <meta name='viewport' content='initial-scale=1, width=device-width' />
         </Head>
         <Provider store={store}>
