@@ -24,6 +24,7 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
+import Divider from '@mui/material/Divider'
 
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -149,7 +150,7 @@ const Dashboard = () => {
         <Grid container spacing={6}>
           <Grid item md={5} xs={12}>
             <Card>
-              <CardHeader title='Your Leave Details' />
+              <CardHeader title='Your Leave Details' subheader={<Divider></Divider>} />
               <CardContent>
                 <Typography sx={{ mb: 4 }}>Excess Days : {data.leaveDetails.excessDays.toFixed(2)}</Typography>
                 <Typography>Cashout Value : ${data.leaveDetails.cashoutValue}</Typography>
@@ -160,7 +161,7 @@ const Dashboard = () => {
           </Grid>
           <Grid item md={3} xs={12}>
             <Card>
-              <CardHeader title='Your Team' />
+              <CardHeader title='Your Team' /> 
               <CardContent>
                 <Typography sx={{ mb: 4 }}>Department : {data.team.department}</Typography>
                 <Typography>Manager name : {data.team.name}</Typography>
@@ -188,6 +189,7 @@ const Dashboard = () => {
               <Card>
                 <CardHeader title='Leaves By Organisation' />
                 <CardContent>
+                <Divider></Divider>
                   <Grid item md={12} xs={12}>
                     <TableContainer component={Paper}>
                       <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>

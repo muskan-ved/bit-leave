@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import { GridProps } from '@mui/material/Grid'
+import Divider from '@mui/material/Divider'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -69,6 +70,7 @@ const Home = () => {
                   </Box>
                   ! 🎉
                 </Typography>
+                <Divider></Divider>
                 <Typography variant='body2'>How are you today? 🤟🏻</Typography>
                 <Typography sx={{ mb: 4.5 }} variant='body2'>
                   Refer to FAQs and Resources to get started !
@@ -87,6 +89,7 @@ const Home = () => {
         <Card>
           <CardHeader title='Frequently Asked Questions'></CardHeader>
           <CardContent>
+            <Divider></Divider>
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
