@@ -24,6 +24,7 @@ import ScrollToTop from 'src/@core/components/scroll-to-top'
 
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
+import ErrorComponent from 'src/layouts/components/error/error'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -101,6 +102,7 @@ const VerticalLayout = (props: LayoutProps) => {
               })
             }}
           >
+            <ErrorComponent></ErrorComponent>
             {children}
           </ContentWrapper>
 

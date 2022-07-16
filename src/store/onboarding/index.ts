@@ -3,8 +3,8 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
-import { FormatLetterCaseLower } from 'mdi-material-ui'
 import { OnboardingType } from 'src/types/onboarding'
+import { show } from '../apiError'
 
 interface Redux {
   getState: any
@@ -14,24 +14,38 @@ interface Redux {
 export const postOrgOnboarding = createAsyncThunk('onboarding/org',
 
   async (params: OnboardingType, { dispatch, getState }: Redux) => {
-    debugger;
     console.log(params);
     const token = localStorage.getItem("accessToken")
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    debugger;
+    try {
+      const response = await axios
+        .post('http://localhost:3002/onboarding',
+          params,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
 
-    const response = await axios
-      .post('https://api.bitleave.co/organisations', {
-        headers: { 'Authorization': `Bearer ${token}` },
-        data: params
-      });
-
-    return response.data
+      return response.data
+    }
+    catch (err) {
+      var data = {
+        canShow: true,
+        redirect: true,
+        code: '',
+        message: '',
+        location: '',
+      }
+      dispatch(show(data))
+    }
   })
 
-export const postEmpOnboarding = createAsyncThunk('onboarding/emp',
 
-  async (params: OnboardingType, { dispatch, getState }: Redux) => {
-    return 'OK'
-  })
 
 
 
@@ -63,6 +77,7 @@ const appOnboardingSlice = createSlice({
       console.log(state, action);
       state.success = false;
       state.isLoading = false;
+
 
     })
     builder.addCase(postOrgOnboarding.pending, (state, action) => {

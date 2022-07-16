@@ -3,10 +3,14 @@ import { configureStore } from '@reduxjs/toolkit'
 
 // ** Reducers
 import onboarding from 'src/store/onboarding'
+import employee from 'src/store/employee'
+import apierror from 'src/store/apiError'
 
 export const store = configureStore({
   reducer: {
-    onboarding
+    onboarding,
+    employee,
+    apierror
   },
   middleware: getDefaultMiddleware =>
   getDefaultMiddleware({

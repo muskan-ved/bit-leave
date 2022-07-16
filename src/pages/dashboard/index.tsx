@@ -43,7 +43,7 @@ import { AccountAlertOutline, OfficeBuildingOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
-
+import CashoutDialog from './cashout'
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
@@ -189,6 +189,10 @@ const Dashboard = () => {
     }
   }
 
+  const [dialogOpen,setDialogOpen]=useState<boolean>(true)
+  const handleDialogClose=()=>{
+    setDialogOpen(false)
+  }
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")
     let employeeId;
@@ -410,6 +414,7 @@ const Dashboard = () => {
             </Grid>
           ) : null}
         </Grid>
+        <CashoutDialog open={dialogOpen} handleClose ={handleDialogClose}></CashoutDialog>
       </div>
     )
   }

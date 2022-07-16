@@ -6,7 +6,8 @@ import StepContent from '@mui/material/StepContent';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import BlankLayout from 'src/@core/layouts/BlankLayout';
-import SignaturePad from "react-signature-canvas";
+import SignaturePad from 'react-signature-canvas';
+
 import { red } from '@mui/material/colors';
 import React, { ReactNode, useRef } from 'react';
 import { Box, BoxProps, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
@@ -40,9 +41,9 @@ const StepperContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 
 interface OnBoardingState {
   compliance: string,
-  leaveNotification: number,
-  leaveWarning: number,
-  maxPayout: number,
+  leaveNotification: number|null,
+  leaveWarning: number|null,
+  maxPayout: number|null,
   email: string,
   payrollEmail: string,
   payrollLink: string,
@@ -118,15 +119,15 @@ const approvalSchema = yup.object().shape({
     })
 })
 
-const Onboarding = () => {
+const Onboarding = (props:any) => {
   // export default function onboarding() {
   const steps = ['Start', 'Compliance', 'Thresholds', 'Contacts', 'Approval'];
   const [activeStep, setActiveStep] = React.useState(0);
   const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
     compliance: '',
-    leaveNotification: '',
-    leaveWarning: '',
-    maxPayout: '',
+    leaveNotification: null,
+    leaveWarning: null,
+    maxPayout: null,
     email: '',
     payrollEmail: '',
     payrollLink: '',

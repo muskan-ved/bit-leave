@@ -7,6 +7,7 @@ import { BlankLayoutWithAppBarProps } from './types'
 
 // ** AppBar Imports
 import AppBar from 'src/@core/layouts/components/blank-layout-with-appBar'
+import ErrorComponent from 'src/layouts/components/error/error'
 
 // Styled component for Blank Layout with AppBar component
 const BlankLayoutWithAppBarWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -45,6 +46,7 @@ const BlankLayoutWithAppBar = (props: BlankLayoutWithAppBarProps) => {
           minHeight: theme => `calc(100vh - ${theme.spacing((theme.mixins.toolbar.minHeight as number) / 4)})`
         }}
       >
+
         {children}
       </Box>
     </BlankLayoutWithAppBarWrapper>
