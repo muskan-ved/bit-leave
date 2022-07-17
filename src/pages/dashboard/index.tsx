@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useEffect, useState } from 'react'
+import { SyntheticEvent, useContext, useEffect, useState } from 'react'
 
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
@@ -56,6 +56,10 @@ import { useTheme } from '@mui/material/styles'
 // ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline'
 import { selectedGridRowsCountSelector } from '@mui/x-data-grid'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { loadEmployee } from 'src/store/employee'
+import CashoutDialog from './cashout'
 
 // Styled Box component
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -126,7 +130,16 @@ const Dashboard = () => {
   const [data, setData] = useState<employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState(0);
+  const dispatch = useDispatch<AppDispatch>()
 
+  const [dialogOpen,setDialogOpen]=useState<boolean>(false)
+  const handleDialogClose=()=>{
+    setDialogOpen(false)
+  }
+  const cashoutLeaveButtonClick =(event:SyntheticEvent)=>{
+    setDialogOpen(true)
+
+  }
   const token = localStorage.getItem("accessToken")
   const theme = useTheme()
   const options: ApexOptions = {
@@ -217,11 +230,23 @@ const Dashboard = () => {
       }
       )
   };
+  const fetchDataFromRedux =async()=>{
+    const userData = localStorage.getItem("userData")
+    let employeeId;
+    if (userData != null) {
+      const data = JSON.parse(userData)
+      employeeId = data.id;
+    }
+    const data = await dispatch(loadEmployee(employeeId))
+    setData(data.payload.data);
+    console.log(data)
+    setIsLoading(false)
+  }
 
   useEffect(() => {
     if (!data) {
       setIsLoading(true);
-      fetchData();
+      fetchDataFromRedux();
     }
     console.log(count);
     if (count != 1)
@@ -313,7 +338,7 @@ const Dashboard = () => {
                 <Divider></Divider>
                 <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
                 <br></br>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={cashoutLeaveButtonClick}>
                   <Button variant='contained'>Cashout Leave</Button>
                 </Box>
               </CardContent>
@@ -417,7 +442,7 @@ const Dashboard = () => {
             </Grid>
           ) : null}
         </Grid>
-        {/* <CashoutDialog open={dialogOpen} handleClose ={handleDialogClose}></CashoutDialog> */}
+        <CashoutDialog open={dialogOpen} handleClose ={handleDialogClose}></CashoutDialog>
       </div>
     )
   }

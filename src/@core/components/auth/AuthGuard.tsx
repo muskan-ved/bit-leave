@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 
 // ** Hooks Import
 import { useAuth } from 'src/hooks/useAuth'
-import { AppDispatch, RootState } from 'src/store'
+import { AppDispatch } from 'src/store'
 import { useDispatch } from 'react-redux'
 import { refreshUserState } from 'src/store/user'
 

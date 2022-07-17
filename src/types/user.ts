@@ -1,4 +1,3 @@
-
 export type user = {
   avatar: string | null,
   companyname: string | null,

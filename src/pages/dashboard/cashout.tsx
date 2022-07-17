@@ -64,7 +64,7 @@ const SignatureSchema = yup.object().shape({
 
 const CashoutDialog = (props: any) => {
   const [activeStep, setActiveStep] = React.useState(0);
-  
+
   //const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -155,7 +155,7 @@ const CashoutDialog = (props: any) => {
                 alignItems: 'flex-start',
               }}>
                 <Item>Days Available:</Item>
-                <Item>Item 3</Item>
+                <Item>{store.cashoutOption!=null && store.cashoutOption?.daysAvailable!=null && store.cashoutOption?.daysAvailable.toFixed(2)}</Item>
               </Box>
               <Box sx={{
                 display: 'flex',
@@ -163,7 +163,7 @@ const CashoutDialog = (props: any) => {
 
               }}>
                 <Item>Value (Before tax):</Item>
-                <Item>Item value Before</Item>
+                <Item> {store.cashoutOption!=null && store.cashoutOption?.cashoutAmount!=null&& '$' + store.cashoutOption?.cashoutAmount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</Item>
               </Box>
 
               <Controller
