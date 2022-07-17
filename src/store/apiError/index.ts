@@ -11,7 +11,6 @@ const apiErrorSlice = createSlice({
   },
   reducers: {
     show: (state, action) => {
-      debugger;
       state.message = 'this is a message'
       state.redirect=true
     },

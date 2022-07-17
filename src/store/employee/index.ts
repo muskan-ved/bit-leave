@@ -16,12 +16,29 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
 
   })
 
+export const loadEmployee = createAsyncThunk('emp/load',
+  async (params: string, { dispatch, getState }: Redux) => {
+    console.log(params);
+    const token = localStorage.getItem("accessToken");
+    const result = await axios
+      .get('https://api.bitleave.co/employees/' + params, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+  })
+
 
 
 
 const employeeSlice = createSlice({
   name: 'employee',
-  initialState: {},
+  initialState: {
+    profile: null,
+    team: null,
+    leaveDetail: null,
+    cashoutOption: null,
+    vitals: null
+  },
   reducers: {
 
   },
@@ -37,8 +54,15 @@ const employeeSlice = createSlice({
       // state.isLoading = false;
 
     })
+
     builder.addCase(postEmployeeCashout.pending, (state, action) => {
       console.log(state, action);
+    })
+
+    builder.addCase(loadEmployee.fulfilled, (state, action) => {
+      console.log(state, action);
+      var employee =action.payload
+
     })
 
 

@@ -16,6 +16,9 @@ import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendC
 //Cognito Integration
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
 import { resolve } from 'path'
+import { AppDispatch } from 'src/store'
+import { useDispatch, useSelector } from 'react-redux'
+import {refreshUserState} from 'src/store/user'
 
 //
 const poolData = {
@@ -58,6 +61,9 @@ const AuthProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
+
+  const dispatch = useDispatch<AppDispatch>()
+
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
@@ -110,6 +116,7 @@ const AuthProvider = ({ children }: Props) => {
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
+        dispatch(refreshUserState(userData))
         //
         const returnUrl = router.query.returnUrl
          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
@@ -132,6 +139,7 @@ const AuthProvider = ({ children }: Props) => {
     window.localStorage.removeItem('userData')
     window.localStorage.removeItem(authConfig.storageTokenKeyName)
     window.localStorage.clear()
+    dispatch({ type: 'store/reset' })
     router.push('/login')
   }
 
@@ -242,17 +250,17 @@ const AuthProvider = ({ children }: Props) => {
   }
 
   const handleConfirmUserPassword = (params: ConfirmPasswordUserParams, errorCallback?: ErrCallbackType) => {
-    
+
     const {
      query: { emailId }
     } = router
-  
+
     const props = {
      emailId
     }
 
-   const userEmail = props.emailId 
-   // const userEmail= window.localStorage.getItem("userEmail")  
+   const userEmail = props.emailId
+   // const userEmail= window.localStorage.getItem("userEmail")
      if(userEmail!= null){
         const user = new CognitoUser({
         Username: userEmail as string,

@@ -21,5 +21,6 @@ export type OnBoardingStore = {
   approval: string,
   signature: string,
   success: boolean,
-  isLoading: boolean
+  isLoading: boolean,
+  onboardingDone:boolean|false
 }

@@ -16,13 +16,10 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
   async (params: OnboardingType, { dispatch, getState }: Redux) => {
     console.log(params);
     const token = localStorage.getItem("accessToken")
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
-    debugger;
+
     try {
       const response = await axios
-        .post('http://localhost:3002/onboarding',
+        .post('https://api.bitleave.co/organisations/onboarding',
           params,
           {
             headers: {
@@ -45,10 +42,6 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
     }
   })
 
-
-
-
-
 const appOnboardingSlice = createSlice({
   name: 'appOnboarding',
   initialState: {
@@ -62,23 +55,25 @@ const appOnboardingSlice = createSlice({
     approval: '',
     signature: '',
     success: false,
-    isLoading: false
+    isLoading: false,
+    onboardingDone: false
   },
   reducers: {
-
+    orgonboardingComplete: (state, action) => {
+      state.onboardingDone = action.payload
+    },
   },
   extraReducers: builder => {
     builder.addCase(postOrgOnboarding.fulfilled, (state, action) => {
       console.log(state, action);
       state.success = true;
       state.isLoading = false;
+      state.onboardingDone = true;
     })
     builder.addCase(postOrgOnboarding.rejected, (state, action) => {
       console.log(state, action);
       state.success = false;
       state.isLoading = false;
-
-
     })
     builder.addCase(postOrgOnboarding.pending, (state, action) => {
       console.log(state, action);

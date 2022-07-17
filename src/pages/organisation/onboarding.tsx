@@ -24,6 +24,7 @@ import { postOrgOnboarding } from 'src/store/onboarding';
 import { AppDispatch, RootState } from 'src/store';
 import { useDispatch, useSelector } from 'react-redux'
 import BlankLayoutWithAppBarWrapper from 'src/@core/layouts/BlankLayoutWithAppBar';
+import { useRouter } from 'next/router';
 
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -123,6 +124,7 @@ const Onboarding = (props:any) => {
   // export default function onboarding() {
   const steps = ['Start', 'Compliance', 'Thresholds', 'Contacts', 'Approval'];
   const [activeStep, setActiveStep] = React.useState(0);
+  const router =useRouter()
   const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
     compliance: '',
     leaveNotification: null,
@@ -324,7 +326,7 @@ const Onboarding = (props:any) => {
     await dispatch(postOrgOnboarding(
       stateData
     ))
-
+    router.push('/home')
     console.log(onBoarding)
   }
   const formatIntoPng = () => {

@@ -64,6 +64,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import { OnboardingProvider } from 'src/context/OnboardingContext'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -119,41 +120,43 @@ const App = (props: ExtendedAppProps) => {
 
   return (
 
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>{`${themeConfig.templateName} - Optimising your Leave, Well-being and Balance Sheet`}</title>
-          <meta
-            name='description'
-            content={`${themeConfig.templateName} – Optimising your Leave, Well-being and Balance Sheet`}
-          />
-          <meta name='keywords' content='Bit Leave, Leave, Well-being, Balance Sheet' />
-          <meta name='viewport' content='initial-scale=1, width=device-width' />
-        </Head>
-        <Provider store={store}>
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <title>{`${themeConfig.templateName} - Optimising your Leave, Well-being and Balance Sheet`}</title>
+        <meta
+          name='description'
+          content={`${themeConfig.templateName} – Optimising your Leave, Well-being and Balance Sheet`}
+        />
+        <meta name='keywords' content='Bit Leave, Leave, Well-being, Balance Sheet' />
+        <meta name='viewport' content='initial-scale=1, width=device-width' />
+      </Head>
+      <Provider store={store}>
         <AuthProvider>
-          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-            <SettingsConsumer>
-              {({ settings }) => {
-                return (
-                  <ThemeComponent settings={settings}>
-                    <WindowWrapper>
-                      <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                        <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
-                          {getLayout(<Component {...pageProps} />)}
-                        </AclGuard>
-                      </Guard>
-                    </WindowWrapper>
-                    <ReactHotToast>
-                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                    </ReactHotToast>
-                  </ThemeComponent>
-                )
-              }}
-            </SettingsConsumer>
-          </SettingsProvider>
+          <OnboardingProvider>
+            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+              <SettingsConsumer>
+                {({ settings }) => {
+                  return (
+                    <ThemeComponent settings={settings}>
+                      <WindowWrapper>
+                        <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                          <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
+                            {getLayout(<Component {...pageProps} />)}
+                          </AclGuard>
+                        </Guard>
+                      </WindowWrapper>
+                      <ReactHotToast>
+                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                      </ReactHotToast>
+                    </ThemeComponent>
+                  )
+                }}
+              </SettingsConsumer>
+            </SettingsProvider>
+          </OnboardingProvider>
         </AuthProvider>
-        </Provider>
-      </CacheProvider>
+      </Provider>
+    </CacheProvider>
 
   )
 }
