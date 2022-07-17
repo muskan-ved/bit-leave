@@ -3,25 +3,24 @@ import React, { SyntheticEvent, useState, useEffect } from 'react'
 import axios from "axios";
 import dynamic from 'next/dynamic'
 import { EditorProps } from 'react-draft-wysiwyg'
+
 const Editor = dynamic<EditorProps>(
   () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
   { ssr: false }
 )
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+
 const htmlToDraft = typeof window === 'object' && require('html-to-draftjs').default;
+
 // ** MUI Imports
 import Card from '@mui/material/Card'
-import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import FormControl from '@mui/material/FormControl'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
-import Divider from '@mui/material/Divider'
 import CircularProgress from '@mui/material/CircularProgress'
 
 // ** MUI Imports
@@ -33,7 +32,6 @@ import TabContext from '@mui/lab/TabContext'
 
 // ** Icons Imports
 import ChevronDown from 'mdi-material-ui/ChevronDown'
-import { CosineWave } from 'mdi-material-ui';
 
 
 const Templates = () => {
@@ -48,6 +46,7 @@ const Templates = () => {
   const token = localStorage.getItem("accessToken")
   const baseUrl = 'https://api.bitleave.co/organisations/'
   const updateBaseUrl = "https://api.bitleave.co/organisations/templates"
+  if(firstexpanded) {}
 
   useEffect(() => {
     setIsLoading(true);
@@ -107,6 +106,7 @@ const Templates = () => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
+        if(res) {}
         alert("Data Updated Successfully")
       })
       .catch((err) => {
@@ -116,10 +116,12 @@ const Templates = () => {
 
   }
   const handleFirstChange = (panel1: string) => (event: SyntheticEvent, isFirstExpanded: boolean) => {
+    if(event) {}
     setFirstExpanded(isFirstExpanded ? panel1 : false)
   }
 
   const handleChangeTab = (event: SyntheticEvent, newValue: string) => {
+    if(event){}
     setValue(newValue)
   }
   if (isLoading)
@@ -151,7 +153,7 @@ const Templates = () => {
                       toolbarClassName="toolbarClassName"
                       wrapperClassName="wrapperClassName"
                       editorClassName="editorClassName" onEditorStateChange={(e: EditorState) => {
-                        let items = [...editorState];
+                        const items = [...editorState];
                         items[templtedata.index] = e;
                         setEditorState(items);
 

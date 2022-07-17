@@ -44,17 +44,21 @@ const OnboardingProvider = ({ children }: Props) => {
       if (path !== '/organisation/onboarding') {
         if (!store.onboardingDone) {
           const userData = window.localStorage.getItem('userData')
-          const storedUser = JSON.parse(userData)
-          const employeeId = storedUser.id;
-          const employee = await dispatch(loadEmployee(employeeId));
-          console.log(employee)
-          if (employee.payload.data.profile) {
-
-            const user = JSON.parse(userData)
-            console.log(user);
-            if (!employee.payload.data.profile.onboarded) {
-              if (user.role === 'admin') {
-                router.push('/organisation/onboarding')
+          let storedUser;
+          if (userData) {
+            storedUser = JSON.parse(userData)
+            const employeeId = storedUser.id;
+            const employee = await dispatch(loadEmployee(employeeId));
+            console.log(employee)
+            if (employee.payload.data.profile) {
+              let user;
+              if (userData)
+                user = JSON.parse(userData)
+              console.log(user);
+              if (!employee.payload.data.profile.onboarded) {
+                if (user.role === 'admin') {
+                  router.push('/organisation/onboarding')
+                }
               }
             }
           }

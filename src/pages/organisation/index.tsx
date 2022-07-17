@@ -12,13 +12,12 @@ import AWS from 'aws-sdk';
 import CSVFileValidator from 'csv-file-validator';
 import authConfig from '../../configs/auth';
 import axios from 'axios'
-import { Null } from 'mdi-material-ui'
 
 const UpdateOrganisation = () => {
 
 	const [file, setFile] = useState();
 	const [array, setArray] = useState([]);
-
+	if (file) { }
 	const S3_BUCKET = authConfig.bucket_name;
 	const REGION = authConfig.region;
 
@@ -34,41 +33,49 @@ const UpdateOrganisation = () => {
 
 	const isIdValid = function (id: any) {
 		const reqExp = /^[0-9A-Z]+$/;
+
 		return reqExp.test(id)
 	}
 
 	const isEmailValid = function (email: any) {
 		const reqExp = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
+
 		return reqExp.test(email)
 	}
 
 	const isNameValid = function (name: any) {
 		const reqExp = /^[A-Za-z]+$/
+
 		return reqExp.test(name)
 	}
 
 	const isEmpTypeValid = function (empType: any) {
 		const reqExp = /^[A-Za-z-]+$/
+
 		return reqExp.test(empType)
 	}
 
 	const isFullNameValid = function (fullname: any) {
 		const reqExp = /^[A-Za-z]+ [A-Za-z]+$/
+
 		return reqExp.test(fullname)
 	}
 
 	const isNumValid = function (num: any) {
 		const reqExp = /^[0-9]+$/
+
 		return reqExp.test(num)
 	}
 
 	const isFloatNumValid = function (num: any) {
 		const reqExp = /^[0-9.0-9]+$/
+
 		return reqExp.test(num)
 	}
 
 	const isDateValid = function (date: any) {
-		var reGoodDate = /^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/;
+		const reGoodDate = /^((0?[1-9]|1[012])[- /.](0?[1-9]|[12][0-9]|3[01])[- /.](19|20)?[0-9]{2})*$/;
+
 		return reGoodDate.test(date);
 	}
 
@@ -289,7 +296,7 @@ const UpdateOrganisation = () => {
 								Bucket: S3_BUCKET,
 								Key: fileName,
 							};
-							
+
 							myBucket.putObject(params)
 								.on('httpUploadProgress', (evt) => {
 									setFile(e.target.files[0]);
@@ -302,20 +309,22 @@ const UpdateOrganisation = () => {
 										const article = { processIdentifier: fileName };
 										const token = localStorage.getItem("accessToken");
 										console.log(token);
-										axios.post('https://api.bitleave.co/employees/syncOrg',article,
+										axios.post('https://api.bitleave.co/employees/syncOrg', article,
 											{
 												headers: {
 													Authorization: `Bearer ${token}`
 												}
-												
+
 											})
 											.then(response => {
+												if (response) { }
 												toast.success("Successfully processed the update", {
 													autoClose: 5000,
 													hideProgressBar: false,
 												})
 											})
 											.catch(err => {
+												if (err) { }
 												toast.error("Failed processing the update", {
 													autoClose: 5000,
 													hideProgressBar: false,
@@ -333,7 +342,7 @@ const UpdateOrganisation = () => {
 								})
 						}
 					})
-					.catch(err => { })
+					.catch(err => { if (err) { } })
 			};
 
 			fileReader.readAsText(e.target.files[0]);
@@ -344,92 +353,92 @@ const UpdateOrganisation = () => {
 		const csvHeader = string.slice(0, string.indexOf("\n")).split(",");
 		const csvRows = string.slice(string.indexOf("\n") + 1).split("\n");
 		const Rows = string.slice(string.indexOf("\n") + 1).split(",");
+		if (Rows) { }
 		csvRows.splice(-1);
 		if (csvHeader.length > 0) {
 
 			// ** Check EmpId **
 			if (csvHeader.includes("id")) {
 				const index = csvHeader.indexOf("id")
-
+				if (index) { }
 			}
 
 			// ** Check FirstName **
 			if (csvHeader.includes("firstname")) {
 				const index = csvHeader.indexOf("firstname")
-
+				if (index) { }
 			}
 
 			// ** Check LastName **
 			if (csvHeader.includes("lastname")) {
 				const index = csvHeader.indexOf("lastname")
-
+				if (index) { }
 			}
 
 			// ** Check FullName **
 			if (csvHeader.includes("fullname")) {
 				const index = csvHeader.indexOf("fullname")
-
+				if (index) { }
 			}
 
 			// ** Check ManagerId**
 			if (csvHeader.includes("manager_id") || !(csvHeader.includes("manager_id"))) {
 				const index = csvHeader.indexOf("manager_id")
-
+				if (index) { }
 			}
 
 			// ** Check Email **
 			if (csvHeader.includes("emailaddress")) {
 				const index = csvHeader.indexOf("emailaddress")
-
-
+				if (index) { }
 			}
 
 			// ** Check AwardType **
 			if (csvHeader.includes("awardtype") || !(csvHeader.includes("awardtype"))) {
 				const index = csvHeader.indexOf("awardtype")
-
+				if (index) { }
 			}
 
 			// ** Check StartDate **
 			if (csvHeader.includes("datejoined")) {
 				const index = csvHeader.indexOf("datejoined")
-
+				if (index) { }
 			}
 
 			// ** Check AnnualLeaveBalance **
 			if (csvHeader.includes("annualleavebalance")) {
 				const index = csvHeader.indexOf("annualleavebalance")
-
+				if (index) { }
 			}
 
 			// ** Check Department **
 			if (csvHeader.includes("department") || !(csvHeader.includes("department"))) {
 				const index = csvHeader.indexOf("department")
-
+				if (index) { }
 			}
 
 			// ** Check AnnualSalary **
 			if (csvHeader.includes("annualsalary")) {
 				const index = csvHeader.indexOf("annualsalary")
-
+				if (index) { }
 			}
 
 			// ** Check OrdinaryHoursPerWeek **
 			if (csvHeader.includes("ordinaryhoursperweek")) {
 				const index = csvHeader.indexOf("ordinaryhoursperweek")
-
+				if (index) { }
 			}
 
 			// ** Check HourlyRate **
 			if (csvHeader.includes("hourlyrate") || !(csvHeader.includes("hourlyrate"))) {
 				const index = csvHeader.indexOf("hourlyrate")
-
+				if (index) { }
 			}
 
 			// ** Check EmploymentType **
 			if (csvHeader.includes("employmenttype")) {
 				const index = csvHeader.indexOf("employmenttype")
-
+				if (index) { }
 			}
 
 			// ** Required Field Missing **

@@ -37,13 +37,12 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 
 // ** Custom Component Import
-import CardStatisticsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
 import { AccountAlertOutline, OfficeBuildingOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
-import CashoutDialog from './cashout'
+
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
@@ -55,11 +54,8 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { useTheme } from '@mui/material/styles'
 
 // ** Icons Imports
-import TrendingUp from 'mdi-material-ui/TrendingUp'
-import StarOutline from 'mdi-material-ui/StarOutline'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
-import { DecimalNumber } from 'aws-sdk/clients/glue'
+import { selectedGridRowsCountSelector } from '@mui/x-data-grid'
 
 // Styled Box component
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -68,16 +64,16 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }))
 
-let seriesData: number[] = []
+const seriesData: number[] = [53.17,80.21]
 
-let series = [
+const series = [
   {
     name: 'Average Excess Days',
     data: seriesData
   }
 ]
 
-let departments: string[] = []
+const departments: string[] = ['Technology', 'Marketing']
 
 type leavesbyOrg = {
   fullname: string
@@ -100,6 +96,7 @@ type vitals = {
 }
 
 type leaveDetails = {
+  totalDays: number
   cashoutValue: number
   excessDays: number
   valueText: string
@@ -128,6 +125,7 @@ const Dashboard = () => {
 
   const [data, setData] = useState<employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [count, setCount] = useState(0);
 
   const token = localStorage.getItem("accessToken")
   const theme = useTheme()
@@ -180,6 +178,7 @@ const Dashboard = () => {
       axisTicks: { show: false },
       axisBorder: { show: false },
       categories: departments,
+
       // labels: {
       //   formatter: val => `${Number(val) / 1000}k`
       // }
@@ -189,10 +188,10 @@ const Dashboard = () => {
     }
   }
 
-  const [dialogOpen,setDialogOpen]=useState<boolean>(true)
-  const handleDialogClose=()=>{
-    setDialogOpen(false)
-  }
+  // const [dialogOpen,setDialogOpen]=useState<boolean>(true)
+  // const handleDialogClose=()=>{
+  //   setDialogOpen(false)
+  // }
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")
     let employeeId;
@@ -205,8 +204,8 @@ const Dashboard = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
-        let data = res.data;
-        setData(data.data);
+        const resultData = res.data;
+        setData(resultData.data);
         setIsLoading(false);
       })
       .catch((reason: AxiosError) => {
@@ -224,19 +223,23 @@ const Dashboard = () => {
       setIsLoading(true);
       fetchData();
     }
+    console.log(count);
+    if (count != 1)
+      setCount(1);
   }, []);
 
-  useEffect(() => {
-    console.log('here');
-    if (data) {
-      for (let index = 0; index < data.leavesByDepartment.length; index++) {
-        departments.push(data.leavesByDepartment[index].department);
-      }
-      for (let index = 0; index < data.leavesByDepartment.length; index++) {
-        series[0].data.push(data.leavesByDepartment[index].averageExcessDays)
-      }
-    }
-  }, [data?.leavesByDepartment]);
+  // useEffect(() => {
+
+  //   if (data) {
+  //     console.log('here');
+  //     for (let index = 0; index < data.leavesByDepartment.length; index++) {
+  //       departments.push(data.leavesByDepartment[index].department);
+  //     }
+  //     for (let index = 0; index < data.leavesByDepartment.length; index++) {
+  //       series[0].data.push(data.leavesByDepartment[index].averageExcessDays)
+  //     }
+  //   }
+  // }, []);
 
   if (isLoading)
     return (<CircularProgress color="success" />)
@@ -273,7 +276,7 @@ const Dashboard = () => {
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.excessDays.toFixed(2)}
+                          {data.leaveDetails.totalDays.toFixed(2)}
                         </Typography>
                         <Typography variant='caption'>Total Days</Typography>
                       </Box>

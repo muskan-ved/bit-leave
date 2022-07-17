@@ -1,5 +1,3 @@
-// ** React Imports
-import { Fragment, SyntheticEvent, useState } from 'react'
 // ** MUI Imports
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -9,9 +7,8 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import Box, { BoxProps } from '@mui/material/Box'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from 'src/store'
-import { postEmployeeCashout } from 'src/store/employee';
+import { useSelector } from 'react-redux'
+import { RootState } from 'src/store'
 import React from 'react'
 import FormControl from '@mui/material/FormControl'
 import { Controller, useForm } from 'react-hook-form'
@@ -26,6 +23,7 @@ import SignaturePad from 'react-signature-canvas';
 
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
+
   return (
     <Box
       sx={{
@@ -65,9 +63,9 @@ const SignatureSchema = yup.object().shape({
 })
 
 const CashoutDialog = (props: any) => {
-  const steps = ['Cashout', 'Signature', 'Success'];
   const [activeStep, setActiveStep] = React.useState(0);
-  const dispatch = useDispatch<AppDispatch>()
+  
+  //const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -96,14 +94,14 @@ const CashoutDialog = (props: any) => {
     defaultValues: defaultSignatureValue,
     resolver: yupResolver(SignatureSchema)
   })
-  let sigCanvas = React.useRef() as React.MutableRefObject<any>;
+  const sigCanvas = React.useRef() as React.MutableRefObject<any>;
 
 
   const store = useSelector((state: RootState) => state.employee)
   console.log('cashout', store);
   const onCashOutSubmit = async (data: any) => {
-    console.log(data);
-    var stateData = {
+
+    const stateData = {
       ...cashout,
       cashAmountInDays: data.cashAmountInDays,
       cashOutReason: data.cashOutReason
@@ -114,8 +112,8 @@ const CashoutDialog = (props: any) => {
   }
 
   const onSignatureSubmit = async (data: any) => {
-    console.log(data);
-    var stateData = {
+
+    const stateData = {
       ...cashout,
       signature: data.signature
     }
@@ -133,10 +131,12 @@ const CashoutDialog = (props: any) => {
   const formatIntoPng = () => {
     if (sigCanvas.current) {
       const dataURL = sigCanvas.current.toDataURL();
+
       return dataURL;
     }
   }
   const onError = () => console.log('errors, e');
+
   return (
     <Dialog fullScreen={fullScreen} open={props.open} onClose={props.handleClose} aria-labelledby='form-dialog-title'>
       <DialogTitle id='form-dialog-title'>{activeStep == 0 && <>Cash Out Request</>}
@@ -170,7 +170,7 @@ const CashoutDialog = (props: any) => {
                 rules={{ required: true }}
                 control={cashOutControl}
                 name='cashAmountInDays'
-                render={({ field: { value, onChange } }) => (
+                render={({ field: { onChange } }) => (
                   <TextField id='cashAmountInDays' autoFocus fullWidth
                     label='Cash Out Amount (In Days)'
                     aria-describedby='cashAmountInDays'
@@ -207,7 +207,7 @@ const CashoutDialog = (props: any) => {
                 rules={{ required: true }}
                 control={cashOutControl}
                 name='cashOutReason'
-                render={({ field: { value, onChange } }) => (
+                render={({ field: { onChange } }) => (
 
                   <TextField id='cashOutReason' autoFocus fullWidth
                     label='Cash Out Reason'
