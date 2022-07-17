@@ -414,7 +414,7 @@ const Dashboard = () => {
             </Grid>
           ) : null}
         </Grid>
-        <CashoutDialog open={dialogOpen} handleClose ={handleDialogClose}></CashoutDialog>
+        {/* <CashoutDialog open={dialogOpen} handleClose ={handleDialogClose}></CashoutDialog> */}
       </div>
     )
   }
