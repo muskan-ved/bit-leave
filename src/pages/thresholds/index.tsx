@@ -48,7 +48,7 @@ const Thresholds = () => {
                     </InputAdornment>
                   )
                 }}
-              />
+              >500</TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -62,7 +62,7 @@ const Thresholds = () => {
                     </InputAdornment>
                   )
                 }}
-              />
+              >400</TextField>
             </Grid>
             <Grid item xs={12}>
               <Button type='submit' variant='contained' size='large'>

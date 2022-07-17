@@ -22,6 +22,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Accordion from '@mui/material/Accordion'
 import Divider from '@mui/material/Divider'
+import CircularProgress from '@mui/material/CircularProgress'
 
 // ** MUI Imports
 import Tab from '@mui/material/Tab'
@@ -42,16 +43,26 @@ const Templates = () => {
   const [getTabList, setTabList] = useState<string[]>([])
   const [getdata, setGetData] = useState<any[]>([])
   const [editorState, setEditorState] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const token = localStorage.getItem("accessToken")
-  const baseUrl = 'https://api.bitleave.co/organisations/1'
+  const baseUrl = 'https://api.bitleave.co/organisations/'
   const updateBaseUrl = "https://api.bitleave.co/organisations/templates"
+
   useEffect(() => {
+    setIsLoading(true);
     fetchData();
   }, []);
 
   const fetchData = async () => {
+    const userData = localStorage.getItem("userData")
+    let id;
+    if (userData != null) {
+      const data = JSON.parse(userData)
+      id = data.orgId;
+    }
     axios
-      .get(baseUrl, {
+      .get(baseUrl + id, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
@@ -60,13 +71,13 @@ const Templates = () => {
         const tabList: string[] = []
         setTabList([]);
         setEditorState([]);
-        data.map((value: any,i: number) => {
+        data.map((value: any, i: number) => {
           if (!tabList.find(x => x === value.templatetype)) {
             tabList.push(value.templatetype);
           }
           const contentBlocks = htmlToDraft(value.defaulttext)
           const contentState = ContentState.createFromBlockArray(contentBlocks)
-          
+
           value.index = i;
           value.updateEditorState = EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks))
           editorState.push(value.updateEditorState);
@@ -74,6 +85,7 @@ const Templates = () => {
         setEditorState(editorState);
         setTabList(tabList);
         setGetData(data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -96,7 +108,6 @@ const Templates = () => {
     })
       .then(res => {
         alert("Data Updated Successfully")
-        console.log(res)
       })
       .catch((err) => {
         alert("Error occured while updating data")
@@ -111,6 +122,9 @@ const Templates = () => {
   const handleChangeTab = (event: SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
+  if (isLoading)
+    return (<CircularProgress color="success" />)
+
   return (
     <Card>
       <TabContext value={value}>
@@ -121,7 +135,7 @@ const Templates = () => {
         <CardContent>
           {getTabList && getTabList.map((data: string, i: any) =>
             <TabPanel key={i} value={i.toString()} sx={{ p: 0 }}>
-              {getdata && getdata.filter(x => x.templatetype === data ).map((templtedata: any, i: any) =>
+              {getdata && getdata.filter(x => x.templatetype === data).map((templtedata: any, i: any) =>
                 <Accordion key={templtedata.index} onChange={handleFirstChange("panel2")}>
                   <AccordionSummary
                     expandIcon={<ChevronDown />}
