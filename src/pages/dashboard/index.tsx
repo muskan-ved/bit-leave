@@ -25,6 +25,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import Divider from '@mui/material/Divider'
+import Box from '@mui/material/Box'
 
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -38,6 +39,45 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 // ** Custom Component Import
 import CardStatisticsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
+import { AccountAlertOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { Button } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import { BoxProps } from '@mui/material/Box'
+
+// ** Custom Components Imports
+import ReactApexcharts from 'src/@core/components/react-apexcharts'
+
+// ** Third Party Imports
+import { ApexOptions } from 'apexcharts'
+
+// ** Util Import
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import { useTheme } from '@mui/material/styles'
+
+// ** Icons Imports
+import TrendingUp from 'mdi-material-ui/TrendingUp'
+import StarOutline from 'mdi-material-ui/StarOutline'
+import AccountOutline from 'mdi-material-ui/AccountOutline'
+import LockOpenOutline from 'mdi-material-ui/LockOpenOutline'
+import { DecimalNumber } from 'aws-sdk/clients/glue'
+
+// Styled Box component
+const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
+  [theme.breakpoints.up('sm')]: {
+    borderRight: `0px solid ${theme.palette.divider}`
+  }
+}))
+
+let seriesData: number[] = []
+
+let series = [
+  {
+    name: 'Average Excess Days',
+    data: seriesData
+  }
+]
+
+let departments: string[] = []
 
 type leavesbyOrg = {
   fullname: string
@@ -84,11 +124,70 @@ type employee = {
 const Dashboard = () => {
   // ** Hooks
   const ability = useContext(AbilityContext)
-  const {logout} = useAuth()
+  const { logout } = useAuth()
 
   const [data, setData] = useState<employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const token = localStorage.getItem("accessToken")
+  const theme = useTheme()
+  const options: ApexOptions = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false }
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        barHeight: '60%',
+        horizontal: true,
+        distributed: true,
+        startingShape: 'rounded'
+      }
+    },
+    grid: {
+      strokeDashArray: 8,
+      xaxis: {
+        lines: { show: true }
+      },
+      yaxis: {
+        lines: { show: false }
+      },
+      padding: {
+        top: -18,
+        left: 26,
+        right: 50,
+        bottom: 6
+      }
+    },
+    colors: [
+      hexToRGBA(theme.palette.primary.light, 1),
+      hexToRGBA(theme.palette.success.light, 1),
+      hexToRGBA(theme.palette.warning.light, 1),
+      hexToRGBA(theme.palette.info.light, 1),
+      hexToRGBA(theme.palette.error.light, 1)
+    ],
+    legend: { show: false },
+    states: {
+      hover: {
+        filter: { type: 'none' }
+      },
+      active: {
+        filter: { type: 'none' }
+      }
+    },
+    xaxis: {
+      axisTicks: { show: false },
+      axisBorder: { show: false },
+      categories: departments,
+      // labels: {
+      //   formatter: val => `${Number(val) / 1000}k`
+      // }
+    },
+    yaxis: {
+      labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
+    }
+  }
 
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")
@@ -103,11 +202,10 @@ const Dashboard = () => {
       })
       .then(res => {
         let data = res.data;
-        setData(data.data)
+        setData(data.data);
         setIsLoading(false);
       })
       .catch((reason: AxiosError) => {
-        console.log(reason)
         if (reason.response!.status === 401) {
           logout()
         } else {
@@ -120,10 +218,21 @@ const Dashboard = () => {
   useEffect(() => {
     if (!data) {
       setIsLoading(true);
-
       fetchData();
     }
   }, []);
+
+  useEffect(() => {
+    console.log('here');
+    if (data) {
+      for (let index = 0; index < data.leavesByDepartment.length; index++) {
+        departments.push(data.leavesByDepartment[index].department);
+      }
+      for (let index = 0; index < data.leavesByDepartment.length; index++) {
+        series[0].data.push(data.leavesByDepartment[index].averageExcessDays)
+      }
+    }
+  }, [data?.leavesByDepartment]);
 
   if (isLoading)
     return (<CircularProgress color="success" />)
@@ -150,52 +259,127 @@ const Dashboard = () => {
         <Grid container spacing={6}>
           <Grid item md={5} xs={12}>
             <Card>
-              <CardHeader title='Your Leave Details' subheader={<Divider></Divider>} />
+              <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
               <CardContent>
-                <Typography sx={{ mb: 4 }}>Excess Days : {data.leaveDetails.excessDays.toFixed(2)}</Typography>
-                <Typography>Cashout Value : ${data.leaveDetails.cashoutValue}</Typography>
-                <br />
+                <Grid container spacing={6}>
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
+                        <AccountAlertOutline />
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                          {data.leaveDetails.excessDays.toFixed(2)}
+                        </Typography>
+                        <Typography variant='caption'>Total Days</Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <CustomAvatar skin='light' variant='rounded' color={'error'} sx={{ mr: 4 }}>
+                        <AccountAlertOutline />
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                          {data.leaveDetails.excessDays.toFixed(2)}
+                        </Typography>
+                        <Typography variant='caption'>Excess Days</Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <CustomAvatar skin='light' variant='rounded' color={'success'} sx={{ mr: 4 }}>
+                        <CurrencyUsd />
+                      </CustomAvatar>
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                          {data.leaveDetails.cashoutValue.toFixed(2)}k
+                        </Typography>
+                        <Typography variant='caption'>Cashout Value</Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                </Grid>
+                <br></br>
+                <Divider></Divider>
                 <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
+                <br></br>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Button variant='contained'>Cashout Leave</Button>
+                </Box>
               </CardContent>
             </Card>
           </Grid>
           <Grid item md={3} xs={12}>
             <Card>
-              <CardHeader title='Your Team' /> 
+              <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>
-                <Typography sx={{ mb: 4 }}>Department : {data.team.department}</Typography>
-                <Typography>Manager name : {data.team.name}</Typography>
+                <StyledBox>
+                  <Box sx={{ py: 1.25, mb: 4, display: 'flex', alignItems: 'center' }}>
+                    <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
+                    <Typography variant='body2'>Department : {data.team.department} </Typography>
+                  </Box>
+                  <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+                    <AccountOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
+                    <Typography variant='body2'>Manager : {data.team.name ? data.team.name : 'No manager assigned'} </Typography>
+                  </Box>
+                  <br></br>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Button variant='contained'>Link to HRIS</Button>
+                  </Box>
+                </StyledBox>
               </CardContent>
             </Card>
           </Grid>
           <Grid item md={4} xs={12} sm={6}>
-            <CardStatisticsCharacter
-              data={{
-                stats: `${data.vitals.averageSalary.toFixed(0)}k`,
-                title: 'Average Salary',
-                trend: 'positive',
-                chipColor: 'success',
-                trendNumber: 'in AUD $',
-                chipText: 'Average Excess Days',
-                src: '/images/cards/card-stats-img-3.png'
-              }}
-            />
+            <Card>
+              <CardHeader title='Salary Details 💲' subheader={<Divider></Divider>} />
+              <CardContent>
+                <CardStatisticsCharacter
+                  data={{
+                    stats: `${data.vitals.averageSalary.toFixed(0)}k`,
+                    title: '',
+                    trend: 'positive',
+                    chipColor: 'success',
+                    trendNumber: 'in AUD $',
+                    chipText: 'Average Salary',
+                    src: '/images/cards/card-stats-img-3.png'
+                  }}
+                />
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
         <br />
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
+            <Grid item md={8} xs={8}>
+              <Card>
+                <CardHeader title='Average Excess Leaves By Department 📈' subheader={<Divider></Divider>} />
+                <CardContent>
+                  <ReactApexcharts type='bar' height={294} series={series} options={options} />
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+        </Grid>
+        <br></br>
+        <Grid container spacing={6}>
+          {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
-                <CardHeader title='Leaves By Organisation' />
+                <CardHeader title='Leaves By Organisation 📊' subheader={<Divider></Divider>} />
                 <CardContent>
-                <Divider></Divider>
+                  <Divider></Divider>
                   <Grid item md={12} xs={12}>
                     <TableContainer component={Paper}>
                       <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
                         <TableHead>
                           <TableRow>
-                            <TableCell>Full Name</TableCell>
+                            <TableCell>Initials </TableCell>
+                            <TableCell align='center'>Full Name</TableCell>
                             <TableCell align='right'>Department</TableCell>
                             <TableCell align='right'>Excess Days</TableCell>
                           </TableRow>
@@ -211,42 +395,10 @@ const Dashboard = () => {
                                 >
                                   {getInitials(row.fullname)}
                                 </CustomAvatar>
-                                {row.fullname}
                               </TableCell>
+                              <TableCell align='center'>{row.fullname}</TableCell>
                               <TableCell align='right'>{row.department}</TableCell>
                               <TableCell align='right'>{row.excessDays.toFixed(2)}</TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-          ) : null}
-        </Grid>
-        <br />
-        <Grid container spacing={6}>
-          {ability?.can('read', 'analytics') ? (
-            <Grid item md={8} xs={8}>
-              <Card>
-                <CardHeader title='Leaves By Department' />
-                <CardContent>
-                  <Grid item md={12} xs={6}>
-                    <TableContainer component={Paper}>
-                      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell align='right'>Department</TableCell>
-                            <TableCell align='right'>Average Excess Days</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {data.leavesByDepartment.map(row => (
-                            <TableRow key={row.department} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
-                              <TableCell align='right'>{row.department}</TableCell>
-                              <TableCell align='right'>{row.averageExcessDays.toFixed(2)}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

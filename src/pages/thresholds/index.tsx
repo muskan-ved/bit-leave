@@ -9,15 +9,13 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icons Imports
-import Phone from 'mdi-material-ui/Phone'
-import EmailOutline from 'mdi-material-ui/EmailOutline'
-import AccountOutline from 'mdi-material-ui/AccountOutline'
-import MessageOutline from 'mdi-material-ui/MessageOutline'
+import Divider from '@mui/material/Divider'
+import { AlertBoxOutline, CurrencyUsd, OfficeBuildingOutline } from 'mdi-material-ui'
 
 const Thresholds = () => {
   return (
     <Card>
-      <CardHeader title='Excess Leave Thresholds'/>
+      <CardHeader title='Excess Leave Thresholds' subheader={<Divider></Divider>}/>
       <CardContent>
         <Typography sx={{ mb: 4.5 }}>
           Adjust the excess Leave thresholds
@@ -27,28 +25,26 @@ const Thresholds = () => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
+                type='number'
                 label='Excess Leave Notification'
-                placeholder='Leonard Carter'
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <AccountOutline />
+                      <OfficeBuildingOutline />
                     </InputAdornment>
                   )
                 }}
-              />
+              >34</TextField>
             </Grid>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                type='email'
+                type='number'
                 label='Excess Leave Warning'
-                placeholder='carterleonard@gmail.com'
-                helperText='You can use letters, numbers & periods'
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <EmailOutline />
+                      <AlertBoxOutline />
                     </InputAdornment>
                   )
                 }}
@@ -59,11 +55,10 @@ const Thresholds = () => {
                 fullWidth
                 type='number'
                 label='Maximum Payout'
-                placeholder='+1-123-456-8790'
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Phone />
+                      <CurrencyUsd />
                     </InputAdornment>
                   )
                 }}
