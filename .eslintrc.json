@@ -5,14 +5,16 @@
     "prettier"
   ],
   "rules": {
+    "react-hooks/exhaustive-deps":"off",
     "react/display-name": "off",
     "@next/next/no-img-element": "off",
     "react/no-unescaped-entities": "off",
     "import/no-anonymous-default-export": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-var-requires":"off",
     // "@typescript-eslint/no-explicit-any": "error",
     // add new line above comment
     "lines-around-comment": [
@@ -27,7 +29,7 @@
       }
     ],
     // add new line above return
-    "newline-before-return": "error",
+    "newline-before-return": "off",
     // add new line below import
     "import/newline-after-import": [
       "error",

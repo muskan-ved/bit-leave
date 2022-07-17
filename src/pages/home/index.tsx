@@ -1,6 +1,3 @@
-// ** React Imports
-import { useContext } from 'react'
-
 import { useRouter } from "next/router";
 
 // ** MUI Imports
@@ -12,18 +9,12 @@ import CardContent from '@mui/material/CardContent'
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import { ChevronDown, Router } from 'mdi-material-ui'
+import { ChevronDown } from 'mdi-material-ui'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import { GridProps } from '@mui/material/Grid'
 import Divider from '@mui/material/Divider'
-
-// ** Context Imports
-import { AbilityContext } from 'src/layouts/components/acl/Can'
-
-// ** Hook
-import { useSettings } from 'src/@core/hooks/useSettings'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -48,8 +39,6 @@ const TrophyImg = styled('img')(({ theme }) => ({
 const Home = () => {
 
   // ** Hooks
-  const ability = useContext(AbilityContext)
-  const { settings } = useSettings()
   const router = useRouter()
 
   const userData = localStorage.getItem("userData")

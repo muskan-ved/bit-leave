@@ -137,7 +137,8 @@ const Onboarding = (props:any) => {
     signature: ''
   });
 
-  let sigCanvas = React.useRef() as React.MutableRefObject<any>;
+  const sigCanvas = React.useRef() as React.MutableRefObject<any>;
+
   // ** Hooks
   const {
     control: complianceControl,
@@ -281,7 +282,7 @@ const Onboarding = (props:any) => {
   const approvalSelected = watchApproval()
 
   const onComplianceSubmit = (data: any) => {
-    var stateData = {
+    const stateData = {
       ...onBoarding,
       compliance: data.compliance
     }
@@ -290,7 +291,7 @@ const Onboarding = (props:any) => {
   }
 
   const onThresholdSubmit = (data: any) => {
-    var stateData = {
+    const stateData = {
       ...onBoarding,
       leaveNotification: data.leaveNotification,
       leaveWarning: data.leaveWarning,
@@ -305,7 +306,7 @@ const Onboarding = (props:any) => {
 
   }
   const onContactSubmit = (data: any) => {
-    var stateData = {
+    const stateData = {
       ...onBoarding,
       email: data.email,
       payrollEmail: data.payrollEmail,
@@ -317,7 +318,7 @@ const Onboarding = (props:any) => {
   }
 
   const onApprovalSubmit = async (data: any) => {
-    var stateData = {
+    const stateData = {
       ...onBoarding,
       approval: data.approval,
       signature: data.signature
