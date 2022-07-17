@@ -21,6 +21,7 @@ const intialState: user = {
   username: '',
 }
 
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
@@ -43,14 +44,22 @@ const userSlice = createSlice({
       state.id = action.payload.id
       state.orgId = action.payload.orgId
       state.role = action.payload.role
-      state.userOnboarded = action.payload.userOnboarded
       state.username = action.payload.username
+    },
+    updateOnBoarding:(state, action) => {
+      state.userOnboarded=action.payload
+    },
+    getUser: (state, action) => {
+      let data=Object.assign({},state)
+      return data
     }
   }
 
 })
 
 export const {
-  refreshUserState
+  refreshUserState,
+  getUser,
+  updateOnBoarding
 } = userSlice.actions;
 export default userSlice.reducer

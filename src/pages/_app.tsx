@@ -132,28 +132,32 @@ const App = (props: ExtendedAppProps) => {
       </Head>
       <Provider store={store}>
         <AuthProvider>
-          <OnboardingProvider>
-            <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
-              <SettingsConsumer>
-                {({ settings }) => {
-                  return (
-                    <ThemeComponent settings={settings}>
-                      <WindowWrapper>
-                        <Guard authGuard={authGuard} guestGuard={guestGuard}>
+          <SettingsProvider {...(setConfig ? { pageSettings: setConfig() } : {})}>
+            <SettingsConsumer>
+              {({ settings }) => {
+                return (
+                  <ThemeComponent settings={settings}>
+                    <WindowWrapper>
+                      <Guard authGuard={authGuard} guestGuard={guestGuard}>
+
                           <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
+                        <OnboardingProvider>
+
                             {getLayout(<Component {...pageProps} />)}
+                        </OnboardingProvider>
+
                           </AclGuard>
-                        </Guard>
-                      </WindowWrapper>
-                      <ReactHotToast>
-                        <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-                      </ReactHotToast>
-                    </ThemeComponent>
-                  )
-                }}
-              </SettingsConsumer>
-            </SettingsProvider>
-          </OnboardingProvider>
+
+                      </Guard>
+                    </WindowWrapper>
+                    <ReactHotToast>
+                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                    </ReactHotToast>
+                  </ThemeComponent>
+                )
+              }}
+            </SettingsConsumer>
+          </SettingsProvider>
         </AuthProvider>
       </Provider>
     </CacheProvider>

@@ -5,6 +5,7 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { OnboardingType } from 'src/types/onboarding'
 import { show } from '../apiError'
+import { updateOnBoarding } from '../user'
 
 interface Redux {
   getState: any
@@ -27,7 +28,7 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
             }
           }
         );
-
+      dispatch(updateOnBoarding(true))
       return response.data
     }
     catch (err) {

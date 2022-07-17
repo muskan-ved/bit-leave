@@ -6,6 +6,9 @@ import { useRouter } from 'next/router'
 
 // ** Hooks Import
 import { useAuth } from 'src/hooks/useAuth'
+import { AppDispatch, RootState } from 'src/store'
+import { useDispatch } from 'react-redux'
+import { refreshUserState } from 'src/store/user'
 
 interface AuthGuardProps {
   children: ReactNode
@@ -16,14 +19,16 @@ const AuthGuard = (props: AuthGuardProps) => {
   const { children, fallback } = props
   const auth = useAuth()
   const router = useRouter()
+  const dispatch = useDispatch<AppDispatch>()
+
 
   useEffect(
     () => {
       if (!router.isReady) {
         return
       }
-
-      if (auth.user === null && !window.localStorage.getItem('userData')) {
+      const userData = window.localStorage.getItem('userData')
+      if (auth.user === null && !userData) {
         if (router.asPath !== '/') {
           router.replace({
             pathname: '/login',
@@ -32,6 +37,9 @@ const AuthGuard = (props: AuthGuardProps) => {
         } else {
           router.replace('/login')
         }
+      }
+      if (userData != null) {
+        dispatch(refreshUserState(JSON.parse(userData)))
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

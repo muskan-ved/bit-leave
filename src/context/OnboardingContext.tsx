@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
 
 import { loadEmployee } from 'src/store/employee'
+import { getUser, updateOnBoarding } from 'src/store/user'
 
 // ** Axios
 import axios from 'axios'
@@ -29,41 +30,45 @@ const OnboardingProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
-  const store = useSelector((state: RootState) => state.onboarding)
+  const store = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch<AppDispatch>()
-
-  const checkIfOnboarded = async () => {
-
-  }
-
-  useEffect(() => {
-    const initOnboarding = async (): Promise<void> => {
-      const path = router.asPath
-
-      console.log(path)
-      if (path !== '/organisation/onboarding') {
-        if (!store.onboardingDone) {
-          const userData = window.localStorage.getItem('userData')
-          const storedUser = JSON.parse(userData)
-          const employeeId = storedUser.id;
-          const employee = await dispatch(loadEmployee(employeeId));
-          console.log(employee)
-          if (employee.payload.data.profile) {
-
-            const user = JSON.parse(userData)
-            console.log(user);
-            if (!employee.payload.data.profile.onboarded) {
-              if (user.role === 'admin') {
-                router.push('/organisation/onboarding')
+  const initOnboarding = async (): Promise<void> => {
+    const path = router.asPath
+    const onboarded = store.userOnboarded
+    setOnboarding(onboarded)
+    if (path !== '/organisation/onboarding') {
+      if (!onboarding) {
+        if (store) {
+          const employeeId = store.id;
+          console.log('employeeId', employeeId)
+          if (employeeId) {
+            const employee = await dispatch(loadEmployee(employeeId));
+            console.log(employee)
+            if (employee.payload.data.profile) {
+              if (!employee.payload.data.profile.onboarded) {
+                if (store.role === 'admin') {
+                  router.push('/organisation/onboarding')
+                }
+              }
+              else {
+                setOnboarding(true)
+                dispatch(updateOnBoarding(true))
               }
             }
           }
         }
-      }
+        else {
+          console.log('else ')
 
+        }
+      }
     }
+
+  }
+
+  useEffect(() => {
     initOnboarding()
-  }, [])
+  }, [router.route])
   const value = {
     onboarding
   }

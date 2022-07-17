@@ -75,6 +75,7 @@ const AuthProvider = ({ children }: Props) => {
         if (userData != null) {
           const user = JSON.parse(userData)
           setUser({ ...user })
+          dispatch(refreshUserState({ ...user }))
           setLoading(false)
         }
       } else {
