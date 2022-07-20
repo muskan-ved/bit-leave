@@ -44,15 +44,17 @@ const OnboardingProvider = ({ children }: Props) => {
           if (employeeId) {
             const employee = await dispatch(loadEmployee(employeeId));
             console.log(employee)
-            if (employee.payload.data.profile) {
-              if (!employee.payload.data.profile.onboarded) {
-                if (store.role === 'admin') {
-                  router.push('/organisation/onboarding')
+            if (employee.payload?.data != null) {
+              if (employee.payload.data.profile) {
+                if (!employee.payload.data.profile.onboarded) {
+                  if (store.role === 'admin') {
+                    router.push('/organisation/onboarding')
+                  }
                 }
-              }
-              else {
-                setOnboarding(true)
-                dispatch(updateOnBoarding(true))
+                else {
+                  setOnboarding(true)
+                  dispatch(updateOnBoarding(true))
+                }
               }
             }
           }

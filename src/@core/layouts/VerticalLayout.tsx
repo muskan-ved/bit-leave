@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Fab from '@mui/material/Fab'
@@ -25,6 +25,10 @@ import ScrollToTop from 'src/@core/components/scroll-to-top'
 // ** Styled Component
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import ErrorComponent from 'src/layouts/components/error/error'
+import { useDispatch } from 'react-redux'
+import { hide } from 'src/store/apiError'
+import router from 'next/router'
+import { AppDispatch } from 'src/store'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -67,6 +71,33 @@ const VerticalLayout = (props: LayoutProps) => {
 
   // ** Toggle Functions
   const toggleNavVisibility = () => setNavVisible(!navVisible)
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    const handleRouteChange = (url, { shallow }) => {
+      console.log(
+        `App is changing to ${url} ${
+          shallow ? 'with' : 'without'
+        } shallow routing`
+      )
+      var data = {
+        canShow: false,
+        redirect: false,
+        code: '',
+        message: '',
+        location: '',
+      }
+      dispatch(hide(data))
+
+    }
+
+    router.events.on('routeChangeStart', handleRouteChange)
+
+    // If the component is unmounted, unsubscribe
+    // from the event with the `off` method:
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [])
 
   return (
     <>

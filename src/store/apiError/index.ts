@@ -11,11 +11,14 @@ const apiErrorSlice = createSlice({
   },
   reducers: {
     show: (state, action) => {
-      state.message = 'this is a message'
-      state.redirect=true
+      console.log(action)
+      state.message = action.payload.message
+      state.redirect=false
+      state.canShow =true
     },
     hide: (state, action) => {
       state.canShow = false
+      state.message=action.payload.message
     }
   }
 })

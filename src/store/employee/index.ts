@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 import { employeeCashOut, employee } from 'src/types/employee'
+import { show } from '../apiError'
 import { updateOnBoarding } from '../user'
 
 interface Redux {
@@ -13,10 +14,45 @@ interface Redux {
 export const postEmployeeCashout = createAsyncThunk('emp/cashout',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
     console.log(params);
-    const token = localStorage.getItem("accessToken");
-
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios
+        .post('https://api.bitleave.co/employeesAction/cashout',
+          params,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      return response.data
+    }
+    catch(e){
+      console.log(e)
+      var data = {
+        canShow: true,
+        redirect: false,
+        code: '',
+        message: 'Error occured while processing the request',
+        location: '',
+      }
+      return dispatch(show(data))
+      // return rejectWithValue(e.response.data)
+    }
   })
 
+export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
+  async (params: number, { dispatch, getState }: Redux) => {
+    console.log(params);
+    const token = localStorage.getItem("accessToken");
+    const result = await axios
+      .post('https://api.bitleave.co/employeeActions/calculate', params, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+
+    return result.data
+
+  })
 export const loadEmployee = createAsyncThunk('emp/load',
   async (params: string, { dispatch, getState }: Redux) => {
     const token = localStorage.getItem("accessToken");
@@ -45,11 +81,13 @@ const employeeSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(postEmployeeCashout.fulfilled, (state, action) => {
+      debugger;
       console.log(state, action);
       // state.success = true;
       // state.isLoading = false;
     })
     builder.addCase(postEmployeeCashout.rejected, (state, action) => {
+      debugger;
       console.log(state, action);
       // state.success = false;
       // state.isLoading = false;

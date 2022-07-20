@@ -7,9 +7,9 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import Box, { BoxProps } from '@mui/material/Box'
-import { useSelector } from 'react-redux'
-import { RootState } from 'src/store'
-import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from 'src/store'
+import React, { SyntheticEvent } from 'react'
 import FormControl from '@mui/material/FormControl'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,6 +17,7 @@ import * as yup from 'yup'
 import { Container, FormHelperText, IconButton, useMediaQuery, useTheme } from '@mui/material'
 import { Eraser } from 'mdi-material-ui'
 import SignaturePad from 'react-signature-canvas';
+import { calculateEmployeeCashout, postEmployeeCashout } from 'src/store/employee'
 
 
 
@@ -64,11 +65,13 @@ const SignatureSchema = yup.object().shape({
 
 const CashoutDialog = (props: any) => {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [calculateAmount, setcalculateAmount] = React.useState(null);
+
 
   //const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+  const dispatch = useDispatch<AppDispatch>()
   const [cashout, setcashoutState] = React.useState<CashOutState>({
     cashAmountInDays: null,
     cashOutReason: '',
@@ -78,6 +81,7 @@ const CashoutDialog = (props: any) => {
   const {
     control: cashOutControl,
     handleSubmit: handleCashOutSubmit,
+    watch: watchCashOutControl,
     formState: { errors: cashOutErrors }
   } = useForm({
     defaultValues: defaultCashoutValue,
@@ -95,6 +99,7 @@ const CashoutDialog = (props: any) => {
     resolver: yupResolver(SignatureSchema)
   })
   const sigCanvas = React.useRef() as React.MutableRefObject<any>;
+  const cashAmountInDays: number | null = watchCashOutControl('cashAmountInDays')
 
 
   const store = useSelector((state: RootState) => state.employee)
@@ -117,6 +122,11 @@ const CashoutDialog = (props: any) => {
       ...cashout,
       signature: data.signature
     }
+    const result = await dispatch(postEmployeeCashout({
+      cashAmountInDays: stateData.cashAmountInDays,
+      cashOutReason: stateData.cashOutReason,
+      signature: stateData.signature
+    }))
     setcashoutState(stateData)
     setActiveStep(2);
 
@@ -136,9 +146,18 @@ const CashoutDialog = (props: any) => {
     }
   }
   const onError = () => console.log('errors, e');
+  const onChangeCashOutDays = async (e: SyntheticEvent) => {
+    console.log("cashAmountInDays", cashAmountInDays)
+    const result = await dispatch(calculateEmployeeCashout(e.target.value))
 
+  }
+  const handleDialogClose= ()=>{
+    setActiveStep(0)
+    props.handleClose()
+  }
+  const maxWidth = 'md'
   return (
-    <Dialog fullScreen={fullScreen} open={props.open} onClose={props.handleClose} aria-labelledby='form-dialog-title'>
+    <Dialog fullScreen={fullScreen} maxWidth={maxWidth} open={props.open} onClose={handleDialogClose} aria-labelledby='form-dialog-title'>
       <DialogTitle id='form-dialog-title'>{activeStep == 0 && <>Cash Out Request</>}
         {activeStep == 1 && <>Sign your contract</>}
         {activeStep == 2 && <>Success</>}
@@ -155,7 +174,7 @@ const CashoutDialog = (props: any) => {
                 alignItems: 'flex-start',
               }}>
                 <Item>Days Available:</Item>
-                <Item>{store.cashoutOption!=null && store.cashoutOption?.daysAvailable!=null && store.cashoutOption?.daysAvailable.toFixed(2)}</Item>
+                <Item>{store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && store.cashoutOption?.daysAvailable.toFixed(2)}</Item>
               </Box>
               <Box sx={{
                 display: 'flex',
@@ -163,7 +182,7 @@ const CashoutDialog = (props: any) => {
 
               }}>
                 <Item>Value (Before tax):</Item>
-                <Item> {store.cashoutOption!=null && store.cashoutOption?.cashoutAmount!=null&& '$' + store.cashoutOption?.cashoutAmount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</Item>
+                <Item> {store.cashoutOption != null && store.cashoutOption?.cashoutAmount != null && '$' + store.cashoutOption?.cashoutAmount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}</Item>
               </Box>
 
               <Controller
@@ -174,7 +193,10 @@ const CashoutDialog = (props: any) => {
                   <TextField id='cashAmountInDays' autoFocus fullWidth
                     label='Cash Out Amount (In Days)'
                     aria-describedby='cashAmountInDays'
-                    onChange={onChange}
+                    onChange={(e) => {
+                      onChange(e);
+                      onChangeCashOutDays(e);
+                    }}
                     error={Boolean(cashOutErrors.cashAmountInDays)}
                   />
                 )}
@@ -191,7 +213,7 @@ const CashoutDialog = (props: any) => {
 
               }}>
                 <Item>Cash Amount (Before tax):</Item>
-                <Item>Item value Before</Item>
+                <Item>{calculateAmount}</Item>
               </Box>
               <Box sx={{
                 display: 'flex',
@@ -199,7 +221,8 @@ const CashoutDialog = (props: any) => {
 
               }}>
                 <Item>Leave Balance After Cash Out:</Item>
-                <Item>Item value After</Item>
+                <Item>{store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && cashAmountInDays != null
+                  && (store.cashoutOption?.daysAvailable.toFixed(2) - cashAmountInDays)}</Item>
               </Box>
 
 

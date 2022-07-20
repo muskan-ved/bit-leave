@@ -1,9 +1,9 @@
 // ** React Imports
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
-import { Router } from 'next/router'
+import router, { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
@@ -56,8 +56,8 @@ import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-tsx'
 
-import { store } from 'src/store'
-import { Provider } from 'react-redux'
+import { AppDispatch, store } from 'src/store'
+import { Provider, useDispatch } from 'react-redux'
 
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
@@ -65,6 +65,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 import { OnboardingProvider } from 'src/context/OnboardingContext'
+import { hide } from 'src/store/apiError'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -117,6 +118,7 @@ const App = (props: ExtendedAppProps) => {
   const guestGuard = Component.guestGuard ?? false
 
   const aclAbilities = Component.acl ?? defaultACLObj
+
 
   return (
 
