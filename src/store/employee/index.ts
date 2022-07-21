@@ -10,7 +10,7 @@ import { updateOnBoarding } from '../user'
 interface Redux {
   getState: any
   dispatch: Dispatch<any>,
-  
+
 }
 export const postEmployeeCashout = createAsyncThunk('emp/cashout',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
@@ -54,6 +54,37 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
     return result.data
 
   })
+
+  export const getCashOutContract =createAsyncThunk('emp/cashoutcontract',
+  async (params: employeeCashOut, { dispatch, getState }: Redux) => {
+    console.log(params);
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios
+        .post('https://api.bitleave.co/employeesAction/cashoutcontract',
+          params,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      return response.data
+    }
+    catch(e){
+      console.log(e)
+      // var data = {
+      //   canShow: true,
+      //   redirect: false,
+      //   code: '',
+      //   message: 'Error occured while processing the request',
+      //   location: '',
+      // }
+      // return dispatch(show(data))
+      // return rejectWithValue(e.response.data)
+    }
+  })
+
 export const loadEmployee = createAsyncThunk('emp/load',
   async (params: string, { dispatch, getState }: Redux) => {
     const token = localStorage.getItem("accessToken");

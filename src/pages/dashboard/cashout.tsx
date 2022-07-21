@@ -1,5 +1,6 @@
 // ** MUI Imports
 import Button from '@mui/material/Button'
+import Alert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog'
 import TextField from '@mui/material/TextField'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -17,7 +18,8 @@ import * as yup from 'yup'
 import { Container, FormHelperText, IconButton, useMediaQuery, useTheme } from '@mui/material'
 import { Eraser } from 'mdi-material-ui'
 import SignaturePad from 'react-signature-canvas';
-import { calculateEmployeeCashout, postEmployeeCashout } from 'src/store/employee'
+import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } from 'src/store/employee'
+import { ApiResult, error } from 'src/types/error'
 
 
 
@@ -36,6 +38,19 @@ function Item(props: BoxProps) {
       {...other}
     />
   );
+}
+
+
+interface cashoutResultModel {
+  success: boolean
+}
+
+
+const defaultCashoutApiResult: ApiResult<cashoutResultModel> = {
+  data: {
+    success: false
+  },
+  errors: null
 }
 
 interface CashOutState {
@@ -63,10 +78,13 @@ const SignatureSchema = yup.object().shape({
   signature: yup.string().required()
 })
 
-const CashoutDialog = (props: any) => {
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [calculateAmount, setcalculateAmount] = React.useState(null);
 
+
+const CashoutDialog = (props: any) => {
+  const [activeStep, setActiveStep] = React.useState(0)
+  const [calculateAmount, setcalculateAmount] = React.useState(null)
+  const [cashoutApiResponse, setcashoutApiResponse] = React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
+  const [employeeContract, setemployeeContract] = React.useState(null)
 
   //const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme();
@@ -103,7 +121,12 @@ const CashoutDialog = (props: any) => {
 
 
   const store = useSelector((state: RootState) => state.employee)
-  console.log('cashout', store);
+  const resetError = () => {
+    setcashoutApiResponse({
+      errors: null,
+      data: null
+    })
+  }
   const onCashOutSubmit = async (data: any) => {
 
     const stateData = {
@@ -112,7 +135,22 @@ const CashoutDialog = (props: any) => {
       cashOutReason: data.cashOutReason
     }
     setcashoutState(stateData)
-    setActiveStep(1);
+    const cashoutContractResponse = await dispatch(getCashOutContract(cashout))
+    if (cashoutContractResponse.payload != null && cashoutContractResponse.payload.contract != null) {
+      setemployeeContract(cashoutContractResponse.payload.contract)
+      setActiveStep(1);
+      resetError()
+    }
+    else {
+      const errortoDisplay: error[] = [{
+        message: 'Some error occured while processing your cashout.',
+        code: '',
+      }];
+      setcashoutApiResponse({
+        errors: errortoDisplay,
+        data: null
+      })
+    }
 
   }
 
@@ -128,8 +166,8 @@ const CashoutDialog = (props: any) => {
       signature: stateData.signature
     }))
     setcashoutState(stateData)
-    setActiveStep(2);
-
+    setActiveStep(2)
+    resetError()
   }
   const onClearSignature = () => {
     sigCanvas.current.clear()
@@ -146,14 +184,41 @@ const CashoutDialog = (props: any) => {
     }
   }
   const onError = () => console.log('errors, e');
+
   const onChangeCashOutDays = async (e: any) => {
     // console.log("cashAmountInDays", cashAmountInDays)
     const result = await dispatch(calculateEmployeeCashout(e.target.value))
-
+    if (result.payload != null && result.payload.cashoutAmount != null) {
+      setcalculateAmount(result.payload.cashoutAmount)
+    }
+    else {
+      const errortoDisplay: error[] = [{
+        message: 'Some error occured while processing your cashout.',
+        code: ''
+      }];
+      setcashoutApiResponse({
+        errors: errortoDisplay,
+        data: null
+      })
+    }
   }
   const handleDialogClose = () => {
     setActiveStep(0)
+    resetError()
     props.handleClose()
+  }
+  const errorControl = () => {
+    let i=0;
+    return (
+
+      cashoutApiResponse.errors?.map(x => {
+        i++
+        return <Alert key={i} variant="outlined" severity="error">{x.message}</Alert>
+      })
+
+
+
+    )
   }
 
   const maxWidth = 'md'
@@ -168,6 +233,7 @@ const CashoutDialog = (props: any) => {
 
 
           <DialogContent>
+            {cashoutApiResponse.errors != null && errorControl()}
             <FormControl fullWidth>
 
               <Box sx={{
@@ -262,6 +328,8 @@ const CashoutDialog = (props: any) => {
         <form key='signature-submit' onSubmit={handleSignatureSubmit(onSignatureSubmit, onError)}>
 
           <DialogContent>
+            {cashoutApiResponse.errors != null && <>errorControl()</>}
+
             <DialogContentText>
               In order to cashout excess leave we require as signed agreement betwen both parties
               being you and your employer.Once both parties execute the document you will recieve asigned copy.

@@ -68,7 +68,7 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }))
 
-const seriesData: number[] = [53.17,80.21]
+const seriesData: number[] = [53.17, 80.21]
 
 const series = [
   {
@@ -132,11 +132,11 @@ const Dashboard = () => {
   const [count, setCount] = useState(0);
   const dispatch = useDispatch<AppDispatch>()
 
-  const [dialogOpen,setDialogOpen]=useState<boolean>(false)
-  const handleDialogClose=()=>{
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const handleDialogClose = () => {
     setDialogOpen(false)
   }
-  const cashoutLeaveButtonClick =(event:SyntheticEvent)=>{
+  const cashoutLeaveButtonClick = (event: SyntheticEvent) => {
     setDialogOpen(true)
 
   }
@@ -230,7 +230,7 @@ const Dashboard = () => {
       }
       )
   };
-  const fetchDataFromRedux =async()=>{
+  const fetchDataFromRedux = async () => {
     const userData = localStorage.getItem("userData")
     let employeeId;
     if (userData != null) {
@@ -238,8 +238,10 @@ const Dashboard = () => {
       employeeId = data.id;
     }
     const data = await dispatch(loadEmployee(employeeId))
-    setData(data.payload.data);
-    console.log(data)
+    if (data.payload != null) {
+      setData(data.payload.data);
+      console.log(data)
+    }
     setIsLoading(false)
   }
 
@@ -442,7 +444,7 @@ const Dashboard = () => {
             </Grid>
           ) : null}
         </Grid>
-        <CashoutDialog open={dialogOpen} handleClose ={handleDialogClose}></CashoutDialog>
+        <CashoutDialog open={dialogOpen} handleClose={handleDialogClose}></CashoutDialog>
       </div>
     )
   }
