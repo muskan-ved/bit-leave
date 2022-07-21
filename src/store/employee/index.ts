@@ -9,7 +9,8 @@ import { updateOnBoarding } from '../user'
 
 interface Redux {
   getState: any
-  dispatch: Dispatch<any>
+  dispatch: Dispatch<any>,
+  
 }
 export const postEmployeeCashout = createAsyncThunk('emp/cashout',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {

@@ -73,7 +73,7 @@ const VerticalLayout = (props: LayoutProps) => {
   const toggleNavVisibility = () => setNavVisible(!navVisible)
   const dispatch = useDispatch<AppDispatch>()
   useEffect(() => {
-    const handleRouteChange = (url, { shallow }) => {
+    const handleRouteChange = (url:string, { shallow =false }) => {
       console.log(
         `App is changing to ${url} ${
           shallow ? 'with' : 'without'

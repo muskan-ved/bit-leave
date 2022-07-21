@@ -9,7 +9,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import Box, { BoxProps } from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
-import React, { SyntheticEvent } from 'react'
+import React from 'react'
 import FormControl from '@mui/material/FormControl'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -146,15 +146,16 @@ const CashoutDialog = (props: any) => {
     }
   }
   const onError = () => console.log('errors, e');
-  const onChangeCashOutDays = async (e: SyntheticEvent) => {
-    console.log("cashAmountInDays", cashAmountInDays)
+  const onChangeCashOutDays = async (e: any) => {
+    // console.log("cashAmountInDays", cashAmountInDays)
     const result = await dispatch(calculateEmployeeCashout(e.target.value))
 
   }
-  const handleDialogClose= ()=>{
+  const handleDialogClose = () => {
     setActiveStep(0)
     props.handleClose()
   }
+
   const maxWidth = 'md'
   return (
     <Dialog fullScreen={fullScreen} maxWidth={maxWidth} open={props.open} onClose={handleDialogClose} aria-labelledby='form-dialog-title'>
@@ -222,7 +223,7 @@ const CashoutDialog = (props: any) => {
               }}>
                 <Item>Leave Balance After Cash Out:</Item>
                 <Item>{store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && cashAmountInDays != null
-                  && (store.cashoutOption?.daysAvailable.toFixed(2) - cashAmountInDays)}</Item>
+                  && (Number(store.cashoutOption?.daysAvailable.toFixed(2)) - cashAmountInDays)}</Item>
               </Box>
 
 
