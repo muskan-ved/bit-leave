@@ -38,7 +38,7 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
-import { AccountAlertOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { AccountAlertOutline, BagPersonalOutline, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
@@ -69,6 +69,7 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 
 const seriesData: number[] = [53.17, 80.21]
+const seriesData1: number[] = [80.21]
 
 const series = [
   {
@@ -77,6 +78,13 @@ const series = [
   }
 ]
 
+const series1 = [
+  {
+    name: 'Average Excess Days By Employee',
+    data: seriesData1
+  }
+]
+const employees : string[] = ['Kushal VaghaniUser']
 const departments: string[] = ['Technology', 'Marketing']
 
 type leavesbyOrg = {
@@ -112,12 +120,19 @@ type profile = {
   onboarded: boolean
 }
 
+type directReport = {
+  fullname: string,
+  department: string,
+  excessDays : number
+}
+
 type employee = {
   id: number
   profile: profile
   leaveDetails: leaveDetails
   leavesByOrg: Array<leavesbyOrg>
   leavesByDepartment: Array<leavesbyDepartment>
+  directReports : Array<directReport>
   team: team
   vitals: vitals
 }
@@ -191,6 +206,65 @@ const Dashboard = () => {
       axisTicks: { show: false },
       axisBorder: { show: false },
       categories: departments,
+
+      // labels: {
+      //   formatter: val => `${Number(val) / 1000}k`
+      // }
+    },
+    yaxis: {
+      labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
+    }
+  }
+
+  const options1: ApexOptions = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false }
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        barHeight: '60%',
+        horizontal: true,
+        distributed: true,
+        startingShape: 'rounded'
+      }
+    },
+    grid: {
+      strokeDashArray: 8,
+      xaxis: {
+        lines: { show: true }
+      },
+      yaxis: {
+        lines: { show: false }
+      },
+      padding: {
+        top: -18,
+        left: 26,
+        right: 50,
+        bottom: 6
+      }
+    },
+    colors: [
+      hexToRGBA(theme.palette.primary.light, 1),
+      hexToRGBA(theme.palette.success.light, 1),
+      hexToRGBA(theme.palette.warning.light, 1),
+      hexToRGBA(theme.palette.info.light, 1),
+      hexToRGBA(theme.palette.error.light, 1)
+    ],
+    legend: { show: false },
+    states: {
+      hover: {
+        filter: { type: 'none' }
+      },
+      active: {
+        filter: { type: 'none' }
+      }
+    },
+    xaxis: {
+      axisTicks: { show: false },
+      axisBorder: { show: false },
+      categories: employees,
 
       // labels: {
       //   formatter: val => `${Number(val) / 1000}k`
@@ -299,7 +373,7 @@ const Dashboard = () => {
                   <Grid item xs={12} sm={4}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
-                        <AccountAlertOutline />
+                        <HomeLightbulbOutline/>
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
@@ -368,8 +442,11 @@ const Dashboard = () => {
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <AccountOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
                     <Typography variant='body2'>Manager : {data.team.name ? data.team.name : 'No manager assigned'} </Typography>
+                  </Box><br/>
+                  <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+                    <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
+                    <Typography variant='body2'>Number Direct Reports : {data.directReports.length} </Typography>
                   </Box>
-                  <br></br>
                 </StyledBox>
               </CardContent>
             </Card>
@@ -385,7 +462,7 @@ const Dashboard = () => {
                     trend: 'positive',
                     chipColor: 'success',
                     trendNumber: 'in AUD $',
-                    chipText: 'Average Salary',
+                    chipText: 'Average Salary across Org.',
                     src: '/images/cards/card-stats-img-3.png'
                   }}
                 />
@@ -396,7 +473,7 @@ const Dashboard = () => {
         <br />
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
-            <Grid item md={8} xs={8}>
+            <Grid item md={6} xs={8}>
               <Card>
                 <CardHeader title='Average Excess Leaves By Department 📈' subheader={<Divider></Divider>} />
                 <CardContent>
@@ -405,13 +482,21 @@ const Dashboard = () => {
               </Card>
             </Grid>
           ) : null}
+           <Grid item md={6} xs={8}>
+              <Card>
+                <CardHeader title='Excess Leaves by Direct Reports 📈' subheader={<Typography variant='body2'>Above the thresholds<Divider></Divider></Typography>} />
+                <CardContent>
+                  <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
+                </CardContent>
+              </Card>
+            </Grid>
         </Grid>
         <br></br>
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
-                <CardHeader title='Leaves By Organisation 📊' subheader={<Divider></Divider>} />
+                <CardHeader title='Top Excess Leaves By Organisation 📊' subheader={<Divider></Divider>} />
                 <CardContent>
                   <Divider></Divider>
                   <Grid item md={12} xs={12}>

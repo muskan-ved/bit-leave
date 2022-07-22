@@ -18,7 +18,7 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .post('https://api.bitleave.co/employeesAction/cashout',
+        .post('https://api.bitleave.co/employeeactions/cashout',
           params,
           {
             headers: {
@@ -67,7 +67,7 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .post('https://api.bitleave.co/employeesAction/cashoutcontract',
+        .post('https://api.bitleave.co/employeeactions/cashoutcontract',
           params,
           {
             headers: {
