@@ -5,7 +5,6 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { employeeCashOut, employee } from 'src/types/employee'
 import { show } from '../apiError'
-import { updateOnBoarding } from '../user'
 
 interface Redux {
   getState: any
@@ -14,7 +13,6 @@ interface Redux {
 }
 export const postEmployeeCashout = createAsyncThunk('emp/cashout',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
-    console.log(params);
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
@@ -29,7 +27,6 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
       return response.data
     }
     catch(e){
-      console.log(e)
       var data = {
         canShow: true,
         redirect: false,
@@ -38,7 +35,6 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
         location: '',
       }
       return dispatch(show(data))
-      // return rejectWithValue(e.response.data)
     }
   })
 
@@ -52,18 +48,15 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
       .post('https://api.bitleave.co/employeeactions/calculate',data, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      console.log(result); 
     return result.data
   }
   catch(e){
-    console.log(e)
     }
 
   })
 
   export const getCashOutContract =createAsyncThunk('emp/cashoutcontract',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
-    console.log(params);
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
@@ -78,16 +71,6 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
       return response.data
     }
     catch(e){
-      console.log(e)
-      // var data = {
-      //   canShow: true,
-      //   redirect: false,
-      //   code: '',
-      //   message: 'Error occured while processing the request',
-      //   location: '',
-      // }
-      // return dispatch(show(data))
-      // return rejectWithValue(e.response.data)
     }
   })
 
@@ -120,24 +103,15 @@ const employeeSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(postEmployeeCashout.fulfilled, (state, action) => {
       debugger;
-      console.log(state, action);
-      // state.success = true;
-      // state.isLoading = false;
     })
     builder.addCase(postEmployeeCashout.rejected, (state, action) => {
       debugger;
-      console.log(state, action);
-      // state.success = false;
-      // state.isLoading = false;
-
     })
 
     builder.addCase(postEmployeeCashout.pending, (state, action) => {
-      console.log(state, action);
     })
 
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
-      console.log(state, action);
       var employee = action.payload.data
       state.profile = {
         id: employee.profile.id,
@@ -161,8 +135,6 @@ const employeeSlice = createSlice({
       }
 
     })
-
-
   }
 })
 

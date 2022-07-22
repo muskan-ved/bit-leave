@@ -7,13 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
 
 import { loadEmployee } from 'src/store/employee'
-import { getUser, updateOnBoarding } from 'src/store/user'
-
-// ** Axios
-import axios from 'axios'
-
-import { resolve } from 'path'
-
+import { updateOnBoarding } from 'src/store/user'
 
 const defaultProvider = {
   onboarding: false
@@ -40,10 +34,8 @@ const OnboardingProvider = ({ children }: Props) => {
       if (!onboarding) {
         if (store) {
           const employeeId = store.id;
-          console.log('employeeId', employeeId)
           if (employeeId) {
             const employee = await dispatch(loadEmployee(employeeId));
-            console.log(employee)
             if (employee.payload?.data != null) {
               if (employee.payload.data.profile) {
                 if (!employee.payload.data.profile.onboarded) {
@@ -60,8 +52,6 @@ const OnboardingProvider = ({ children }: Props) => {
           }
         }
         else {
-          console.log('else ')
-
         }
       }
     }

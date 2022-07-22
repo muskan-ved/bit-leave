@@ -1,26 +1,5 @@
 // ** Redux Imports
-import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
-
-// ** Axios Imports
-import axios from 'axios'
-import { user } from 'src/types/user'
-
-interface Redux {
-  getState: any
-  dispatch: Dispatch<any>
-}
-const intialState: user = {
-  avatar: '',
-  companyname: '',
-  email: '',
-  fullName: '',
-  id: null,
-  orgId: null,
-  role: '',
-  userOnboarded: false,
-  username: '',
-}
-
+import { createSlice } from '@reduxjs/toolkit'
 
 const userSlice = createSlice({
   name: 'user',
@@ -54,7 +33,6 @@ const userSlice = createSlice({
       return data
     }
   }
-
 })
 
 export const {

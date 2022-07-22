@@ -48,7 +48,6 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
     success: {
       light: '#83E542',
       main: '#2DCCA7',
-      //main: '#72E128', MVP
       dark: '#64C623',
       contrastText: '#FFF'
     },

@@ -185,25 +185,7 @@ const UserDropdown = (props: Props) => {
             Profile
           </Box>
         </MenuItem>
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <EmailOutline sx={{ marginRight: 2 }} />
-            Inbox
-          </Box>
-        </MenuItem> */}
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <MessageOutline sx={{ marginRight: 2 }} />
-            Support (coming soon)
-          </Box>
-        </MenuItem> */}
         <Divider />
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CogOutline sx={{ marginRight: 2 }} />
-            Settings
-          </Box>
-        </MenuItem> */}
         <MenuItem sx={{ p: 0 }} onClick={() => handleContactUs()}>
           <Box sx={styles}>
             <CardAccountPhone sx={{ marginRight: 2 }} />

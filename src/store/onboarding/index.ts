@@ -15,7 +15,6 @@ interface Redux {
 export const postOrgOnboarding = createAsyncThunk('onboarding/org',
 
   async (params: OnboardingType, { dispatch, getState }: Redux) => {
-    console.log(params);
     const token = localStorage.getItem("accessToken")
 
     try {
@@ -66,22 +65,18 @@ const appOnboardingSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(postOrgOnboarding.fulfilled, (state, action) => {
-      console.log(state, action);
       state.success = true;
       state.isLoading = false;
       state.onboardingDone = true;
     })
     builder.addCase(postOrgOnboarding.rejected, (state, action) => {
-      console.log(state, action);
       state.success = false;
       state.isLoading = false;
     })
     builder.addCase(postOrgOnboarding.pending, (state, action) => {
-      console.log(state, action);
       state.isLoading = true;
     })
   }
-
 })
 
 export default appOnboardingSlice.reducer

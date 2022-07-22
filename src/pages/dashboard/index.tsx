@@ -4,9 +4,6 @@ import { SyntheticEvent, useContext, useEffect, useState } from 'react'
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
 
-// ** Axios
-import axios, { AxiosError } from 'axios'
-
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
@@ -55,7 +52,6 @@ import { useTheme } from '@mui/material/styles'
 
 // ** Icons Imports
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import { selectedGridRowsCountSelector } from '@mui/x-data-grid'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { loadEmployee } from 'src/store/employee'
@@ -67,7 +63,6 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
     borderRight: `0px solid ${theme.palette.divider}`
   }
 }))
-
 
 type leavesbyOrg = {
   fullname: string
@@ -227,10 +222,6 @@ const Dashboard = () => {
       axisTicks: { show: false },
       axisBorder: { show: false },
       categories: departments,
-
-      // labels: {
-      //   formatter: val => `${Number(val) / 1000}k`
-      // }
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
@@ -286,46 +277,11 @@ const Dashboard = () => {
       axisTicks: { show: false },
       axisBorder: { show: false },
       categories: employees,
-
-      // labels: {
-      //   formatter: val => `${Number(val) / 1000}k`
-      // }
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
     }
   }
-
-  // const [dialogOpen,setDialogOpen]=useState<boolean>(true)
-  // const handleDialogClose=()=>{
-  //   setDialogOpen(false)
-  // }
-  const fetchData = async () => {
-    const userData = localStorage.getItem("userData")
-    let employeeId;
-    if (userData != null) {
-      const data = JSON.parse(userData)
-      employeeId = data.id;
-    }
-    axios
-      .get('https://api.bitleave.co/employees/' + employeeId, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(res => {
-        const resultData = res.data;
-        setData(resultData.data);
-        setIsLoading(false);
-        console.log(resultData.data, "Ddddd")
-      })
-      .catch((reason: AxiosError) => {
-        if (reason.response!.status === 401) {
-          logout()
-        } else {
-          // Handle else
-        }
-      }
-      )
-  };
 
   const fetchDataFromRedux = async () => {
     const userData = localStorage.getItem("userData")
@@ -347,23 +303,9 @@ const Dashboard = () => {
       setIsLoading(true);
       fetchDataFromRedux();
     }
-    console.log(count);
     if (count != 1)
       setCount(1);
   }, []);
-
-  // useEffect(() => {
-
-  //   if (data) {
-  //     console.log('here');
-  //     for (let index = 0; index < data.leavesByDepartment.length; index++) {
-  //       departments.push(data.leavesByDepartment[index].department);
-  //     }
-  //     for (let index = 0; index < data.leavesByDepartment.length; index++) {
-  //       series[0].data.push(data.leavesByDepartment[index].averageExcessDays)
-  //     }
-  //   }
-  // }, []);
 
   if (isLoading)
     return (<CircularProgress color="success" />)

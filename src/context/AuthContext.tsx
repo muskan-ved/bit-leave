@@ -17,7 +17,7 @@ import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendC
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
 import { resolve } from 'path'
 import { AppDispatch } from 'src/store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {refreshUserState} from 'src/store/user'
 
 //
@@ -242,7 +242,6 @@ const AuthProvider = ({ children }: Props) => {
         })
       },
       onFailure: (err) => {
-        console.log(err);
         if (err) {
           if (errorCallback) errorCallback({ 'Message': err.message })
         }

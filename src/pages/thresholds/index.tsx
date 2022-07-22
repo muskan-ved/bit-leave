@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
 
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
@@ -56,7 +56,6 @@ const Thresholds = () => {
       .then(res => {
         const data = res.data;
         setData(data.data.organisation);
-        console.log(data);
         setIsLoading(false);
       })
       .catch((reason: AxiosError) => {

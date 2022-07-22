@@ -2,30 +2,20 @@
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import BlankLayout from 'src/@core/layouts/BlankLayout';
 import SignaturePad from 'react-signature-canvas';
-
-import { red } from '@mui/material/colors';
 import React, { ReactNode, useRef } from 'react';
-import { Box, BoxProps, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
-import { padding } from '@mui/system';
+import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import * as yup from 'yup'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Paper from '@mui/material/Paper';
 import { Check, Eraser } from 'mdi-material-ui';
-import { relative } from 'path';
-import { left } from '@popperjs/core';
 import { postOrgOnboarding } from 'src/store/onboarding';
 import { AppDispatch, RootState } from 'src/store';
 import { useDispatch, useSelector } from 'react-redux'
 import BlankLayoutWithAppBarWrapper from 'src/@core/layouts/BlankLayoutWithAppBar';
 import { useRouter } from 'next/router';
-
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   // height: '100%',
@@ -36,10 +26,6 @@ const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 const StepperContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   padding: theme.spacing(7)
 }))
-
-
-
-
 interface OnBoardingState {
   compliance: string,
   leaveNotification: number|null,
@@ -73,26 +59,6 @@ const defaultApprovalValue = {
   approval: '',
   signature: ''
 }
-interface compliance {
-  compliance: string,
-}
-
-interface threshold {
-  leaveNotification: string,
-  leaveWarning: string,
-  maxPayout: string
-}
-
-interface contact {
-  email: string,
-  payrollEmail: string,
-  payrollLink: string
-}
-
-interface approval {
-  approval: string,
-  signature: string
-}
 
 const complianceSchema = yup.object().shape({
   compliance: yup.string().required()
@@ -121,7 +87,6 @@ const approvalSchema = yup.object().shape({
 })
 
 const Onboarding = (props:any) => {
-  // export default function onboarding() {
   const steps = ['Start', 'Compliance', 'Thresholds', 'Contacts', 'Approval'];
   const [activeStep, setActiveStep] = React.useState(0);
   const router =useRouter()
@@ -181,16 +146,10 @@ const Onboarding = (props:any) => {
   })
 
   const handleNext = () => { setActiveStep((prevActiveStep) => prevActiveStep + 1); };
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-  const handleReset = () => {
-    setActiveStep(0);
-  };
 
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.onboarding)
-  console.log(store)
+
 
   const getComplianceContent = () => {
     switch (complianceSelected) {
@@ -328,7 +287,7 @@ const Onboarding = (props:any) => {
       stateData
     ))
     router.push('/home')
-    console.log(onBoarding)
+
   }
   const formatIntoPng = () => {
     if (sigCanvas.current) {
@@ -343,7 +302,7 @@ const Onboarding = (props:any) => {
       signature: ''
     })
   }
-  const onError = () => console.log('errors, e');
+  const onError = () => {};
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:

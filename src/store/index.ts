@@ -20,7 +20,6 @@ const rootReducer = (state: ReturnType<typeof combinedReducer>|undefined, action
   if (action.type === 'store/reset') {
     return combinedReducer(undefined, action);
   };
-
   return combinedReducer(state, action);
 };
 
@@ -31,11 +30,7 @@ export const store = configureStore({
       serializableCheck: false
     })
 })
- //{
-  //   onboarding,
-  //   employee,
-  //   apierror
-  // },
+
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 

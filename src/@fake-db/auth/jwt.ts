@@ -7,6 +7,9 @@ import mock from 'src/@fake-db/mock'
 // ** Types
 import { UserDataType } from 'src/context/types'
 
+// ** Config Vars
+import authConfig from '../../configs/auth';
+
 const users: UserDataType[] = [
   {
     id: 1,
@@ -36,8 +39,8 @@ const jwtConfig = {
   refreshTokenSecret: '7c4c1c50-3230-45bf-9eae-c9b2e401c767'
 }
 
-mock.onPost('/jwt/login').reply(request => {
-  const { email, password } = JSON.parse(request.data)
+mock.onPost(`${authConfig.loginEndpoint }`).reply(request => {
+  const { email } = JSON.parse(request.data)
 
   let error = {
     email: ['Something went wrong']
@@ -62,9 +65,9 @@ mock.onPost('/jwt/login').reply(request => {
   }
 })
 
-mock.onPost('/jwt/register').reply(request => {
+mock.onPost(`${authConfig.registerEndpoint }`).reply(request => {
   if (request.data.length > 0) {
-    const { email, password, username } = JSON.parse(request.data)
+    const { email, username } = JSON.parse(request.data)
     const isEmailAlreadyInUse = users.find(user => user.email === email)
     const isUsernameAlreadyInUse = users.find(user => user.username === username)
     const error = {
@@ -94,8 +97,6 @@ mock.onPost('/jwt/register').reply(request => {
 
       const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret)
 
-      const user = { ...userData }
-
       const response = { accessToken }
 
       return [200, response]
@@ -107,7 +108,7 @@ mock.onPost('/jwt/register').reply(request => {
   }
 })
 
-mock.onGet('/auth/me').reply(config => {
+mock.onGet(`${authConfig.meEndpoint }`).reply(config => {
   // @ts-ignore
   const token = config.headers.Authorization as string
 

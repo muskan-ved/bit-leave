@@ -21,9 +21,6 @@ import SignaturePad from 'react-signature-canvas';
 import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } from 'src/store/employee'
 import { ApiResult, error } from 'src/types/error'
 
-
-
-
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
 
@@ -40,11 +37,9 @@ function Item(props: BoxProps) {
   );
 }
 
-
 interface cashoutResultModel {
   success: boolean
 }
-
 
 const defaultCashoutApiResult: ApiResult<cashoutResultModel> = {
   data: {
@@ -52,7 +47,6 @@ const defaultCashoutApiResult: ApiResult<cashoutResultModel> = {
   },
   errors: null
 }
-
 interface CashOutState {
   cashAmountInDays: number | null,
   signature: string,
@@ -68,7 +62,6 @@ const defaultSignatureValue = {
   signature: ''
 }
 
-
 const CashOutSchema = yup.object().shape({
   cashAmountInDays: yup.number().required().positive().integer(),
   cashOutReason: yup.string().required(),
@@ -78,15 +71,12 @@ const SignatureSchema = yup.object().shape({
   signature: yup.string().required()
 })
 
-
-
 const CashoutDialog = (props: any) => {
   const [activeStep, setActiveStep] = React.useState(0)
   const [calculateAmount, setcalculateAmount] = React.useState(null)
   const [cashoutApiResponse, setcashoutApiResponse] = React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
   const [employeeContract, setemployeeContract] = React.useState(null)
 
-  //const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const dispatch = useDispatch<AppDispatch>()
@@ -119,7 +109,6 @@ const CashoutDialog = (props: any) => {
   const sigCanvas = React.useRef() as React.MutableRefObject<any>;
   const cashAmountInDays: number | null = watchCashOutControl('cashAmountInDays')
 
-
   const store = useSelector((state: RootState) => state.employee)
   const resetError = () => {
     setcashoutApiResponse({
@@ -151,7 +140,6 @@ const CashoutDialog = (props: any) => {
         data: null
       })
     }
-
   }
 
   const onSignatureSubmit = async (data: any) => {
@@ -183,12 +171,13 @@ const CashoutDialog = (props: any) => {
       return dataURL;
     }
   }
-  const onError = () => console.log('errors, e');
+
+  const onError = () => {};
 
   const onChangeCashOutDays = async (e: any) => {
-    // console.log("cashAmountInDays", cashAmountInDays)
+
     const result = await dispatch(calculateEmployeeCashout(e.target.value))
-    console.log(result.payload)
+
     if (result.payload != null && result.payload.data.cashoutAmount != null) {
       setcalculateAmount(result.payload.data.cashoutAmount)
     }
@@ -216,9 +205,6 @@ const CashoutDialog = (props: any) => {
         i++
         return <Alert key={i} variant="outlined" severity="error">{x.message}</Alert>
       })
-
-
-
     )
   }
 
@@ -231,7 +217,6 @@ const CashoutDialog = (props: any) => {
       </DialogTitle>
       {activeStep == 0 &&
         <><Container maxWidth="lg"><form key='cashoutform' onSubmit={handleCashOutSubmit(onCashOutSubmit, onError)}>
-
 
           <DialogContent>
             {cashoutApiResponse.errors != null && errorControl()}
@@ -383,7 +368,6 @@ const CashoutDialog = (props: any) => {
         </DialogContent>
         </>
       }
-
     </Dialog>
   )
 

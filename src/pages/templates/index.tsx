@@ -75,7 +75,6 @@ const Templates = () => {
             tabList.push(value.templatetype);
           }
           const contentBlocks = htmlToDraft(value.defaulttext)
-          const contentState = ContentState.createFromBlockArray(contentBlocks)
 
           value.index = i;
           value.updateEditorState = EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks))
@@ -87,7 +86,6 @@ const Templates = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
   const updateData = async () => {
@@ -111,7 +109,6 @@ const Templates = () => {
       })
       .catch((err) => {
         alert("Error occured while updating data")
-        console.log(err)
       })
 
   }
