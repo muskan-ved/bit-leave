@@ -44,7 +44,8 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
 
 export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
   async (params: number, { dispatch, getState }: Redux) => {
-    console.log(params);
+    
+    try {
     const token = localStorage.getItem("accessToken");
     var data = { days: params};
     const result = await axios
@@ -53,6 +54,10 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
       })
       console.log(result); 
     return result.data
+  }
+  catch(e){
+    console.log(e)
+    }
 
   })
 

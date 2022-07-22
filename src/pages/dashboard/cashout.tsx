@@ -188,8 +188,9 @@ const CashoutDialog = (props: any) => {
   const onChangeCashOutDays = async (e: any) => {
     // console.log("cashAmountInDays", cashAmountInDays)
     const result = await dispatch(calculateEmployeeCashout(e.target.value))
-    if (result.payload != null && result.payload.cashoutAmount != null) {
-      setcalculateAmount(result.payload.cashoutAmount)
+    console.log(result.payload)
+    if (result.payload != null && result.payload.data.cashoutAmount != null) {
+      setcalculateAmount(result.payload.data.cashoutAmount)
     }
     else {
       const errortoDisplay: error[] = [{
