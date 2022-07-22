@@ -68,24 +68,6 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }))
 
-const seriesData: number[] = [53.17, 80.21]
-const seriesData1: number[] = [80.21]
-
-const series = [
-  {
-    name: 'Average Excess Days',
-    data: seriesData
-  }
-]
-
-const series1 = [
-  {
-    name: 'Average Excess Days By Employee',
-    data: seriesData1
-  }
-]
-const employees : string[] = ['Kushal VaghaniUser']
-const departments: string[] = ['Technology', 'Marketing']
 
 type leavesbyOrg = {
   fullname: string
@@ -123,7 +105,7 @@ type profile = {
 type directReport = {
   fullname: string,
   department: string,
-  excessDays : number
+  excessDays: number
 }
 
 type employee = {
@@ -132,7 +114,7 @@ type employee = {
   leaveDetails: leaveDetails
   leavesByOrg: Array<leavesbyOrg>
   leavesByDepartment: Array<leavesbyDepartment>
-  directReports : Array<directReport>
+  directReports: Array<directReport>
   team: team
   vitals: vitals
 }
@@ -153,8 +135,48 @@ const Dashboard = () => {
   }
   const cashoutLeaveButtonClick = (event: SyntheticEvent) => {
     setDialogOpen(true)
-
   }
+
+  let avgExcessDays: number[] = [], 
+    departmentsOfAverageExcessDays: string[] = [], 
+    directReportsOfFullname: string[] = [],
+    directReportsOfExcessDays : number[] = [];
+
+  if (data) {
+    for (let index = 0; index < data?.leavesByDepartment.length; index++) {
+      avgExcessDays.push(data?.leavesByDepartment[index].averageExcessDays);
+    }
+    for (let index = 0; index < data?.leavesByDepartment.length; index++) {
+      departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
+    }
+    for (let index = 0; index < data?.directReports.length; index++) {
+      directReportsOfFullname.push(data?.directReports[index].fullname);
+    }
+    for (let index = 0; index < data?.directReports.length; index++) {
+      directReportsOfExcessDays.push(data?.directReports[index].excessDays);
+    } 
+  }
+
+  console.log(data,"ddddddddddddddd")
+  const seriesData: number[] = avgExcessDays;
+  const seriesData1: number[] = directReportsOfExcessDays;
+
+  const series = [
+    {
+      name: 'Average Excess Days',
+      data: seriesData
+    }
+  ]
+
+  const series1 = [
+    {
+      name: 'Average Excess Days By Employee',
+      data: seriesData1
+    }
+  ]
+
+  const employees: string[] = directReportsOfFullname
+  const departments: string[] = departmentsOfAverageExcessDays;
   const token = localStorage.getItem("accessToken")
   const theme = useTheme()
   const options: ApexOptions = {
@@ -294,6 +316,7 @@ const Dashboard = () => {
         const resultData = res.data;
         setData(resultData.data);
         setIsLoading(false);
+        console.log(resultData.data, "Ddddd")
       })
       .catch((reason: AxiosError) => {
         if (reason.response!.status === 401) {
@@ -304,6 +327,7 @@ const Dashboard = () => {
       }
       )
   };
+
   const fetchDataFromRedux = async () => {
     const userData = localStorage.getItem("userData")
     let employeeId;
@@ -314,12 +338,12 @@ const Dashboard = () => {
     const data = await dispatch(loadEmployee(employeeId))
     if (data.payload != null) {
       setData(data.payload.data);
-      console.log(data)
     }
     setIsLoading(false)
   }
 
   useEffect(() => {
+
     if (!data) {
       setIsLoading(true);
       fetchDataFromRedux();
@@ -373,7 +397,7 @@ const Dashboard = () => {
                   <Grid item xs={12} sm={4}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
-                        <HomeLightbulbOutline/>
+                        <HomeLightbulbOutline />
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
@@ -421,9 +445,9 @@ const Dashboard = () => {
                     </Box>
                   </Grid>
                   <Grid item xs={5} sm={6}>
-                  <Box sx={{ display: 'grid', alignItems: 'left' }}>
-                    <Button variant='contained'>Take Leave</Button>
-                  </Box>
+                    <Box sx={{ display: 'grid', alignItems: 'left' }}>
+                      <Button variant='contained'>Take Leave</Button>
+                    </Box>
                   </Grid>
                 </Grid>
 
@@ -442,7 +466,7 @@ const Dashboard = () => {
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <AccountOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
                     <Typography variant='body2'>Manager : {data.team.name ? data.team.name : 'No manager assigned'} </Typography>
-                  </Box><br/>
+                  </Box><br />
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
                     <Typography variant='body2'>Number Direct Reports : {data.directReports.length} </Typography>
@@ -482,14 +506,14 @@ const Dashboard = () => {
               </Card>
             </Grid>
           ) : null}
-           <Grid item md={6} xs={8}>
-              <Card>
-                <CardHeader title='Excess Leaves by Direct Reports 📈' subheader={<Typography variant='body2'>Above the thresholds<Divider></Divider></Typography>} />
-                <CardContent>
-                  <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
-                </CardContent>
-              </Card>
-            </Grid>
+          <Grid item md={6} xs={8}>
+            <Card>
+              <CardHeader title='Excess Leaves by Direct Reports 📈' subheader={<Typography variant='body2'>Above the thresholds<Divider></Divider></Typography>} />
+              <CardContent>
+                <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
         <br></br>
         <Grid container spacing={6}>
