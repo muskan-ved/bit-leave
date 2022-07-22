@@ -157,7 +157,6 @@ const Dashboard = () => {
     } 
   }
 
-  console.log(data,"ddddddddddddddd")
   const seriesData: number[] = avgExcessDays;
   const seriesData1: number[] = directReportsOfExcessDays;
 
