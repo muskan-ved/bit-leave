@@ -340,9 +340,19 @@ const Dashboard = () => {
                 <Divider></Divider>
                 <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
                 <br></br>
-                <Box sx={{ display: 'flex', alignItems: 'center' }} onClick={cashoutLeaveButtonClick}>
-                  <Button variant='contained'>Cashout Leave</Button>
-                </Box>
+                <Grid container spacing={1}>
+                  <Grid item xs={5} sm={6}>
+                    <Box sx={{ display: 'grid', alignItems: 'left' }} onClick={cashoutLeaveButtonClick}>
+                      <Button variant='contained'>Cashout Leave</Button>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={5} sm={6}>
+                  <Box sx={{ display: 'grid', alignItems: 'left' }}>
+                    <Button variant='contained'>Take Leave</Button>
+                  </Box>
+                  </Grid>
+                </Grid>
+
               </CardContent>
             </Card>
           </Grid>
@@ -360,9 +370,6 @@ const Dashboard = () => {
                     <Typography variant='body2'>Manager : {data.team.name ? data.team.name : 'No manager assigned'} </Typography>
                   </Box>
                   <br></br>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Button variant='contained'>Link to HRIS</Button>
-                  </Box>
                 </StyledBox>
               </CardContent>
             </Card>

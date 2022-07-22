@@ -46,11 +46,12 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
   async (params: number, { dispatch, getState }: Redux) => {
     console.log(params);
     const token = localStorage.getItem("accessToken");
+    var data = { days: params};
     const result = await axios
-      .post('https://api.bitleave.co/employeeActions/calculate', params, {
+      .post('https://api.bitleave.co/employeeactions/calculate',data, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-
+      console.log(result); 
     return result.data
 
   })
