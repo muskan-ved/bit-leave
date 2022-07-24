@@ -143,7 +143,7 @@ const Dashboard = () => {
     directReportsOfExcessDays : number[] = [];
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
-      avgExcessDays.push(data?.leavesByDepartment[index].averageExcessDays);
+      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays.toFixed(2)));
     }
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
       departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
@@ -152,7 +152,7 @@ const Dashboard = () => {
       directReportsOfFullname.push(data?.directReports[index].fullname);
     }
     for (let index = 0; index < data?.directReports.length; index++) {
-      directReportsOfExcessDays.push(data?.directReports[index].excessDays);
+      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays.toFixed(2)));
     } 
   }
 
@@ -350,7 +350,7 @@ const Dashboard = () => {
   if (isLoading)
     return (<CircularProgress color="success" />)
 
-  if (!isLoading && data && !data.profile.onboarded) {
+  if (!isLoading && data && Object.keys(data.leaveDetails).length == 0) {
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
