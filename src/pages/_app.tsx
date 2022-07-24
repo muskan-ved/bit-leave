@@ -163,7 +163,6 @@ const App = (props: ExtendedAppProps) => {
         </AuthProvider>
       </Provider>
     </CacheProvider>
-
   )
 }
 

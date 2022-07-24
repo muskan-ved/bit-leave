@@ -25,6 +25,7 @@ import { AppDispatch, RootState } from 'src/store';
 import { useDispatch, useSelector } from 'react-redux'
 import BlankLayoutWithAppBarWrapper from 'src/@core/layouts/BlankLayoutWithAppBar';
 import { useRouter } from 'next/router';
+import { loadOrganisation } from 'src/store/organisation';
 
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -327,6 +328,7 @@ const Onboarding = (props:any) => {
     await dispatch(postOrgOnboarding(
       stateData
     ))
+    await dispatch(loadOrganisation())
     router.push('/home')
     console.log(onBoarding)
   }
