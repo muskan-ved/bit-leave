@@ -185,11 +185,11 @@ const CashoutDialog = (props: any) => {
       signature: stateData.signature
     }))
     console.log(result.payload)
-    if (result.payload != null && result.payload.data!=null && result.payload.data.success != null) {
+    if (result.payload != null && result.payload.data != null && result.payload.data?.success == true) {
       // setcalculateAmount(result.payload.data.cashoutAmount)
       setcashoutState(stateData)
       setActiveStep(2)
-    resetError()
+      resetError()
 
     }
     else {
