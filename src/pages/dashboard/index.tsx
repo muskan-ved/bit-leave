@@ -68,25 +68,6 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }))
 
-const seriesData: number[] = [53.17, 80.21]
-const seriesData1: number[] = [80.21]
-
-const series = [
-  {
-    name: 'Average Excess Days',
-    data: seriesData
-  }
-]
-
-const series1 = [
-  {
-    name: 'Average Excess Days By Employee',
-    data: seriesData1
-  }
-]
-const employees : string[] = ['Kushal VaghaniUser']
-const departments: string[] = ['Technology', 'Marketing']
-
 type leavesbyOrg = {
   fullname: string
   department: string
@@ -155,6 +136,43 @@ const Dashboard = () => {
     setDialogOpen(true)
 
   }
+
+  let avgExcessDays: number[] = [], 
+    departmentsOfAverageExcessDays: string[] = [], 
+    directReportsOfFullname: string[] = [],
+    directReportsOfExcessDays : number[] = [];
+  if (data) {
+    for (let index = 0; index < data?.leavesByDepartment.length; index++) {
+      avgExcessDays.push(data?.leavesByDepartment[index].averageExcessDays);
+    }
+    for (let index = 0; index < data?.leavesByDepartment.length; index++) {
+      departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
+    }
+    for (let index = 0; index < data?.directReports.length; index++) {
+      directReportsOfFullname.push(data?.directReports[index].fullname);
+    }
+    for (let index = 0; index < data?.directReports.length; index++) {
+      directReportsOfExcessDays.push(data?.directReports[index].excessDays);
+    } 
+  }
+
+  const seriesData: number[] = avgExcessDays;
+  const seriesData1: number[] = directReportsOfExcessDays;
+  const series = [
+    {
+      name: 'Average Excess Days',
+      data: seriesData
+    }
+  ]
+  const series1 = [
+    {
+      name: 'Average Excess Days By Employee',
+      data: seriesData1
+    }
+  ]
+  const employees: string[] = directReportsOfFullname
+  const departments: string[] = departmentsOfAverageExcessDays;
+
   const token = localStorage.getItem("accessToken")
   const theme = useTheme()
   const options: ApexOptions = {
@@ -328,19 +346,6 @@ const Dashboard = () => {
     if (count != 1)
       setCount(1);
   }, []);
-
-  // useEffect(() => {
-
-  //   if (data) {
-  //     console.log('here');
-  //     for (let index = 0; index < data.leavesByDepartment.length; index++) {
-  //       departments.push(data.leavesByDepartment[index].department);
-  //     }
-  //     for (let index = 0; index < data.leavesByDepartment.length; index++) {
-  //       series[0].data.push(data.leavesByDepartment[index].averageExcessDays)
-  //     }
-  //   }
-  // }, []);
 
   if (isLoading)
     return (<CircularProgress color="success" />)
