@@ -30,6 +30,9 @@ import Box from '@mui/material/Box'
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
+// ** Custom Component Import
+import CardStatisticsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
+
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -38,7 +41,7 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
-import { AccountAlertOutline, BagPersonalOutline, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
@@ -137,7 +140,7 @@ const Dashboard = () => {
 
   }
 
-  let avgExcessDays: number[] = [], 
+  const avgExcessDays: number[] = [], 
     departmentsOfAverageExcessDays: string[] = [], 
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays : number[] = [];
@@ -456,11 +459,8 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={4} xs={12} sm={6}>
-            <Card>
-              <CardHeader title='Salary Details 💲' subheader={<Divider></Divider>} />
-              <CardContent>
-                <CardStatisticsCharacter
+          <Grid item md={4} xs={6} sm={3}>
+                <CardStatisticsCharacter 
                   data={{
                     stats: `${data.vitals.averageSalary.toFixed(0)}k`,
                     title: '',
@@ -470,10 +470,20 @@ const Dashboard = () => {
                     chipText: 'Average Salary across Org.',
                     src: '/images/cards/card-stats-img-3.png'
                   }}
+                /><br/>
+                <CardStatisticsCharacter 
+                  data={{
+                    stats: `3`,
+                    title: '',
+                    trend: 'positive',
+                    chipColor: 'success',
+                    trendNumber: 'in days',
+                    chipText: 'Leave mobilised by bit.leave',
+                    src: '/images/cards/trophy.png'
+                  }}
                 />
-              </CardContent>
-            </Card>
           </Grid>
+          
         </Grid>
         <br />
         <Grid container spacing={6}>
