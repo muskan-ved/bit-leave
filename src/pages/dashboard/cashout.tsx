@@ -88,6 +88,8 @@ const CashoutDialog = (props: any) => {
   const [cashoutApiResponse, setcashoutApiResponse] = React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
   const [employeeContract, setemployeeContract] = React.useState('')
   const [loading, setloading] = React.useState(false)
+  const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout]=React.useState(null)
+  const [cashoutError,setcashoutError] =React.useState(false)
 
   //const dispatch = useDispatch<AppDispatch>()
   const theme = useTheme();
@@ -228,10 +230,18 @@ const CashoutDialog = (props: any) => {
       setloading(true)
       const result = await dispatch(calculateEmployeeCashout(e.target.value))
       console.log(result.payload)
-      if (result.payload != null && result.payload.data.cashoutAmount != null) {
+      if (result.payload != null ) {
+      if(result.payload.data.cashoutAmount != null){
         setcalculateAmount(result.payload.data.cashoutAmount)
+        setleaveBalanceAfterCashout(result.payload.data.leaveBalanceAfterCashout)
+      }
+      //Standardize error first
+      // else if(result.payload.data.error!){
+
+      // }
       }
       else {
+
         const errortoDisplay: error[] = [{
           message: 'Some error occured while processing your cashout.',
           code: ''
@@ -355,8 +365,7 @@ const CashoutDialog = (props: any) => {
 
                 }}>
                   <Item>Leave Balance After Cash Out:</Item>
-                  <Item>{store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && cashoutdays != null
-                    && (Number(store.cashoutOption?.daysAvailable.toFixed(2)) - cashoutdays)}</Item>
+                  <Item>{leaveBalanceAfterCashout}</Item>
                 </Box>
 
 
