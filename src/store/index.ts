@@ -6,11 +6,13 @@ import onboarding from 'src/store/onboarding'
 import employee from 'src/store/employee'
 import apierror from 'src/store/apiError'
 import user from 'src/store/user'
+import organisation from 'src/store/organisation'
 
 export const reducers = {
   onboarding,
   employee,
   user,
+  organisation,
   apierror
 }
 

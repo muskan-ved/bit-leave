@@ -7,7 +7,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
 
 import { loadEmployee } from 'src/store/employee'
-import { updateOnBoarding } from 'src/store/user'
+import { getUser, updateOnBoarding } from 'src/store/user'
+
+// ** Axios
+import axios from 'axios'
+
+import { resolve } from 'path'
+import { loadOrganisation } from 'src/store/organisation'
+import { organisation } from 'src/types/organisation'
+
 
 const defaultProvider = {
   onboarding: false
@@ -24,34 +32,70 @@ const OnboardingProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
+  const organisationStore = useSelector((state: RootState) => state.organisation)
+
   const store = useSelector((state: RootState) => state.user)
+  debugger;
   const dispatch = useDispatch<AppDispatch>()
   const initOnboarding = async (): Promise<void> => {
     const path = router.asPath
     const onboarded = store.userOnboarded
+
+    if (path == '/login/' || path == '/logout/') {
+      return;
+    }
+
     setOnboarding(onboarded)
     if (path !== '/organisation/onboarding') {
-      if (!onboarding) {
-        if (store) {
-          const employeeId = store.id;
-          if (employeeId) {
-            const employee = await dispatch(loadEmployee(employeeId));
-            if (employee.payload?.data != null) {
-              if (employee.payload.data.profile) {
-                if (!employee.payload.data.profile.onboarded) {
-                  if (store.role === 'admin') {
-                    router.push('/organisation/onboarding')
+      let orgOnBoarding: boolean
+      if (!organisationStore.id) {
+        //todo: get it from store
+        const userData = localStorage.getItem("userData")
+        let organisationID;
+        if (userData != null) {
+          const data = JSON.parse(userData)
+          organisationID = data.id;
+        }
+        const organisation = await dispatch(loadOrganisation())
+        orgOnBoarding = organisation.payload.data.organisation.active
+
+      }
+      else {
+        orgOnBoarding = organisationStore.active
+      }
+
+      if (orgOnBoarding == false) {
+        if (store.role === 'admin') {
+          router.push('/organisation/onboarding')
+        }
+      }
+      else {
+        if (!onboarding) {
+          if (store) {
+            const employeeId = store.id;
+            console.log('employeeId', employeeId)
+            if (employeeId) {
+              const employee = await dispatch(loadEmployee(employeeId));
+              console.log(employee)
+              if (employee.payload?.data != null) {
+                if (employee.payload.data.profile) {
+                  if (!employee.payload.data.profile.onboarded) {
+                    if (store.role === 'admin') {
+                      router.push('/organisation/onboarding')
+                    }
                   }
-                }
-                else {
-                  setOnboarding(true)
-                  dispatch(updateOnBoarding(true))
+                  else {
+                    setOnboarding(true)
+                    dispatch(updateOnBoarding(true))
+                  }
                 }
               }
             }
           }
-        }
-        else {
+          else {
+            console.log('else ')
+
+          }
         }
       }
     }

@@ -27,6 +27,9 @@ import Box from '@mui/material/Box'
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
+// ** Custom Component Import
+import CardStatisticsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
+
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -35,7 +38,7 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
-import { AccountAlertOutline, BagPersonalOutline, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
@@ -132,14 +135,13 @@ const Dashboard = () => {
     setDialogOpen(true)
   }
 
-  let avgExcessDays: number[] = [], 
+  const avgExcessDays: number[] = [], 
     departmentsOfAverageExcessDays: string[] = [], 
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays : number[] = [];
-
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
-      avgExcessDays.push(data?.leavesByDepartment[index].averageExcessDays);
+      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays.toFixed(2)));
     }
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
       departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
@@ -148,29 +150,27 @@ const Dashboard = () => {
       directReportsOfFullname.push(data?.directReports[index].fullname);
     }
     for (let index = 0; index < data?.directReports.length; index++) {
-      directReportsOfExcessDays.push(data?.directReports[index].excessDays);
+      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays.toFixed(2)));
     } 
   }
 
   const seriesData: number[] = avgExcessDays;
   const seriesData1: number[] = directReportsOfExcessDays;
-
   const series = [
     {
       name: 'Average Excess Days',
       data: seriesData
     }
   ]
-
   const series1 = [
     {
       name: 'Average Excess Days By Employee',
       data: seriesData1
     }
   ]
-
   const employees: string[] = directReportsOfFullname
   const departments: string[] = departmentsOfAverageExcessDays;
+
   const token = localStorage.getItem("accessToken")
   const theme = useTheme()
   const options: ApexOptions = {
@@ -310,7 +310,7 @@ const Dashboard = () => {
   if (isLoading)
     return (<CircularProgress color="success" />)
 
-  if (!isLoading && data && !data.profile.onboarded) {
+  if (!isLoading && data && Object.keys(data.leaveDetails).length == 0) {
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -416,11 +416,8 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={4} xs={12} sm={6}>
-            <Card>
-              <CardHeader title='Salary Details 💲' subheader={<Divider></Divider>} />
-              <CardContent>
-                <CardStatisticsCharacter
+          <Grid item md={4} xs={6} sm={3}>
+                <CardStatisticsCharacter 
                   data={{
                     stats: `${data.vitals.averageSalary.toFixed(0)}k`,
                     title: '',
@@ -430,10 +427,20 @@ const Dashboard = () => {
                     chipText: 'Average Salary across Org.',
                     src: '/images/cards/card-stats-img-3.png'
                   }}
+                /><br/>
+                <CardStatisticsCharacter 
+                  data={{
+                    stats: `3`,
+                    title: '',
+                    trend: 'positive',
+                    chipColor: 'success',
+                    trendNumber: 'in days',
+                    chipText: 'Leave mobilised by bit.leave',
+                    src: '/images/cards/trophy.png'
+                  }}
                 />
-              </CardContent>
-            </Card>
           </Grid>
+          
         </Grid>
         <br />
         <Grid container spacing={6}>

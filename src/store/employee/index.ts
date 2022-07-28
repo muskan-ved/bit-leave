@@ -27,20 +27,22 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
       return response.data
     }
     catch(e){
-      var data = {
-        canShow: true,
-        redirect: false,
-        code: '',
-        message: 'Error occured while processing the request',
-        location: '',
-      }
-      return dispatch(show(data))
+      console.log(e)
+      // var data = {
+      //   canShow: true,
+      //   redirect: false,
+      //   code: '',
+      //   message: 'Error occured while processing the request',
+      //   location: '',
+      // }
+      // return dispatch(show(data))
+      // return rejectWithValue(e.response.data)
     }
   })
 
 export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
   async (params: number, { dispatch, getState }: Redux) => {
-    
+
     try {
     const token = localStorage.getItem("accessToken");
     var data = { days: params};
@@ -48,6 +50,7 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
       .post('https://api.bitleave.co/employeeactions/calculate',data, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
+      console.log(result);
     return result.data
   }
   catch(e){
@@ -81,7 +84,7 @@ export const loadEmployee = createAsyncThunk('emp/load',
       .get('https://api.bitleave.co/employees/' + params, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-
+console.log(result.data)
     return result.data
   })
 

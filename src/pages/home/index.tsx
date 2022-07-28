@@ -95,7 +95,7 @@ const Home = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>What is Bit.Leave ?</Typography>
+                <Typography>What is bit.Leave ?</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -109,7 +109,7 @@ const Home = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>How do I use Bit.leave? </Typography>
+                <Typography>How do I use bit.leave? </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -123,7 +123,7 @@ const Home = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>What can I spend Bit.leave on? </Typography>
+                <Typography>What can I spend bit.leave on? </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -151,7 +151,7 @@ const Home = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>What is the ROI of Bit.leave?? </Typography>
+                <Typography>What is the ROI of bit.leave?? </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -183,7 +183,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -194,27 +193,10 @@ const Home = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                60% or more of employees simply want more money or more time off when it comes to helping with cost of living pressures. Leave as a currency guarantees a 100% adoption rate across your organisation as it can be used by everyone.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-
-
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ChevronDown />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography>Why use leave as a currency?  </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
                 bit.leave is compliant across all awards (even award-free), enterprise agreements, locations and industries. 
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -229,14 +211,13 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>Why is Bit.leave better than other benefits?  </Typography>
+                <Typography>Why is bit.leave better than other benefits?  </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
@@ -244,7 +225,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -259,7 +239,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -270,11 +249,10 @@ const Home = () => {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                Yes. Bit.leave works with any HRIS system on the market. 
+                Yes. bit.leave works with any HRIS system on the market. 
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -289,7 +267,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -304,7 +281,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -319,7 +295,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -334,7 +309,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
             <Accordion>
               <AccordionSummary
                 expandIcon={<ChevronDown />}
@@ -349,9 +323,6 @@ const Home = () => {
                 </Typography>
               </AccordionDetails>
             </Accordion>
-
-
-
           </CardContent>
         </Card>
       </Grid>
