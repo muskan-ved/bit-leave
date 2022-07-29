@@ -35,7 +35,7 @@ const OnboardingProvider = ({ children }: Props) => {
   const organisationStore = useSelector((state: RootState) => state.organisation)
 
   const store = useSelector((state: RootState) => state.user)
-  debugger;
+  // debugger;
   const dispatch = useDispatch<AppDispatch>()
   const initOnboarding = async (): Promise<void> => {
     const path = router.asPath

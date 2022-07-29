@@ -105,10 +105,10 @@ const employeeSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(postEmployeeCashout.fulfilled, (state, action) => {
-      debugger;
+      // debugger;
     })
     builder.addCase(postEmployeeCashout.rejected, (state, action) => {
-      debugger;
+      // debugger;
     })
 
     builder.addCase(postEmployeeCashout.pending, (state, action) => {

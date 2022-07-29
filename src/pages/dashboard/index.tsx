@@ -35,6 +35,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Types Imports
 import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
+import {employee } from 'src/types/dashboard'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
@@ -46,10 +47,10 @@ import { BoxProps } from '@mui/material/Box'
 // ** Custom Components Imports
 import ReactApexcharts from 'src/@core/components/react-apexcharts'
 
-// ** Third Party Imports
+// // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
 
-// ** Util Import
+// // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { useTheme } from '@mui/material/styles'
 
@@ -67,55 +68,7 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   }
 }))
 
-type leavesbyOrg = {
-  fullname: string
-  department: string
-  excessDays: number
-}
 
-type leavesbyDepartment = {
-  department: string
-  averageExcessDays: number
-}
-
-type team = {
-  name: string
-  department: string
-}
-
-type vitals = {
-  averageSalary: number
-}
-
-type leaveDetails = {
-  totalDays: number
-  cashoutValue: number
-  excessDays: number
-  valueText: string
-}
-
-type profile = {
-  id: number,
-  fullname: string,
-  onboarded: boolean
-}
-
-type directReport = {
-  fullname: string,
-  department: string,
-  excessDays: number
-}
-
-type employee = {
-  id: number
-  profile: profile
-  leaveDetails: leaveDetails
-  leavesByOrg: Array<leavesbyOrg>
-  leavesByDepartment: Array<leavesbyDepartment>
-  directReports: Array<directReport>
-  team: team
-  vitals: vitals
-}
 
 const Dashboard = () => {
   // ** Hooks
@@ -139,6 +92,7 @@ const Dashboard = () => {
     departmentsOfAverageExcessDays: string[] = [], 
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays : number[] = [];
+    
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
       avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays.toFixed(2)));
@@ -173,6 +127,7 @@ const Dashboard = () => {
 
   const token = localStorage.getItem("accessToken")
   const theme = useTheme()
+ 
   const options: ApexOptions = {
     chart: {
       parentHeightOffset: 0,

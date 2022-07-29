@@ -180,6 +180,7 @@ const CashoutDialog = (props: any) => {
       setcashoutState(stateData)
       setActiveStep(2)
       resetError()
+      
 
     }
     else {

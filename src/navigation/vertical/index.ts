@@ -94,7 +94,8 @@ const navigation = (): VerticalNavItemsType => {
       disabled: true,
       action: 'read',
       subject: 'Perks'
-    }
+    },
+
   ]
 
 }
