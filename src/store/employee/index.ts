@@ -30,8 +30,7 @@ export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
             }
           }
         );
-      const employeeId = getState().user.id
-      await dispatch(loadEmployee(employeeId))
+      await dispatch(loadEmployee())
       return response.data
     }
     catch (e) {
