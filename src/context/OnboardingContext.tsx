@@ -35,7 +35,6 @@ const OnboardingProvider = ({ children }: Props) => {
   const organisationStore = useSelector((state: RootState) => state.organisation)
 
   const store = useSelector((state: RootState) => state.user)
-  debugger;
   const dispatch = useDispatch<AppDispatch>()
   const initOnboarding = async (): Promise<void> => {
     const path = router.asPath
@@ -70,33 +69,7 @@ const OnboardingProvider = ({ children }: Props) => {
         }
       }
       else {
-        if (!onboarding) {
-          if (store) {
-            const employeeId = store.id;
-            console.log('employeeId', employeeId)
-            if (employeeId) {
-              const employee = await dispatch(loadEmployee(employeeId));
-              console.log(employee)
-              if (employee.payload?.data != null) {
-                if (employee.payload.data.profile) {
-                  if (!employee.payload.data.profile.onboarded) {
-                    if (store.role === 'admin') {
-                      router.push('/organisation/onboarding')
-                    }
-                  }
-                  else {
-                    setOnboarding(true)
-                    dispatch(updateOnBoarding(true))
-                  }
-                }
-              }
-            }
-          }
-          else {
-            console.log('else ')
 
-          }
-        }
       }
     }
 

@@ -28,7 +28,11 @@ import ErrorComponent from 'src/layouts/components/error/error'
 import { useDispatch } from 'react-redux'
 import { hide } from 'src/store/apiError'
 import router from 'next/router'
-import { AppDispatch } from 'src/store'
+import { AppDispatch, RootState } from 'src/store'
+import useEmployeeOnboarding from '../hoc/useEmployeeOnboarding'
+import EmployeeOnboardingDialog from './components/shared-components/employeeOnboarding'
+import { useSelector } from 'react-redux'
+import { loadEmployee } from 'src/store/employee'
 
 const VerticalLayoutWrapper = styled('div')({
   height: '100%',
@@ -58,25 +62,33 @@ const VerticalLayout = (props: LayoutProps) => {
   // ** Props
   const { hidden, settings, children, scrollToTop } = props
 
+  const dispatch = useDispatch<AppDispatch>()
+
+
   // ** Vars
   const { skin, navHidden, contentWidth } = settings
   const { navigationSize, disableCustomizer, collapsedNavigationSize } = themeConfig
   const navWidth = navigationSize
   const navigationBorderWidth = skin === 'bordered' ? 1 : 0
   const collapsedNavWidth = collapsedNavigationSize
+  //Hooks
+  const store = useSelector((state: RootState) => state.employee)
 
-  // ** States
-  const [navHover, setNavHover] = useState<boolean>(false)
-  const [navVisible, setNavVisible] = useState<boolean>(false)
 
-  // ** Toggle Functions
-  const toggleNavVisibility = () => setNavVisible(!navVisible)
-  const dispatch = useDispatch<AppDispatch>()
+  const fetchEmployee = async () => {
+    const data = await dispatch(loadEmployee())
+    if(data.payload?.data){
+      if(data.payload?.data.profile.onboarded==false){
+      console.log(store.profile)
+      setDialogOpen(true)
+      }
+    }
+  }
+
   useEffect(() => {
-    const handleRouteChange = (url:string, { shallow =false }) => {
+    const handleRouteChange = (url: string, { shallow = false }) => {
       console.log(
-        `App is changing to ${url} ${
-          shallow ? 'with' : 'without'
+        `App is changing to ${url} ${shallow ? 'with' : 'without'
         } shallow routing`
       )
       var data = {
@@ -98,14 +110,33 @@ const VerticalLayout = (props: LayoutProps) => {
       router.events.off('routeChangeStart', handleRouteChange)
     }
   }, [])
+  useEffect(() => {
+    if (store.profile == null) {
+      fetchEmployee()
+    }
+
+  }, [])
+
+  const employeeOnboarded = store.profile?.onboarded != null && store.profile?.onboarded == true
+  console.log('employeeOnboarded', employeeOnboarded)
+  // ** States
+  const [navHover, setNavHover] = useState<boolean>(false)
+  const [navVisible, setNavVisible] = useState<boolean>(false)
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const handleDialogClose = () => {
+    setDialogOpen(false)
+  }
+
+  // ** Toggle Functions
+  const toggleNavVisibility = () => setNavVisible(!navVisible)
 
   return (
     <>
       <VerticalLayoutWrapper className='layout-wrapper'>
         {/* Navigation Menu */}
         {navHidden &&
-        themeConfig.layout === 'vertical' &&
-        !(navHidden && settings.lastLayout === 'horizontal') ? null : (
+          themeConfig.layout === 'vertical' &&
+          !(navHidden && settings.lastLayout === 'horizontal') ? null : (
           <Navigation
             navWidth={navWidth}
             navHover={navHover}
@@ -135,6 +166,7 @@ const VerticalLayout = (props: LayoutProps) => {
           >
             <ErrorComponent></ErrorComponent>
             {children}
+
           </ContentWrapper>
 
           {/* Footer Component */}
@@ -160,6 +192,8 @@ const VerticalLayout = (props: LayoutProps) => {
           </Fab>
         </ScrollToTop>
       )}
+      <EmployeeOnboardingDialog open={dialogOpen} handleClose={handleDialogClose}></EmployeeOnboardingDialog>
+
     </>
   )
 }

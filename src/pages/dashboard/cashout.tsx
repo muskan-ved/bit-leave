@@ -235,7 +235,9 @@ const CashoutDialog = (props: any) => {
         setcalculateAmount(result.payload.data.cashoutAmount)
         setleaveBalanceAfterCashout(result.payload.data.leaveBalanceAfterCashout)
       }
+
       //Standardize error first
+
       // else if(result.payload.data.error!){
 
       // }
