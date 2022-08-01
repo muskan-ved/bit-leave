@@ -308,7 +308,6 @@ const UpdateOrganisation = () => {
 
 										const article = { processIdentifier: fileName };
 										const token = localStorage.getItem("accessToken");
-										console.log(token);
 										axios.post('https://api.bitleave.co/employees/syncOrg', article,
 											{
 												headers: {

@@ -136,7 +136,7 @@ export const loadEmployee = createAsyncThunk('emp/load',
       .get('https://api.bitleave.co/employees/' + employeeId, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-    console.log(result.data)
+   // console.log(result.data)
     return result.data
   })
 
@@ -147,7 +147,7 @@ export const listEmployee = createAsyncThunk('emp/list',
       .get('https://api.bitleave.co/employees/list', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-    console.log(result.data)
+   // console.log(result.data)
     return result.data
   })
 

@@ -339,10 +339,8 @@ const Dashboard = () => {
       employeeId = data.id;
     }
     const data = await dispatch(loadEmployee())
-    console.log(data)
     if (data.payload != null) {
       setData(data.payload.data);
-      console.log(data)
     }
     setIsLoading(false)
   }
@@ -352,7 +350,6 @@ const Dashboard = () => {
       setIsLoading(true);
       fetchDataFromRedux();
     }
-    console.log(count);
     if (count != 1)
       setCount(1);
   }, []);

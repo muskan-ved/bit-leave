@@ -79,7 +79,6 @@ const VerticalLayout = (props: LayoutProps) => {
     const data = await dispatch(loadEmployee())
     if(data.payload?.data){
       if(data.payload?.data.profile.onboarded==false){
-      console.log(store.profile)
       setDialogOpen(true)
       }
     }
@@ -118,7 +117,7 @@ const VerticalLayout = (props: LayoutProps) => {
   }, [])
 
   const employeeOnboarded = store.profile?.onboarded != null && store.profile?.onboarded == true
-  console.log('employeeOnboarded', employeeOnboarded)
+  //console.log('employeeOnboarded', employeeOnboarded)
   // ** States
   const [navHover, setNavHover] = useState<boolean>(false)
   const [navVisible, setNavVisible] = useState<boolean>(false)

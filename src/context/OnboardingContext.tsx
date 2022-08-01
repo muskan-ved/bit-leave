@@ -56,7 +56,10 @@ const OnboardingProvider = ({ children }: Props) => {
           organisationID = data.id;
         }
         const organisation = await dispatch(loadOrganisation())
-        orgOnBoarding = organisation.payload.data.organisation.active
+        if (organisation.payload)
+          orgOnBoarding = organisation.payload.data.organisation.active
+        else
+          orgOnBoarding = false
 
       }
       else {

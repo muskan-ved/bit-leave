@@ -60,7 +60,8 @@ const Thresholds = () => {
         setIsLoading(false);
       })
       .catch((reason: AxiosError) => {
-        if (reason.response!.status === 401) {
+        setIsLoading(false);
+        if (reason.response && reason.response!.status === 401) {
           logout()
         } else {
           // Handle else
@@ -130,6 +131,23 @@ const Thresholds = () => {
 
   if (isLoading)
     return (<CircularProgress color="success" />)
+
+    if (!isLoading && !data) {
+
+      return (
+        <Grid container spacing={6}>
+          <Grid item md={12} xs={12}>
+            <Card>
+              <CardHeader title='Your Dashboard' />
+              <CardContent>
+                <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
+                <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
+                <br />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>)
+    }
 
   if (!isLoading && data) {
     return (

@@ -44,7 +44,7 @@ const EmployeeOnboardingDialog = (props: any) => {
     resolver: yupResolver(employeeOnboardingSchema)
   })
   const onEmployeeOnboardingSubmit = async (data: any) => {
-    console.log('onEmployeeOnboardingSubmit', data)
+    //console.log('onEmployeeOnboardingSubmit', data)
     setprogress(true)
     const result = await dispatch(postEmployeeOnboarding(data.id))
     if (result.payload?.data?.success == true) {
@@ -71,7 +71,7 @@ const EmployeeOnboardingDialog = (props: any) => {
   }
 
   const setSelectedOptions = (value: any) => {
-    console.log(value)
+    // console.log(value)
     if (value && value.id) {
       setselectedoptions(value.id)
     }
