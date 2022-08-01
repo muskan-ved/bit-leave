@@ -1,5 +1,5 @@
 // ** Icon imports
-import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingOutline, OfficeBuildingMarkerOutline } from 'mdi-material-ui'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -21,8 +21,10 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: orgName,
-      icon: OfficeBuildingOutline,
-      disabled: true,
+      icon: OfficeBuildingMarkerOutline,
+      disabled: false,
+      badgeColor : 'warning',
+      badgeContent : '',
       action: 'read',
       subject: 'orgname'
     },
@@ -82,18 +84,22 @@ const navigation = (): VerticalNavItemsType => {
       subject: 'sectionTitles'
     },
     {
-      title: 'Wallets \n (coming soon)',
+      title: 'Wallets',
       icon: WalletOutline,
-      disabled: true,
+      disabled: false,
       action: 'read',
-      subject: 'Wallets'
+      subject: 'Wallets',
+      badgeColor: "primary",
+      badgeContent:'coming soon'
     },
     {
-      title: 'Perks (coming soon)',
+      title: 'Perks',
       icon: GiftOpenOutline,
-      disabled: true,
+      disabled: false,
       action: 'read',
-      subject: 'Perks'
+      subject: 'Perks',
+      badgeColor: 'primary',
+      badgeContent:'coming soon'
     }
   ]
 

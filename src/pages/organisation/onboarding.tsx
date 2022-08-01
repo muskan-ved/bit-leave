@@ -191,7 +191,7 @@ const Onboarding = (props:any) => {
 
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.onboarding)
-  console.log(store)
+  //console.log(store)
 
   const getComplianceContent = () => {
     switch (complianceSelected) {

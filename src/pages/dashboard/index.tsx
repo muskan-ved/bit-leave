@@ -101,7 +101,8 @@ type leaveDetails = {
 type profile = {
   id: number,
   fullname: string,
-  onboarded: boolean
+  onboarded: boolean,
+  hrisLogin : string
 }
 
 type directReport = {
@@ -139,6 +140,10 @@ const Dashboard = () => {
   const cashoutLeaveButtonClick = (event: SyntheticEvent) => {
     setDialogOpen(true)
 
+  }
+  const takeLeaveButtonClick = (event: SyntheticEvent) => {
+    alert('here');
+    window.open(data?.profile.hrisLogin)
   }
 
   const avgExcessDays: number[] = [],
@@ -432,7 +437,7 @@ const Dashboard = () => {
                     </Box>
                   </Grid>
                   <Grid item xs={5} sm={6}>
-                  <Box sx={{ display: 'grid', alignItems: 'left' }}>
+                  <Box sx={{ display: 'grid', alignItems: 'left' }} onClick={takeLeaveButtonClick}>
                     <Button variant='contained'>Take Leave</Button>
                   </Box>
                   </Grid>
