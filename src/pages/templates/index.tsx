@@ -29,6 +29,8 @@ import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import Button from '@mui/material/Button'
 import TabContext from '@mui/lab/TabContext'
+import Grid from '@mui/material/Grid'
+import CardHeader from '@mui/material/CardHeader'
 
 // ** Icons Imports
 import ChevronDown from 'mdi-material-ui/ChevronDown'
@@ -46,7 +48,7 @@ const Templates = () => {
   const token = localStorage.getItem("accessToken")
   const baseUrl = 'https://api.bitleave.co/organisations/'
   const updateBaseUrl = "https://api.bitleave.co/organisations/templates"
-  if(firstexpanded) {}
+  if (firstexpanded) { }
 
   useEffect(() => {
     setIsLoading(true);
@@ -83,6 +85,7 @@ const Templates = () => {
         setEditorState(editorState);
         setTabList(tabList);
         setGetData(data);
+        console.log('HERE ' + getdata);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -104,7 +107,7 @@ const Templates = () => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
-        if(res) {}
+        if (res) { }
         alert("Data Updated Successfully")
       })
       .catch((err) => {
@@ -113,16 +116,33 @@ const Templates = () => {
 
   }
   const handleFirstChange = (panel1: string) => (event: SyntheticEvent, isFirstExpanded: boolean) => {
-    if(event) {}
+    if (event) { }
     setFirstExpanded(isFirstExpanded ? panel1 : false)
   }
 
   const handleChangeTab = (event: SyntheticEvent, newValue: string) => {
-    if(event){}
+    if (event) { }
     setValue(newValue)
   }
   if (isLoading)
     return (<CircularProgress color="success" />)
+
+  if (!isLoading && getdata.length == 0) {
+
+    return (
+      <Grid container spacing={6}>
+        <Grid item md={12} xs={12}>
+          <Card>
+            <CardHeader title='Your Dashboard' />
+            <CardContent>
+              <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
+              <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
+              <br />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>)
+  }
 
   return (
     <Card>

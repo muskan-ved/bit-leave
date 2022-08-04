@@ -11,6 +11,7 @@ const apiErrorSlice = createSlice({
   },
   reducers: {
     show: (state, action) => {
+      //console.log(action)
       state.message = action.payload.message
       state.redirect=false
       state.canShow =true

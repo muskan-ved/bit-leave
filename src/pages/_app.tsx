@@ -115,6 +115,23 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
+  let maintainenceMode = false;
+
+  if(maintainenceMode)
+  {
+    return(    <CacheProvider value={emotionCache}>
+      <Head>
+        <title>{`${themeConfig.templateName} - Optimising your Leave, Well-being and Balance Sheet`}</title>
+        <meta
+          name='description'
+          content={`${themeConfig.templateName} – Optimising your Leave, Well-being and Balance Sheet`}
+        />
+        <meta name='keywords' content='Bit Leave, Leave, Well-being, Balance Sheet' />
+        <meta name='viewport' content='initial-scale=1, width=device-width' />
+      </Head>
+      Platform under maintainence.
+    </CacheProvider>);
+  }
 
   return (
 

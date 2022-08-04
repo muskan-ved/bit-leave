@@ -11,6 +11,43 @@ interface Redux {
   dispatch: Dispatch<any>,
 
 }
+
+export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
+  async (params: any, { dispatch, getState }: Redux) => {
+    console.log(params);
+    const payload ={
+      managerId:params.id
+    }
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios
+        .put('https://api.bitleave.co/employees/onboarding',
+          payload,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      await dispatch(loadEmployee())
+      return response.data
+    }
+    catch (e) {
+      console.log(e)
+      // var data = {
+      //   canShow: true,
+      //   redirect: false,
+      //   code: '',
+      //   message: 'Error occured while processing the request',
+      //   location: '',
+      // }
+      // return dispatch(show(data))
+      // return rejectWithValue(e.response.data)
+    }
+
+  })
+
+
 export const postEmployeeCashout = createAsyncThunk('emp/cashout',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
     try {
@@ -26,7 +63,7 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
         );
       return response.data
     }
-    catch(e){
+    catch (e) {
       console.log(e)
       // var data = {
       //   canShow: true,
@@ -44,21 +81,22 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
   async (params: number, { dispatch, getState }: Redux) => {
 
     try {
-    const token = localStorage.getItem("accessToken");
-    var data = { days: params};
-    const result = await axios
-      .post('https://api.bitleave.co/employeeactions/calculate',data, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
+      const token = localStorage.getItem("accessToken");
+      var data = { days: params };
+      const result = await axios
+        .post('https://api.bitleave.co/employeeactions/calculate', data, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
       console.log(result);
-    return result.data
-  }
-  catch(e){
+      return result.data
+    }
+    catch (e) {
+      console.log(e)
     }
 
   })
 
-  export const getCashOutContract =createAsyncThunk('emp/cashoutcontract',
+export const getCashOutContract = createAsyncThunk('emp/cashoutcontract',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
     try {
       const token = localStorage.getItem("accessToken");
@@ -73,18 +111,40 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
         );
       return response.data
     }
-    catch(e){
+    catch (e) {
+      console.log(e)
+      // var data = {
+      //   canShow: true,
+      //   redirect: false,
+      //   code: '',
+      //   message: 'Error occured while processing the request',
+      //   location: '',
+      // }
+      // return dispatch(show(data))
+      // return rejectWithValue(e.response.data)
     }
   })
 
 export const loadEmployee = createAsyncThunk('emp/load',
-  async (params: string, { dispatch, getState }: Redux) => {
+  async (_: void, { dispatch, getState }: Redux) => {
     const token = localStorage.getItem("accessToken");
+    const employeeId = getState().user.id
     const result = await axios
-      .get('https://api.bitleave.co/employees/' + params, {
+      .get('https://api.bitleave.co/employees/' + employeeId, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-console.log(result.data)
+   // console.log(result.data)
+    return result.data
+  })
+
+export const listEmployee = createAsyncThunk('emp/list',
+  async (params: void, { dispatch, getState }: Redux) => {
+    const token = localStorage.getItem("accessToken");
+    const result = await axios
+      .get('https://api.bitleave.co/employees/list', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+   // console.log(result.data)
     return result.data
   })
 
@@ -105,15 +165,40 @@ const employeeSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(postEmployeeCashout.fulfilled, (state, action) => {
-      // debugger;
+      console.log(state, action);
+      // state.success = true;
+      // state.isLoading = false;
     })
     builder.addCase(postEmployeeCashout.rejected, (state, action) => {
-      // debugger;
+      console.log(state, action);
+      // state.success = false;
+      // state.isLoading = false;
+
     })
 
     builder.addCase(postEmployeeCashout.pending, (state, action) => {
     })
 
+    builder.addCase(listEmployee.fulfilled, (state, action) => {
+      console.log(state, action);
+
+    })
+
+    builder.addCase(postEmployeeOnboarding.fulfilled, (state, action) => {
+      // var current = state
+      // if (current != null) {
+      //   state.profile = {
+      //     id: current.profile.id,
+      //     fullname: current.profile.fullname,
+      //     onboarded: true
+      //   }
+      //   state.cashoutOption = current.cashoutOption
+
+      //   state.team = current.team
+      //   state.leaveDetail = current.leaveDetail
+      // }
+
+    })
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       var employee = action.payload.data
       state.profile = {

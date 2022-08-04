@@ -9,13 +9,15 @@ import Spinner from 'src/@core/components/spinner'
 
 // ** Hook Imports
 import { useAuth } from 'src/hooks/useAuth'
+import { main } from '@popperjs/core'
 
 /**
  *  Set Home URL based on User Roles
  */
 export const getHomeRoute = (role: string) => {
-  if (role === 'client') return '/acl'
-  else return '/home'
+    if (role === 'client') return '/acl'
+    else return '/home'
+
 }
 
 const Home = () => {

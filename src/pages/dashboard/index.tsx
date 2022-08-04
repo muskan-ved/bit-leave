@@ -71,6 +71,7 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
 
 
 const Dashboard = () => {
+
   // ** Hooks
   const ability = useContext(AbilityContext)
   const { logout } = useAuth()
@@ -87,9 +88,13 @@ const Dashboard = () => {
   const cashoutLeaveButtonClick = (event: SyntheticEvent) => {
     setDialogOpen(true)
   }
+  const takeLeaveButtonClick = (event: SyntheticEvent) => {
+    alert('here');
+    window.open(data?.profile.hrisLogin)
+  }
 
-  const avgExcessDays: number[] = [], 
-    departmentsOfAverageExcessDays: string[] = [], 
+  const avgExcessDays: number[] = [],
+    departmentsOfAverageExcessDays: string[] = [],
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays : number[] = [];
     
@@ -105,7 +110,7 @@ const Dashboard = () => {
     }
     for (let index = 0; index < data?.directReports.length; index++) {
       directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays.toFixed(2)));
-    } 
+    }
   }
 
   const seriesData: number[] = avgExcessDays;
@@ -245,7 +250,7 @@ const Dashboard = () => {
       const data = JSON.parse(userData)
       employeeId = data.id;
     }
-    const data = await dispatch(loadEmployee(employeeId))
+    const data = await dispatch(loadEmployee())
     if (data.payload != null) {
       setData(data.payload.data);
     }
@@ -266,6 +271,7 @@ const Dashboard = () => {
     return (<CircularProgress color="success" />)
 
   if (!isLoading && data && Object.keys(data.leaveDetails).length == 0) {
+
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -341,9 +347,9 @@ const Dashboard = () => {
                     </Box>
                   </Grid>
                   <Grid item xs={5} sm={6}>
-                    <Box sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained'>Take Leave</Button>
-                    </Box>
+                  <Box sx={{ display: 'grid', alignItems: 'left' }} onClick={takeLeaveButtonClick}>
+                    <Button variant='contained'>Take Leave</Button>
+                  </Box>
                   </Grid>
                 </Grid>
 
@@ -372,7 +378,7 @@ const Dashboard = () => {
             </Card>
           </Grid>
           <Grid item md={4} xs={6} sm={3}>
-                <CardStatisticsCharacter 
+                <CardStatisticsCharacter
                   data={{
                     stats: `${data.vitals.averageSalary.toFixed(0)}k`,
                     title: '',
@@ -383,7 +389,7 @@ const Dashboard = () => {
                     src: '/images/cards/card-stats-img-3.png'
                   }}
                 /><br/>
-                <CardStatisticsCharacter 
+                <CardStatisticsCharacter
                   data={{
                     stats: `3`,
                     title: '',
@@ -395,7 +401,7 @@ const Dashboard = () => {
                   }}
                 />
           </Grid>
-          
+
         </Grid>
         <br />
         <Grid container spacing={6}>
