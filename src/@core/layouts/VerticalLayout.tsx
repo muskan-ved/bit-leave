@@ -79,7 +79,7 @@ const VerticalLayout = (props: LayoutProps) => {
     const data = await dispatch(loadEmployee())
     if(data.payload?.data){
       if(data.payload?.data.profile.onboarded==false){
-      setDialogOpen(true)
+      //setDialogOpen(true)
       }
     }
   }
@@ -98,7 +98,6 @@ const VerticalLayout = (props: LayoutProps) => {
         location: '',
       }
       dispatch(hide(data))
-
     }
 
     router.events.on('routeChangeStart', handleRouteChange)

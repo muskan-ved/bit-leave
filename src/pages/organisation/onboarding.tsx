@@ -29,9 +29,9 @@ const StepperContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 }))
 interface OnBoardingState {
   compliance: string,
-  leaveNotification: number|null,
-  leaveWarning: number|null,
-  maxPayout: number|null,
+  leaveNotification: number | null,
+  leaveWarning: number | null,
+  maxPayout: number | null,
   email: string,
   payrollEmail: string,
   payrollLink: string,
@@ -87,10 +87,12 @@ const approvalSchema = yup.object().shape({
     })
 })
 
-const Onboarding = (props:any) => {
+
+const Onboarding = (props: any) => {
+
   const steps = ['Start', 'Compliance', 'Thresholds', 'Contacts', 'Approval'];
   const [activeStep, setActiveStep] = React.useState(0);
-  const router =useRouter()
+  const router = useRouter()
   const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
     compliance: '',
     leaveNotification: null,
@@ -257,6 +259,7 @@ const Onboarding = (props:any) => {
       maxPayout: data.maxPayout
     }
     setOnBoardingState(stateData)
+    console.log(stateData)
     handleNext()
   }
   const onStart = () => {
@@ -386,7 +389,7 @@ const Onboarding = (props:any) => {
                         control={thresholdControl}
                         rules={{ required: true }}
                         render={({ field: { value, onChange } }) => (
-                          <TextField
+                          <TextField id='leaveNoti'
                             value={value}
                             label='Excess Leave Notification (in days)'
                             onChange={onChange}
@@ -438,7 +441,7 @@ const Onboarding = (props:any) => {
                         render={({ field: { value, onChange } }) => (
                           <TextField
                             value={value}
-                            label='Maximum payout (every 12 month period)'
+                            label='Maximum leave cash out every 12 months (in days)'
                             onChange={onChange}
                             error={Boolean(thresholdErrors.maxPayout)}
                             placeholder=''
@@ -469,7 +472,7 @@ const Onboarding = (props:any) => {
         )
 
       case 3:
-        return (<form key={0} onSubmit={handleContactSubmit(onContactSubmit, onError)}>
+        return (<form key={1} onSubmit={handleContactSubmit(onContactSubmit, onError)}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }} gutterBottom>
@@ -542,7 +545,7 @@ const Onboarding = (props:any) => {
                       render={({ field: { value, onChange } }) => (
                         <TextField
                           value={value}
-                          label='Payroll Link'
+                          label='HRIS login link'
                           onChange={onChange}
                           error={Boolean(contactErrors.payrollLink)}
                           placeholder=''
@@ -662,11 +665,47 @@ const Onboarding = (props:any) => {
             {approvalSelected.approval === 'automatic' &&
 
               <Grid item xs={12}>
+                <Typography variant='body2'>
+                  Automatically approving excess leave cash out allows you to:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Sign once (below) for all leave cash out requests
+                    </ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Automate entire excess leave process
+                    </ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Saves HR and Payroll time in processing and approvals
+                    </ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      It does NOT allow you to review and approve individual requests
+                    </ListItemText>
+                  </ListItem>
+                </List>
                 <IconButton onClick={onClearSignature} style={{ display: 'block', position: 'relative', textAlign: 'right', left: '365px', top: '40px', 'zIndex': '100' }}>
                   <Eraser></Eraser>
                 </IconButton>
                 <FormControl>
-
                   <Controller
                     name="signature"
                     control={approvalControl}

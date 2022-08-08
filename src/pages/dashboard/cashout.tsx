@@ -174,6 +174,7 @@ const CashoutDialog = (props: any) => {
       cashoutreason: stateData.cashoutreason,
       signature: stateData.signature
     }))
+
     //console.log(result.payload)
     if (result.payload != null && result.payload.data != null && result.payload.data?.success == true) {
       // setcalculateAmount(result.payload.data.cashoutAmount)
@@ -218,6 +219,7 @@ const CashoutDialog = (props: any) => {
     if (e.target.value != null) {
       setloading(true)
       const result = await dispatch(calculateEmployeeCashout(e.target.value))
+      
      // console.log(result.payload)
       if (result.payload != null ) {
       if(result.payload.data.cashoutAmount != null){

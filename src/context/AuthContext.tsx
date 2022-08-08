@@ -58,7 +58,6 @@ const AuthProvider = ({ children }: Props) => {
   const [cognitoUser, setCognitoUser] = useState<CognitoUser | null>(defaultProvider.cognitoUser)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const [isInitialized, setIsInitialized] = useState<boolean>(defaultProvider.isInitialized)
-  let maintainenceMode = true;
 
   // ** Hooks
   const router = useRouter()
