@@ -28,13 +28,13 @@ function Item(props: BoxProps) {
 
   return (
     <Box
-      sx={{
-        p: 1,
-        m: 1,
-        fontSize: '0.875rem',
-        ...sx,
-      }}
-      {...other}
+    {...other}
+    sx={{
+      p: 1,
+      m: 1,
+      fontSize: '0.875rem',
+      ...sx,
+    }}
     />
   );
 }
@@ -295,7 +295,7 @@ const CashoutDialog = (props: any) => {
       </DialogTitle>
       {activeStep == 0 &&
         <>
-          <form style={{ overflowY: "auto", display: "flex", flexDirection: "column" }} key='cashoutform' onSubmit={handleCashOutSubmit(onCashOutSubmit, onError)}>
+          <form  key='cashoutform' onSubmit={handleCashOutSubmit(onCashOutSubmit, onError)} style={{ overflowY: "auto", display: "flex", flexDirection: "column" }}>
 
 
             <DialogContent dividers={true}>
@@ -336,7 +336,7 @@ const CashoutDialog = (props: any) => {
                   )}
                 />
                 {cashOutErrors.cashoutdays && (
-                  <FormHelperText sx={{ color: 'error.main' }} id='cashoutdays'>
+                  <FormHelperText id='cashoutdays' sx={{ color: 'error.main' }} >
                     Required
                   </FormHelperText>
                 )}
@@ -376,7 +376,7 @@ const CashoutDialog = (props: any) => {
                   )}
                 />
                 {cashOutErrors.cashoutreason && (
-                  <FormHelperText sx={{ color: 'error.main' }} id='cashoutreason'>
+                  <FormHelperText id='cashoutreason' sx={{ color: 'error.main' }} >
                     Required
                   </FormHelperText>
                 )}
@@ -384,10 +384,10 @@ const CashoutDialog = (props: any) => {
             </DialogContent>
             <DialogActions disableSpacing={true} className='dialog-actions-dense'>
               {loading == false &&
-                <Button style={{ marginTop: '0.75em' }} type='submit' variant="contained"> Cash Out Leave</Button>
+                <Button  type='submit' variant="contained" style={{ marginTop: '0.75em' }}> Cash Out Leave</Button>
               }
               {loading == true &&
-                <LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
+                <LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained"  disabled>
                   Cash Out Leave
                 </LoadingButton>
               }
@@ -398,7 +398,7 @@ const CashoutDialog = (props: any) => {
         </>
       }
       {activeStep == 1 &&
-        <form style={{ overflowY: "auto", display: "flex", flexDirection: "column" }} key='signature-submit' onSubmit={handleSignatureSubmit(onSignatureSubmit, onError)}>
+        <form  key='signature-submit' onSubmit={handleSignatureSubmit(onSignatureSubmit, onError)} style={{ overflowY: "auto", display: "flex", flexDirection: "column" }}>
           <DialogContent dividers={true}>
             {cashoutApiResponse.errors != null && errorControl()}
 

@@ -29,6 +29,8 @@ const defineRulesFor = (role: string) => {
     can('read', 'Wallets');
     can('read', 'Perks');
     can('read', 'home');
+    can('read', 'actionApproval');
+    can('read', 'profile');
   }
 
   return rules

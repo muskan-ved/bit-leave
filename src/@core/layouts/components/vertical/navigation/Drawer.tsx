@@ -120,9 +120,6 @@ const Drawer = (props: Props) => {
       className='layout-vertical-nav'
       variant={hidden ? 'temporary' : 'permanent'}
       {...(hidden ? { ...MobileDrawerProps } : { ...DesktopDrawerProps })}
-      sx={{
-        width: navCollapsed ? collapsedNavWidth : navWidth
-      }}
       PaperProps={{
         sx: {
           ...drawerColor(),
@@ -131,6 +128,9 @@ const Drawer = (props: Props) => {
           ...(!hidden && navCollapsed && navHover ? { boxShadow: 10 } : {}),
           borderRight: navigationBorderWidth === 0 ? 0 : `${navigationBorderWidth}px solid ${theme.palette.divider}`
         }
+      }}
+      sx={{
+        width: navCollapsed ? collapsedNavWidth : navWidth
       }}
     >
       {children}

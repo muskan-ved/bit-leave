@@ -1,9 +1,12 @@
 export type actionApproval = {
-    appliedHours: number,
-    cashoutValue: number,
-    dateSigned: Date,
-    approvalReason: string,
+  cashoutdays: number,
+    cashoutamt: number,
+    actiondate: string,
+    approvalreason: string,
+    rejectreason: string,
+    cashoutreason: string,
     signatureOfEmployee: string,
     submitApproval: string,
+
   }
   

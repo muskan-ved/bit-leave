@@ -72,7 +72,7 @@ const Home = () => {
                 </Typography>
                 <Divider></Divider>
                 <Typography variant='body2'>How are you today? 🤟🏻</Typography>
-                <Typography sx={{ mb: 4.5 }} variant='body2'>
+                <Typography  variant='body2' sx={{ mb: 4.5 }}>
                   Refer to FAQs and Resources to get started !
                 </Typography>
                 <Button variant='contained' onClick={() => onGoToDashboard()}>Go To Dashboard</Button>
@@ -151,10 +151,10 @@ const Home = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>What is the ROI of bit.leave?? </Typography>
+                <Typography >What is the ROI of bit.leave?? </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>
+                <Typography component='div'>
                   Depending on your company, the ROI will vary but here’s some of the areas bit.leave will help in your business:
                   <ul>
                     <li>Reduction in excess leave liabilities</li>

@@ -28,7 +28,8 @@
  type profile = {
     id: number,
     fullname: string,
-    onboarded: boolean
+    onboarded: boolean,
+    hrisLogin: string,
   }
   
  type directReport = {

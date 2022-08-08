@@ -115,12 +115,12 @@ const AuthProvider = ({ children }: Props) => {
           orgId: userClaims.idToken.payload["custom:orgId"],
           userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
-        //
+
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
         dispatch(refreshUserState(userData))
-        //
+        
         const returnUrl = router.query.returnUrl
          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
          router.replace(redirectURL as string)

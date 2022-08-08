@@ -198,6 +198,7 @@ const HorizontalNavGroup = (props: Props) => {
               }}
             >
               <Box
+                ref={setReferenceElement}
                 sx={{
                   width: '100%',
                   display: 'flex',
@@ -205,7 +206,6 @@ const HorizontalNavGroup = (props: Props) => {
                   alignItems: 'center',
                   justifyContent: 'space-between'
                 }}
-                ref={setReferenceElement}
               >
                 <Box
                   sx={{

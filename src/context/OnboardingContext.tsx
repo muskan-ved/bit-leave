@@ -57,15 +57,15 @@ const OnboardingProvider = ({ children }: Props) => {
         }
         const organisation = await dispatch(loadOrganisation())
         if (organisation.payload)
-          orgOnBoarding = organisation.payload.data.organisation.active
+        orgOnBoarding = organisation.payload.data.organisation.active
         else
-          orgOnBoarding = false
+        orgOnBoarding = false
 
       }
       else {
         orgOnBoarding = organisationStore.active
       }
-
+      
       if (orgOnBoarding == false) {
         if (store.role === 'admin') {
           router.push('/organisation/onboarding')

@@ -76,8 +76,8 @@ const CardSnippet = (props: CardSnippetProps) => {
   return (
     <Card
       className={className}
-      sx={{ '& .MuiCardHeader-action': { lineHeight: 0.8 }, ...sx }}
       id={id || `card-snippet--${title.toLowerCase().replace(/ /g, '-')}`}
+      sx={{ '& .MuiCardHeader-action': { lineHeight: 0.8 }, ...sx }}
     >
       <CardHeader
         title={title}

@@ -39,7 +39,7 @@ import {employee } from 'src/types/dashboard'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
-import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, HomeLightbulbOutline, OfficeBuildingOutline, StoreMarkerOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
@@ -67,8 +67,6 @@ const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
     borderRight: `0px solid ${theme.palette.divider}`
   }
 }))
-
-
 
 const Dashboard = () => {
 
@@ -150,7 +148,8 @@ const Dashboard = () => {
     grid: {
       strokeDashArray: 8,
       xaxis: {
-        lines: { show: true }
+        lines: { show: true },
+       
       },
       yaxis: {
         lines: { show: false }
@@ -191,7 +190,8 @@ const Dashboard = () => {
   const options1: ApexOptions = {
     chart: {
       parentHeightOffset: 0,
-      toolbar: { show: false }
+      toolbar: { show: false },
+      id:"muskan"
     },
     plotOptions: {
       bar: {
@@ -222,12 +222,12 @@ const Dashboard = () => {
       hexToRGBA(theme.palette.success.light, 1),
       hexToRGBA(theme.palette.warning.light, 1),
       hexToRGBA(theme.palette.info.light, 1),
-      hexToRGBA(theme.palette.error.light, 1)
-    ],
-    legend: { show: false },
+      hexToRGBA(theme.palette.error.light, 1)      
+    ], 
     states: {
       hover: {
         filter: { type: 'none' }
+        
       },
       active: {
         filter: { type: 'none' }
@@ -240,7 +240,7 @@ const Dashboard = () => {
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
-    }
+    },
   }
 
   const fetchDataFromRedux = async () => {
@@ -253,6 +253,7 @@ const Dashboard = () => {
     const data = await dispatch(loadEmployee())
     if (data.payload != null) {
       setData(data.payload.data);
+
     }
     setIsLoading(false)
   }
@@ -291,7 +292,7 @@ const Dashboard = () => {
     return (
       <div>
         <Grid container spacing={6}>
-          <Grid item md={5} xs={12}>
+          <Grid item md={5} xs={12} sx={{display:'inline-grid'}}>
             <Card>
               <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
               <CardContent>
@@ -342,12 +343,12 @@ const Dashboard = () => {
                 <br></br>
                 <Grid container spacing={1}>
                   <Grid item xs={5} sm={6}>
-                    <Box sx={{ display: 'grid', alignItems: 'left' }} onClick={cashoutLeaveButtonClick}>
+                    <Box  onClick={cashoutLeaveButtonClick} sx={{ display: 'grid', alignItems: 'left' }}>
                       <Button variant='contained'>Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={5} sm={6}>
-                  <Box sx={{ display: 'grid', alignItems: 'left' }} onClick={takeLeaveButtonClick}>
+                  <Box  onClick={takeLeaveButtonClick} sx={{ display: 'grid', alignItems: 'left' }}>
                     <Button variant='contained'>Take Leave</Button>
                   </Box>
                   </Grid>
@@ -356,21 +357,21 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={3} xs={12}>
+          <Grid item md={3} xs={12} sx={{display:'inline-grid'}} >
             <Card>
               <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>
                 <StyledBox>
-                  <Box sx={{ py: 1.25, mb: 4, display: 'flex', alignItems: 'center' }}>
-                    <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
+                  <Box sx={{ py: 1.25, mb: 6, display: 'flex', alignItems: 'center' }}>
+                    <OfficeBuildingOutline   sx={{ color: 'primary.main', mr: 2.5 ,fontSize:'small'}} />
                     <Typography variant='body2'>Department : {data.team.department} </Typography>
                   </Box>
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
-                    <AccountOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
+                    <AccountOutline   sx={{ color: 'primary.main', mr: 2.5 , fontSize:'small'}} />
                     <Typography variant='body2'>Manager : {data.team.name ? data.team.name : 'No manager assigned'} </Typography>
                   </Box><br />
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
-                    <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5 }} fontSize='small' />
+                    <BagPersonalOutline  sx={{ color: 'primary.main', mr: 2.5 , fontSize:'small'}} />
                     <Typography variant='body2'>Number Direct Reports : {data.directReports.length} </Typography>
                   </Box>
                 </StyledBox>
@@ -401,13 +402,12 @@ const Dashboard = () => {
                   }}
                 />
           </Grid>
-
         </Grid>
         <br />
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
-            <Grid item md={6} xs={8}>
-              <Card>
+            <Grid item md={6} xs={8} sx={{display:'inline-grid'}}>
+              <Card sx={{width:'100%'}}>
                 <CardHeader title='Average Excess Leaves By Department 📈' subheader={<Divider></Divider>} />
                 <CardContent>
                   <ReactApexcharts type='bar' height={294} series={series} options={options} />
@@ -415,9 +415,9 @@ const Dashboard = () => {
               </Card>
             </Grid>
           ) : null}
-          <Grid item md={6} xs={8}>
-            <Card>
-              <CardHeader title='Excess Leaves by Direct Reports 📈' subheader={<Typography variant='body2'>Above the thresholds<Divider></Divider></Typography>} />
+          <Grid item md={6} xs={8}  >
+            <Card >
+              <CardHeader title='Excess Leaves by Direct Reports 📈' subheader={<><Typography variant='body2'>Above the thresholds</Typography><Divider></Divider></>} />
               <CardContent>
                 <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
               </CardContent>
@@ -434,7 +434,7 @@ const Dashboard = () => {
                   <Divider></Divider>
                   <Grid item md={12} xs={12}>
                     <TableContainer component={Paper}>
-                      <Table sx={{ minWidth: 650 }} size='small' aria-label='a dense table'>
+                      <Table   aria-label='a dense table' sx={{ minWidth: 650,size:'small' }}>
                         <TableHead>
                           <TableRow>
                             <TableCell>Initials </TableCell>
