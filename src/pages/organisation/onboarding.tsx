@@ -300,6 +300,7 @@ const Onboarding = (props: any) => {
       maxPayout: data.maxPayout
     }
     setOnBoardingState(stateData)
+    console.log(stateData)
     handleNext()
   }
   const onStart = () => {
@@ -429,7 +430,7 @@ const Onboarding = (props: any) => {
                         control={thresholdControl}
                         rules={{ required: true }}
                         render={({ field: { value, onChange } }) => (
-                          <TextField
+                          <TextField id='leaveNoti'
                             value={value}
                             label='Excess Leave Notification (in days)'
                             onChange={onChange}
@@ -512,7 +513,7 @@ const Onboarding = (props: any) => {
         )
 
       case 3:
-        return (<form key={0} onSubmit={handleContactSubmit(onContactSubmit, onError)}>
+        return (<form key={1} onSubmit={handleContactSubmit(onContactSubmit, onError)}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }} gutterBottom>
