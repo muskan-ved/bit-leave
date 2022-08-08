@@ -130,22 +130,22 @@ const Templates = () => {
   if (isLoading)
     return (<CircularProgress color="success" />)
 
-  if (!isLoading && getdata.length == 0) {
+  // if (!isLoading && getdata.length == 0) {
 
-    return (
-      <Grid container spacing={6}>
-        <Grid item md={12} xs={12}>
-          <Card>
-            <CardHeader title='Your Dashboard' />
-            <CardContent>
-              <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
-              <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
-              <br />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>)
-  }
+  //   return (
+  //     <Grid container spacing={6}>
+  //       <Grid item md={12} xs={12}>
+  //         <Card>
+  //           <CardHeader title='Your Dashboard' />
+  //           <CardContent>
+  //             <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
+  //             <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
+  //             <br />
+  //           </CardContent>
+  //         </Card>
+  //       </Grid>
+  //     </Grid>)
+  // }
 
   return (
     <Card>
