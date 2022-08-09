@@ -28,8 +28,19 @@ html body .MuiDataGrid-columnHeaders {
    color: #061a16;
   }
   
-  .MuiBox-root.css-19q7vmd.btndivider{
+.MuiBox-root.css-19q7vmd.btndivider{
   display: flex;
   justify-content: space-between;
 }
 
+.css-m3k6wd-MuiPaper-root-MuiCard-root svg tspan {
+  fill: white;
+}
+
+.css-osbcxs-MuiPaper-root-MuiCard-root svg tspan {
+  fill: white;
+}
+
+.apexcharts-tooltip .apexcharts-tooltip-title, .apexcharts-tooltip-series-group .apexcharts-tooltip-text{
+  color: #30334E;
+}

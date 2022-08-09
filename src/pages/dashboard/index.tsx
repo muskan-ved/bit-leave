@@ -292,7 +292,7 @@ const Dashboard = () => {
     return (
       <div>
         <Grid container spacing={6}>
-          <Grid item md={5} xs={12} sx={{display:'inline-grid'}}>
+          <Grid item md={5} xs={12} >
             <Card>
               <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
               <CardContent>
@@ -357,7 +357,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={3} xs={12} sx={{display:'inline-grid'}} >
+          <Grid item md={3} xs={12}  >
             <Card>
               <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>
@@ -406,7 +406,7 @@ const Dashboard = () => {
         <br />
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
-            <Grid item md={6} xs={8} sx={{display:'inline-grid'}}>
+            <Grid item md={6} xs={8} >
               <Card sx={{width:'100%'}}>
                 <CardHeader title='Average Excess Leaves By Department 📈' subheader={<Divider></Divider>} />
                 <CardContent>
@@ -434,7 +434,7 @@ const Dashboard = () => {
                   <Divider></Divider>
                   <Grid item md={12} xs={12}>
                     <TableContainer component={Paper}>
-                      <Table   aria-label='a dense table' sx={{ minWidth: 650,size:'small' }}>
+                      <Table  aria-label='a dense table' sx={{ minWidth: 650,size:'small' }}>
                         <TableHead>
                           <TableRow>
                             <TableCell>Initials </TableCell>
@@ -444,8 +444,8 @@ const Dashboard = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data.leavesByOrg.map(row => (
-                            <TableRow key={row.fullname} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
+                          {data.leavesByOrg.map((row,i) => (
+                            <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                               <TableCell component='th' scope='row' >
                                 <CustomAvatar
                                   skin='light'

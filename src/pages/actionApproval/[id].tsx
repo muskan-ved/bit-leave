@@ -9,7 +9,6 @@ import axios, { AxiosError } from 'axios'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
-import Typography from '@mui/material/Typography'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -22,7 +21,18 @@ import Divider from '@mui/material/Divider'
 
 // ** Types Import
 import {actionApproval} from 'src/types/actionApproval'
-import { Box } from '@mui/material'
+
+// ** MUI Import
+import { Grid, InputAdornment, TextField } from '@mui/material'
+
+// ** MUI Icon Import
+import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+
 
 const baseUrl = 'https://api.bitleave.co/employeeactions';
 
@@ -81,32 +91,113 @@ const ActionApproval = () =>{
 
     return (
         <Card>
-              <CardHeader title='Cashout Approval' subheader={<Divider></Divider>} />
+              <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />
               <CardContent>
-                <Box sx={{mb: '10px'}}>
-                  <Typography variant="body1"  sx={{width:'200px',display: 'inline-block',verticalAlign:'middle'}}>Applied Hours </Typography> :
-                   <Typography variant='body2' component="span" sx={{ml:8,verticalAlign:'middle'}}>{data?.cashoutdays} </Typography>
-                </Box>
-                <Box sx={{mb: '10px'}}>
-                  <Typography variant="body1"  sx={{width:'200px',display: 'inline-block',verticalAlign:'middle'}}>Cashout Value </Typography> :
-                  <Typography variant='body2' component="span" sx={{ml:8,verticalAlign:'middle'}}>{data?.cashoutamt} </Typography>
-                </Box>
-                <Box sx={{mb: '10px'}}>
-                  <Typography variant="body1"  sx={{width:'200px',display: 'inline-block',verticalAlign:'middle'}}>Date </Typography> :
-                  <Typography variant='body2' component="span" sx={{ml:8,align:'middle'}}>{data?.actiondate}</Typography>
-                </Box>
-                <Box sx={{mb: '10px'}}>
-                  <Typography variant="body1"  sx={{width:'200px',display: 'inline-block',verticalAlign:'middle'}}>{data.approvalreason ? 'Approval reason' : 'Rejected reason' } </Typography> :
-                  <Typography variant='body2' component="span" sx={{ml:8,verticalAlign:'middle'}}>{data.approvalreason ? data.approvalreason : data.rejectreason }</Typography>
-                </Box>
-                <Box sx={{mb: '10px'}}>
-                  <Typography variant="body1"  sx={{width:'200px',display: 'inline-block',verticalAlign:'middle'}}>Submit an approval </Typography> :
-                  <Typography variant='body2' component="span" sx={{ml:8,verticalAlign:'middle'}}>{dataa?.submitApproval} </Typography>
-                </Box>
-                <Box sx={{mb: '10px'}}>
-                  <Typography variant="body1"  sx={{width:'200px',display: 'inline-block',verticalAlign:'middle'}}>Sign </Typography> : 
-                  <img alt="Cindy Employer" src={dataa?.signatureOfEmployee} width='200px' height='auto' style={{border:'1px solid #a4a5b0',marginLeft:30,verticalAlign:'middle'}}/>
-                </Box>
+              <Grid container spacing={5}>
+                <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    type='number'
+                    label='Applied Hours'
+                    name='Applied Hours'
+                    defaultValue={data?.cashoutdays} 
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <InputAdornment position='start'>
+                        <QueryBuilderIcon/>
+                      </InputAdornment>
+                      )
+                    }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    type='number'
+                    label='Cashout Value'
+                    name='Cashout Value'
+                    defaultValue={data?.cashoutamt} 
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <InputAdornment position='start'>
+                        <AttachMoneyIcon/>
+                      </InputAdornment>
+                      )
+                    }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    type='string'
+                    label='Date of Signed'
+                    name='Date of Signed'
+                    defaultValue={data?.actiondate} 
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <InputAdornment position='start'>
+                        <CalendarMonthIcon/>
+                      </InputAdornment>
+                      )
+                    }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    type='string'
+                    label={data.approvalreason ? 'Approval Reason' : 'Rejected Reason' }
+                    name={data.approvalreason ? 'Approval Reason' : 'Rejected Reason' }
+                    defaultValue={data.approvalreason ? data.approvalreason : data.rejectreason } 
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <InputAdornment position='start'>
+                        {data.approvalreason ? <CheckCircleOutlineIcon/> : <HighlightOffIcon/>}
+                      </InputAdornment>
+                      )
+                    }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    type='string'
+                    label="Approval By"
+                    name="Approval By"
+                    defaultValue={data?.submitApproval} 
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <InputAdornment position='start'>
+                        <PersonOutlineIcon/>
+                      </InputAdornment>
+                      )
+                    }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    label="Signature of Employee"
+                    name="Signature of Employee"
+                    sx={{
+                      img: {
+                        marginTop:'1rem',
+                      }
+                    }}
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <img src={dataa?.signatureOfEmployee}  width='200px' />
+                      )
+                    }}
+                    />
+                  </Grid>
+                </Grid>
               </CardContent>
             </Card>
       )

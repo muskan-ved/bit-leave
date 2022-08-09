@@ -171,7 +171,7 @@ const Navigation = (props: Props) => {
           {userVerticalNavMenuContent ? (
             userVerticalNavMenuContent(props)
           ) : (
-            <List className='nav-items' sx={{ pt: 0, '& > :first-child': { mt: '0' } }}>
+            <List className='nav-items' sx={{ pt: 0,height:'90vh', '& > :first-child': { mt: '0' } }}>
               <VerticalNavItems
                 groupActive={groupActive}
                 setGroupActive={setGroupActive}

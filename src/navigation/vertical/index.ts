@@ -1,5 +1,5 @@
 // ** Icon imports
-import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingOutline, OfficeBuildingMarkerOutline } from 'mdi-material-ui'
+import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingOutline, OfficeBuildingMarkerOutline, HelpCircleOutline } from 'mdi-material-ui'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -100,7 +100,13 @@ const navigation = (): VerticalNavItemsType => {
       subject: 'Perks',
       badgeColor: 'primary',
       badgeContent:'coming soon'
-    }
+    },
+    {
+      title: 'How To',
+      icon: HelpCircleOutline,
+      action: 'read',
+      subject: 'howTo'
+    },
   ]
 
 }
