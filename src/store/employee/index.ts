@@ -33,19 +33,18 @@ export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
       await dispatch(loadEmployee())
       return response.data
     }
-    catch (e) {
-      console.log(e)
-      // var data = {
-      //   canShow: true,
-      //   redirect: false,
-      //   code: '',
-      //   message: 'Error occured while processing the request',
-      //   location: '',
-      // }
-      // return dispatch(show(data))
-      // return rejectWithValue(e.response.data)
-    }
+    catch(err){
+      console.log(err)
+      if (axios.isAxiosError(err)) {
 
+        // console.log(err.response?.data)
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
+    }
   })
 
 
@@ -64,17 +63,17 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
         );
       return response.data
     }
-    catch (e) {
-      console.log(e)
-      // var data = {
-      //   canShow: true,
-      //   redirect: false,
-      //   code: '',
-      //   message: 'Error occured while processing the request',
-      //   location: '',
-      // }
-      // return dispatch(show(data))
-      // return rejectWithValue(e.response.data)
+    catch(err){
+      console.log(err)
+      if (axios.isAxiosError(err)) {
+
+        // console.log(err.response?.data)
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
     }
   })
 
@@ -91,8 +90,17 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
       console.log(result);
       return result.data
     }
-    catch (e) {
-      console.log(e)
+    catch(err){
+      console.log(err)
+      if (axios.isAxiosError(err)) {
+
+        // console.log(err.response?.data)
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
     }
 
   })
@@ -155,12 +163,24 @@ export const loadEmployee = createAsyncThunk('emp/load',
 export const listEmployee = createAsyncThunk('emp/list',
   async (params: void, { dispatch, getState }: Redux) => {
     const token = localStorage.getItem("accessToken");
+    try{
     const result = await axios
       .get('https://api.bitleave.co/employees/list', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
    // console.log(result.data)
     return result.data
+    }catch(err){
+      if (axios.isAxiosError(err)) {
+
+        // console.log(err.response?.data)
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
+    }
   })
 
 

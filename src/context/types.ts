@@ -38,8 +38,6 @@ export type UserDataType = {
   avatar?: string | null
   orgId :string
   userOnboarded : boolean
-  cognitoUser:CognitoUser|null
-
 }
 
 export type AuthValuesType = {

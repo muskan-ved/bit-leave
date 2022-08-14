@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { OnboardingType } from 'src/types/onboarding'
 import { show } from '../apiError'
-import { updateOnBoarding } from '../user'
+import { updateOnBoarding, userLogout } from '../user'
 
 interface Redux {
   getState: any
@@ -30,15 +30,27 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
       dispatch(updateOnBoarding(true))
       return response.data
     }
-    catch (err) {
-      var data = {
-        canShow: true,
-        redirect: true,
-        code: '',
-        message: '',
-        location: '',
-      }
-      dispatch(show(data))
+    catch(err){
+      console.log(err)
+      if (axios.isAxiosError(err)) {
+
+        // console.log(err.response?.data)
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
+        else{
+          var data = {
+            canShow: true,
+            redirect: true,
+            code: '',
+            message: '',
+            location: '',
+          }
+          dispatch(show(data))
+        }
     }
   })
 

@@ -112,15 +112,14 @@ const AuthProvider = ({ children }: Props) => {
           fullName: userClaims.idToken.payload["custom:fullname"],
           role: userClaims.idToken.payload["custom:rolename"],
           orgId: userClaims.idToken.payload["custom:orgId"],
-          userOnboarded: userClaims.idToken.payload["custom:userOnboarded"],
-          cognitoUser:cognitoUser
+          userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
 
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
         dispatch(refreshUserState(userData))
-        
+
         const returnUrl = router.query.returnUrl
          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
          router.replace(redirectURL as string)
@@ -244,7 +243,7 @@ const AuthProvider = ({ children }: Props) => {
         })
       },
       onFailure: (err) => {
-       
+
         if (err) {
           if (errorCallback) errorCallback({ 'Message': err.message })
         }

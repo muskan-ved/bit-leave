@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, Dispatch } from "@reduxjs/toolkit";
 import axios from "axios";
 import { organisation } from "src/types/organisation";
 import { show } from "../apiError";
+import { userLogout } from "../user";
 
 
 interface Redux {
@@ -20,16 +21,27 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
 
       return result.data
     }
-    catch (e) {
-      console.log(e);
-      var data = {
-        canShow: true,
-        redirect: false,
-        code: '',
-        message: 'Error occured while processing the request ',
-        location: '',
+    catch (err) {
+
+      if (axios.isAxiosError(err)) {
+
+        // console.log(err.response?.data)
+        if (!err?.response) {
+          console.log("No Server Response");
+        } else if (err.response?.status === 401) {
+          dispatch(userLogout())
+        }
       }
-      dispatch(show(data))
+      else {
+        var data = {
+          canShow: true,
+          redirect: false,
+          code: '',
+          message: 'Error occured while processing the request ',
+          location: '',
+        }
+        dispatch(show(data))
+      }
     }
   })
 

@@ -1,5 +1,4 @@
 // ** Redux Imports
-import { createSlice } from '@reduxjs/toolkit'
 import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
@@ -27,6 +26,8 @@ export const userLogout = createAsyncThunk('user/logout',
     window.localStorage.removeItem('userData')
     window.localStorage.removeItem('accessToken')
     window.localStorage.clear()
+    dispatch({ type: 'store/reset' })
+
     //Clear organisation
 
   })
@@ -81,16 +82,16 @@ const userSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(userLogout.fulfilled, (state, action) => {
-      state.avatar = ''
-      state.companyname = ''
-      state.email = ''
-      state.fullName = ''
-      state.id = null
-      state.orgId = null
-      state.role = ''
-      state.username = ''
-      state.cognitoUser = null
-      state.userOnboarded = false
+      // state.avatar = ''
+      // state.companyname = ''
+      // state.email = ''
+      // state.fullName = ''
+      // state.id = null
+      // state.orgId = null
+      // state.role = ''
+      // state.username = ''
+      // state.cognitoUser = null
+      // state.userOnboarded = false
       document.location.href = '/login'
     })
   }
