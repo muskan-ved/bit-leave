@@ -1,3 +1,5 @@
+import { CognitoUser } from "amazon-cognito-identity-js"
+
 export type user = {
   avatar: string | null,
   companyname: string | null,
@@ -8,4 +10,5 @@ export type user = {
   role: string | null,
   userOnboarded: boolean | false,
   username: string | null,
+  cognitoUser:CognitoUser|null
 }

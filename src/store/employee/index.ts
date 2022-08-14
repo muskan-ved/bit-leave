@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { employeeCashOut, employee } from 'src/types/employee'
 import { show } from '../apiError'
-import { updateOnBoarding } from '../user'
+import { updateOnBoarding, userLogout } from '../user'
 
 interface Redux {
   getState: any
@@ -130,6 +130,7 @@ export const getCashOutContract = createAsyncThunk('emp/cashoutcontract',
 
 export const loadEmployee = createAsyncThunk('emp/load',
   async (_: void, { dispatch, getState }: Redux) => {
+    try{
     const token = localStorage.getItem("accessToken");
     const employeeId = getState().user.id
     const result = await axios
@@ -138,6 +139,19 @@ export const loadEmployee = createAsyncThunk('emp/load',
       })
    // console.log(result.data)
     return result.data
+    }
+    catch(err){
+      console.log(err)
+      if (axios.isAxiosError(err)) {
+
+        // console.log(err.response?.data)
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
+    }
   })
 
 export const listEmployee = createAsyncThunk('emp/list',
@@ -205,6 +219,7 @@ const employeeSlice = createSlice({
     })
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       console.log(state, action);
+      if(action.payload?.data){
       var employee = action.payload.data
       state.profile = {
         id: employee.profile.id,
@@ -226,7 +241,7 @@ const employeeSlice = createSlice({
         cashoutValue: employee.leaveDetails.cashoutValue,
         valueText: employee.leaveDetails.valueText
       }
-
+    }
     })
 
 

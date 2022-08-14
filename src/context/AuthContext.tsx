@@ -113,7 +113,8 @@ const AuthProvider = ({ children }: Props) => {
           fullName: userClaims.idToken.payload["custom:fullname"],
           role: userClaims.idToken.payload["custom:rolename"],
           orgId: userClaims.idToken.payload["custom:orgId"],
-          userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
+          userOnboarded: userClaims.idToken.payload["custom:userOnboarded"],
+          cognitoUser:cognitoUser
         }
         //
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary

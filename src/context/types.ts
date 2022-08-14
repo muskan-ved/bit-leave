@@ -20,7 +20,7 @@ export type ConfirmUserParams = {
 }
 
 export type ResendCodeParams = {
-  email: string 
+  email: string
 }
 
 export type ConfirmPasswordUserParams = {
@@ -38,6 +38,8 @@ export type UserDataType = {
   avatar?: string | null
   orgId :string
   userOnboarded : boolean
+  cognitoUser:CognitoUser|null
+
 }
 
 export type AuthValuesType = {
