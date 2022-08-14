@@ -52,14 +52,6 @@ const AuthGuard = (props: AuthGuardProps) => {
     return fallback
   }
 
-  // Remove unwanted localStorage
-  var keys = Object.keys(localStorage)
-  for(var i = 0; i<keys.length; i++){
-    if(keys[i].slice(0,30) === "CognitoIdentityServiceProvider"){
-      window.localStorage.removeItem(keys[i])
-    }
-  }
-
   return <>{children}</>
 }
 
