@@ -45,10 +45,10 @@ const Profile = () => {
 	  index: number;
 	  value: number;
 	}
-	
+
 	function TabPanel(props: TabPanelProps) {
 	  const { children, value, index, ...other } = props;
-	
+
 	  return (
 		<div
 		  role="tabpanel"
@@ -72,14 +72,14 @@ const Profile = () => {
 		  'aria-controls': `simple-tabpanel-${index}`,
 		};
 	  }
-	
+
 	const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
 		if (event) { }
 		console.log(newValue,"dddd")
 		setValue(newValue)
 	  }
 
-	var data;
+	let data;
 	if (userData != null) {
 		data = JSON.parse(userData)
 	}
@@ -87,9 +87,9 @@ const Profile = () => {
 	const handleOnChange = async(event: any) => {
 		event.preventDefault();
 
-		let reader = new FileReader();
-		let file = event.target.files[0];
-		
+		const reader = new FileReader();
+		const file = event.target.files[0];
+
 		  reader.onloadend = (e:any) => {
 			let image = e.target.result
 			setImagePreviewUrl(image);
@@ -97,7 +97,7 @@ const Profile = () => {
 		  reader.readAsDataURL(file);
 
 		await axios.put('endpoint',
-		{file}, 
+		{file},
 		{
 			headers: { 'Authorization': `Bearer ${token}` }
         }).then((res)=>{
@@ -127,7 +127,7 @@ const Profile = () => {
 				</CardContent>
 
 				<Typography variant='body1' component='p' sx={{ ml: 3, pl: 3,pb:2,fontSize:'12px'}}>
-					The size of the Organisation logo should be 500*500. 
+					The size of the Organisation logo should be 500*500.
 				</Typography>
 				<Box sx={{ ml: 3, pl: 3,pb:4 }} className="btndivider">
 					<Button variant="contained" component="label">
@@ -137,7 +137,7 @@ const Profile = () => {
 
 				</Box>
 			</>
-			) : ( 
+			) : (
 			<>
 				<CardHeader title='Your Profile Details' subheader={<Divider></Divider>} />
 				<Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
@@ -154,7 +154,7 @@ const Profile = () => {
 							type='string'
 							label='User Name'
 							name='User Name'
-							defaultValue={data?.companyname} 
+							defaultValue={data?.companyname}
 							InputProps={{
 								readOnly: true,
 								startAdornment: (
@@ -171,7 +171,7 @@ const Profile = () => {
 							type='string'
 							label='Full Name'
 							name='Full Name'
-							defaultValue={data?.fullName} 
+							defaultValue={data?.fullName}
 							InputProps={{
 								readOnly: true,
 								startAdornment: (
@@ -188,7 +188,7 @@ const Profile = () => {
 							type='string'
 							label='Organisation Name'
 							name='Organisation Name'
-							defaultValue={data?.companyname} 
+							defaultValue={data?.companyname}
 							InputProps={{
 								readOnly: true,
 								startAdornment: (
@@ -205,7 +205,7 @@ const Profile = () => {
 							type='string'
 							label='Email'
 							name='Email'
-							defaultValue={data?.email} 
+							defaultValue={data?.email}
 							InputProps={{
 								readOnly: true,
 								startAdornment: (
@@ -218,7 +218,7 @@ const Profile = () => {
 						</Grid>
 					</Grid>
 				</CardContent>
-				</TabPanel> 	
+				</TabPanel>
 				<TabPanel value={value} index={1}>
 					<Typography>Coming Soon {getTabList[1]}</Typography>
 				</TabPanel>
@@ -226,8 +226,8 @@ const Profile = () => {
 					<Typography>Coming Soon {getTabList[2]}</Typography>
 				</TabPanel>
 				</>
-			)} 
-			</Card> 
+			)}
+			</Card>
 
 	</>
 	);
