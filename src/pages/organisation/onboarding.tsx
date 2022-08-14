@@ -2,31 +2,21 @@
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
-import StepContent from '@mui/material/StepContent';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import BlankLayout from 'src/@core/layouts/BlankLayout';
 import SignaturePad from 'react-signature-canvas';
-
-import { red } from '@mui/material/colors';
 import React, { ReactNode, useRef } from 'react';
-import { Box, BoxProps, Button, Card, CardContent, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
-import { padding } from '@mui/system';
+import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import * as yup from 'yup'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Paper from '@mui/material/Paper';
 import { Check, Eraser } from 'mdi-material-ui';
-import { relative } from 'path';
-import { left } from '@popperjs/core';
 import { postOrgOnboarding } from 'src/store/onboarding';
 import { AppDispatch, RootState } from 'src/store';
 import { useDispatch, useSelector } from 'react-redux'
 import BlankLayoutWithAppBarWrapper from 'src/@core/layouts/BlankLayoutWithAppBar';
 import { useRouter } from 'next/router';
 import { loadOrganisation } from 'src/store/organisation';
-
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   // height: '100%',
@@ -37,15 +27,11 @@ const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 const StepperContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
   padding: theme.spacing(7)
 }))
-
-
-
-
 interface OnBoardingState {
   compliance: string,
-  leaveNotification: number|null,
-  leaveWarning: number|null,
-  maxPayout: number|null,
+  leaveNotification: number | null,
+  leaveWarning: number | null,
+  maxPayout: number | null,
   email: string,
   payrollEmail: string,
   payrollLink: string,
@@ -74,26 +60,6 @@ const defaultApprovalValue = {
   approval: '',
   signature: ''
 }
-interface compliance {
-  compliance: string,
-}
-
-interface threshold {
-  leaveNotification: string,
-  leaveWarning: string,
-  maxPayout: string
-}
-
-interface contact {
-  email: string,
-  payrollEmail: string,
-  payrollLink: string
-}
-
-interface approval {
-  approval: string,
-  signature: string
-}
 
 const complianceSchema = yup.object().shape({
   compliance: yup.string().required()
@@ -121,11 +87,12 @@ const approvalSchema = yup.object().shape({
     })
 })
 
-const Onboarding = (props:any) => {
-  // export default function onboarding() {
+
+const Onboarding = (props: any) => {
+
   const steps = ['Start', 'Compliance', 'Thresholds', 'Contacts', 'Approval'];
   const [activeStep, setActiveStep] = React.useState(0);
-  const router =useRouter()
+  const router = useRouter()
   const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
     compliance: '',
     leaveNotification: null,
@@ -182,16 +149,9 @@ const Onboarding = (props:any) => {
   })
 
   const handleNext = () => { setActiveStep((prevActiveStep) => prevActiveStep + 1); };
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-  const handleReset = () => {
-    setActiveStep(0);
-  };
 
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.onboarding)
-  //console.log(store)
 
   const getComplianceContent = () => {
     switch (complianceSelected) {
@@ -299,6 +259,7 @@ const Onboarding = (props:any) => {
       maxPayout: data.maxPayout
     }
     setOnBoardingState(stateData)
+    console.log(stateData)
     handleNext()
   }
   const onStart = () => {
@@ -330,7 +291,7 @@ const Onboarding = (props:any) => {
     ))
     await dispatch(loadOrganisation())
     router.push('/home')
-    console.log(onBoarding)
+
   }
   const formatIntoPng = () => {
     if (sigCanvas.current) {
@@ -345,7 +306,7 @@ const Onboarding = (props:any) => {
       signature: ''
     })
   }
-  const onError = () => console.log('errors, e');
+  const onError = () => {};
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
@@ -428,7 +389,7 @@ const Onboarding = (props:any) => {
                         control={thresholdControl}
                         rules={{ required: true }}
                         render={({ field: { value, onChange } }) => (
-                          <TextField
+                          <TextField id='leaveNoti'
                             value={value}
                             label='Excess Leave Notification (in days)'
                             onChange={onChange}
@@ -480,7 +441,7 @@ const Onboarding = (props:any) => {
                         render={({ field: { value, onChange } }) => (
                           <TextField
                             value={value}
-                            label='Maximum payout (every 12 month period)'
+                            label='Maximum leave cash out every 12 months (in days)'
                             onChange={onChange}
                             error={Boolean(thresholdErrors.maxPayout)}
                             placeholder=''
@@ -511,7 +472,7 @@ const Onboarding = (props:any) => {
         )
 
       case 3:
-        return (<form key={0} onSubmit={handleContactSubmit(onContactSubmit, onError)}>
+        return (<form key={1} onSubmit={handleContactSubmit(onContactSubmit, onError)}>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }} gutterBottom>
@@ -584,7 +545,7 @@ const Onboarding = (props:any) => {
                       render={({ field: { value, onChange } }) => (
                         <TextField
                           value={value}
-                          label='Payroll Link'
+                          label='HRIS login link'
                           onChange={onChange}
                           error={Boolean(contactErrors.payrollLink)}
                           placeholder=''
@@ -704,11 +665,47 @@ const Onboarding = (props:any) => {
             {approvalSelected.approval === 'automatic' &&
 
               <Grid item xs={12}>
+                <Typography variant='body2'>
+                  Automatically approving excess leave cash out allows you to:
+                </Typography>
+                <List>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Sign once (below) for all leave cash out requests
+                    </ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Automate entire excess leave process
+                    </ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      Saves HR and Payroll time in processing and approvals
+                    </ListItemText>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Check />
+                    </ListItemIcon>
+                    <ListItemText>
+                      It does NOT allow you to review and approve individual requests
+                    </ListItemText>
+                  </ListItem>
+                </List>
                 <IconButton onClick={onClearSignature} style={{ display: 'block', position: 'relative', textAlign: 'right', left: '365px', top: '40px', 'zIndex': '100' }}>
                   <Eraser></Eraser>
                 </IconButton>
                 <FormControl>
-
                   <Controller
                     name="signature"
                     control={approvalControl}

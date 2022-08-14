@@ -104,7 +104,6 @@ const Dialog = (theme: Theme, skin: Skin) => {
             lineHeight: 1.25,
             fontSize: '0.875rem'
           }
-
           // Styling for Mobile Date Picker ends
         }
       }

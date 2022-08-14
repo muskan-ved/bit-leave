@@ -1,4 +1,5 @@
 // ** Redux Imports
+import { createSlice } from '@reduxjs/toolkit'
 import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
@@ -93,7 +94,6 @@ const userSlice = createSlice({
       document.location.href = '/login'
     })
   }
-
 })
 
 export const {

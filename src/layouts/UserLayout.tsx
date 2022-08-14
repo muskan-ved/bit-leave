@@ -13,11 +13,6 @@ import Layout from 'src/@core/layouts/Layout'
 import VerticalNavItems from 'src/navigation/vertical'
 import HorizontalNavItems from 'src/navigation/horizontal'
 
-// ** Component Import
-// Uncomment the below line (according to the layout type) when using server-side menu
-// import ServerSideVerticalNavItems from './components/vertical/ServerSideNavItems'
-// import ServerSideHorizontalNavItems from './components/horizontal/ServerSideNavItems'
-
 import VerticalAppBarContent from './components/vertical/AppBarContent'
 import HorizontalAppBarContent from './components/horizontal/AppBarContent'
 
@@ -50,10 +45,7 @@ const UserLayout = ({ children }: Props) => {
         {...(settings.layout === 'horizontal'
           ? {
             // ** Navigation Items
-            horizontalNavItems: HorizontalNavItems(),
-
-            // Uncomment the below line when using server-side menu in horizontal layout and comment the above line
-            // horizontalNavItems: ServerSideHorizontalNavItems(),
+            horizontalNavItems: HorizontalNavItems(),      
 
             // ** AppBar Content
             horizontalAppBarContent: () => (
@@ -63,9 +55,6 @@ const UserLayout = ({ children }: Props) => {
           : {
             // ** Navigation Items
             verticalNavItems: VerticalNavItems(),
-
-            // Uncomment the below line when using server-side menu in vertical layout and comment the above line
-            // verticalNavItems: ServerSideVerticalNavItems(),
 
             // ** AppBar Content
             verticalAppBarContent: props => (

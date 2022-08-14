@@ -116,25 +116,24 @@ const UserDropdown = (props: Props) => {
       <Badge
         overlap='circular'
         onClick={handleDropdownOpen}
-        sx={{ ml: 2, cursor: 'pointer' }}
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right'
         }}
+        sx={{ ml: 2, cursor: 'pointer' }}
       >
         <Avatar
           alt='John Doe'
           onClick={handleDropdownOpen}
-          sx={{ width: 40, height: 40 }}
           src='/images/avatars/1.png'
+          sx={{ width: 40, height: 40 }}
         />
       </Badge>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={() => handleDropdownClose()}
-        sx={{ '& .MuiMenu-paper': { width: 230, marginTop: 4 } }}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: direction === 'ltr' ? 'right' : 'left'
@@ -143,6 +142,7 @@ const UserDropdown = (props: Props) => {
           vertical: 'top',
           horizontal: direction === 'ltr' ? 'right' : 'left'
         }}
+        sx={{ '& .MuiMenu-paper': { width: 230, marginTop: 4 } }}
       >
         <Box sx={{ pt: 2, pb: 3, px: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -179,45 +179,27 @@ const UserDropdown = (props: Props) => {
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        <MenuItem  onClick={() => handleDropdownClose('/profile')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <AccountOutline sx={{ marginRight: 2 }} />
             Profile
           </Box>
         </MenuItem>
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <EmailOutline sx={{ marginRight: 2 }} />
-            Inbox
-          </Box>
-        </MenuItem> */}
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <MessageOutline sx={{ marginRight: 2 }} />
-            Support (coming soon)
-          </Box>
-        </MenuItem> */}
         <Divider />
-        {/* <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
-          <Box sx={styles}>
-            <CogOutline sx={{ marginRight: 2 }} />
-            Settings
-          </Box>
-        </MenuItem> */}
-        <MenuItem sx={{ p: 0 }} onClick={() => handleContactUs()}>
+        <MenuItem  onClick={() => handleContactUs()} sx={{ p: 0 }}>
           <Box sx={styles}>
             <CardAccountPhone sx={{ marginRight: 2 }} />
             Contact Us
           </Box>
         </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
+        <MenuItem  onClick={() => handleDropdownClose()} sx={{ p: 0 }}>
           <Box sx={styles}>
             <AccountQuestionOutline sx={{ marginRight: 2 }} />
             FAQ (coming soon)
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
+        <MenuItem  onClick={handleLogout} sx={{ py: 2 }}>
           <LogoutVariant
             sx={{
               marginRight: 2,

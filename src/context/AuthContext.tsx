@@ -58,7 +58,6 @@ const AuthProvider = ({ children }: Props) => {
   const [cognitoUser, setCognitoUser] = useState<CognitoUser | null>(defaultProvider.cognitoUser)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
   const [isInitialized, setIsInitialized] = useState<boolean>(defaultProvider.isInitialized)
-  let maintainenceMode = true;
 
   // ** Hooks
   const router = useRouter()
@@ -116,12 +115,12 @@ const AuthProvider = ({ children }: Props) => {
           userOnboarded: userClaims.idToken.payload["custom:userOnboarded"],
           cognitoUser:cognitoUser
         }
-        //
+
         window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
         dispatch(refreshUserState(userData))
-        //
+        
         const returnUrl = router.query.returnUrl
          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
          router.replace(redirectURL as string)
@@ -245,7 +244,7 @@ const AuthProvider = ({ children }: Props) => {
         })
       },
       onFailure: (err) => {
-        console.log(err);
+       
         if (err) {
           if (errorCallback) errorCallback({ 'Message': err.message })
         }

@@ -1,6 +1,6 @@
 // ** React Imports
 import React, { SyntheticEvent, useState, useEffect } from 'react'
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import dynamic from 'next/dynamic'
 import { EditorProps } from 'react-draft-wysiwyg'
 
@@ -35,6 +35,8 @@ import CardHeader from '@mui/material/CardHeader'
 // ** Icons Imports
 import ChevronDown from 'mdi-material-ui/ChevronDown'
 
+// ** Context
+import { useAuth } from 'src/hooks/useAuth'
 
 const Templates = () => {
   // ** State
@@ -54,6 +56,8 @@ const Templates = () => {
     setIsLoading(true);
     fetchData();
   }, []);
+
+  const { logout } = useAuth()
 
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")
@@ -77,7 +81,6 @@ const Templates = () => {
             tabList.push(value.templatetype);
           }
           const contentBlocks = htmlToDraft(value.defaulttext)
-          const contentState = ContentState.createFromBlockArray(contentBlocks)
 
           value.index = i;
           value.updateEditorState = EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks))
@@ -89,8 +92,12 @@ const Templates = () => {
         console.log('HERE ' + getdata);
         setIsLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((reason: AxiosError) => {
+        if (reason.response && reason.response!.status === 401) {
+          logout()
+        } else {
+          // Handle else
+        }
       });
   };
   const updateData = async () => {
@@ -114,7 +121,6 @@ const Templates = () => {
       })
       .catch((err) => {
         alert("Error occured while updating data")
-        console.log(err)
       })
 
   }

@@ -15,9 +15,7 @@ import axios from 'axios'
 
 const UpdateOrganisation = () => {
 
-	const [file, setFile] = useState();
 	const [array, setArray] = useState([]);
-	if (file) { }
 	const S3_BUCKET = authConfig.bucket_name;
 	const REGION = authConfig.region;
 
@@ -299,7 +297,6 @@ const UpdateOrganisation = () => {
 
 							myBucket.putObject(params)
 								.on('httpUploadProgress', (evt) => {
-									setFile(e.target.files[0]);
 									if (evt) {
 										toast.success("Successfully file uploaded to s3", {
 											autoClose: 5000,
@@ -440,12 +437,6 @@ const UpdateOrganisation = () => {
 				if (index) { }
 			}
 
-			// ** Required Field Missing **
-			else {
-				//console.log("One or more Field is missing")
-			}
-
-
 			const array = csvRows.map(i => {
 				const values = i.split(",");
 				const obj = csvHeader.reduce((object: any, header: any, index) => {
@@ -460,8 +451,6 @@ const UpdateOrganisation = () => {
 			setArray(array as any);
 		}
 	};
-
-	//const headerKeys = Object.keys(Object.assign({}, ...array));
 
 	return (
 		<Grid container spacing={6}>

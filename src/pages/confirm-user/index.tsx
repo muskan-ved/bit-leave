@@ -82,7 +82,6 @@ const defaultValues = {
   apiErrors: ''
 }
 
-
 const ConfirmUser = () => {
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
@@ -94,7 +93,7 @@ const ConfirmUser = () => {
   // ** Vars
   const { skin } = settings
 
-  //const userEmail= window.localStorage.getItem('userEmail');
+
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const imageSource =
     skin === 'bordered' ? 'bit.leave' : 'bit.leave'
@@ -115,7 +114,6 @@ const ConfirmUser = () => {
     resolver: yupResolver(schema)
   })
 
-
   const router = useRouter()
 
   const {
@@ -127,7 +125,6 @@ const ConfirmUser = () => {
   }
 
   const userEmail = props.emailId
-
 
   const handleSubmit = () => {
 

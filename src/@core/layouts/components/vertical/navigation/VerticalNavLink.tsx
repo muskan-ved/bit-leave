@@ -41,6 +41,8 @@ interface Props {
   isSubToSub?: NavGroup | undefined
 }
 
+
+
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)<
   ListItemButtonProps & { component?: ElementType; target?: '_blank' | undefined }
@@ -61,6 +63,12 @@ const MenuNavLink = styled(ListItemButton)<
     }
   }
 }))
+
+const StyledLink = styled('span')({
+  display: 'flex',
+  // alignItems: 'center',
+  textDecoration: 'none'
+})
 
 const MenuItemTextMetaWrapper = styled(Box)<BoxProps>({
   width: '100%',
@@ -131,15 +139,19 @@ const VerticalNavLink = ({
   }
 
   return (
-    <CanViewNavLink navLink={item}>
+    <CanViewNavLink navLink={item} >
       <ListItem
         disablePadding
-        className='nav-link'
+        className='nav-link '
         disabled={item.disabled || false}
-        sx={{
+        sx={{ ...(item.title === "How To") ? 
+        {position: 'absolute',
+          bottom: '0px',mt: 1.5,
+          transition: 'padding .25s ease-in-out',
+          px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`}:{
           mt: 1.5,
           transition: 'padding .25s ease-in-out',
-          px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`
+          px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`}
         }}
       >
         <Link passHref href={item.path === undefined ? '/' : `${item.path}`}>
@@ -173,6 +185,12 @@ const VerticalNavLink = ({
                   ...(parent ? { ml: 2, mr: 4 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
                 }}
               >
+              {item.title === "Demo Company" ? 
+              <span >
+                <img src="https://uploads-ssl.webflow.com/6222c6f371f51f626a16077d/622e7fbf19b7cc22f478da42_bitleaveLogo.png" alt="Organisation Logo" width='70px' />
+              </span>
+          
+       : 
                 <UserIcon
                   icon={IconTag}
                   componentType='vertical-menu'
@@ -183,6 +201,7 @@ const VerticalNavLink = ({
                     }
                   }}
                 />
+                }
               </ListItemIcon>
             )}
 
@@ -196,6 +215,7 @@ const VerticalNavLink = ({
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                   noWrap: true
                 })}
+                sx={{...(item.title === "Demo Company" ? {fontSize:'14px'} : "") }}
               >
                 <Translations text={item.title} />
               </Typography>

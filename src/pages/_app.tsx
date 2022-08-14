@@ -115,7 +115,7 @@ const App = (props: ExtendedAppProps) => {
 
   const aclAbilities = Component.acl ?? defaultACLObj
 
-  let maintainenceMode = false;
+  const maintainenceMode = false;
 
   if(maintainenceMode)
   {

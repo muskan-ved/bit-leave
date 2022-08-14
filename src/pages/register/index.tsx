@@ -41,7 +41,6 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 
-
 const defaultValues = {
   email: '',
   username: '',
@@ -109,6 +108,7 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
     color: theme.palette.text.secondary
   }
 }))
+
 const Register = () => {
   // ** States
   const [showPassword, setShowPassword] = useState<boolean>(false)

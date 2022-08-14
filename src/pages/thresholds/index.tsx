@@ -120,6 +120,7 @@ const Thresholds = () => {
           autoClose: 5000,
           hideProgressBar: false,
         })
+        
         // Handle else
       }
     })

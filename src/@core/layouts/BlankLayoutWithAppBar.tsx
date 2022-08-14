@@ -7,7 +7,6 @@ import { BlankLayoutWithAppBarProps } from './types'
 
 // ** AppBar Imports
 import AppBar from 'src/@core/layouts/components/blank-layout-with-appBar'
-import ErrorComponent from 'src/layouts/components/error/error'
 
 // Styled component for Blank Layout with AppBar component
 const BlankLayoutWithAppBarWrapper = styled(Box)<BoxProps>(({ theme }) => ({

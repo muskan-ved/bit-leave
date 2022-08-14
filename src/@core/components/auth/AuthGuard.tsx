@@ -28,6 +28,7 @@ const AuthGuard = (props: AuthGuardProps) => {
         return
       }
       const userData = window.localStorage.getItem('userData')
+
       if (auth.user === null && !userData) {
         if (router.asPath !== '/') {
           router.replace({
@@ -41,6 +42,7 @@ const AuthGuard = (props: AuthGuardProps) => {
       if (userData != null) {
         dispatch(refreshUserState(JSON.parse(userData)))
       }
+      
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.route]

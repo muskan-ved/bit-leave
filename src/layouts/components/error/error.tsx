@@ -1,6 +1,6 @@
 import Alert from '@mui/material/Alert';
 import { useRouter } from "next/router"
-import React, { useEffect } from "react"
+import React from "react"
 import { useSelector } from "react-redux"
 import { RootState } from "src/store"
 
@@ -10,12 +10,7 @@ const ErrorComponent = () => {
   if (store.redirect) {
     router.push('/login')
   }
-  // useEffect(() => {
-  //   if(store.redirect){
-  //     router.push('/login')
-  //   }
 
-  // }, [])
   return (
     <>{
       store.canShow == true &&

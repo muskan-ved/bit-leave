@@ -45,7 +45,7 @@ const AclGuard = (props: AclGuardProps) => {
   if (auth.user && auth.user.role && !ability) {
     setAbility(buildAbilityFor(auth.user.role, aclAbilities.subject))
   }
-
+  
   // Check the access of current user and render pages
   if (ability && ability.can(aclAbilities.action, aclAbilities.subject)) {
     return <AbilityContext.Provider value={ability}>{children}</AbilityContext.Provider>

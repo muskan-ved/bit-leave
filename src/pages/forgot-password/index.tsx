@@ -18,9 +18,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 // ** Icons Imports
 import ChevronLeft from 'mdi-material-ui/ChevronLeft'
 
-// ** Configs
-//import themeConfig from 'src/configs/themeConfig'
-
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
@@ -90,7 +87,6 @@ const ForgotPassword = () => {
   const { skin } = settings
   window.localStorage.setItem("userEmail", "")
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
-
   interface FormData {
     email: string
     apiErrors: string
@@ -196,8 +192,6 @@ const ForgotPassword = () => {
                 {errors.apiErrors && <Alert severity='error'>{errors.apiErrors.message}</Alert>}
                 <Divider sx={{ mt: 5, mb: 7.5, '& .MuiDivider-wrapper': { px: 4 } }}></Divider>
               </FormControl>
-              {/* <TextField autoFocus id = 'email' type='email' label='Email' sx={{ display: 'flex', mb: 4 }}  onChange={event => setEmail(event.target.value)}
-          value={email}/> */}
               <LoadingButton loading={isProcessing} fullWidth size='large' type='submit' variant='contained' sx={{ mb: 5.25 }}>
                 Send reset link
               </LoadingButton>

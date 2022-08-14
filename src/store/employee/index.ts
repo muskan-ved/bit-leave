@@ -51,7 +51,6 @@ export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
 
 export const postEmployeeCashout = createAsyncThunk('emp/cashout',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
-    console.log(params);
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
@@ -100,7 +99,6 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
 
 export const getCashOutContract = createAsyncThunk('emp/cashoutcontract',
   async (params: employeeCashOut, { dispatch, getState }: Redux) => {
-    console.log(params);
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
@@ -194,7 +192,6 @@ const employeeSlice = createSlice({
     })
 
     builder.addCase(postEmployeeCashout.pending, (state, action) => {
-      console.log(state, action);
     })
 
     builder.addCase(listEmployee.fulfilled, (state, action) => {
@@ -218,7 +215,6 @@ const employeeSlice = createSlice({
 
     })
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
-      console.log(state, action);
       if(action.payload?.data){
       var employee = action.payload.data
       state.profile = {

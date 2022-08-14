@@ -77,26 +77,6 @@ const LanguageDropdown = ({ settings, saveSettings }: Props) => {
         >
           English
         </MenuItem>
-        {/* <MenuItem
-          sx={{ py: 2 }}
-          selected={i18n.language === 'fr'}
-          onClick={() => {
-            handleLangItemClick('fr')
-            saveSettings({ ...settings, direction: 'ltr' })
-          }}
-        >
-          French
-        </MenuItem>
-        <MenuItem
-          sx={{ py: 2 }}
-          selected={i18n.language === 'ar'}
-          onClick={() => {
-            handleLangItemClick('ar')
-            saveSettings({ ...settings, direction: 'rtl' })
-          }}
-        >
-          Arabic
-        </MenuItem> */}
       </Menu>
     </Fragment>
   )

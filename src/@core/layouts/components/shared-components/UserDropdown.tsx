@@ -91,27 +91,27 @@ const UserDropdown = (props: Props) => {
       <Badge
         overlap='circular'
         onClick={handleDropdownOpen}
-        sx={{ ml: 2, cursor: 'pointer' }}
         badgeContent={<BadgeContentSpan />}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right'
         }}
-      >
+        sx={{ ml: 2, cursor: 'pointer' }}
+        >
         <Avatar
           alt='John Doe'
           onClick={handleDropdownOpen}
-          sx={{ width: 40, height: 40 }}
           src='/images/avatars/1.png'
+          sx={{ width: 40, height: 40 }}
         />
       </Badge>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={() => handleDropdownClose()}
-        sx={{ '& .MuiMenu-paper': { width: 230, mt: 4 } }}
         anchorOrigin={{ vertical: 'bottom', horizontal: direction === 'ltr' ? 'right' : 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: direction === 'ltr' ? 'right' : 'left' }}
+        sx={{ '& .MuiMenu-paper': { width: 230, mt: 4 } }}
       >
         <Box sx={{ pt: 2, pb: 3, px: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -134,45 +134,45 @@ const UserDropdown = (props: Props) => {
           </Box>
         </Box>
         <Divider sx={{ mt: 0, mb: 1 }} />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/user/view/12')}>
+        <MenuItem  onClick={() => handleDropdownClose('/apps/user/view/12')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <AccountOutline sx={{ mr: 2 }} />
             Profile
           </Box>
         </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/email')}>
+        <MenuItem  onClick={() => handleDropdownClose('/apps/email')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <EmailOutline sx={{ mr: 2 }} />
             Inbox
           </Box>
         </MenuItem> 
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/chat')}>
+        <MenuItem  onClick={() => handleDropdownClose('/apps/chat')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <MessageOutline sx={{ mr: 2 }} />
             Chat
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/account-settings')}>
+        <MenuItem  onClick={() => handleDropdownClose('/pages/account-settings')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <CogOutline sx={{ mr: 2 }} />
             Settings
           </Box>
         </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/pricing')}>
+        <MenuItem  onClick={() => handleDropdownClose('/pages/pricing')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <CurrencyUsd sx={{ mr: 2 }} />
             Pricing
           </Box>
         </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/faq')}>
+        <MenuItem  onClick={() => handleDropdownClose('/pages/faq')} sx={{ p: 0 }}>
           <Box sx={styles}>
             <HelpCircleOutline sx={{ mr: 2 }} />
             FAQ
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem sx={{ py: 2 }} onClick={handleLogout}>
+        <MenuItem onClick={handleLogout} sx={{ py: 2 }} >
           <LogoutVariant sx={{ mr: 2, fontSize: '1.375rem', color: 'text.secondary' }} />
           Logout
         </MenuItem>
