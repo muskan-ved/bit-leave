@@ -4,9 +4,6 @@ import {  useEffect, useState } from 'react'
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
 
-// ** Axios
-import axios, { AxiosError } from 'axios'
-
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -32,9 +29,7 @@ import { thresholds } from 'src/types/thresholds'
 // ** Redux Import
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { excessLeaveThresholds } from 'src/store/thresholds'
-
-const baseUrl = 'https://api.bitleave.co/organisations/'
+import { excessLeaveThresholds, getExcessLeave } from 'src/store/thresholds'
 
 const Thresholds = () => {
   const [data, setData] = useState<thresholds | null>(null);
@@ -42,8 +37,6 @@ const Thresholds = () => {
   const [leaveWarning, setLeaveWarning] = useState<thresholds | number>();
   const [maximumPayout, setMaximumPayout] = useState<thresholds | number>();
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { logout } = useAuth()
-  const token = localStorage.getItem("accessToken")
   const dispatch = useDispatch<AppDispatch>()
 
   const fetchData = async () => {
@@ -53,27 +46,14 @@ const Thresholds = () => {
       const data = JSON.parse(userData)
       orgId = data.orgId;
     }
-    axios
-      .get(baseUrl + orgId, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      .then(res => {
-        const data = res.data.data.organisation;
+    await dispatch(getExcessLeave(orgId)).then((res) => {
+        const data = res.payload.data.organisation;
         setLeaveNotification(data.organisationssettings[0].thrleavenotification)
         setLeaveWarning(data.organisationssettings[0].thrleavewarning)
         setMaximumPayout(data.organisationssettings[0].thrpayoutfrequency)
         setData(data)
         setIsLoading(false);
       })
-      .catch((reason: AxiosError) => {
-        setIsLoading(false);
-        if (reason.response && reason.response!.status === 401) {
-          logout()
-        } else {
-          // Handle else
-        }
-      }
-      )
   };
 
   useEffect(() => {

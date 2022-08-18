@@ -12,6 +12,32 @@ interface Redux {
   
   }
 
+export const getExcessLeave = createAsyncThunk('excessLeaveData',
+  async (id: any, { dispatch, getState }: Redux) => {
+ 
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios
+        .get('https://api.bitleave.co/organisations/' + id,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      return response.data
+    }
+    catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+            console.log("No Server Response");
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+
 export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
   async (params: any, { dispatch, getState }: Redux) => {
     const payload ={

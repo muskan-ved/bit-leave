@@ -40,7 +40,7 @@ type directReport = {
   excessDays: number
 }
 
-export type employee = {
+export type employeeType = {
   id: number
   profile: profile
   leaveDetails: leaveDetails

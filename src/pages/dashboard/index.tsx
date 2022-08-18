@@ -1,5 +1,5 @@
 // ** React Imports
-import { SyntheticEvent, useContext, useEffect, useState } from 'react'
+import { SyntheticEvent, useContext, useEffect, useRef, useState } from 'react'
 
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
@@ -35,7 +35,7 @@ import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Types Imports
 import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
-import { employee } from 'src/types/dashboard'
+import { employeeType } from 'src/types/dashboard'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
@@ -54,11 +54,14 @@ import { ApexOptions } from 'apexcharts'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { useTheme } from '@mui/material/styles'
 
-// ** Icons Imports
+// ** Icons Import
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'src/store'
-import { loadEmployee } from 'src/store/employee'
+
+// ** Redux Store Import
+import { useSelector } from 'react-redux'
+import { RootState} from 'src/store'
+
+// ** Modal Import
 import CashoutDialog from './cashout'
 
 // Styled Box component
@@ -83,13 +86,9 @@ const Dashboard = () => {
 
   // ** Hooks
   const ability = useContext(AbilityContext)
-  const { logout } = useAuth()
 
-  const [data, setData] = useState<employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState(0);
-  const dispatch = useDispatch<AppDispatch>()
-
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const handleDialogClose = () => {
     setDialogOpen(false)
@@ -101,6 +100,14 @@ const Dashboard = () => {
     alert('here');
     window.open(data?.profile.hrisLogin)
   }
+
+  const statedtaa = useSelector((state: RootState) => state.employee);
+  var data:any = useState<employeeType | null>(null);
+    if(statedtaa){
+      data = statedtaa?.employeeDetail?.data
+    }else{
+      setIsLoading(false);
+    }
 
   const avgExcessDays: number[] = [],
     departmentsOfAverageExcessDays: string[] = [],
@@ -138,8 +145,6 @@ const Dashboard = () => {
   ]
   const employees: string[] = directReportsOfFullname
   const departments: string[] = departmentsOfAverageExcessDays;
-
-  const token = localStorage.getItem("accessToken")
   const theme = useTheme()
 
   const options: ApexOptions = {
@@ -254,27 +259,8 @@ const Dashboard = () => {
     },
   }
 
-  const fetchDataFromRedux = async () => {
-    const userData = localStorage.getItem("userData")
-    let employeeId;
-    if (userData != null) {
-      const data = JSON.parse(userData)
-      employeeId = data.id;
-    }
-    const data = await dispatch(loadEmployee())
-    if (data.payload != null) {
-      setData(data.payload.data);
 
-    }
-    setIsLoading(false)
-  }
-
-  useEffect(() => {
-
-    if (!data) {
-      setIsLoading(true);
-      fetchDataFromRedux();
-    }
+  useEffect(() => {  
     if (count != 1)
       setCount(1);
   }, []);
@@ -524,7 +510,7 @@ const Dashboard = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data.leavesByOrg.map((row, i) => (
+                          {data.leavesByOrg.map((row:any, i:number) => (
                             <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                               <TableCell component='th' scope='row' >
                                 <CustomAvatar

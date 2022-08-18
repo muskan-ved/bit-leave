@@ -138,14 +138,19 @@ export const loadEmployee = createAsyncThunk('emp/load',
   async (_: void, { dispatch, getState }: Redux) => {
     try{
     const token = localStorage.getItem("accessToken");
+    var user;
+    const userData = localStorage.getItem("userData");
+    if (userData != null) {
+      user = JSON.parse(userData)
+    }
     const employeeId = getState().user.id
     const result = await axios
-      .get('https://api.bitleave.co/employees/' + employeeId, {
+      .get('https://api.bitleave.co/employees/' + (employeeId !== null? employeeId : user.id ), {
         headers: { 'Authorization': `Bearer ${token}` }
       })
    // console.log(result.data)
     return result.data
-    }
+    } 
     catch(err){
       console.log(err)
       if (axios.isAxiosError(err)) {
@@ -184,8 +189,6 @@ export const listEmployee = createAsyncThunk('emp/list',
   })
 
 
-
-
 const employeeSlice = createSlice({
   name: 'employee',
   initialState: {
@@ -193,7 +196,8 @@ const employeeSlice = createSlice({
     team: null,
     leaveDetail: null,
     cashoutOption: null,
-    vitals: null
+    vitals: null,
+    employeeDetail : null,
   } as employee,
   reducers: {
 
@@ -215,8 +219,6 @@ const employeeSlice = createSlice({
     })
 
     builder.addCase(listEmployee.fulfilled, (state, action) => {
-      console.log(state, action);
-
     })
 
     builder.addCase(postEmployeeOnboarding.fulfilled, (state, action) => {
@@ -237,10 +239,13 @@ const employeeSlice = createSlice({
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       if(action.payload?.data){
       var employee = action.payload.data
+      state.employeeDetail = {
+        data: action.payload.data
+      }
       state.profile = {
         id: employee.profile.id,
         fullname: employee.profile.fullname,
-        onboarded: employee.profile.onboarded
+        onboarded: employee.profile.onboarded,
       }
       state.cashoutOption = {
         daysAvailable: employee.cashoutOptions.daysAvailable,

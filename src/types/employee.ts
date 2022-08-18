@@ -14,13 +14,18 @@ export type employee = {
   team: team | null,
   leaveDetail: leaveDetail | null,
   cashoutOption: cashoutOption | null,
-  vitals: vitals | null
+  vitals: vitals | null,
+  employeeDetail : employeeDetail | null
+}
+
+export type employeeDetail ={
+  data : any | null
 }
 
 export type profile = {
   id: number | null,
   fullname: string | null,
-  onboarded: boolean | false
+  onboarded: boolean | false,
 }
 
 export type team = {

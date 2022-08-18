@@ -20,10 +20,7 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
       return result.data
     }
     catch (err) {
-
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
           console.log("No Server Response");
         } else if (err.response?.status === 401) {

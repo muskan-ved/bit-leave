@@ -1,12 +1,12 @@
 export type actionApproval = {
-  cashoutdays: number,
-    cashoutamt: number,
-    actiondate: string,
-    approvalreason: string,
-    rejectreason: string,
-    cashoutreason: string,
-    signatureOfEmployee: string,
-    submitApproval: string,
+  cashoutdays: number | null,
+    cashoutamt: number | null,
+    actiondate: string | null,
+    approvalreason: string | null,
+    rejectreason: string | null,
+    cashoutreason: string | null,
+    signatureOfEmployee: string | null,
+    submitApproval: string | null,
 
   }
   

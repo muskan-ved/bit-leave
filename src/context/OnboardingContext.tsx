@@ -56,6 +56,7 @@ const OnboardingProvider = ({ children }: Props) => {
           organisationID = data.id;
         }
         const organisation = await dispatch(loadOrganisation())
+        const data = await dispatch(loadEmployee())
         if (organisation.payload)
         orgOnBoarding = organisation.payload.data.organisation.active
         else

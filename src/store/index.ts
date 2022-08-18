@@ -9,6 +9,7 @@ import user from 'src/store/user'
 import organisation from 'src/store/organisation'
 import thresholds from 'src/store/thresholds'
 import profile from 'src/store/profile'
+import actionApproval from 'src/store/actionapproval'
 
 export const reducers = {
   onboarding,
@@ -17,7 +18,8 @@ export const reducers = {
   organisation,
   apierror,
   thresholds,
-  profile
+  profile,
+  actionApproval,
 }
 
 const combinedReducer = combineReducers(reducers);

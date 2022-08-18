@@ -1,8 +1,11 @@
 // ** Redux Imports
-import { createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+import { actionApproval } from 'src/types/actionApproval';
+
+// ** Logout function
 import { userLogout } from '../user';
 
 interface Redux {
@@ -36,3 +39,25 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
         }
     }
   })
+
+const actionApprovalSlice = createSlice({
+    name: 'actionApproval',
+    initialState: {
+        cashoutamt:  null,
+        actiondate:  null,
+        approvalreason:  null,
+        rejectreason:  null,
+        cashoutreason:  null,
+        signatureOfEmployee:  null,
+        submitApproval:  null,
+    } as actionApproval,
+    reducers: {
+  
+    },
+    extraReducers: builder => {
+      builder.addCase(cashoutActionApproval.fulfilled, (state, action) => {
+      })
+    }
+  })
+  
+export default actionApprovalSlice.reducer
