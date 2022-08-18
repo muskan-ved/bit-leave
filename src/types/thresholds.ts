@@ -4,8 +4,8 @@ export type organisationssettings ={
     thrpayoutfrequency:number
   }
   
-export type organisation = 
+export type thresholds = 
   {
-    id: number,
-    organisationssettings : Array<organisationssettings>
+    id: number|null,
+    organisationssettings : Array<organisationssettings>|[]
   }

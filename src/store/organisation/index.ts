@@ -3,8 +3,6 @@ import axios from "axios";
 import { organisation } from "src/types/organisation";
 import { show } from "../apiError";
 import { userLogout } from "../user";
-
-
 interface Redux {
   getState: any
   dispatch: Dispatch<any>,
@@ -45,6 +43,26 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
     }
   })
 
+  export const uploadCSVToS3 = createAsyncThunk('organisations/uploads3',
+  async (params: any, { dispatch, getState }: Redux) => {
+    const token = localStorage.getItem("accessToken");
+    try {
+      const result = await axios
+        .post('https://api.bitleave.co/employees/syncOrg',params, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        })
+      return result.data
+    }
+    catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+          console.log("No Server Response");
+        } else if (err.response?.status === 401) {
+          dispatch(userLogout())
+        }
+      }
+    }
+  })
 
 const organisationSlice = createSlice({
   name: 'organisation',
@@ -68,6 +86,10 @@ const organisationSlice = createSlice({
         state.name = payload.organisation.name
         state.onboard_date = payload.organisation.onboard_date
       }
+    })
+
+    builder.addCase(uploadCSVToS3.fulfilled, (state, action) => {
+     
     })
   }
 })

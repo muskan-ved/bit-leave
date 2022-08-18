@@ -7,13 +7,17 @@ import employee from 'src/store/employee'
 import apierror from 'src/store/apiError'
 import user from 'src/store/user'
 import organisation from 'src/store/organisation'
+import thresholds from 'src/store/thresholds'
+import profile from 'src/store/profile'
 
 export const reducers = {
   onboarding,
   employee,
   user,
   organisation,
-  apierror
+  apierror,
+  thresholds,
+  profile
 }
 
 const combinedReducer = combineReducers(reducers);

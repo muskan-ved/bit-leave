@@ -1,12 +1,6 @@
 // ** React Imports
 import {  useEffect, useState } from 'react'
 
-// ** Context
-import { useAuth } from 'src/hooks/useAuth'
-
-// ** Axios
-import axios, { AxiosError } from 'axios'
-
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -33,15 +27,16 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
-
-const baseUrl = 'https://api.bitleave.co/employeeactions';
+// ** Redux Import
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { cashoutActionApproval } from 'src/store/actionapproval'
 
 const ActionApproval = () =>{
   
   const [data, setData] = useState<actionApproval | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { logout } = useAuth()
-  const token = localStorage.getItem("accessToken")
+	const dispatch = useDispatch<AppDispatch>()
   
   // demo data 
   const dataa = {
@@ -62,25 +57,10 @@ const ActionApproval = () =>{
     
     const fetchData = async () => {
       setIsLoading(true);
-      const userData = localStorage.getItem("userData")
-
-      if (userData != null) {
-        const data = JSON.parse(userData)
-      }
-       await axios.get(baseUrl + "/" + id, {
-            headers: { 'Authorization': `Bearer ${token}` }
-          })
+         await dispatch(cashoutActionApproval(id))
           .then(res => {
-            setData(res.data.data.action)
+            setData(res.payload.data.action)
             setIsLoading(false);
-          })
-          .catch((reason: AxiosError) => {
-            if (reason.response!.status === 401) {
-              logout()
-            } else {
-              setIsLoading(false);
-              // Handle else
-            }
           })
       };
 

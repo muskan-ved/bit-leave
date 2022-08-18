@@ -27,18 +27,24 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 //  ** Types Imports
-import { organisation } from 'src/types/organisation';
+import { thresholds } from 'src/types/thresholds'
+
+// ** Redux Import
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { excessLeaveThresholds } from 'src/store/thresholds'
 
 const baseUrl = 'https://api.bitleave.co/organisations/'
 
 const Thresholds = () => {
-  const [data, setData] = useState<organisation | null>(null);
-  const [leaveNotification, setLeaveNotification] = useState<organisation | number>();
-  const [leaveWarning, setLeaveWarning] = useState<organisation | number>();
-  const [maximumPayout, setMaximumPayout] = useState<organisation | number>();
+  const [data, setData] = useState<thresholds | null>(null);
+  const [leaveNotification, setLeaveNotification] = useState<thresholds | number>();
+  const [leaveWarning, setLeaveWarning] = useState<thresholds | number>();
+  const [maximumPayout, setMaximumPayout] = useState<thresholds | number>();
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const { logout } = useAuth()
   const token = localStorage.getItem("accessToken")
+  const dispatch = useDispatch<AppDispatch>()
 
   const fetchData = async () => {
     const userData = localStorage.getItem("userData")
@@ -99,30 +105,19 @@ const Thresholds = () => {
       thrpayoutfrequency: maximumPayout,
     }
     setIsLoading(true);
-    await axios({
-      method: "PUT",
-      url: `${baseUrl}thresholds`,
-      data: data,
-      headers: { 'Authorization': `Bearer ${token}` },
-    }).then((res)=>{
+     await dispatch(excessLeaveThresholds(data)).then(()=>{
         setIsLoading(false);
         toast.success("Successfully updated thresholds", {
           autoClose: 5000,
           hideProgressBar: false,
         })
         fetchData();
-      }).catch((reason: AxiosError)=>{
-      if (reason.response!.status === 401) {
-        logout()
-      } else {
+      }).catch(()=>{
         setIsLoading(false);
         toast.error("Failed to updated thresholds", {
           autoClose: 5000,
           hideProgressBar: false,
         })
-        
-        // Handle else
-      }
     })
   }else{
     //else statement

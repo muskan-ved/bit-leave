@@ -11,13 +11,18 @@ import 'react-toastify/dist/ReactToastify.css';
 import AWS from 'aws-sdk';
 import CSVFileValidator from 'csv-file-validator';
 import authConfig from '../../configs/auth';
-import axios from 'axios'
+
+// ** Redux Import
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { uploadCSVToS3 } from 'src/store/organisation'
 
 const UpdateOrganisation = () => {
 
 	const [array, setArray] = useState([]);
 	const S3_BUCKET = authConfig.bucket_name;
 	const REGION = authConfig.region;
+	const dispatch = useDispatch<AppDispatch>()
 
 	AWS.config.update({
 		accessKeyId: authConfig.accessKeyId,
@@ -296,7 +301,7 @@ const UpdateOrganisation = () => {
 							};
 
 							myBucket.putObject(params)
-								.on('httpUploadProgress', (evt) => {
+								.on('httpUploadProgress', async(evt) => {
 									if (evt) {
 										toast.success("Successfully file uploaded to s3", {
 											autoClose: 5000,
@@ -304,14 +309,7 @@ const UpdateOrganisation = () => {
 										})
 
 										const article = { processIdentifier: fileName };
-										const token = localStorage.getItem("accessToken");
-										axios.post('https://api.bitleave.co/employees/syncOrg', article,
-											{
-												headers: {
-													Authorization: `Bearer ${token}`
-												}
-
-											})
+										await dispatch(uploadCSVToS3(article))
 											.then(response => {
 												if (response) { }
 												toast.success("Successfully processed the update", {
@@ -463,7 +461,7 @@ const UpdateOrganisation = () => {
 				draggable />
 			<Grid item xs={12}>
 				<Card sx={{ mt: 15 }}>
-					<CardHeader title='Upload a CSV file with employee details' style={{ "borderBottom": "2px solid #aaaaaa" }}></CardHeader>
+					<CardHeader title='Import Organisation Data' style={{ "borderBottom": "2px solid #aaaaaa" }}></CardHeader>
 
 					<Box sx={{ m: 3, p: 3 }} className="btndivider">
 						<Button variant="contained" component="label">
