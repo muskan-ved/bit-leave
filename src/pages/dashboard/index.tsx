@@ -1,9 +1,6 @@
 // ** React Imports
 import { SyntheticEvent, useContext, useEffect, useRef, useState } from 'react'
 
-// ** Context
-import { useAuth } from 'src/hooks/useAuth'
-
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
@@ -39,7 +36,7 @@ import { employeeType } from 'src/types/dashboard'
 
 // ** Custom Component Import
 import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
-import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, ChevronDown, ChevronUp, HomeLightbulbOutline, OfficeBuildingOutline, StoreMarkerOutline } from 'mdi-material-ui'
+import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, ChevronDown, ChevronUp, ConsoleNetwork, HomeLightbulbOutline, OfficeBuildingOutline, StoreMarkerOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
@@ -56,10 +53,14 @@ import { useTheme } from '@mui/material/styles'
 
 // ** Icons Import
 import AccountOutline from 'mdi-material-ui/AccountOutline'
+// ** Icons Imports
+import RefreshIcon from '@mui/icons-material/Refresh'
+// ** Redux Import
+import { useSelector, useDispatch } from 'react-redux'
 
 // ** Redux Store Import
-import { useSelector } from 'react-redux'
-import { RootState} from 'src/store'
+import { RootState, AppDispatch } from 'src/store'
+import { loadEmployee } from 'src/store/employee'
 
 // ** Modal Import
 import CashoutDialog from './cashout'
@@ -87,9 +88,13 @@ const Dashboard = () => {
   // ** Hooks
   const ability = useContext(AbilityContext)
 
+  const [data, setData] = useState<employeeType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const dispatch = useDispatch<AppDispatch>()
+
+
   const handleDialogClose = () => {
     setDialogOpen(false)
   }
@@ -100,14 +105,6 @@ const Dashboard = () => {
     alert('here');
     window.open(data?.profile.hrisLogin)
   }
-
-  const statedtaa = useSelector((state: RootState) => state.employee);
-  var data:any = useState<employeeType | null>(null);
-    if(statedtaa){
-      data = statedtaa?.employeeDetail?.data
-    }else{
-      setIsLoading(false);
-    }
 
   const avgExcessDays: number[] = [],
     departmentsOfAverageExcessDays: string[] = [],
@@ -260,7 +257,30 @@ const Dashboard = () => {
   }
 
 
-  useEffect(() => {  
+  const employeeDetails = useSelector((state: RootState) => state.employee);
+
+  const refreshbtn = async () => {
+    fetchDataFromRedux()
+  }
+
+  const fetchDataFromRedux = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+  
+  useEffect(() => {
+    if (employeeDetails?.employeeDetail === null) {
+      fetchDataFromRedux();
+    }else{
+      
+      setData(employeeDetails?.employeeDetail?.data)
+    }
+
     if (count != 1)
       setCount(1);
   }, []);
@@ -287,7 +307,14 @@ const Dashboard = () => {
 
   if (!isLoading && data && data.profile.onboarded) {
     return (
-      <div>
+      <>
+         <Grid container spacing={12} justifyContent={'flex-end'}>
+            <Grid item xs={1}>
+              <Button onClick={refreshbtn}> 
+                  <RefreshIcon />
+                </Button>
+            </Grid>
+          </Grid>
         <Grid container spacing={6}>
           <Grid item md={5} xs={12} >
             <Card>
@@ -375,7 +402,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={4} xs={6} sm={3}>
+          <Grid item md={4} xs={12} sm={12}>
             <Card>
               <CardHeader title='Quick Stats' subheader={<Divider></Divider>} />
               <CardContent sx={{ py: 3 }}>
@@ -386,7 +413,7 @@ const Dashboard = () => {
                   <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
                       <Typography variant='h6' sx={{ mr: 1.75 }}>
-                      ${data.vitals.averageSalary.toFixed(0)}k
+                        ${data.vitals.averageSalary.toFixed(0)}k
                       </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
@@ -470,9 +497,9 @@ const Dashboard = () => {
           </Grid>
         </Grid>
         <br />
-        <Grid container spacing={6}>
+        <Grid container spacing={6} >
           {ability?.can('read', 'analytics') ? (
-            <Grid item md={6} xs={8} >
+            <Grid item md={6} xs={12} >
               <Card sx={{ width: '100%' }}>
                 <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
                 <CardContent>
@@ -481,7 +508,7 @@ const Dashboard = () => {
               </Card>
             </Grid>
           ) : null}
-          <Grid item md={6} xs={8}  >
+          <Grid item md={6} xs={12}  >
             <Card >
               <CardHeader title='Leaves by Direct Reports 📈' subheader={<><Typography variant='body2'>Above the thresholds</Typography><Divider></Divider></>} />
               <CardContent>
@@ -510,7 +537,7 @@ const Dashboard = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data.leavesByOrg.map((row:any, i:number) => (
+                          {data && data.leavesByOrg.map((row: any, i: number) => (
                             <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                               <TableCell component='th' scope='row' >
                                 <CustomAvatar
@@ -536,7 +563,7 @@ const Dashboard = () => {
           ) : null}
         </Grid>
         <CashoutDialog open={dialogOpen} handleClose={handleDialogClose}></CashoutDialog>
-      </div>
+      </>
     )
   }
 }

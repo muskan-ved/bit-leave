@@ -119,7 +119,8 @@ const Profile = () => {
 
 	const StyledTableCell = styled(TableCell)(({ theme }) => ({
 		[`&.${tableCellClasses.head}`]: {
-		  backgroundColor: '#2dcca7',
+     
+	  backgroundColor: theme.palette.primary.main,
 		  color: theme.palette.common.black,
 		 
 		},

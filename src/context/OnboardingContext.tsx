@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
 
-import { loadEmployee } from 'src/store/employee'
 import { getUser, updateOnBoarding } from 'src/store/user'
 
 // ** Axios
@@ -52,11 +51,10 @@ const OnboardingProvider = ({ children }: Props) => {
         const userData = localStorage.getItem("userData")
         let organisationID;
         if (userData != null) {
-          const data = JSON.parse(userData)
+          const data = JSON.parse(userData) 
           organisationID = data.id;
         }
         const organisation = await dispatch(loadOrganisation())
-        const data = await dispatch(loadEmployee())
         if (organisation.payload)
         orgOnBoarding = organisation.payload.data.organisation.active
         else
@@ -85,6 +83,7 @@ const OnboardingProvider = ({ children }: Props) => {
   const value = {
     onboarding
   }
+
   return <OnboardingContext.Provider value={value} >{children}</OnboardingContext.Provider>
 
 
