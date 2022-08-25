@@ -8,7 +8,7 @@ import mock from 'src/@fake-db/mock'
 import { UserDataType } from 'src/context/types'
 
 // ** Config Vars
-import authConfig from '../../configs/auth';
+import API from '../../configs/auth';
 
 const users: UserDataType[] = [
   {
@@ -39,7 +39,7 @@ const jwtConfig = {
   refreshTokenSecret: '7c4c1c50-3230-45bf-9eae-c9b2e401c767'
 }
 
-mock.onPost(`${authConfig.loginEndpoint }`).reply(request => {
+mock.onPost(`${API.loginEndpoint }`).reply(request => {
   const { email } = JSON.parse(request.data)
 
   let error = {
@@ -65,7 +65,7 @@ mock.onPost(`${authConfig.loginEndpoint }`).reply(request => {
   }
 })
 
-mock.onPost(`${authConfig.registerEndpoint }`).reply(request => {
+mock.onPost(`${API.registerEndpoint }`).reply(request => {
   if (request.data.length > 0) {
     const { email, username } = JSON.parse(request.data)
     const isEmailAlreadyInUse = users.find(user => user.email === email)
@@ -108,7 +108,7 @@ mock.onPost(`${authConfig.registerEndpoint }`).reply(request => {
   }
 })
 
-mock.onGet(`${authConfig.meEndpoint }`).reply(config => {
+mock.onGet(`${API.meEndpoint }`).reply(config => {
   // @ts-ignore
   const token = config.headers.Authorization as string
 

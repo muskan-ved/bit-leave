@@ -6,6 +6,9 @@ import axios from 'axios'
 import { thresholds } from 'src/types/thresholds';
 import { userLogout } from '../user';
 
+// ** Config Var
+import API from '../../configs/auth'
+
 interface Redux {
     getState: any
     dispatch: Dispatch<any>,
@@ -18,7 +21,7 @@ export const getExcessLeave = createAsyncThunk('excessLeaveData',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .get('https://api.bitleave.co/organisations/' + id,
+        .get(API.loadOrganisation + id,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -46,7 +49,7 @@ export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .put('https://api.bitleave.co/organisations/thresholds',
+        .put(API.updateThresholds,
           payload,
           {
             headers: {

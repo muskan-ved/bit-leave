@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 
 // ** Config
-import authConfig from 'src/configs/auth'
+import API from 'src/configs/auth'
 
 // ** Types
 import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams,ConfirmPasswordUserParams, ErrCallbackType, UserDataType } from './types'
@@ -22,8 +22,8 @@ import {refreshUserState} from 'src/store/user'
 
 //
 const poolData = {
-  UserPoolId: authConfig.userPoolId,
-  ClientId: authConfig.userPoolAppClientId
+  UserPoolId: API.userPoolId,
+  ClientId: API.userPoolAppClientId
 }
 const UserPool = new CognitoUserPool(poolData);
 
@@ -68,7 +68,7 @@ const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       setIsInitialized(true)
-      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
+      const storedToken = window.localStorage.getItem(API.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
         const userData = window.localStorage.getItem('userData')
@@ -114,13 +114,14 @@ const AuthProvider = ({ children }: Props) => {
           orgId: userClaims.idToken.payload["custom:orgId"],
           userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
-
-        window.localStorage.setItem(authConfig.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
+  console.log(userClaims,"ttttttttttttttttttttttt")
+        window.localStorage.setItem(API.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
         dispatch(refreshUserState(userData))
 
         const returnUrl = router.query.returnUrl
+        
          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
          router.replace(redirectURL as string)
       },
@@ -139,7 +140,7 @@ const AuthProvider = ({ children }: Props) => {
     setCognitoUser(null);
     setIsInitialized(false)
     window.localStorage.removeItem('userData')
-    window.localStorage.removeItem(authConfig.storageTokenKeyName)
+    window.localStorage.removeItem(API.storageTokenKeyName)
     window.localStorage.clear()
     dispatch({ type: 'store/reset' })
     router.push('/login')
@@ -147,7 +148,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
     axios
-      .get(authConfig.apiBaseEndpoint + 'checkorganisations', {
+      .get(API.handleRegister, {
         params: { name: params.companyname }
       })
       .then(res => {

@@ -5,15 +5,7 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
-
-import { getUser, updateOnBoarding } from 'src/store/user'
-
-// ** Axios
-import axios from 'axios'
-
-import { resolve } from 'path'
 import { loadOrganisation } from 'src/store/organisation'
-import { organisation } from 'src/types/organisation'
 
 
 const defaultProvider = {
@@ -48,12 +40,7 @@ const OnboardingProvider = ({ children }: Props) => {
       let orgOnBoarding: boolean
       if (!organisationStore.id) {
         //todo: get it from store
-        const userData = localStorage.getItem("userData")
-        let organisationID;
-        if (userData != null) {
-          const data = JSON.parse(userData) 
-          organisationID = data.id;
-        }
+
         const organisation = await dispatch(loadOrganisation())
         if (organisation.payload)
         orgOnBoarding = organisation.payload.data.organisation.active
@@ -71,7 +58,7 @@ const OnboardingProvider = ({ children }: Props) => {
         }
       }
       else {
-
+       
       }
     }
 

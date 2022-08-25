@@ -289,7 +289,7 @@ const Onboarding = (props: any) => {
     await dispatch(postOrgOnboarding(
       stateData
     ))
-    await dispatch(loadOrganisation())
+    // await dispatch(loadOrganisation())
     router.push('/home')
 
   }
@@ -380,9 +380,9 @@ const Onboarding = (props: any) => {
                 </Typography>
               </Grid>
 
-              <Grid item xs={12} md={8}>
-                <Grid container spacing={6}>
-                  <Grid item xs={12} md={8}>
+              {/* <Grid item xs={12} md={8}> */}
+                <Grid container item spacing={6}>
+                  <Grid item xs={12}>
                     <FormControl fullWidth>
                       <Controller
                         name='leaveNotification'
@@ -407,7 +407,7 @@ const Onboarding = (props: any) => {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={12} md={8}>
+                  <Grid item xs={12} >
                     <FormControl fullWidth>
                       <Controller
                         name='leaveWarning'
@@ -431,7 +431,7 @@ const Onboarding = (props: any) => {
                       )}
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} md={8}>
+                  <Grid item xs={12} >
 
                     <FormControl fullWidth>
                       <Controller
@@ -457,9 +457,8 @@ const Onboarding = (props: any) => {
                     </FormControl>
 
                   </Grid>
-                </Grid>
-
-              </Grid>
+                </Grid> 
+              {/* </Grid> */} 
               <Grid item xs={12} md={6}>
                 <Button type='submit' variant="contained">
                   {activeStep === 0 ? 'Start' : 'Next'}
@@ -482,9 +481,9 @@ const Onboarding = (props: any) => {
                 Who are the key contact in the leave management process?
               </Typography>
             </Grid>
-            <Grid item xs={12} md={8}>
-              <Grid container spacing={6}>
-                <Grid item xs={12} md={8}>
+            {/* <Grid item xs={12} md={8}> */}
+              <Grid container item spacing={6}>
+                <Grid item xs={12}>
                   <FormControl fullWidth>
                     <Controller
                       name='email'
@@ -509,7 +508,7 @@ const Onboarding = (props: any) => {
                     )}
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12}>
                   <FormControl fullWidth>
                     <Controller
                       name='payrollEmail'
@@ -536,7 +535,7 @@ const Onboarding = (props: any) => {
                 </Grid>
 
 
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12}>
                   <FormControl fullWidth>
                     <Controller
                       name='payrollLink'
@@ -560,8 +559,7 @@ const Onboarding = (props: any) => {
                     )}
                   </FormControl>
                 </Grid>
-
-              </Grid>
+                {/*  </Grid> */}
             </Grid>
             <Grid item xs={12}>
               <Button type='submit' variant="contained">
@@ -772,7 +770,7 @@ const Onboarding = (props: any) => {
           </Stepper>
         </StepperWrapper>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={10}>
         <Grid container>
           <Grid item xs={12}>
             <StepperContentWrapper>

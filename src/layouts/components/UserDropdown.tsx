@@ -31,7 +31,7 @@ import { useAuth } from 'src/hooks/useAuth'
 import { Settings } from 'src/@core/context/settingsContext'
 
 // ** Config
-import authConfig from 'src/configs/auth'
+import API from 'src/configs/auth'
 
 interface Props {
   settings: Settings
@@ -48,7 +48,7 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 
 const UserDropdown = (props: Props) => {
 
-  const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)
+  const storedToken = window.localStorage.getItem(API.storageTokenKeyName)
   const userData = window.localStorage.getItem('userData')
 
   let userName = "";

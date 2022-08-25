@@ -308,11 +308,14 @@ const Dashboard = () => {
   if (!isLoading && data && data.profile.onboarded) {
     return (
       <>
-         <Grid container spacing={12} justifyContent={'flex-end'}>
-            <Grid item xs={1}>
-              <Button onClick={refreshbtn}> 
-                  <RefreshIcon />
-                </Button>
+         <Grid container spacing={9}>
+            <Grid item xs={12} mb={5} sx={{textAlign:"right"}}>
+            <Box sx={{maxWidth: 'inherit'}}>
+              <Button variant='contained' onClick={refreshbtn}> 
+                  <RefreshIcon sx={{fontSize: '1.1rem',mr:'4px'}}/>Refresh
+              </Button>
+            </Box>
+            <Divider></Divider>
             </Grid>
           </Grid>
         <Grid container spacing={6}>

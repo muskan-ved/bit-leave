@@ -7,6 +7,9 @@ import { OnboardingType } from 'src/types/onboarding'
 import { show } from '../apiError'
 import { updateOnBoarding, userLogout } from '../user'
 
+// ** Config Var
+import API from '../../configs/auth'
+
 interface Redux {
   getState: any
   dispatch: Dispatch<any>
@@ -19,7 +22,7 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
 
     try {
       const response = await axios
-        .post('https://api.bitleave.co/organisations/onboarding',
+        .post(API.postOrgOnboarding,
           params,
           {
             headers: {

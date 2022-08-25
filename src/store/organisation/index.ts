@@ -3,17 +3,27 @@ import axios from "axios";
 import { organisation } from "src/types/organisation";
 import { show } from "../apiError";
 import { userLogout } from "../user";
+import API from "../../configs/auth";
 interface Redux {
   getState: any
-  dispatch: Dispatch<any>,
-
+  dispatch: Dispatch<any>
 }
 export const loadOrganisation = createAsyncThunk('organisations/load',
   async (_params: void, { dispatch, getState }: Redux) => {
+
     const token = localStorage.getItem("accessToken");
+    const userData = localStorage.getItem("userData")
+    var organisationId;
+    if (userData != null) {
+      organisationId = JSON.parse(userData)
+    }
+    const orgvarId = getState().user.orgId
+    const empId = orgvarId !== null? orgvarId : organisationId.orgId;
+
     try {
+      
       const result = await axios
-        .get('https://api.bitleave.co/organisations/1', {
+         .get(API.loadOrganisation + empId, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
 
@@ -45,7 +55,7 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
     const token = localStorage.getItem("accessToken");
     try {
       const result = await axios
-        .post('https://api.bitleave.co/employees/syncOrg',params, {
+        .post(API.uploadCSVToS3,params, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       return result.data
@@ -76,12 +86,12 @@ const organisationSlice = createSlice({
   extraReducers: builder => {
     builder.addCase(loadOrganisation.fulfilled, (state, action) => {
       if (action.payload) {
-        const payload = action.payload.data
-        state.id = payload.organisation.id
-        state.active = payload.organisation.active
-        state.exit_date = payload.organisation.exit_date
-        state.name = payload.organisation.name
-        state.onboard_date = payload.organisation.onboard_date
+        // const payload = action.payload.data
+        // state.id = payload.organisation.id
+        // state.active = payload.organisation.active
+        // state.exit_date = payload.organisation.exit_date
+        // state.name = payload.organisation.name
+        // state.onboard_date = payload.organisation.onboard_date
       }
     })
 

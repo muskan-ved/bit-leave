@@ -7,6 +7,9 @@ import { employeeCashOut, employee } from 'src/types/employee'
 import { show } from '../apiError'
 import { updateOnBoarding, userLogout } from '../user'
 
+// ** Config Var
+import API from '../../configs/auth'
+
 interface Redux {
   getState: any
   dispatch: Dispatch<any>,
@@ -22,7 +25,7 @@ export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .put('https://api.bitleave.co/employees/onboarding',
+        .put(API.postEmployeeOnboarding,
           payload,
           {
             headers: {
@@ -53,7 +56,7 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .post('https://api.bitleave.co/employeeactions/cashout',
+        .post(API.postEmployeeCashout,
           params,
           {
             headers: {
@@ -84,7 +87,7 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
       const token = localStorage.getItem("accessToken");
       var data = { days: params };
       const result = await axios
-        .post('https://api.bitleave.co/employeeactions/calculate', data, {
+        .post(API.calculateEmployeeCashout, data, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       console.log(result);
@@ -110,7 +113,7 @@ export const getCashOutContract = createAsyncThunk('emp/cashoutcontract',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .post('https://api.bitleave.co/employeeactions/cashoutcontract',
+        .post(API.getCashOutContract,
           params,
           {
             headers: {
@@ -144,8 +147,9 @@ export const loadEmployee = createAsyncThunk('emp/load',
       user = JSON.parse(userData)
     }
     const employeeId = getState().user.id
+    const empId = employeeId !== null? employeeId : user.id;
     const result = await axios
-      .get('https://api.bitleave.co/employees/' + (employeeId !== null? employeeId : user.id ), {
+      .get(API.loadEmployee + empId, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
    // console.log(result.data)
@@ -170,7 +174,7 @@ export const listEmployee = createAsyncThunk('emp/list',
     const token = localStorage.getItem("accessToken");
     try{
     const result = await axios
-      .get('https://api.bitleave.co/employees/list', {
+      .get(API.listEmployee, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
    // console.log(result.data)

@@ -38,6 +38,9 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
 
+// ** config import
+import API from '../../configs/auth'
+
 const Templates = () => {
   // ** State
   const [value, setValue] = useState<string>('0')
@@ -48,8 +51,7 @@ const Templates = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const token = localStorage.getItem("accessToken")
-  const baseUrl = 'https://api.bitleave.co/organisations/'
-  const updateBaseUrl = "https://api.bitleave.co/organisations/templates"
+
   if (firstexpanded) { }
 
   useEffect(() => {
@@ -60,6 +62,7 @@ const Templates = () => {
   const { logout } = useAuth()
 
   const fetchData = async () => {
+   
     const userData = localStorage.getItem("userData")
     let id;
     if (userData != null) {
@@ -67,7 +70,7 @@ const Templates = () => {
       id = data.orgId;
     }
     axios
-      .get(baseUrl + id, {
+      .get(API.loadOrganisation + id, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
@@ -112,7 +115,7 @@ const Templates = () => {
     const data = {
       "organisationstemplates": organisationstemplates
     }
-    axios.put(updateBaseUrl, data, {
+    axios.put(API.updateTemplateData, data, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {

@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+import API from 'src/configs/auth';
 import { actionApproval } from 'src/types/actionApproval';
 
 // ** Logout function
@@ -20,7 +21,7 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .get('https://api.bitleave.co/employeeactions/' + id,
+        .get(API.cashoutActionApproval + id,
           {
             headers: {
               'Authorization': `Bearer ${token}`
