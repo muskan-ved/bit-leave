@@ -39,7 +39,7 @@ import ChevronDown from 'mdi-material-ui/ChevronDown'
 import { useAuth } from 'src/hooks/useAuth'
 
 // ** config import
-import API from '../../configs/auth'
+import API from '../../configs/apiEndpoints'
 
 const Templates = () => {
   // ** State
@@ -69,6 +69,8 @@ const Templates = () => {
       const data = JSON.parse(userData)
       id = data.orgId;
     }
+
+
     axios
       .get(API.loadOrganisation + id, {
         headers: { 'Authorization': `Bearer ${token}` }

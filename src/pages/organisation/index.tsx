@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AWS from 'aws-sdk';
 import CSVFileValidator from 'csv-file-validator';
-import API from '../../configs/auth';
+import auth from '../../configs/auth';
 
 // ** Redux Import
 import { useDispatch } from 'react-redux'
@@ -20,13 +20,13 @@ import { uploadCSVToS3 } from 'src/store/organisation'
 const UpdateOrganisation = () => {
 
 	const [array, setArray] = useState([]);
-	const S3_BUCKET = API.bucket_name;
-	const REGION = API.region;
+	const S3_BUCKET = auth.bucket_name;
+	const REGION = auth.region;
 	const dispatch = useDispatch<AppDispatch>()
 
 	AWS.config.update({
-		accessKeyId: API.accessKeyId,
-		secretAccessKey: API.secretAccessKey,
+		accessKeyId: auth.accessKeyId,
+		secretAccessKey: auth.secretAccessKey,
 	})
 
 	const myBucket = new AWS.S3({

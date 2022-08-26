@@ -4,7 +4,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import SignaturePad from 'react-signature-canvas';
 import React, { ReactNode, useRef } from 'react';
-import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
+import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, LinkProps, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import * as yup from 'yup'
 import { Controller, useForm } from 'react-hook-form';
@@ -157,64 +157,54 @@ const Onboarding = (props: any) => {
     switch (complianceSelected) {
       case 'award':
         return (<Paper elevation={0}>
-
-
-          <Typography variant="subtitle2" component="div" gutterBottom>
+          <Typography variant="subtitle2"  sx={{pl:8}}>
             Most awards stipulate that when cashing out excess leave that:
-          </Typography>
-          <List>
-            <ListItem >
-              <ListItemText primary={"at least 4 weeks annual leave must be left after the cash out"}></ListItemText>
-
+          <List >
+            <ListItem sx={{pt:0,pb:0}} >1. 
+              <ListItemText  secondary={"At least 4 weeks annual leave must be left after the cash out."} sx={{ marginLeft: '4px'}}></ListItemText>
             </ListItem>
-            <ListItem>
-              <ListItemText primary={"an employee can't cash out more than 2 weeks each 12 months"}></ListItemText>
-
+            <ListItem sx={{pt:0,pb:0}}>2. 
+              <ListItemText secondary={"An employee can't cash out more than 2 weeks each 12 months."} sx={{ marginLeft: '4px'}}></ListItemText>
             </ListItem>
           </List>
-          <Typography variant="subtitle2" component="div" gutterBottom>
-            You can find your relevant award <Link target={"_blank"} href={"https://google.com"}>here</Link> and find your excess leave cash out rules <Link target={"_blank"} href={"https://google.com"}>here</Link>.
+          <Typography variant="subtitle2" component="div" gutterBottom >
+            You can find your relevant award <Link target={"_blank"} href={"https://google.com"} style={{color:'red !important'}} >Here</Link> and find your excess leave cash out rules <Link target={"_blank"} href={"https://google.com"} >Here</Link>.
+          </Typography>
           </Typography>
         </Paper>)
       case 'enterpriseAgreement':
-        return (<Box pt={3}>
-          <Typography variant="subtitle2" component="div" gutterBottom >
+        return (
+          <Typography variant="subtitle2" component="div" sx={{pl:8}}>
             Generic excess leave cash out rules for Enterprise Agreements:
-          </Typography>
           <List>
-            <ListItem >
-              <ListItemText primary={"Annual leave can only be cashed out when a registered agreement allows it"}></ListItemText>
-
+            <ListItem sx={{pt:0,pb:0}}>1.
+              <ListItemText secondary={"Annual leave can only be cashed out when a registered agreement allows it."} sx={{ marginLeft: '4px'}}></ListItemText>
             </ListItem>
-            <ListItem>
-              <ListItemText primary={"an employee need to have at least 4 weeks annual leave left over"}></ListItemText>
-
+            <ListItem sx={{pt:0,pb:0}}>2.
+              <ListItemText secondary={"An employee need to have at least 4 weeks annual leave left over."} sx={{ marginLeft: '4px'}}></ListItemText>
             </ListItem>
           </List>
-
           <Typography variant="subtitle2" component="div" gutterBottom >
-            You will need to confirm that your agreement allows cash out
+            You will need to confirm that your agreement allows cash out.
+          </Typography>
           </Typography>
 
-        </Box>)
+        )
       case 'awardFree':
-        return (<Box pt={3}>
-          <Typography variant="subtitle2" component="div" gutterBottom >
+        return (
+          <Typography variant="subtitle2" component="div" sx={{pl:8}} >
             An award and agreement free employee can make an agreement with their employer
-            to cash out their annual leave
-          </Typography>
-          <Typography variant="subtitle2" component="div" gutterBottom >
-            If:
-          </Typography>
+            to cash out their annual leave.
           <List>
-            <ListItem >
-              <ListItemText primary={"an employee need to have at least 4 weeks annual leave left over"}></ListItemText>
+            <ListItem  sx={{pt:0,pb:0}}>If:
+              <ListItemText secondary={"An employee need to have at least 4 weeks annual leave left over."} sx={{ marginLeft: '4px'}}></ListItemText>
             </ListItem>
           </List>
           <Typography variant="subtitle2" component="div" gutterBottom>
-            You can learn more about cash out rules <Link target={"_blank"} href={"https://google.com"}>here</Link>
+            You can learn more about cash out rules <Link target={"_blank"} href={"https://google.com"}>Here.</Link>
           </Typography>
-        </Box>)
+          </Typography>
+       )
       default:
         return (null);
     }
@@ -289,7 +279,7 @@ const Onboarding = (props: any) => {
     await dispatch(postOrgOnboarding(
       stateData
     ))
-    // await dispatch(loadOrganisation())
+    await dispatch(loadOrganisation())
     router.push('/home')
 
   }
@@ -315,16 +305,16 @@ const Onboarding = (props: any) => {
         return (
           <form key={0} onSubmit={handleComplianceSubmit(onComplianceSubmit, onError)}>
             <Grid container spacing={5}>
-              <Grid item xs={12}>
-                <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }} gutterBottom>
+              <Grid item xs={12} >
+                <Typography variant='h5' sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }} gutterBottom >
                   Compliance
                 </Typography>
-                <Typography variant='body2' gutterBottom>
+                <Typography variant='body2' sx={{pt:0}} >
                   Are your employees on an award, enterprise agreement or award free?
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <FormControl fullWidth>
+                <FormControl fullWidth className='rrrrr'>
                   <Controller
                     rules={{ required: true }}
                     control={complianceControl}
@@ -358,6 +348,8 @@ const Onboarding = (props: any) => {
                   )}
                 </FormControl>
                 {getComplianceContent()}
+                </Grid>
+              <Grid item xs={12}>
                 <Button type='submit' variant="contained">
                   {activeStep === 0 ? 'Start' : 'Next'}
                 </Button>
@@ -380,9 +372,9 @@ const Onboarding = (props: any) => {
                 </Typography>
               </Grid>
 
-              {/* <Grid item xs={12} md={8}> */}
-                <Grid container item spacing={6}>
-                  <Grid item xs={12}>
+              <Grid item xs={12} md={8}>
+                <Grid container spacing={6}>
+                  <Grid item xs={12} md={8}>
                     <FormControl fullWidth>
                       <Controller
                         name='leaveNotification'
@@ -407,7 +399,7 @@ const Onboarding = (props: any) => {
                     </FormControl>
                   </Grid>
 
-                  <Grid item xs={12} >
+                  <Grid item xs={12} md={8}>
                     <FormControl fullWidth>
                       <Controller
                         name='leaveWarning'
@@ -431,7 +423,7 @@ const Onboarding = (props: any) => {
                       )}
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} >
+                  <Grid item xs={12} md={8}>
 
                     <FormControl fullWidth>
                       <Controller
@@ -457,8 +449,9 @@ const Onboarding = (props: any) => {
                     </FormControl>
 
                   </Grid>
-                </Grid> 
-              {/* </Grid> */} 
+                </Grid>
+
+              </Grid>
               <Grid item xs={12} md={6}>
                 <Button type='submit' variant="contained">
                   {activeStep === 0 ? 'Start' : 'Next'}
@@ -481,9 +474,9 @@ const Onboarding = (props: any) => {
                 Who are the key contact in the leave management process?
               </Typography>
             </Grid>
-            {/* <Grid item xs={12} md={8}> */}
-              <Grid container item spacing={6}>
-                <Grid item xs={12}>
+            <Grid item xs={12} md={8}>
+              <Grid container spacing={6}>
+                <Grid item xs={12} md={8}>
                   <FormControl fullWidth>
                     <Controller
                       name='email'
@@ -508,7 +501,7 @@ const Onboarding = (props: any) => {
                     )}
                   </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={8}>
                   <FormControl fullWidth>
                     <Controller
                       name='payrollEmail'
@@ -535,7 +528,7 @@ const Onboarding = (props: any) => {
                 </Grid>
 
 
-                <Grid item xs={12}>
+                <Grid item xs={12} md={8}>
                   <FormControl fullWidth>
                     <Controller
                       name='payrollLink'
@@ -559,7 +552,8 @@ const Onboarding = (props: any) => {
                     )}
                   </FormControl>
                 </Grid>
-                {/*  </Grid> */}
+
+              </Grid>
             </Grid>
             <Grid item xs={12}>
               <Button type='submit' variant="contained">
@@ -770,7 +764,7 @@ const Onboarding = (props: any) => {
           </Stepper>
         </StepperWrapper>
       </Grid>
-      <Grid item xs={10}>
+      <Grid item xs={9}>
         <Grid container>
           <Grid item xs={12}>
             <StepperContentWrapper>

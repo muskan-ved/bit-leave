@@ -7,7 +7,7 @@ import { thresholds } from 'src/types/thresholds';
 import { userLogout } from '../user';
 
 // ** Config Var
-import API from '../../configs/auth'
+import API from '../../configs/apiEndpoints'
 
 interface Redux {
     getState: any
@@ -17,6 +17,7 @@ interface Redux {
 
 export const getExcessLeave = createAsyncThunk('excessLeaveData',
   async (id: any, { dispatch, getState }: Redux) => {
+
  
     try {
       const token = localStorage.getItem("accessToken");

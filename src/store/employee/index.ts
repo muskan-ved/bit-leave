@@ -8,7 +8,7 @@ import { show } from '../apiError'
 import { updateOnBoarding, userLogout } from '../user'
 
 // ** Config Var
-import API from '../../configs/auth'
+import API from '../../configs/apiEndpoints'
 
 interface Redux {
   getState: any

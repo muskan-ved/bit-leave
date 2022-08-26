@@ -3,7 +3,7 @@ import axios from "axios";
 import { organisation } from "src/types/organisation";
 import { show } from "../apiError";
 import { userLogout } from "../user";
-import API from "../../configs/auth";
+import API from "../../configs/apiEndpoints";
 interface Redux {
   getState: any
   dispatch: Dispatch<any>
