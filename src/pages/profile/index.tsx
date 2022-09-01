@@ -5,7 +5,7 @@ import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 // ** MUI Imports
-import { Typography, Box, Grid, CardHeader, Card, CardContent, Divider, styled, AvatarProps, FormControl, Button, TextField, InputAdornment, CircularProgress, Tabs, TableContainer,Table,TableBody,TableCell,TableHead,TableRow,Paper, tableCellClasses } from '@mui/material';
+import { Typography, Box, Grid, CardHeader, Card, CardContent, Divider, styled, AvatarProps, Button, TextField, InputAdornment, CircularProgress, Tabs, TableContainer,Table,TableBody,TableCell,TableHead,TableRow,Paper, tableCellClasses } from '@mui/material';
 
 // ** Custom Components Imports
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -37,12 +37,10 @@ const Profile = () => {
 	const [value, setValue] = useState<number>(0)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [employeeData, setemployeeData] = useState<any>('')
-
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
 	const getTabList = ['Profile Detail', 'Direct Reports', 'Team']
-
 	interface TabPanelProps {
 		children?: React.ReactNode;
 		index: number;

@@ -1,5 +1,5 @@
 // ** Icon imports
-import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingOutline, OfficeBuildingMarkerOutline, HelpCircleOutline } from 'mdi-material-ui'
+import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline } from 'mdi-material-ui'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'

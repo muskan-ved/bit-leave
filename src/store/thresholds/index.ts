@@ -61,7 +61,6 @@ export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
       return response.data
     }
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
             console.log("No Server Response");

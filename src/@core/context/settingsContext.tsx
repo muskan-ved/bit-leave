@@ -15,7 +15,7 @@ export type Settings = {
   appBar?: AppBar
   footer?: Footer
   mode: PaletteMode
-  navHidden?: boolean // navigation menu
+  navHidden?: boolean 
   appBarBlur: boolean
   direction: Direction
   navCollapsed: boolean
@@ -32,7 +32,7 @@ export type PageSpecificSettings = {
   appBar?: AppBar
   footer?: Footer
   mode?: PaletteMode
-  navHidden?: boolean // navigation menu
+  navHidden?: boolean 
   appBarBlur?: boolean
   direction?: Direction
   navCollapsed?: boolean

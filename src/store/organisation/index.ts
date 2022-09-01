@@ -85,18 +85,8 @@ const organisationSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(loadOrganisation.fulfilled, (state, action) => {
-      if (action.payload) {
-        // const payload = action.payload.data
-        // state.id = payload.organisation.id
-        // state.active = payload.organisation.active
-        // state.exit_date = payload.organisation.exit_date
-        // state.name = payload.organisation.name
-        // state.onboard_date = payload.organisation.onboard_date
-      }
     })
-
     builder.addCase(uploadCSVToS3.fulfilled, (state, action) => {
-     
     })
   }
 })

@@ -8,8 +8,7 @@ import { show } from '../apiError'
 import { updateOnBoarding, userLogout } from '../user'
 
 // ** Config Var
-import API from '../../configs/auth'
-
+import API from '../../configs/apiEndpoints'
 interface Redux {
   getState: any
   dispatch: Dispatch<any>
@@ -34,10 +33,7 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
       return response.data
     }
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
             console.log("No Server Response");
          } else if (err.response?.status === 401) {

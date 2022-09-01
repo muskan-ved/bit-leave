@@ -326,26 +326,6 @@ const Home = () => {
           </CardContent>
         </Card>
       </Grid>
-
-      {/* <Grid item xs={6}>
-        <Card>
-          <CardHeader title='Resources'></CardHeader>
-          <CardContent>
-            <Box
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                '& > :not(style)': {
-                  m: 1,
-                  width: 128,
-                  height: 128,
-                },
-              }}
-            >
-            </Box>
-          </CardContent>
-        </Card>
-      </Grid> */}
     </Grid>
   )
 }

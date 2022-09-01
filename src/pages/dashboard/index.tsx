@@ -1,5 +1,5 @@
 // ** React Imports
-import { SyntheticEvent, useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -24,9 +24,6 @@ import Box from '@mui/material/Box'
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
-// ** Custom Component Import
-import CardStatisticsVertical from 'src/@core/components/card-statistics/card-stats-vertical'
-
 // ** Utils Import
 import { getInitials } from 'src/@core/utils/get-initials'
 
@@ -35,8 +32,7 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import { employeeType } from 'src/types/dashboard'
 
 // ** Custom Component Import
-import CardStatisticsCharacter from 'src/@core/components/card-statistics/card-stats-with-image'
-import { AccountAlertOutline, BagPersonalOutline, CartArrowRight, ChevronDown, ChevronUp, ConsoleNetwork, HomeLightbulbOutline, OfficeBuildingOutline, StoreMarkerOutline } from 'mdi-material-ui'
+import { AccountAlertOutline, BagPersonalOutline, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
@@ -87,22 +83,19 @@ const Dashboard = () => {
 
   // ** Hooks
   const ability = useContext(AbilityContext)
-
   const [data, setData] = useState<employeeType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
 
-
   const handleDialogClose = () => {
     setDialogOpen(false)
   }
-  const cashoutLeaveButtonClick = (event: SyntheticEvent) => {
+  const cashoutLeaveButtonClick = () => {
     setDialogOpen(true)
   }
-  const takeLeaveButtonClick = (event: SyntheticEvent) => {
-    alert('here');
+  const takeLeaveButtonClick = () => {
     window.open(data?.profile.hrisLogin)
   }
 
@@ -203,8 +196,7 @@ const Dashboard = () => {
   const options1: ApexOptions = {
     chart: {
       parentHeightOffset: 0,
-      toolbar: { show: false },
-      id: "muskan"
+      toolbar: { show: false }
     },
     plotOptions: {
       bar: {
@@ -277,10 +269,8 @@ const Dashboard = () => {
     if (employeeDetails?.employeeDetail === null) {
       fetchDataFromRedux();
     }else{
-      
       setData(employeeDetails?.employeeDetail?.data)
     }
-
     if (count != 1)
       setCount(1);
   }, []);
@@ -380,7 +370,6 @@ const Dashboard = () => {
                     </Box>
                   </Grid>
                 </Grid>
-
               </CardContent>
             </Card>
           </Grid>
@@ -440,12 +429,6 @@ const Dashboard = () => {
                       <Typography variant='h6' sx={{ mr: 1.75 }}>
                         {data.vitals.totalLeaveLiabilities.toFixed(2)}
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant='subtitle2' sx={{ color: 'error.main' }}>
-                          {/* -8% */}
-                        </Typography>
-                        {/* <ChevronDown fontSize='small' sx={{ color: 'error.main' }} /> */}
-                      </Box>
                     </Box>
                     <Typography variant='body2'>Total Leave Liabilities (days)</Typography>
                   </Grid>
@@ -462,12 +445,6 @@ const Dashboard = () => {
                       <Typography variant='h6' sx={{ mr: 1.75 }}>
                         {data.vitals.headcount}
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant='subtitle2' sx={{ color: 'error.main' }}>
-                          {/* -8% */}
-                        </Typography>
-                        {/* <ChevronDown fontSize='small' sx={{ color: 'error.main' }} /> */}
-                      </Box>
                     </Box>
                     <Typography variant='body2'>Organisational Headcount</Typography>
                   </Grid>
@@ -484,12 +461,6 @@ const Dashboard = () => {
                       <Typography variant='h6' sx={{ mr: 1.75 }}>
                         4
                       </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant='subtitle2' sx={{ color: 'error.main' }}>
-                          {/* -8% */}
-                        </Typography>
-                        {/* <ChevronDown fontSize='small' sx={{ color: 'error.main' }} /> */}
-                      </Box>
                     </Box>
                     <Typography variant='body2'>Leave Mobilesed (Days)</Typography>
                   </Grid>

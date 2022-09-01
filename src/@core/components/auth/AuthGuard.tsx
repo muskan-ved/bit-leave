@@ -9,7 +9,6 @@ import { useAuth } from 'src/hooks/useAuth'
 import { AppDispatch } from 'src/store'
 import { useDispatch } from 'react-redux'
 import { refreshUserState } from 'src/store/user'
-
 interface AuthGuardProps {
   children: ReactNode
   fallback: ReactElement | null
@@ -42,7 +41,6 @@ const AuthGuard = (props: AuthGuardProps) => {
       if (userData != null) {
         dispatch(refreshUserState(JSON.parse(userData)))
       }
-      
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.route]

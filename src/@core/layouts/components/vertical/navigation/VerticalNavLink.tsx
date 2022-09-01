@@ -41,8 +41,6 @@ interface Props {
   isSubToSub?: NavGroup | undefined
 }
 
-
-
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)<
   ListItemButtonProps & { component?: ElementType; target?: '_blank' | undefined }
@@ -63,12 +61,6 @@ const MenuNavLink = styled(ListItemButton)<
     }
   }
 }))
-
-const StyledLink = styled('span')({
-  display: 'flex',
-  // alignItems: 'center',
-  textDecoration: 'none'
-})
 
 const MenuItemTextMetaWrapper = styled(Box)<BoxProps>({
   width: '100%',

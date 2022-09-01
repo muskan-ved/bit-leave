@@ -3,8 +3,8 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import SignaturePad from 'react-signature-canvas';
-import React, { ReactNode, useRef } from 'react';
-import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, Icon, IconButton, InputLabel, LinkProps, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
+import React, { ReactNode } from 'react';
+import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormHelperText, Grid,IconButton, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import * as yup from 'yup'
 import { Controller, useForm } from 'react-hook-form';
@@ -12,15 +12,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Paper from '@mui/material/Paper';
 import { Check, Eraser } from 'mdi-material-ui';
 import { postOrgOnboarding } from 'src/store/onboarding';
-import { AppDispatch, RootState } from 'src/store';
-import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from 'src/store';
+import { useDispatch } from 'react-redux'
 import BlankLayoutWithAppBarWrapper from 'src/@core/layouts/BlankLayoutWithAppBar';
 import { useRouter } from 'next/router';
 import { loadOrganisation } from 'src/store/organisation';
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  // height: '100%',
-  // display: 'flex',
   padding: theme.spacing(7)
 }))
 
@@ -88,7 +86,7 @@ const approvalSchema = yup.object().shape({
 })
 
 
-const Onboarding = (props: any) => {
+const Onboarding = () => {
 
   const steps = ['Start', 'Compliance', 'Thresholds', 'Contacts', 'Approval'];
   const [activeStep, setActiveStep] = React.useState(0);
@@ -151,7 +149,7 @@ const Onboarding = (props: any) => {
   const handleNext = () => { setActiveStep((prevActiveStep) => prevActiveStep + 1); };
 
   const dispatch = useDispatch<AppDispatch>()
-  const store = useSelector((state: RootState) => state.onboarding)
+
 
   const getComplianceContent = () => {
     switch (complianceSelected) {
@@ -249,7 +247,6 @@ const Onboarding = (props: any) => {
       maxPayout: data.maxPayout
     }
     setOnBoardingState(stateData)
-    console.log(stateData)
     handleNext()
   }
   const onStart = () => {
@@ -748,7 +745,7 @@ const Onboarding = (props: any) => {
       <Grid item xs={2}>
         <StepperWrapper>
           <Stepper activeStep={activeStep} orientation='vertical'>
-            {steps.map((label, index) => {
+            {steps.map((label) => {
               const stepProps: { completed?: boolean; } = {};
               const labelProps: {
                 optional?: React.ReactNode;

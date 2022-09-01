@@ -1,9 +1,6 @@
 // ** React Imports
 import {  useEffect, useState } from 'react'
 
-// ** Context
-import { useAuth } from 'src/hooks/useAuth'
-
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
@@ -102,7 +99,6 @@ const Thresholds = () => {
   }else{
     //else statement
   }
-
   }
 
   if (isLoading)

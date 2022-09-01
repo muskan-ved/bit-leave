@@ -8,7 +8,8 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 
 // ** Config
-import API from 'src/configs/auth'
+import API from 'src/configs/apiEndpoints'
+import Auth from 'src/configs/auth'
 
 // ** Types
 import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams,ConfirmPasswordUserParams, ErrCallbackType, UserDataType } from './types'
@@ -17,13 +18,13 @@ import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendC
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
 import { resolve } from 'path'
 import { AppDispatch } from 'src/store'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {refreshUserState} from 'src/store/user'
 
 //
 const poolData = {
-  UserPoolId: API.userPoolId,
-  ClientId: API.userPoolAppClientId
+  UserPoolId: Auth.userPoolId,
+  ClientId: Auth.userPoolAppClientId
 }
 const UserPool = new CognitoUserPool(poolData);
 
@@ -64,11 +65,10 @@ const AuthProvider = ({ children }: Props) => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       setIsInitialized(true)
-      const storedToken = window.localStorage.getItem(API.storageTokenKeyName)!
+      const storedToken = window.localStorage.getItem(Auth.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
         const userData = window.localStorage.getItem('userData')
@@ -87,19 +87,16 @@ const AuthProvider = ({ children }: Props) => {
   }, [])
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
-
     const user = new CognitoUser({
       Username: params.email,
       Pool: UserPool
     });
 
-    //
     const authDetails = new AuthenticationDetails({
       Username: params.email,
       Password: params.password
     });
 
-    //
     user.authenticateUser(authDetails, {
       onSuccess: (data) => {
         const userClaims = JSON.parse(JSON.stringify(data));
@@ -114,14 +111,12 @@ const AuthProvider = ({ children }: Props) => {
           orgId: userClaims.idToken.payload["custom:orgId"],
           userOnboarded: userClaims.idToken.payload["custom:userOnboarded"]
         }
-  console.log(userClaims,"ttttttttttttttttttttttt")
-        window.localStorage.setItem(API.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
+        window.localStorage.setItem(Auth.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
         dispatch(refreshUserState(userData))
 
         const returnUrl = router.query.returnUrl
-        
          const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
          router.replace(redirectURL as string)
       },
@@ -140,7 +135,7 @@ const AuthProvider = ({ children }: Props) => {
     setCognitoUser(null);
     setIsInitialized(false)
     window.localStorage.removeItem('userData')
-    window.localStorage.removeItem(API.storageTokenKeyName)
+    window.localStorage.removeItem(Auth.storageTokenKeyName)
     window.localStorage.clear()
     dispatch({ type: 'store/reset' })
     router.push('/login')
@@ -263,7 +258,6 @@ const AuthProvider = ({ children }: Props) => {
     }
 
    const userEmail = props.emailId
-   // const userEmail= window.localStorage.getItem("userEmail")
      if(userEmail!= null){
         const user = new CognitoUser({
         Username: userEmail as string,

@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContentText from '@mui/material/DialogContentText'
 import LoadingButton from '@mui/lab/LoadingButton';
-import Box, { BoxProps } from '@mui/material/Box'
+import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
 import React from 'react'
@@ -17,7 +17,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 import { FormHelperText, IconButton, InputAdornment, useMediaQuery, useTheme } from '@mui/material'
-import { Eraser, Close, Grid } from 'mdi-material-ui'
+import { Eraser, Close } from 'mdi-material-ui'
 import SignaturePad from 'react-signature-canvas';
 import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } from 'src/store/employee'
 import { ApiResult, error } from 'src/types/error'
@@ -25,527 +25,487 @@ import { ApiResult, error } from 'src/types/error'
 // MUI Icon
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-
-function Item(props: BoxProps) {
-  const { sx, ...other } = props;
-  return (
-    <Box
-    {...other}
-    sx={{
-      p: 1,
-      m: 1,
-      fontSize: '0.875rem',
-      ...sx,
-    }}
-    />
-  );
-}
-
 interface cashoutResultModel {
-  success: boolean
+	success: boolean
 }
 
 const defaultCashoutApiResult: ApiResult<cashoutResultModel> = {
-  data: {
-    success: false
-  },
-  errors: null
+	data: {
+		success: false
+	},
+	errors: null
 }
 interface CashOutState {
-  cashoutdays: number | null,
-  signature: string,
-  cashoutreason: string
+	cashoutdays: number | null,
+	signature: string,
+	cashoutreason: string
 }
 
 const defaultCashoutValue = {
-  cashoutdays: null,
-  cashoutreason: ''
+	cashoutdays: null,
+	cashoutreason: ''
 }
 
 const defaultSignatureValue = {
-  signature: ''
+	signature: ''
 }
 
 const CashOutSchema = yup.object().shape({
-  cashoutdays: yup.number().required().positive().integer(),
-  cashoutreason: yup.string().required(),
+	cashoutdays: yup.number().required().positive().integer(),
+	cashoutreason: yup.string().required(),
 })
 
 const SignatureSchema = yup.object().shape({
-  signature: yup.string().required()
+	signature: yup.string().required()
 })
 
 const CashoutDialog = (props: any) => {
-  const [activeStep, setActiveStep] = React.useState(0)
-  const [calculateAmount, setcalculateAmount] = React.useState(null)
-  const [cashoutApiResponse, setcashoutApiResponse] = React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
-  const [employeeContract, setemployeeContract] = React.useState('')
-  const [loading, setloading] = React.useState(false)
-  const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout]=React.useState(null)
-  const [cashoutError,setcashoutError] =React.useState(false)
-  const [toggleValue,setToggleValue] =React.useState(false)
-  
+	const [activeStep, setActiveStep] = React.useState(0)
+	const [calculateAmount, setcalculateAmount] = React.useState(null)
+	const [cashoutApiResponse, setcashoutApiResponse] = React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
+	const [employeeContract, setemployeeContract] = React.useState('')
+	const [loading, setloading] = React.useState(false)
+	const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null)
+	const [toggleValue, setToggleValue] = React.useState(false)
 
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const dispatch = useDispatch<AppDispatch>()
-  const [cashout, setcashoutState] = React.useState<CashOutState>({
-    cashoutdays: null,
-    cashoutreason: '',
-    signature: ''
-  });
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+	const dispatch = useDispatch<AppDispatch>()
+	const [cashout, setcashoutState] = React.useState<CashOutState>({
+		cashoutdays: null,
+		cashoutreason: '',
+		signature: ''
+	});
 
-  const resetError = () => {
-    setcashoutApiResponse({
-      errors: null,
-      data: null
-    })
-  }
-  const resetCashoutDialog = () => {
-    setActiveStep(0)
-    setcalculateAmount(null)
-    setleaveBalanceAfterCashout(null)
-    setemployeeContract('')
-    setloading(false)
-    resetError()
-  }
+	const resetError = () => {
+		setcashoutApiResponse({
+			errors: null,
+			data: null
+		})
+	}
+	const resetCashoutDialog = () => {
+		setActiveStep(0)
+		setcalculateAmount(null)
+		setleaveBalanceAfterCashout(null)
+		setemployeeContract('')
+		setloading(false)
+		resetError()
+	}
 
-  const {
-    control: cashOutControl,
-    handleSubmit: handleCashOutSubmit,
-    watch: watchCashOutControl,
-    formState: { errors: cashOutErrors }
-  } = useForm({
-    defaultValues: defaultCashoutValue,
-    resolver: yupResolver(CashOutSchema)
-  })
+	const {
+		control: cashOutControl,
+		handleSubmit: handleCashOutSubmit,
+		watch: watchCashOutControl,
+		formState: { errors: cashOutErrors }
+	} = useForm({
+		defaultValues: defaultCashoutValue,
+		resolver: yupResolver(CashOutSchema)
+	})
 
-  const {
-    control: signatureControl,
-    handleSubmit: handleSignatureSubmit,
-    reset: signatureReset,
+	const {
+		control: signatureControl,
+		handleSubmit: handleSignatureSubmit,
+		reset: signatureReset,
 
-    formState: { errors: signatureErrors }
-  } = useForm({
-    defaultValues: defaultSignatureValue,
-    resolver: yupResolver(SignatureSchema)
-  })
-  const sigCanvas = React.useRef() as React.MutableRefObject<any>;
-  const cashoutdays: number | null = watchCashOutControl('cashoutdays')
+		formState: { errors: signatureErrors }
+	} = useForm({
+		defaultValues: defaultSignatureValue,
+		resolver: yupResolver(SignatureSchema)
+	})
+	const sigCanvas = React.useRef() as React.MutableRefObject<any>;
+	const store = useSelector((state: RootState) => state.employee)
 
-  const store = useSelector((state: RootState) => state.employee)
+	const onCashOutSubmit = async (data: any) => {
+		setloading(true)
 
-  const onCashOutSubmit = async (data: any) => {
-    setloading(true)
+		const stateData = {
+			...cashout,
+			cashoutdays: data.cashoutdays,
+			cashoutreason: data.cashoutreason
+		}
+		setcashoutState(stateData)
 
-    const stateData = {
-      ...cashout,
-      cashoutdays: data.cashoutdays,
-      cashoutreason: data.cashoutreason
-    }
-    setcashoutState(stateData)
+		const cashoutContractResponse = await dispatch(getCashOutContract(cashout))
+		if (cashoutContractResponse.payload != null && cashoutContractResponse.payload.data != null && cashoutContractResponse.payload.data.contract != null) {
+			setemployeeContract(cashoutContractResponse.payload.data.contract)
+			setActiveStep(1);
+			resetError()
+			setloading(false)
+			setToggleValue(false);
+		}
+		else {
+			const errortoDisplay: error[] = [{
+				message: 'Some error occured while processing your cashout.',
+				code: '',
+			}];
+			setloading(false)
 
-    const cashoutContractResponse = await dispatch(getCashOutContract(cashout))
-    if (cashoutContractResponse.payload != null && cashoutContractResponse.payload.data != null && cashoutContractResponse.payload.data.contract != null) {
-      setemployeeContract(cashoutContractResponse.payload.data.contract)
-      setActiveStep(1);
-      resetError()
-      setloading(false)
-      setToggleValue(false);
-    }
-    else {
-      const errortoDisplay: error[] = [{
-        message: 'Some error occured while processing your cashout.',
-        code: '',
-      }];
-      setloading(false)
+			setcashoutApiResponse({
+				errors: errortoDisplay,
+				data: null
+			})
 
-      setcashoutApiResponse({
-        errors: errortoDisplay,
-        data: null
-      })
+		}
+	}
 
-    }
-  }
+	const onSignatureSubmit = async (data: any) => {
 
-  const onSignatureSubmit = async (data: any) => {
+		const stateData = {
+			...cashout,
+			signature: data.signature
+		}
+		setloading(true)
+		const result = await dispatch(postEmployeeCashout({
+			cashoutdays: stateData.cashoutdays,
+			cashoutreason: stateData.cashoutreason,
+			signature: stateData.signature
+		}))
 
-    const stateData = {
-      ...cashout,
-      signature: data.signature
-    }
-    setloading(true)
-    const result = await dispatch(postEmployeeCashout({
-      cashoutdays: stateData.cashoutdays,
-      cashoutreason: stateData.cashoutreason,
-      signature: stateData.signature
-    }))
+		if (result.payload != null && result.payload.data != null && result.payload.data?.success == true) {
+			setcashoutState(stateData)
+			setActiveStep(2)
+			resetError()
+		}
+		else {
+			const errortoDisplay: error[] = [{
+				message: 'Some error occured while processing your cashout.',
+				code: ''
+			}];
+			setcashoutApiResponse({
+				errors: errortoDisplay,
+				data: null
+			})
+		}
 
-    //console.log(result.payload)
-    if (result.payload != null && result.payload.data != null && result.payload.data?.success == true) {
-      // setcalculateAmount(result.payload.data.cashoutAmount)
-      setcashoutState(stateData)
-      setActiveStep(2)
-      resetError()
-      
+		setloading(false)
 
-    }
-    else {
-      const errortoDisplay: error[] = [{
-        message: 'Some error occured while processing your cashout.',
-        code: ''
-      }];
-      setcashoutApiResponse({
-        errors: errortoDisplay,
-        data: null
-      })
-    }
+	}
+	const onClearSignature = () => {
+		sigCanvas.current.clear()
+		signatureReset({
+			signature: ''
+		})
+	}
 
-    setloading(false)
+	const formatIntoPng = () => {
+		if (sigCanvas.current) {
+			const dataURL = sigCanvas.current.toDataURL();
+			return dataURL;
+		}
+	}
+	const onError = (e: any) => console.log('errors', e);
 
-  }
-  const onClearSignature = () => {
-    sigCanvas.current.clear()
-    signatureReset({
-      signature: ''
-    })
-  }
+	const onChangeCashOutDays = async (e: any) => {
+		if (e.target.value != null) {
+			setloading(true)
+			setToggleValue(true)
+			const result = await dispatch(calculateEmployeeCashout(e.target.value))
+			if (result.payload != null) {
+				if (result.payload.data.cashoutAmount != null) {
+					setcalculateAmount(result.payload.data.cashoutAmount)
+					setleaveBalanceAfterCashout(result.payload.data.leaveBalanceAfterCashout)
+				}
+			}
+			else {
 
-  const formatIntoPng = () => {
-    if (sigCanvas.current) {
-      const dataURL = sigCanvas.current.toDataURL();
+				const errortoDisplay: error[] = [{
+					message: 'Some error occured while processing your cashout.',
+					code: ''
+				}];
+				setcashoutApiResponse({
+					errors: errortoDisplay,
+					data: null
+				})
+			}
+			setloading(false)
+		}
 
-      return dataURL;
-    }
-  }
-  const onError = (e: any) => console.log('errors', e);
+	}
+	const handleDialogClose = (event: any, reason: string) => {
+		if (reason && (reason == "backdropClick" || reason == "escapeKeyDown"))
+			return;
+		setActiveStep(0)
+		resetCashoutDialog()
+		props.handleClose()
+	}
 
-  const onChangeCashOutDays = async (e: any) => {
-    // console.log("cashAmountInDays", cashAmountInDays)
-    if (e.target.value != null) {
-      setloading(true)
-      setToggleValue(true)
-      const result = await dispatch(calculateEmployeeCashout(e.target.value))
-      
-     // console.log(result.payload)
-      if (result.payload != null ) {
-      if(result.payload.data.cashoutAmount != null){
-        setcalculateAmount(result.payload.data.cashoutAmount)
-        setleaveBalanceAfterCashout(result.payload.data.leaveBalanceAfterCashout)
-      }
+	const onClose = () => {
+		setActiveStep(0)
+		resetCashoutDialog()
+		props.handleClose()
+	}
+	const errorControl = () => {
+		let i = 0;
+		return (
 
-      //Standardize error first
+			cashoutApiResponse.errors?.map(x => {
+				i++
+				return <Alert key={i} variant="outlined" severity="error">{x.message}</Alert>
+			})
+		)
+	}
 
-      // else if(result.payload.data.error!){
+	const displayContract = () => {
+		return { __html: employeeContract };
+	}
 
-      // }
-      }
-      else {
+	const maxWidth = 'sm'
+	return (
+		<Dialog fullWidth={true} scroll={'paper'} fullScreen={fullScreen} maxWidth={maxWidth} open={props.open} onClose={handleDialogClose} aria-labelledby='form-dialog-title'>
+			<DialogTitle id='form-dialog-title'>{activeStep == 0 && <>Cash Out Request</>}
+				{activeStep == 1 && <>Sign your contract</>}
+				{activeStep == 2 && <>Success</>}
+				<IconButton
+					aria-label="close"
+					onClick={onClose}
+					sx={{
+						position: 'absolute',
+						right: 8,
+						top: 8,
+						color: (theme) => theme.palette.grey[500],
+					}}
+				>
+					<Close />
+				</IconButton>
+			</DialogTitle>
+			{activeStep == 0 &&
+				<>
+					<form key='cashoutform' onSubmit={handleCashOutSubmit(onCashOutSubmit, onError)} style={{ overflowY: "auto", display: "flex", flexDirection: "column" }}>
+						<DialogContent dividers={true}>
+							{cashoutApiResponse.errors != null && errorControl()}
 
-        const errortoDisplay: error[] = [{
-          message: 'Some error occured while processing your cashout.',
-          code: ''
-        }];
-        setcashoutApiResponse({
-          errors: errortoDisplay,
-          data: null
-        })
-      }
-      setloading(false)
-    }
+							<FormControl fullWidth>
+								<Box sx={{
+									display: 'flex',
+									alignItems: 'flex-start',
+									pb: '1.25rem',
+								}}>
+									<TextField
+										fullWidth
+										type='string'
+										label='Days Available'
+										name='Days Available'
+										value={store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && store.cashoutOption?.daysAvailable.toFixed(2)}
+										InputProps={{
 
-  }
-  const handleDialogClose = (event: any, reason: string) => {
-    if (reason && (reason == "backdropClick" || reason == "escapeKeyDown"))
-      return;
-    setActiveStep(0)
-    resetCashoutDialog()
-    props.handleClose()
-  }
+											startAdornment: (
+												<InputAdornment position='start'>
+													<CalendarMonthIcon />
+												</InputAdornment>
+											)
+										}}
+										disabled
+										sx={{ background: '#91919121' }}
+									/>
+								</Box>
+								<Box sx={{
+									display: 'flex',
+									alignItems: 'flex-start',
+									pb: '1.25rem',
+								}}>
+									<TextField
+										fullWidth
+										type='string'
+										label='Value (Before tax)'
+										name='Value (Before tax)'
+										value={store.cashoutOption != null && store.cashoutOption?.cashoutAmount != null && store.cashoutOption?.cashoutAmount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}
+										InputProps={{
+											startAdornment: (
+												<InputAdornment position='start'>
+													<AttachMoneyIcon />
+												</InputAdornment>
+											)
+										}}
+										disabled
+										sx={{ background: '#91919121' }}
+									/>
+								</Box>
 
-  const onClose = () => {
-    setActiveStep(0)
-    resetCashoutDialog()
-    props.handleClose()
-  }
-  const errorControl = () => {
-    let i = 0;
-    return (
+								<Controller
+									rules={{ required: true }}
+									control={cashOutControl}
+									name='cashoutdays'
+									render={({ field: { onChange } }) => (
+										<TextField id='cashoutdays' autoFocus fullWidth
+											label='Cash Out Amount (In Days)'
+											aria-describedby='cashoutdays'
+											onChange={(e) => {
+												onChange(e);
+												onChangeCashOutDays(e);
+											}}
+											error={Boolean(cashOutErrors.cashoutdays)}
+										/>
+									)}
+								/>
+								{cashOutErrors.cashoutdays && (
+									<FormHelperText id='cashoutdays' sx={{ color: 'error.main' }} >
+										Required
+									</FormHelperText>
+								)}
+								{toggleValue && calculateAmount ?
+									<Box >
+										<Box sx={{
+											display: 'flex',
+											alignItems: 'flex-start',
+											pb: '1.25rem',
+											pt: '1.25rem',
+										}}>
+											<TextField
+												fullWidth
+												type='string'
+												label='Cash Amount (Before tax)'
+												defaultValue='0.00'
+												value={calculateAmount}
+												InputProps={{
 
-      cashoutApiResponse.errors?.map(x => {
-        i++
-        return <Alert key={i} variant="outlined" severity="error">{x.message}</Alert>
-      })
-    )
-  }
+													startAdornment: (
+														<InputAdornment position='start'>
+															<AttachMoneyIcon />
+														</InputAdornment>
+													)
+												}}
+												disabled
+												sx={{ background: '#91919121' }}
+											/>
+										</Box>
+										<Box sx={{
+											display: 'flex',
+											alignItems: 'flex-start',
 
-  const displayContract = () => {
-    return { __html: employeeContract };
-  }
+										}}>
+											<TextField
+												fullWidth
+												type='string'
+												label='Leave Balance After Cash Out'
+												name='Leave Balance After Cash Out'
+												defaultValue='0.00'
+												value={leaveBalanceAfterCashout}
+												InputProps={{
+													startAdornment: (
+														<InputAdornment position='start'>
+															<AttachMoneyIcon />
+														</InputAdornment>
+													)
+												}}
+												disabled
+												sx={{ background: '#91919121' }}
+											/>
+										</Box>
+									</Box>
+									: ""}
 
-  const maxWidth = 'sm'
-  return (
-    <Dialog fullWidth={true} scroll={'paper'} fullScreen={fullScreen} maxWidth={maxWidth} open={props.open} onClose={handleDialogClose} aria-labelledby='form-dialog-title'>
-      <DialogTitle id='form-dialog-title'>{activeStep == 0 && <>Cash Out Request</>}
-        {activeStep == 1 && <>Sign your contract</>}
-        {activeStep == 2 && <>Success</>}
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <Close />
-        </IconButton>
-      </DialogTitle>
-      {activeStep == 0 &&
-        <>
-          <form  key='cashoutform' onSubmit={handleCashOutSubmit(onCashOutSubmit, onError)} style={{ overflowY: "auto", display: "flex", flexDirection: "column" }}>
+								{toggleValue && calculateAmount ?
+									<Controller
+										rules={{ required: true }}
+										control={cashOutControl}
+										name='cashoutreason'
+										render={({ field: { onChange } }) => (
 
+											<TextField id='cashoutreason' autoFocus fullWidth
+												label='Cash Out Reason'
+												placeholder=''
+												aria-describedby='cashoutreason'
+												onChange={onChange}
+												multiline
+												error={Boolean(cashOutErrors.cashoutreason)}
+												sx={{ mt: '1.25rem' }}
 
-            <DialogContent dividers={true}>
-              {cashoutApiResponse.errors != null && errorControl()}
+											/>
+										)}
+									/> : ''}
+								{toggleValue && calculateAmount ? cashOutErrors.cashoutreason && (
+									<FormHelperText id='cashoutreason' sx={{ color: 'error.main' }} >
+										Required
+									</FormHelperText>
+								) : ""}
+							</FormControl>
+						</DialogContent>
+						<DialogActions disableSpacing={true} className='dialog-actions-dense'>
+							{loading == false &&
+								<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }}> Cash Out Leave</Button>
+							}
+							{loading == true &&
+								<LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
+									Cash Out Leave
+								</LoadingButton>
+							}
 
-              <FormControl fullWidth>
+						</DialogActions>
+					</form>
 
-                <Box sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  pb:'1.25rem',
-                }}>
-                  <TextField
-                  fullWidth
-                  type='string'
-                  label='Days Available'
-                  name='Days Available'
-                  value={store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && store.cashoutOption?.daysAvailable.toFixed(2)} 
-                  InputProps={{
-                    
-                    startAdornment: (
-                    <InputAdornment position='start'>
-                      <CalendarMonthIcon/>
-                    </InputAdornment>
-                    )
-                  }}
-                disabled
-                sx={{background: '#91919121'}}
-                />
-                </Box>
-                <Box sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  pb:'1.25rem',
-                }}>
-                <TextField
-                  fullWidth
-                  type='string'
-                  label='Value (Before tax)'
-                  name='Value (Before tax)'
-                  value={store.cashoutOption != null && store.cashoutOption?.cashoutAmount != null && store.cashoutOption?.cashoutAmount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} 
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>
-                      <AttachMoneyIcon/>
-                    </InputAdornment>
-                    )
-                  }}
-                  disabled
-                  sx={{background: '#91919121'}}
-                />
-                </Box>
+				</>
+			}
+			{activeStep == 1 &&
+				<form key='signature-submit' onSubmit={handleSignatureSubmit(onSignatureSubmit, onError)} style={{ overflowY: "auto", display: "flex", flexDirection: "column" }}>
+					<DialogContent dividers={true}>
+						{cashoutApiResponse.errors != null && errorControl()}
 
-                <Controller
-                  rules={{ required: true }}
-                  control={cashOutControl}
-                  name='cashoutdays'
-                  render={({ field: { onChange } }) => (
-                    <TextField id='cashoutdays' autoFocus fullWidth
-                      label='Cash Out Amount (In Days)'
-                      aria-describedby='cashoutdays'
-                      onChange={(e) => {
-                        onChange(e);
-                        onChangeCashOutDays(e);
-                      }}
-                      error={Boolean(cashOutErrors.cashoutdays)}
-                      
-                      
-                    />
-                    )}
-                />
-                {cashOutErrors.cashoutdays && (
-                  <FormHelperText id='cashoutdays' sx={{ color: 'error.main' }} >
-                    Required
-                  </FormHelperText>
-                )}
-                {toggleValue && calculateAmount?
-                <Box >
-                <Box sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  pb:'1.25rem',
-                  pt:'1.25rem',
-                }}>
-                  <TextField
-                  fullWidth
-                  type='string'
-                  label='Cash Amount (Before tax)'
-                  defaultValue='0.00'
-                  value={calculateAmount} 
-                  InputProps={{
-                    
-                    startAdornment: (
-                    <InputAdornment position='start'>
-                      <AttachMoneyIcon/>
-                    </InputAdornment>
-                    )
-                  }}
-                disabled
-                sx={{background: '#91919121'}}
-                />
-                </Box>
-                <Box sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  
-                }}>
-                <TextField
-                  fullWidth
-                  type='string'
-                  label='Leave Balance After Cash Out'
-                  name='Leave Balance After Cash Out'
-                  defaultValue='0.00'
-                  value={leaveBalanceAfterCashout} 
-                  InputProps={{
-                   
-                    startAdornment: (
-                    <InputAdornment position='start'>
-                      <AttachMoneyIcon/>
-                    </InputAdornment>
-                    )
-                  }}
-                disabled
-                sx={{background: '#91919121'}}
-                />
-                </Box>
-                </Box>
-                :""}
+						<DialogContentText>
+							In order to cashout excess leave we require as signed agreement betwen both parties
+							being you and your employer.Once both parties execute the document you will recieve asigned copy.
+						</DialogContentText>
+						<DialogContentText>
+							<div dangerouslySetInnerHTML={displayContract()} />
+						</DialogContentText>
 
-                {toggleValue && calculateAmount?
-                <Controller
-                  rules={{ required: true }}
-                  control={cashOutControl}
-                  name='cashoutreason'
-                  render={({ field: { onChange } }) => (
+						<IconButton onClick={onClearSignature} style={{ display: 'block', position: 'relative', textAlign: 'right', left: '365px', top: '40px', 'zIndex': '100' }}>
+							<Eraser></Eraser>
+						</IconButton>
+						<FormControl>
 
-                    <TextField id='cashoutreason' autoFocus fullWidth
-                      label='Cash Out Reason'
-                      placeholder=''
-                      aria-describedby='cashoutreason'
-                      onChange={onChange}
-                      multiline
-                      error={Boolean(cashOutErrors.cashoutreason)}
-                      sx={{mt:'1.25rem'}}
-                      
-                    />
-                  )}
-                />:''}
-                {toggleValue && calculateAmount? cashOutErrors.cashoutreason && (
-                  <FormHelperText id='cashoutreason' sx={{ color: 'error.main' }} >
-                    Required
-                  </FormHelperText>
-                ):""}
-              </FormControl>
-            </DialogContent>
-            <DialogActions disableSpacing={true} className='dialog-actions-dense'>
-              {loading == false &&
-                <Button  type='submit' variant="contained" style={{ marginTop: '0.75em' }}> Cash Out Leave</Button>
-              }
-              {loading == true &&
-                <LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained"  disabled>
-                  Cash Out Leave
-                </LoadingButton>
-              }
+							<Controller
+								name="signature"
+								control={signatureControl}
+								render={({ field }) => (
+									<>
 
-            </DialogActions>
-          </form>
+										<SignaturePad
+											ref={sigCanvas}
+											onEnd={() => field.onChange(formatIntoPng())}
+											penColor="black"
+											canvasProps={{
+												width: 400,
+												height: 80,
+												style: { border: "1px solid black" },
+											}}
+										/>
+									</>
+								)}
+							/>
+							{signatureErrors.signature && (
+								<FormHelperText sx={{ color: 'error.main' }} >
+									Signature is required
+								</FormHelperText>
+							)}
+						</FormControl>
+					</DialogContent>
+					<DialogActions className='dialog-actions-dense'>
+						{loading == false &&
+							<Button style={{ marginTop: '0.75em' }} type='submit' variant="contained">Sign Contract</Button>
+						}
+						{loading == true &&
+							<LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
+								Sign Contract
+							</LoadingButton>
+						}
+					</DialogActions>
+				</form>
+			}
+			{activeStep == 2 &&
+				<> <DialogContent dividers={true}>
 
-        </>
-      }
-      {activeStep == 1 &&
-        <form  key='signature-submit' onSubmit={handleSignatureSubmit(onSignatureSubmit, onError)} style={{ overflowY: "auto", display: "flex", flexDirection: "column" }}>
-          <DialogContent dividers={true}>
-            {cashoutApiResponse.errors != null && errorControl()}
-
-            <DialogContentText>
-              In order to cashout excess leave we require as signed agreement betwen both parties
-              being you and your employer.Once both parties execute the document you will recieve asigned copy.
-            </DialogContentText>
-            <DialogContentText>
-              <div dangerouslySetInnerHTML={displayContract()} />
-            </DialogContentText>
-
-            <IconButton onClick={onClearSignature} style={{ display: 'block', position: 'relative', textAlign: 'right', left: '365px', top: '40px', 'zIndex': '100' }}>
-              <Eraser></Eraser>
-            </IconButton>
-            <FormControl>
-
-              <Controller
-                name="signature"
-                control={signatureControl}
-                render={({ field }) => (
-                  <>
-
-                    <SignaturePad
-                      ref={sigCanvas}
-                      onEnd={() => field.onChange(formatIntoPng())}
-                      penColor="black"
-                      canvasProps={{
-                        width: 400,
-                        height: 80,
-                        style: { border: "1px solid black" },
-                      }}
-                    />
-                  </>
-                )}
-              />
-              {signatureErrors.signature && (
-                <FormHelperText sx={{ color: 'error.main' }} >
-                  Signature is required
-                </FormHelperText>
-              )}
-            </FormControl>
-          </DialogContent>
-          <DialogActions className='dialog-actions-dense'>
-            {loading == false &&
-              <Button style={{ marginTop: '0.75em' }} type='submit' variant="contained">Sign Contract</Button>
-            }
-            {loading == true &&
-              <LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
-                Sign Contract
-              </LoadingButton>
-            }
-          </DialogActions>
-        </form>
-      }
-      {activeStep == 2 &&
-        <> <DialogContent dividers={true}>
-
-          <DialogContentText>
-            Thank you for using bit.leave!
-          </DialogContentText>
-          <DialogContentText>
-            You will recieve a notification once your leave cash out has been approved.
-            You will be able to view this contract in your 'My contracts & History' section.
-          </DialogContentText>
-        </DialogContent>
-        </>
-      }
-    </Dialog>
-  )
+					<DialogContentText>
+						Thank you for using bit.leave!
+					</DialogContentText>
+					<DialogContentText>
+						You will recieve a notification once your leave cash out has been approved.
+						You will be able to view this contract in your 'My contracts & History' section.
+					</DialogContentText>
+				</DialogContent>
+				</>
+			}
+		</Dialog>
+	)
 
 }
 

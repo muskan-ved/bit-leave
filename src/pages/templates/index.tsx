@@ -70,7 +70,6 @@ const Templates = () => {
       id = data.orgId;
     }
 
-
     axios
       .get(API.loadOrganisation + id, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -86,7 +85,6 @@ const Templates = () => {
             tabList.push(value.templatetype);
           }
           const contentBlocks = htmlToDraft(value.defaulttext)
-
           value.index = i;
           value.updateEditorState = EditorState.createWithContent(ContentState.createFromBlockArray(contentBlocks))
           editorState.push(value.updateEditorState);
@@ -94,7 +92,6 @@ const Templates = () => {
         setEditorState(editorState);
         setTabList(tabList);
         setGetData(data);
-        console.log('HERE ' + getdata);
         setIsLoading(false);
       })
       .catch((reason: AxiosError) => {

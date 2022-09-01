@@ -3,9 +3,12 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+
+// ** Types Imports
 import { employeeCashOut, employee } from 'src/types/employee'
-import { show } from '../apiError'
-import { updateOnBoarding, userLogout } from '../user'
+
+// ** Logout function
+import { userLogout } from '../user'
 
 // ** Config Var
 import API from '../../configs/apiEndpoints'
@@ -13,12 +16,10 @@ import API from '../../configs/apiEndpoints'
 interface Redux {
   getState: any
   dispatch: Dispatch<any>,
-
 }
 
 export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
   async (params: any, { dispatch, getState }: Redux) => {
-    console.log(params);
     const payload ={
       managerId:params.id
     }
@@ -37,10 +38,7 @@ export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
       return response.data
     }
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
             console.log("No Server Response");
          } else if (err.response?.status === 401) {
@@ -67,10 +65,7 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
       return response.data
     }
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
             console.log("No Server Response");
          } else if (err.response?.status === 401) {
@@ -90,14 +85,10 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
         .post(API.calculateEmployeeCashout, data, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
-      console.log(result);
       return result.data
     }
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
             console.log("No Server Response");
          } else if (err.response?.status === 401) {
@@ -124,16 +115,6 @@ export const getCashOutContract = createAsyncThunk('emp/cashoutcontract',
       return response.data
     }
     catch (e) {
-      console.log(e)
-      // var data = {
-      //   canShow: true,
-      //   redirect: false,
-      //   code: '',
-      //   message: 'Error occured while processing the request',
-      //   location: '',
-      // }
-      // return dispatch(show(data))
-      // return rejectWithValue(e.response.data)
     }
   })
 
@@ -152,14 +133,10 @@ export const loadEmployee = createAsyncThunk('emp/load',
       .get(API.loadEmployee + empId, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-   // console.log(result.data)
     return result.data
     } 
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
             console.log("No Server Response");
          } else if (err.response?.status === 401) {
@@ -177,12 +154,9 @@ export const listEmployee = createAsyncThunk('emp/list',
       .get(API.listEmployee, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-   // console.log(result.data)
     return result.data
     }catch(err){
       if (axios.isAxiosError(err)) {
-
-        // console.log(err.response?.data)
         if (!err?.response) {
             console.log("No Server Response");
          } else if (err.response?.status === 401) {
@@ -208,37 +182,14 @@ const employeeSlice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(postEmployeeCashout.fulfilled, (state, action) => {
-      console.log(state, action);
-      // state.success = true;
-      // state.isLoading = false;
     })
     builder.addCase(postEmployeeCashout.rejected, (state, action) => {
-      console.log(state, action);
-      // state.success = false;
-      // state.isLoading = false;
-
     })
-
     builder.addCase(postEmployeeCashout.pending, (state, action) => {
     })
-
     builder.addCase(listEmployee.fulfilled, (state, action) => {
     })
-
     builder.addCase(postEmployeeOnboarding.fulfilled, (state, action) => {
-      // var current = state
-      // if (current != null) {
-      //   state.profile = {
-      //     id: current.profile.id,
-      //     fullname: current.profile.fullname,
-      //     onboarded: true
-      //   }
-      //   state.cashoutOption = current.cashoutOption
-
-      //   state.team = current.team
-      //   state.leaveDetail = current.leaveDetail
-      // }
-
     })
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       if(action.payload?.data){

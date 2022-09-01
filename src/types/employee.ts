@@ -1,10 +1,6 @@
 
 export type employeeCashOut = {
-  // daysAvailable: number | null,
-  // valueBeforeTax: number | null,
   cashoutdays: number | null,
-  // cashAmountBeforeTax: number | null,
-  // leaveBalanceAfterCashOut: number | null,
   cashoutreason: string,
   signature:string|null
 }

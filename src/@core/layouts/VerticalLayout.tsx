@@ -29,7 +29,6 @@ import { useDispatch } from 'react-redux'
 import { hide } from 'src/store/apiError'
 import router from 'next/router'
 import { AppDispatch, RootState } from 'src/store'
-import useEmployeeOnboarding from '../hoc/useEmployeeOnboarding'
 import EmployeeOnboardingDialog from './components/shared-components/employeeOnboarding'
 import { useSelector } from 'react-redux'
 import { loadEmployee } from 'src/store/employee'
@@ -64,16 +63,13 @@ const VerticalLayout = (props: LayoutProps) => {
 
   const dispatch = useDispatch<AppDispatch>()
 
-
   // ** Vars
   const { skin, navHidden, contentWidth } = settings
   const { navigationSize, disableCustomizer, collapsedNavigationSize } = themeConfig
   const navWidth = navigationSize
   const navigationBorderWidth = skin === 'bordered' ? 1 : 0
   const collapsedNavWidth = collapsedNavigationSize
-  //Hooks
   const store = useSelector((state: RootState) => state.employee)
-
 
   const fetchEmployee = async () => {
     const data = await dispatch(loadEmployee())
@@ -114,9 +110,7 @@ const VerticalLayout = (props: LayoutProps) => {
     }
 
   }, [])
-
-  const employeeOnboarded = store.profile?.onboarded != null && store.profile?.onboarded == true
-  //console.log('employeeOnboarded', employeeOnboarded)
+  
   // ** States
   const [navHover, setNavHover] = useState<boolean>(false)
   const [navVisible, setNavVisible] = useState<boolean>(false)

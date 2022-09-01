@@ -3,12 +3,13 @@ import { createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
-import { userLogout } from '../user';
+import { BASE_URL } from 'src/configs/apiEndpoints';
 
+// ** logout function
+import { userLogout } from '../user';
 interface Redux {
     getState: any
     dispatch: Dispatch<any>,
-  
   }
 
 export const putOrganisationLogo = createAsyncThunk('profile/uploadLogo',
@@ -19,7 +20,7 @@ export const putOrganisationLogo = createAsyncThunk('profile/uploadLogo',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .put('http://localhost:3000/endpiont/',
+        .put(BASE_URL,
           payload,
           {
             headers: {
@@ -30,7 +31,6 @@ export const putOrganisationLogo = createAsyncThunk('profile/uploadLogo',
       return response.data
     }
     catch(err){
-      console.log(err)
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
             console.log("No Server Response");

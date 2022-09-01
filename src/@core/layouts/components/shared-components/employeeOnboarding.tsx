@@ -12,7 +12,6 @@ const defaultEmployeeOnboardingValue = {
   id: null
 }
 
-
 const employeeOnboardingSchema = yup.object().shape({
   id: yup.string().required(),
 })
@@ -22,13 +21,12 @@ interface autoCompleteEmployee {
   name: string
 }
 const EmployeeOnboardingDialog = (props: any) => {
-  const [open, setOpen] = useState<boolean>(false)
 
+  const [open, setOpen] = useState<boolean>(false)
   const [options, setOptions] = useState<autoCompleteEmployee[]>([])
   const [selectedoptions, setselectedoptions] = useState<autoCompleteEmployee>()
   const [inputValue, setInputValue] = useState('')
   const [progress, setprogress] = useState(false)
-
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -43,8 +41,8 @@ const EmployeeOnboardingDialog = (props: any) => {
     defaultValues: defaultEmployeeOnboardingValue,
     resolver: yupResolver(employeeOnboardingSchema)
   })
+
   const onEmployeeOnboardingSubmit = async (data: any) => {
-    //console.log('onEmployeeOnboardingSubmit', data)
     setprogress(true)
     const result = await dispatch(postEmployeeOnboarding(data.id))
     if (result.payload?.data?.success == true) {
@@ -53,32 +51,6 @@ const EmployeeOnboardingDialog = (props: any) => {
     setprogress(false)
   }
 
-  const fectchEmployee = async () => {
-    const data = await dispatch(listEmployee())
-    if (data.payload?.data) {
-
-      const result: autoCompleteEmployee[] = data.payload?.data.employees.map((x: { id: any; fullname: any; }) => {
-        return {
-          id: x.id,
-          name: x.fullname
-        }
-      })
-
-      setOptions(result)
-
-
-    }
-  }
-
-  const setSelectedOptions = (value: any) => {
-    // console.log(value)
-    if (value && value.id) {
-      setselectedoptions(value.id)
-    }
-    else {
-      setselectedoptions(undefined)
-    }
-  }
   const onError = (e: any) => console.log('errors', e);
   useEffect(() => {
     let active = true
@@ -100,8 +72,6 @@ const EmployeeOnboardingDialog = (props: any) => {
         if (active) {
           setOptions(result)
         }
-
-
       }
     }
     fetchEmployee()

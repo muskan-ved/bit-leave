@@ -1,9 +1,9 @@
 // ** React Imports
-import { ReactNode, useEffect } from 'react'
+import { ReactNode} from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
-import router, { Router } from 'next/router'
+import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
@@ -52,8 +52,8 @@ import 'prismjs/themes/prism-tomorrow.css'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-tsx'
 
-import { AppDispatch, store } from 'src/store'
-import { Provider, useDispatch } from 'react-redux'
+import { store } from 'src/store'
+import { Provider } from 'react-redux'
 
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
@@ -61,7 +61,6 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 import { OnboardingProvider } from 'src/context/OnboardingContext'
-import { hide } from 'src/store/apiError'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {

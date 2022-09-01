@@ -4,11 +4,7 @@ import Link from 'next/link'
 // ** MUI Imports
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
 import { styled, useTheme } from '@mui/material/styles'
-
-// ** Configs
-import themeConfig from 'src/configs/themeConfig'
 
 const StyledLink = styled('a')(({ theme }) => ({
   display: 'flex',

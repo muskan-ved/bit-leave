@@ -9,14 +9,11 @@ const useEmployeeOnboarding = () => {
     const employee = useSelector((state: RootState) => state.employee)
     const isOnboarded = employee.profile?.onboarded
     useEffect(() => {
-      const getUser = async () => {
-
         if (!isOnboarded) {
           setisEmployeeOnboarded(false)
         } else {
           setisEmployeeOnboarded(true)
         }
-      }
     })
     return isEmployeeOnboarded ? <div>Test</div> : null
   }

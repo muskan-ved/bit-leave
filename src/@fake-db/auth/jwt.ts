@@ -8,7 +8,6 @@ import mock from 'src/@fake-db/mock'
 import { UserDataType } from 'src/context/types'
 
 // ** Config Vars
-import API from '../../configs/apiEndpoints';
 import auth from '../../configs/auth';
 
 
@@ -94,16 +93,12 @@ mock.onPost(`${auth.registerEndpoint }`).reply(request => {
         orgId:'50',
     userOnboarded:false
       }
-
       users.push(userData)
-
       const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret)
-
       const response = { accessToken }
 
       return [200, response]
     }
-
     return [200, { error }]
   } else {
     return [401, { error: 'Invalid Data' }]
@@ -120,9 +115,7 @@ mock.onGet(`${auth.meEndpoint }`).reply(config => {
   if (decoded) {
     // @ts-ignore
     const { id: userId } = decoded.payload
-
     const userData = JSON.parse(JSON.stringify(users.find((u: UserDataType) => u.id === userId)))
-
     delete userData.password
 
     return [200, { userData }]

@@ -1,7 +1,6 @@
 // ** React Imports
 import { useState, ReactNode } from 'react';
 
-
 // ** MUI Components
 import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
@@ -30,8 +29,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // ** Hooks
 import { useAuth } from 'src/hooks/useAuth'
 import { useSettings } from 'src/@core/hooks/useSettings'
-
-
 
 // ** Layout Import
 import BlankLayout from 'src/@core/layouts/BlankLayout'
@@ -82,13 +79,6 @@ const TypographyStyled = styled(Typography)<TypographyProps>(({ theme }) => ({
   [theme.breakpoints.down('md')]: { marginTop: theme.spacing(8) }
 }))
 
-// const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ theme }) => ({
-//   '& .MuiFormControlLabel-label': {
-//     fontSize: '0.875rem',
-//     color: theme.palette.text.secondary
-//   }
-// }))
-
 const schema = yup.object().shape({
   code: yup.string().min(6).required(),
   password: yup.string().min(5).required()
@@ -113,7 +103,6 @@ const ConfirmPassword = () => {
   const auth = useAuth()
   const theme = useTheme()
 
-  /*const bgClasses = useBgColor()*/
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 

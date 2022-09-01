@@ -9,7 +9,6 @@ import Spinner from 'src/@core/components/spinner'
 
 // ** Hook Imports
 import { useAuth } from 'src/hooks/useAuth'
-import { main } from '@popperjs/core'
 
 /**
  *  Set Home URL based on User Roles

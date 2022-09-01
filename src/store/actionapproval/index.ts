@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
-import API from 'src/configs/auth';
+import API from 'src/configs/apiEndpoints';
 import { actionApproval } from 'src/types/actionApproval';
 
 // ** Logout function
@@ -12,7 +12,6 @@ import { userLogout } from '../user';
 interface Redux {
     getState: any
     dispatch: Dispatch<any>,
-  
   }
 
 export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
@@ -33,7 +32,6 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-            console.log("No Server Response");
          } else if (err.response?.status === 401) {
            dispatch(userLogout())
          }

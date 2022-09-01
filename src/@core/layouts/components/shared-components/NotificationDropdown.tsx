@@ -9,7 +9,7 @@ import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
-import Typography, { TypographyProps } from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 
 // ** Icons Imports
 import BellOutline from 'mdi-material-ui/BellOutline'
@@ -19,11 +19,9 @@ import PerfectScrollbarComponent from 'react-perfect-scrollbar'
 
 // ** Custom Components Imports
 import CustomChip from 'src/@core/components/mui/chip'
-import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
-import { CustomAvatarProps } from 'src/@core/components/mui/avatar/types'
 
 interface Props {
   settings: Settings
@@ -61,32 +59,6 @@ const styles = {
 // ** Styled PerfectScrollbar component
 const PerfectScrollbar = styled(PerfectScrollbarComponent)({
   ...styles
-})
-
-// ** Styled Avatar component
-const Avatar = styled(CustomAvatar)<CustomAvatarProps>({
-  width: '2.375rem',
-  height: '2.375rem',
-  fontSize: '1.125rem'
-})
-
-// ** Styled component for the title in MenuItems
-const MenuItemTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
-  fontWeight: 600,
-  flex: '1 1 100%',
-  overflow: 'hidden',
-  fontSize: '0.875rem',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  marginBottom: theme.spacing(0.75)
-}))
-
-// ** Styled component for the subtitle in MenuItems
-const MenuItemSubtitle = styled(Typography)<TypographyProps>({
-  flex: '1 1 100%',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis'
 })
 
 const NotificationDropdown = (props: Props) => {
