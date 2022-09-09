@@ -34,7 +34,6 @@ export const getExcessLeave = createAsyncThunk('excessLeaveData',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-            console.log("No Server Response");
          } else if (err.response?.status === 401) {
            dispatch(userLogout())
          }
@@ -63,7 +62,6 @@ export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-            console.log("No Server Response");
          } else if (err.response?.status === 401) {
            dispatch(userLogout())
          }

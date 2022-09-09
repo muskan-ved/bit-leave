@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState,ReactElement } from 'react'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -32,8 +32,8 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import { employeeType } from 'src/types/dashboard'
 
 // ** Custom Component Import
-import { AccountAlertOutline, BagPersonalOutline, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
-import { Button } from '@mui/material'
+import { AccountAlertOutline, BagPersonalOutline, ChevronUp, DotsVertical, HomeLightbulbOutline, OfficeBuildingOutline, Poll, TrendingUp } from 'mdi-material-ui'
+import { Button, IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { BoxProps } from '@mui/material/Box'
 
@@ -78,6 +78,12 @@ const TrophyImg = styled('img')(({ theme }) => ({
     width: 10
   }
 }))
+
+interface QuickStatsType {
+  stats: any
+  title: string
+  icon: string
+}
 
 const Dashboard = () => {
 
@@ -275,6 +281,30 @@ const Dashboard = () => {
       setCount(1);
   }, []);
 
+
+  const quickStats: QuickStatsType[] = [
+    {
+      stats: `$${data?.vitals?.averageSalary.toFixed(0)}k`, 
+      title: 'Average Salary in AUD',
+      icon: "/images/cards/user_icon.png"
+    },
+    {
+      stats: data?.vitals?.totalLeaveLiabilities.toFixed(2),
+      title: 'Total Leave Liabilities (days)',
+      icon: "/images/cards/total_leave_liabilities.png"
+    },
+    {
+      stats: data?.vitals.headcount,
+      title: 'Organisational Headcount',
+      icon: "/images/cards/org_headcount.png"
+    },
+    {
+      stats: '4',
+      title: 'Leave Mobilesed (Days)',
+      icon: "/images/cards/leave_mobilised.png"
+    }
+  ]
+
   if (isLoading)
     return (<CircularProgress color="success" />)
 
@@ -295,6 +325,22 @@ const Dashboard = () => {
       </Grid>)
   }
 
+  const renderStats = () => {
+    return data && quickStats.map((item: QuickStatsType, index: number) => (
+      <Grid item xs={12} sm={3} key={index}>
+        <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+          <CustomAvatar src={item.icon}  variant='rounded' color={'primary'}  sx={{ mr: 4 ,width:"auto"}} />
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant='h6' sx={{ fontWeight: 600 }}>
+            {item.stats}
+            </Typography>
+            <Typography variant='caption'>{item.title}</Typography>
+          </Box>
+        </Box>
+      </Grid>
+    ))
+  }
+
   if (!isLoading && data && data.profile.onboarded) {
     return (
       <>
@@ -308,8 +354,21 @@ const Dashboard = () => {
             <Divider></Divider>
             </Grid>
           </Grid>
+          <Grid container spacing={6}>
+            <Grid item  xs={12}>
+              <Card>
+                <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>}  />
+                <CardContent>
+                  <Grid container spacing={6}>
+                    {renderStats()}
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+          <br />
         <Grid container spacing={6}>
-          <Grid item md={5} xs={12} >
+          <Grid item md={7} xs={12} >
             <Card>
               <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
               <CardContent>
@@ -373,7 +432,7 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={3} xs={12}  >
+          <Grid item md={5} xs={12} sx={{display:"inline-grid"}} >
             <Card>
               <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>
@@ -393,81 +452,6 @@ const Dashboard = () => {
                 </StyledBox>
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item md={4} xs={12} sm={12}>
-            <Card>
-              <CardHeader title='Quick Stats' subheader={<Divider></Divider>} />
-              <CardContent sx={{ py: 3 }}>
-                <Grid container spacing={5}>
-                  <Grid item xs={6}>
-                    <TrophyImg alt='Congratulations Daisy' src={`/images/cards/card-stats-img-3.png`} />
-                  </Grid>
-                  <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                      <Typography variant='h6' sx={{ mr: 1.75 }}>
-                        ${data.vitals.averageSalary.toFixed(0)}k
-                      </Typography>
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
-                          {/* +12% */}
-                        </Typography>
-                        {/* <ChevronUp fontSize='small' sx={{ color: 'success.main' }} /> */}
-                      </Box>
-                    </Box>
-                    <Typography variant='body2'>Average Salary in AUD</Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-              <Divider sx={{ my: 0 }} />
-              <CardContent sx={{ py: theme => `${theme.spacing(3)} !important` }}>
-                <Grid container spacing={5}>
-                  <Grid item xs={6}>
-                    <TrophyImg alt='Congratulations Daisy' src={`/images/cards/sales-overview-logo.png`} />
-                  </Grid>
-                  <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                      <Typography variant='h6' sx={{ mr: 1.75 }}>
-                        {data.vitals.totalLeaveLiabilities.toFixed(2)}
-                      </Typography>
-                    </Box>
-                    <Typography variant='body2'>Total Leave Liabilities (days)</Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-              <Divider sx={{ my: 0 }} />
-              <CardContent sx={{ py: theme => `${theme.spacing(3)} !important` }}>
-                <Grid container spacing={5}>
-                  <Grid item xs={6}>
-                    <TrophyImg alt='Congratulations Daisy' src={`/images/cards/headcount.png`} />
-                  </Grid>
-                  <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                      <Typography variant='h6' sx={{ mr: 1.75 }}>
-                        {data.vitals.headcount}
-                      </Typography>
-                    </Box>
-                    <Typography variant='body2'>Organisational Headcount</Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-              <Divider sx={{ my: 0 }} />
-              <CardContent sx={{ py: theme => `${theme.spacing(3)} !important` }}>
-                <Grid container spacing={5}>
-                  <Grid item xs={6}>
-                    <TrophyImg alt='Congratulations Daisy' src={`/images/cards/trophy.png`} />
-                  </Grid>
-                  <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-                      <Typography variant='h6' sx={{ mr: 1.75 }}>
-                        4
-                      </Typography>
-                    </Box>
-                    <Typography variant='body2'>Leave Mobilesed (Days)</Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-
           </Grid>
         </Grid>
         <br />
