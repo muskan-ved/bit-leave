@@ -178,9 +178,9 @@ const VerticalNavLink = ({
                   ...(parent ? { ml: 2, mr: 4 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
                 }}
               >
-              {item.title === "Demo Company" ? 
+              {item.subject === "orgname" ? 
               <span >
-                <img src="https://uploads-ssl.webflow.com/6222c6f371f51f626a16077d/622e7fbf19b7cc22f478da42_bitleaveLogo.png" alt="Organisation Logo" width='70px' />
+                <img src="https://o.remove.bg/downloads/402e773a-1cb9-44c7-83da-86401a18bc5f/text-in-vintage-banner-9393ld-removebg-preview.png" alt="Organisation Logo" width='70px' />
               </span>
           
        : 
@@ -208,7 +208,7 @@ const VerticalNavLink = ({
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                   noWrap: true
                 })}
-                sx={{...(item.title === "Demo Company" ? {fontSize:'14px'} : "") }}
+                sx={{...(item.subject === "orgname" ? {fontSize:'14px'} : "") }}
               >
                 <Translations text={item.title} />
               </Typography>

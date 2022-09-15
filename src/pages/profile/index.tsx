@@ -298,7 +298,7 @@ const Profile = () => {
 							The size of the Organisation logo should be 500*500.
 						</Typography>
 						<Box sx={{ ml: 3, pl: 3, pb: 4 }} className="btndivider">
-							<Button variant="contained" component="label">
+							<Button variant="contained" component="label" disabled>
 								Upload Organisation Logo
 								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} hidden />
 							</Button>

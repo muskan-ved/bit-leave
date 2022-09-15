@@ -14,5 +14,6 @@ export default {
   loadEmployee:`${BASE_URL}/employees/`,
   listEmployee:`${BASE_URL}/employees/list`,
   postOrgOnboarding:`${BASE_URL}/organisations/onboarding`,
-  updateThresholds:`${BASE_URL}/organisations/thresholds`
+  updateThresholds:`${BASE_URL}/organisations/thresholds`,
+  xeroReturnUrl: `${BASE_URL}/organisations/xeroConnect`,
 }

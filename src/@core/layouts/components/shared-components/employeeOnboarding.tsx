@@ -105,7 +105,6 @@ const EmployeeOnboardingDialog = (props: any) => {
               <Autocomplete
                 {...field}
                 open={open}
-
                 options={options}
                 loading={loading}
                 onOpen={() => setOpen(true)}

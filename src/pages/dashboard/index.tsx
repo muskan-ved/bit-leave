@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useEffect, useState,ReactElement } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
@@ -419,13 +419,13 @@ const Dashboard = () => {
                 <br></br>
                 <Grid container spacing={1}>
                   <Grid item xs={5} sm={6}>
-                    <Box onClick={cashoutLeaveButtonClick} sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained'>Cashout Leave</Button>
+                    <Box  sx={{ display: 'grid', alignItems: 'left' }}>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={5} sm={6}>
-                    <Box onClick={takeLeaveButtonClick} sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained'>Take Leave</Button>
+                    <Box  sx={{ display: 'grid', alignItems: 'left' }}>
+                      <Button variant='contained' onClick={takeLeaveButtonClick} disabled>Take Leave</Button>
                     </Box>
                   </Grid>
                 </Grid>

@@ -52,6 +52,27 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
     }
   })
 
+export const xeroReturlUrl = createAsyncThunk('xero/returnUrl',
+  async (_: void, { dispatch, getState }: Redux) => {
+    try{
+    const token = localStorage.getItem("accessToken");
+   
+    const result = await axios
+      .get(API.xeroReturnUrl, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    } 
+    catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401) {
+          //  dispatch(userLogout())
+         }
+        }
+    }
+  })
+
 const appOnboardingSlice = createSlice({
   name: 'appOnboarding',
   initialState: {
@@ -85,6 +106,8 @@ const appOnboardingSlice = createSlice({
     })
     builder.addCase(postOrgOnboarding.pending, (state, action) => {
       state.isLoading = true;
+    })
+    builder.addCase(xeroReturlUrl.fulfilled, (state, action) => {
     })
   }
 })
