@@ -790,10 +790,12 @@ const Onboarding = () => {
 				</form>)
 			case 3:
 				return (<Grid container spacing={5}>
-					<Grid item xs={12}>
-						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
+					<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
 						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Connect to Xero</Typography>
-						<Typography variant='body2' gutterBottom sx={{ float: "left" }}>Please click below, to link your Xero tenant with bit.leave. This will open a seperate window. Please note, you will be asked to allow bit.leave access to certain scopes (payroll etc.). This will enable bit.leave to automatically calculate excess leave amounts based on thresholds. Furthermore, please note, you will need to sign into Xero to complete the flow.</Typography>
+						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
+					</Grid>
+					<Grid  xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
+						<Typography variant='body2' gutterBottom >Please click below, to link your Xero tenant with bit.leave. This will open a seperate window. Please note, you will be asked to allow bit.leave access to certain scopes (payroll etc.). This will enable bit.leave to automatically calculate excess leave amounts based on thresholds. Furthermore, please note, you will need to sign into Xero to complete the flow.</Typography>
 					</Grid>
 					<Grid item xs={12}>
 						<Box sx={{ float: "left" }}>
@@ -813,11 +815,13 @@ const Onboarding = () => {
 				return (
 				<form key={0} onSubmit={handleTenantIdSubmit(onTenantIdSubmit, onError)}>
 			       <Grid container spacing={5}>
-			         <Grid item xs={12}>
-							<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
-							<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Choose Tenant Id</Typography>
-							<Typography variant='body2' gutterBottom sx={{ float: "left" , color: 'success.main'}}>Success / </Typography>
-							<Typography variant='body2' gutterBottom sx={{ float: "left",color: 'error.main' }}>/ Error message show there.</Typography>
+					<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
+						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Choose Tenant Id</Typography>
+						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
+					</Grid>
+					<Grid  xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
+						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'success.main'}}>Success / </Typography>
+						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'error.main'}}>/ Error message show there.</Typography>
 					</Grid>
 			         <Grid item xs={12}>
 			           <FormControl fullWidth >
@@ -830,20 +834,20 @@ const Onboarding = () => {
 			                   value={value}
 			                   onChange={onChange}>
 			                   <FormControlLabel
-			                     value="123U-brett"
+			                     value="Brett-123U"
 			                     control={<Radio />}
-			                     label="123U-brett"
+			                     label="Brett-123U"
 								 />
 								
 			                   <FormControlLabel
-			                     value="u234xe-kushal"
+			                     value="Kushal-u234xe"
 			                     control={<Radio />}
-			                     label="u234xe-kushal"
+			                     label="Kushal-u234xe"
 			                   />
 			                   <FormControlLabel
-			                     value="62wetx-vaghani"
+			                     value="Vaghani-62wetx"
 			                     control={<Radio />}
-			                     label="62wetx-vaghani"
+			                     label="Vaghani-62wetx"
 			                   />
 			                 </RadioGroup>
 			               )}
