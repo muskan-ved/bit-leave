@@ -180,7 +180,7 @@ const VerticalNavLink = ({
               >
               {item.subject === "orgname" ? 
               <span >
-                <img src="https://o.remove.bg/downloads/402e773a-1cb9-44c7-83da-86401a18bc5f/text-in-vintage-banner-9393ld-removebg-preview.png" alt="Organisation Logo" width='70px' />
+                <img src="/images/cards/company_logo.png" alt="Organisation Logo" width='70px' />
               </span>
           
        : 

@@ -23,7 +23,7 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
     try {
       
       const result = await axios
-         .get(API.loadOrganisation , {
+         .get(API.loadOrganisation + empId, {
           headers: { 'Authorization': `Bearer ${token}` }
         })
 

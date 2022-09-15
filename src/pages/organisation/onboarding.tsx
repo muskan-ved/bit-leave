@@ -826,23 +826,24 @@ const Onboarding = () => {
 			               control={tenantIdControl}
 			               name="tenantId"
 			               render={({ field: { value, onChange } }) => (
-			                 <RadioGroup row={true}
+			                 <RadioGroup row={false}
 			                   value={value}
 			                   onChange={onChange}>
 			                   <FormControlLabel
-			                     value="123U"
+			                     value="123U-brett"
 			                     control={<Radio />}
-			                     label="123U"
+			                     label="123U-brett"
+								 />
+								
+			                   <FormControlLabel
+			                     value="u234xe-kushal"
+			                     control={<Radio />}
+			                     label="u234xe-kushal"
 			                   />
 			                   <FormControlLabel
-			                     value="u234xe"
+			                     value="62wetx-vaghani"
 			                     control={<Radio />}
-			                     label="u234xe"
-			                   />
-			                   <FormControlLabel
-			                     value="6532wetx"
-			                     control={<Radio />}
-			                     label="6532wetx"
+			                     label="62wetx-vaghani"
 			                   />
 			                 </RadioGroup>
 			               )}
