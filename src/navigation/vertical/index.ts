@@ -1,5 +1,6 @@
 // ** Icon imports
 import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline } from 'mdi-material-ui'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -75,6 +76,13 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Sync Org',
       icon: FileUploadOutline,
       // path: '/organisation',
+      action: 'manage',
+      subject: 'admin'
+    },
+    {
+      title: 'Setup',
+      icon: SettingsOutlinedIcon,
+      path: '/setup',
       action: 'manage',
       subject: 'admin'
     },

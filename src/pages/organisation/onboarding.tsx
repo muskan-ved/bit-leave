@@ -98,7 +98,7 @@ const tenantIdSchema = yup.object().shape({
 
 const Onboarding = () => {
 
-	const steps = ['Start', 'Contacts', 'Approval', 'Connect to XERO','Choose Tenant Id'];
+	const steps = ['Start', 'Contacts', 'Approval', 'Connect to XERO','Choose Xero Tenant'];
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [buttonToggle, setButtonToggle] = React.useState(false);
 	const router = useRouter()
@@ -161,7 +161,6 @@ const Onboarding = () => {
 	const {
 		control: tenantIdControl,
 		handleSubmit: handleTenantIdSubmit,
-		// watch: watchTenantId,
 		formState: { errors: tenantIdErrors }
 	} = useForm({
 		defaultValues: defaultTenantIdValue,
@@ -251,7 +250,6 @@ const Onboarding = () => {
 	}
 
 	const complianceSelected = watchCompliance('compliance')
-	// const tenantIdSelected = watchTenantId('tenantId')
 	const approvalSelected = watchApproval()
 
 	const onComplianceSubmit = (data: any) => {
@@ -341,10 +339,7 @@ const Onboarding = () => {
 		setButtonToggle(true)
 		const xeroo = await dispatch(xeroReturlUrl())
 		if (xeroo.payload) {
-			console.log(xeroo, "response")
-
 		} else {
-			console.log("errr")
 		}
 	}
 
@@ -816,7 +811,7 @@ const Onboarding = () => {
 				<form key={0} onSubmit={handleTenantIdSubmit(onTenantIdSubmit, onError)}>
 			       <Grid container spacing={5}>
 					<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
-						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Choose Tenant Id</Typography>
+						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Choose Xero Tenant</Typography>
 						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
 					</Grid>
 					<Grid  xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>

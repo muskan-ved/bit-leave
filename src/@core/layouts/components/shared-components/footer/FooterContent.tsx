@@ -5,7 +5,7 @@ import { Theme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import Divider from "@mui/material/Divider"
-import { BASE_URL_1 } from 'src/configs/apiEndpoints'
+import { APP_URL } from 'src/configs/apiEndpoints'
 
 const FooterContent = () => {
   // ** Var
@@ -19,7 +19,7 @@ const FooterContent = () => {
         </Typography>
         {hidden ? null : (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
-            <Link target='_blank' href={BASE_URL_1}>
+            <Link target='_blank' href={APP_URL}>
               About Bit.Leave
             </Link>
           </Box>

@@ -1,11 +1,13 @@
-export const BASE_URL = "https://api.bitleave.co"; 
-export const BASE_URL_1 = "https://bitleave.co";
+export const BASE_URL = "https://app-dev.api.bitleave.co/v1"; 
+export const APP_URL = "https://app-dev.bitleave.co";
+export const ORG_URL = "https://app-dev.api.bitleave.co"
 
 export default {
+  handleRegister:`${ORG_URL}/checkorganisations`,
+  
   loadOrganisation:`${BASE_URL}/organisations/`,
   uploadCSVToS3:`${BASE_URL}/employees/syncOrg`,
   cashoutActionApproval:`${BASE_URL}/employeeactions/`,
-  handleRegister:`${BASE_URL}/checkorganisations`,
   updateTemplateData:`${BASE_URL}/organisations/templates`,
   postEmployeeOnboarding:`${BASE_URL}/employees/onboarding`,
   postEmployeeCashout:`${BASE_URL}/employeeactions/cashout`,
