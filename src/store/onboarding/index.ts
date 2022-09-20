@@ -67,7 +67,29 @@ export const xeroReturlUrl = createAsyncThunk('xero/returnUrl',
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
          } else if (err.response?.status === 401) {
-          //  dispatch(userLogout())
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+
+
+  export const xeroConnectUrl = createAsyncThunk('xero/connectionUrl',
+  async (_: void, { dispatch, getState }: Redux) => {
+    try{
+    const token = localStorage.getItem("accessToken");
+  
+    const result = await axios
+      .get(`${API.xeroConnectionUrl}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    } 
+    catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
          }
         }
     }

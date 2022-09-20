@@ -12,18 +12,12 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
   async (_params: void, { dispatch, getState }: Redux) => {
 
     const token = localStorage.getItem("accessToken");
-    const userData = localStorage.getItem("userData")
-    var organisationId;
-    if (userData != null) {
-      organisationId = JSON.parse(userData)
-    }
-    const orgvarId = getState().user.orgId
-    const empId = orgvarId !== null? orgvarId : organisationId.orgId;
+
 
     try {
       
       const result = await axios
-         .get(API.loadOrganisation + empId, {
+         .get(API.loadOrganisation + "me", {
           headers: { 'Authorization': `Bearer ${token}` }
         })
 

@@ -1,8 +1,8 @@
 export type OnboardingType = {
-  compliance: string,
-  leaveNotification: number|null,
-  leaveWarning: number|null,
-  maxPayout: number|null,
+  employeeAwardType: string,
+  thresholdLeaveNotification: number|null,
+  thresholdLeaveWarning: number|null,
+  thresholdPayoutFrequency: number|null,
   email: string,
   payrollEmail: string,
   payrollLink: string,

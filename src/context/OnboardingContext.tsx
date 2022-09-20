@@ -41,9 +41,9 @@ const OnboardingProvider = ({ children }: Props) => {
       if (!organisationStore.id) {
         //todo: get it from store
         const organisation = await dispatch(loadOrganisation())
-        if (organisation.payload)
-        orgOnBoarding = organisation.payload.data.organisation.active
-        else
+        if (organisation.payload){
+        orgOnBoarding = organisation.payload.data[0].active
+         } else
         orgOnBoarding = false
 
       }

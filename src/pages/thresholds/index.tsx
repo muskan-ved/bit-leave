@@ -43,11 +43,11 @@ const Thresholds = () => {
       const data = JSON.parse(userData)
       orgId = data.orgId;
     }
-    await dispatch(getExcessLeave(orgId)).then((res) => {
-        const data = res.payload.data.organisation;
-        setLeaveNotification(data.organisationssettings[0].thrleavenotification)
-        setLeaveWarning(data.organisationssettings[0].thrleavewarning)
-        setMaximumPayout(data.organisationssettings[0].thrpayoutfrequency)
+    await dispatch(getExcessLeave()).then((res) => {
+        const data = res.payload?.data;
+        setLeaveNotification(data[0]?.organisationssettings?.[0].thrleavenotification)
+        setLeaveWarning(data[0]?.organisationssettings?.[0].thrleavewarning)
+        setMaximumPayout(data[0]?.organisationssettings?.[0].thrpayoutfrequency)
         setData(data)
         setIsLoading(false);
       })
@@ -77,17 +77,25 @@ const Thresholds = () => {
 
     if(leaveNotification || leaveWarning || maximumPayout){
     const data = {
-      thrleavenotification: leaveNotification,
-      thrleavewarning: leaveWarning,
-      thrpayoutfrequency: maximumPayout,
+      thresholdLeaveNotification: leaveNotification,
+      thresholdLeaveWarning: leaveWarning,
+      thresholdPayoutFrequency: maximumPayout,
     }
     setIsLoading(true);
-     await dispatch(excessLeaveThresholds(data)).then(()=>{
+     await dispatch(excessLeaveThresholds(data)).then((res)=>{
         setIsLoading(false);
+        if(res.payload){
         toast.success("Successfully updated thresholds", {
           autoClose: 5000,
           hideProgressBar: false,
         })
+      }
+      else{
+        toast.error("Failed to updated thresholds", {
+          autoClose: 5000,
+          hideProgressBar: false,
+        })
+      }
         fetchData();
       }).catch(()=>{
         setIsLoading(false);

@@ -62,22 +62,16 @@ const Templates = () => {
   const { logout } = useAuth()
 
   const fetchData = async () => {
-   
-    const userData = localStorage.getItem("userData")
-    let id;
-    if (userData != null) {
-      const data = JSON.parse(userData)
-      id = data.orgId;
-    }
 
     axios
-      .get(API.loadOrganisation + id, {
+      .get(API.loadOrganisation + "me", {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
-        const data = res.data.data.organisation.organisationstemplates
+        const data = res.data.organisationstemplates
         const editorState: any[] = []
         const tabList: string[] = []
+        setIsLoading(false);
         setTabList([]);
         setEditorState([]);
         data.map((value: any, i: number) => {
@@ -92,7 +86,6 @@ const Templates = () => {
         setEditorState(editorState);
         setTabList(tabList);
         setGetData(data);
-        setIsLoading(false);
       })
       .catch((reason: AxiosError) => {
         if (reason.response && reason.response!.status === 401) {

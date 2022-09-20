@@ -119,15 +119,8 @@ export const loadEmployee = createAsyncThunk('emp/load',
   async (_: void, { dispatch, getState }: Redux) => {
     try{
     const token = localStorage.getItem("accessToken");
-    var user;
-    const userData = localStorage.getItem("userData");
-    if (userData != null) {
-      user = JSON.parse(userData)
-    }
-    const employeeId = getState().user.id
-    const empId = employeeId !== null? employeeId : user.id;
     const result = await axios
-      .get(API.loadEmployee + empId, {
+      .get(API.loadEmployee + "me", {
         headers: { 'Authorization': `Bearer ${token}` }
       })
     return result.data

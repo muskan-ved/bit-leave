@@ -11,7 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Paper from '@mui/material/Paper';
 import { Check, Eraser } from 'mdi-material-ui';
-import { postOrgOnboarding, xeroReturlUrl } from 'src/store/onboarding';
+import { postOrgOnboarding, xeroConnectUrl, xeroReturlUrl } from 'src/store/onboarding';
 import { AppDispatch } from 'src/store';
 import { useDispatch } from 'react-redux'
 import BlankLayoutWithAppBarWrapper from 'src/@core/layouts/BlankLayoutWithAppBar';
@@ -27,10 +27,10 @@ const StepperContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 	padding: theme.spacing(7)
 }))
 interface OnBoardingState {
-	compliance: string,
-	leaveNotification: number | null,
-	leaveWarning: number | null,
-	maxPayout: number | null,
+	employeeAwardType: string,
+	thresholdLeaveNotification: number | null,
+	thresholdLeaveWarning: number | null,
+	thresholdPayoutFrequency: number | null,
 	email: string,
 	payrollEmail: string,
 	payrollLink: string,
@@ -41,13 +41,13 @@ interface OnBoardingState {
 
 
 const defaultComplianceValue = {
-	compliance: ''
+	employeeAwardType: ''
 }
 
 const defaultThresholdValue = {
-	leaveNotification: '',
-	leaveWarning: '',
-	maxPayout: ''
+	thresholdLeaveNotification: '',
+	thresholdLeaveWarning: '',
+	thresholdPayoutFrequency: ''
 }
 
 const defaultcontactValue = {
@@ -66,13 +66,13 @@ const defaultTenantIdValue = {
 }
 
 const complianceSchema = yup.object().shape({
-	compliance: yup.string().required()
+	employeeAwardType: yup.string().required()
 })
 
 const thresholdSchema = yup.object().shape({
-	leaveNotification: yup.number().required(),
-	leaveWarning: yup.number().required(),
-	maxPayout: yup.number().required()
+	thresholdLeaveNotification: yup.number().required(),
+	thresholdLeaveWarning: yup.number().required(),
+	thresholdPayoutFrequency: yup.number().required()
 })
 
 const contactSchema = yup.object().shape({
@@ -101,12 +101,13 @@ const Onboarding = () => {
 	const steps = ['Start', 'Contacts', 'Approval', 'Connect to XERO','Choose Xero Tenant'];
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [buttonToggle, setButtonToggle] = React.useState(false);
+	const [tenantData, setTenantData] = React.useState([]);
 	const router = useRouter()
 	const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
-		compliance: '',
-		leaveNotification: null,
-		leaveWarning: null,
-		maxPayout: null,
+		employeeAwardType: 'award',
+		thresholdLeaveNotification: 20,
+		thresholdLeaveWarning: 50,
+		thresholdPayoutFrequency: 10,
 		email: '',
 		payrollEmail: '',
 		payrollLink: '',
@@ -249,13 +250,13 @@ const Onboarding = () => {
 
 	}
 
-	const complianceSelected = watchCompliance('compliance')
+	const complianceSelected = watchCompliance('employeeAwardType')
 	const approvalSelected = watchApproval()
 
 	const onComplianceSubmit = (data: any) => {
 		const stateData = {
 			...onBoarding,
-			compliance: data.compliance
+			employeeAwardType: data.compliance
 		}
 		setOnBoardingState(stateData)
 		handleNext()
@@ -264,9 +265,9 @@ const Onboarding = () => {
 	const onThresholdSubmit = (data: any) => {
 		const stateData = {
 			...onBoarding,
-			leaveNotification: data.leaveNotification,
-			leaveWarning: data.leaveWarning,
-			maxPayout: data.maxPayout
+			thresholdLeaveNotification: data.leaveNotification,
+			thresholdLeaveWarning: data.leaveWarning,
+			thresholdPayoutFrequency: data.maxPayout
 		}
 		setOnBoardingState(stateData)
 		handleNext()
@@ -302,6 +303,11 @@ const Onboarding = () => {
 		const stateData = {
 			...onBoarding,
 		}
+		const xeroConnect = await dispatch(xeroConnectUrl())
+		if (xeroConnect.payload) {
+			setTenantData(xeroConnect.payload.data.connections)
+			} else {
+		}
 		setOnBoardingState(stateData)
 		handleNext()
 
@@ -313,11 +319,11 @@ const Onboarding = () => {
 			 tenantId: data.tenantId,
 		}
 		setOnBoardingState(stateData)
-		// await dispatch(postOrgOnboarding(
-			//   stateData
-		// ))
-		// await dispatch(loadOrganisation())
-		// router.push('/home')
+		await dispatch(postOrgOnboarding(
+			  stateData
+		))
+		await dispatch(loadOrganisation())
+		router.push('/home')
 	}
 	
 	const formatIntoPng = () => {
@@ -337,14 +343,11 @@ const Onboarding = () => {
 	// Connect to XERO Step
 	const onXeroRedirectURL = async () => {
 		setButtonToggle(true)
-		const xeroo = await dispatch(xeroReturlUrl())
-		if (xeroo.payload) {
-		} else {
+		const xeroUrl = await dispatch(xeroReturlUrl())
+		if (xeroUrl.payload) {
+			window.open(xeroUrl.payload.data.url)
 		}
 	}
-
-	//  Step back on preview step
-	// onXeroStepBack
 
 	const onError = () => { };
 	const getStepContent = (step: number) => {
@@ -815,10 +818,13 @@ const Onboarding = () => {
 						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
 					</Grid>
 					<Grid  xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
-						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'success.main'}}>Success / </Typography>
-						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'error.main'}}>/ Error message show there.</Typography>
+					{tenantData.length > 0 ? 
+						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'success.main'}}>Connection to Xero established. </Typography>:
+						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'error.main'}}>No connection to Xero was established.</Typography>}
 					</Grid>
 			         <Grid item xs={12}>
+					   {tenantData.length > 0 ? tenantData?.map((item:any)=>{
+						return(
 			           <FormControl fullWidth >
 			             <Controller
 			               rules={{ required: true }}
@@ -829,31 +835,20 @@ const Onboarding = () => {
 			                   value={value}
 			                   onChange={onChange}>
 			                   <FormControlLabel
-			                     value="Brett-123U"
+			                     value={item?.tenantId}
 			                     control={<Radio />}
-			                     label="Brett-123U"
+			                     label={(item?.tenantName) +" - "+ (item?.tenantId)}
 								 />
-								
-			                   <FormControlLabel
-			                     value="Kushal-u234xe"
-			                     control={<Radio />}
-			                     label="Kushal-u234xe"
-			                   />
-			                   <FormControlLabel
-			                     value="Vaghani-62wetx"
-			                     control={<Radio />}
-			                     label="Vaghani-62wetx"
-			                   />
 			                 </RadioGroup>
 			               )}
 			             />
 			             {tenantIdErrors.tenantId && (
-			               <FormHelperText sx={{ color: 'error.main' }} id='stepper-linear-account-username'>
+							 <FormHelperText sx={{ color: 'error.main' }} id='stepper-linear-account-username'>
 			                 This field is required
 			               </FormHelperText>
 			             )}
 			           </FormControl>
-			           {/* {getComplianceContent()} */}
+						)}):""}
 			           </Grid>
 			         <Grid item xs={12}>
 						<Box sx={{ float: "left" }}>

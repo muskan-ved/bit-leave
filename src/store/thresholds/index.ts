@@ -16,13 +16,11 @@ interface Redux {
   }
 
 export const getExcessLeave = createAsyncThunk('excessLeaveData',
-  async (id: any, { dispatch, getState }: Redux) => {
-
- 
+  async (_: void, { dispatch, getState }: Redux) => {
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .get(API.loadOrganisation + id,
+        .get(API.loadOrganisation + "me",
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -43,14 +41,11 @@ export const getExcessLeave = createAsyncThunk('excessLeaveData',
 
 export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
   async (params: any, { dispatch, getState }: Redux) => {
-    const payload ={
-      data:params
-    }
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .put(API.updateThresholds,
-          payload,
+        .patch(API.updateThresholds,
+          params,
           {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -72,7 +67,6 @@ export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
   const thresholdSlice = createSlice({
     name: 'thresholds',
     initialState: {
-      id: null,
       organisationssettings: [],
     } as thresholds,
     reducers: {
