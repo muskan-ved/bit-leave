@@ -6,9 +6,9 @@ export default {
   handleRegister:`${ORG_URL}/checkorganisations`,
   
   loadOrganisation:`${BASE_URL}/organisation/`,
-  uploadCSVToS3:`${BASE_URL}/employees/syncOrg`,
+  uploadCSVToS3:`${BASE_URL}/employees/SyncOrg`,
   cashoutActionApproval:`${BASE_URL}/employeeactions/`,
-  updateTemplateData:`${BASE_URL}/organisation/templates`,
+  updateTemplateData:`${BASE_URL}/organisation/template`,
   postEmployeeOnboarding:`${BASE_URL}/employees/onboarding`,
   postEmployeeCashout:`${BASE_URL}/employeeactions/cashout`,
   calculateEmployeeCashout:`${BASE_URL}/employeeactions/calculate`,

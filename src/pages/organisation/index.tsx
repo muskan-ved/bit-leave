@@ -282,7 +282,12 @@ const UpdateOrganisation = () => {
 		if (e.target.files[0]) {
 			fileReader.onload = function (event: any) {
 				const text = event.target.result;
-				const fileName = (e.target.files[0].name.replace(e.target.files[0].name), `demo${Math.floor((Math.random() * 1000) + 1)}.csv`)
+				const userData = window.localStorage.getItem('userData')
+				let user
+				if (userData != null) {
+				   user = JSON.parse(userData)
+				}
+				const fileName = (e.target.files[0].name.replace(e.target.files[0].name), `${user.orgId}${Math.floor((Math.random() * 1000) + 1)}.csv`)
 
 				//csv validation
 				CSVFileValidator(e.target.files[0], columns)
@@ -311,11 +316,12 @@ const UpdateOrganisation = () => {
 										const article = { processIdentifier: fileName };
 										await dispatch(uploadCSVToS3(article))
 											.then(response => {
-												if (response) { }
+												if (response.payload !== undefined) {
 												toast.success("Successfully processed the update", {
 													autoClose: 5000,
 													hideProgressBar: false,
 												})
+											}
 											})
 											.catch(err => {
 												if (err) { }
@@ -466,7 +472,7 @@ const UpdateOrganisation = () => {
 					<Box sx={{ m: 3, p: 3 }} className="btndivider">
 						<Button variant="contained" component="label">
 							Upload File
-							<input style={{ marginLeft: 60 }} type={"file"} id={"csvFileInput"} accept={".csv"} onChange={handleOnChange} hidden />
+							<input  type={"file"} id={"csvFileInput"} accept={".csv"} onChange={handleOnChange} onClick={(event:any)=> {event.target.value = null}} hidden style={{ marginLeft: 60 }} />
 						</Button>
 					</Box>
 					<CardContent >

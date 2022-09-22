@@ -51,7 +51,7 @@ const EmployeeOnboardingDialog = (props: any) => {
     setprogress(false)
   }
 
-  const onError = (e: any) => console.log('errors', e);
+  const onError = (e: any) => {};
   useEffect(() => {
     let active = true
 

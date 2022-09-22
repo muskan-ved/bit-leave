@@ -37,13 +37,7 @@ const Thresholds = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const fetchData = async () => {
-    const userData = localStorage.getItem("userData")
-    let orgId;
-    if (userData != null) {
-      const data = JSON.parse(userData)
-      orgId = data.orgId;
-    }
-    await dispatch(getExcessLeave()).then((res) => {
+    const excessleave = await dispatch(getExcessLeave()).then((res) => {
         const data = res.payload?.data;
         setLeaveNotification(data[0]?.organisationssettings?.[0].thrleavenotification)
         setLeaveWarning(data[0]?.organisationssettings?.[0].thrleavewarning)
@@ -77,9 +71,9 @@ const Thresholds = () => {
 
     if(leaveNotification || leaveWarning || maximumPayout){
     const data = {
-      thresholdLeaveNotification: leaveNotification,
-      thresholdLeaveWarning: leaveWarning,
-      thresholdPayoutFrequency: maximumPayout,
+      thresholdLeaveNotification: typeof(leaveNotification) === "string" ? parseInt(leaveNotification) : leaveNotification,
+      thresholdLeaveWarning: typeof(leaveWarning) === "string" ? parseInt(leaveWarning) : leaveWarning,
+      thresholdPayoutFrequency: typeof(maximumPayout) === "string" ? parseInt(maximumPayout) : maximumPayout
     }
     setIsLoading(true);
      await dispatch(excessLeaveThresholds(data)).then((res)=>{
@@ -143,7 +137,7 @@ const Thresholds = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  type='number'
+                 
                   label='Excess Leave Notification'
                   name='Excess Leave Notification'
                   defaultValue={
@@ -162,7 +156,7 @@ const Thresholds = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  type='number'
+                
                   label='Excess Leave Warning'
                   name='Excess Leave Warning'
                   defaultValue={leaveWarning}
@@ -179,7 +173,7 @@ const Thresholds = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  type='number'
+                 
                   label='Maximum Payout'
                   name='Maximum Payout'
                   defaultValue={maximumPayout}

@@ -349,11 +349,12 @@ const Onboarding = () => {
 		}
 	}
 
-	const onError = () => { };
+	const onError = () => {return ""};
 	const getStepContent = (step: number) => {
 		switch (step) {
 			case 0:
 				return (startOnBoarding())
+
 			// case 1:
 			//   return (
 			//     <form key={0} onSubmit={handleComplianceSubmit(onComplianceSubmit, onError)}>
@@ -371,7 +372,7 @@ const Onboarding = () => {
 			//             <Controller
 			//               rules={{ required: true }}
 			//               control={complianceControl}
-			//               name="compliance"
+			//               name="employeeAwardType"
 			//               render={({ field: { value, onChange } }) => (
 			//                 <RadioGroup row={true}
 			//                   value={value}
@@ -394,7 +395,7 @@ const Onboarding = () => {
 			//                 </RadioGroup>
 			//               )}
 			//             />
-			//             {complianceErrors.compliance && (
+			//             {complianceErrors.employeeAwardType && (
 			//               <FormHelperText sx={{ color: 'error.main' }} id='stepper-linear-account-username'>
 			//                 This field is required
 			//               </FormHelperText>
@@ -787,12 +788,13 @@ const Onboarding = () => {
 					</Grid>
 				</form>)
 			case 3:
-				return (<Grid container spacing={5}>
+				return (
+				<Grid container spacing={5}>
 					<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
 						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Connect to Xero</Typography>
 						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
 					</Grid>
-					<Grid  xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
+					<Grid item xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
 						<Typography variant='body2' gutterBottom >Please click below, to link your Xero tenant with bit.leave. This will open a seperate window. Please note, you will be asked to allow bit.leave access to certain scopes (payroll etc.). This will enable bit.leave to automatically calculate excess leave amounts based on thresholds. Furthermore, please note, you will need to sign into Xero to complete the flow.</Typography>
 					</Grid>
 					<Grid item xs={12}>
@@ -807,7 +809,6 @@ const Onboarding = () => {
 							</Button>}
 						</Box>
 					</Grid>
-
 				</Grid>)
 			case 4:
 				return (
@@ -817,7 +818,7 @@ const Onboarding = () => {
 						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Choose Xero Tenant</Typography>
 						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
 					</Grid>
-					<Grid  xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
+					<Grid item xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
 					{tenantData.length > 0 ? 
 						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'success.main'}}>Connection to Xero established. </Typography>:
 						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'error.main'}}>No connection to Xero was established.</Typography>}
@@ -825,7 +826,7 @@ const Onboarding = () => {
 			         <Grid item xs={12}>
 					   {tenantData.length > 0 ? tenantData?.map((item:any)=>{
 						return(
-			           <FormControl fullWidth >
+			           <FormControl fullWidth key={item?.tenantId}>
 			             <Controller
 			               rules={{ required: true }}
 			               control={tenantIdControl}

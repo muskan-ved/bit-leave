@@ -33,33 +33,35 @@ import { employeeType } from 'src/types/dashboard'
 
 // ** Custom Component Import
 import { AccountAlertOutline, BagPersonalOutline, ChevronUp, DotsVertical, HomeLightbulbOutline, OfficeBuildingOutline, Poll, TrendingUp } from 'mdi-material-ui'
-import { Button, IconButton } from '@mui/material'
-import { styled } from '@mui/material/styles'
-import { BoxProps } from '@mui/material/Box'
+import { Button, IconButton } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { BoxProps } from '@mui/material/Box';
 
 // ** Custom Components Imports
-import ReactApexcharts from 'src/@core/components/react-apexcharts'
+import ReactApexcharts from 'src/@core/components/react-apexcharts';
 
 // // ** Third Party Imports
-import { ApexOptions } from 'apexcharts'
+import { ApexOptions } from 'apexcharts';
 
 // // ** Util Import
-import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
-import { useTheme } from '@mui/material/styles'
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba';
+import { useTheme } from '@mui/material/styles';
 
 // ** Icons Import
-import AccountOutline from 'mdi-material-ui/AccountOutline'
+import AccountOutline from 'mdi-material-ui/AccountOutline';
+
 // ** Icons Imports
-import RefreshIcon from '@mui/icons-material/Refresh'
+import RefreshIcon from '@mui/icons-material/Refresh';
+
 // ** Redux Import
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
 // ** Redux Store Import
-import { RootState, AppDispatch } from 'src/store'
-import { loadEmployee } from 'src/store/employee'
+import { RootState, AppDispatch } from 'src/store';
+import { loadEmployee } from 'src/store/employee';
 
 // ** Modal Import
-import CashoutDialog from './cashout'
+import CashoutDialog from './cashout';
 
 // Styled Box component
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -94,7 +96,6 @@ const Dashboard = () => {
   const [count, setCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
-
   const handleDialogClose = () => {
     setDialogOpen(false)
   }
@@ -112,7 +113,7 @@ const Dashboard = () => {
 
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
-      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays.toFixed(2)));
+      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)));
     }
     for (let index = 0; index < data?.leavesByDepartment.length; index++) {
       departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
@@ -121,7 +122,7 @@ const Dashboard = () => {
       directReportsOfFullname.push(data?.directReports[index].fullname);
     }
     for (let index = 0; index < data?.directReports.length; index++) {
-      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays.toFixed(2)));
+      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)));
     }
   }
 
@@ -284,12 +285,12 @@ const Dashboard = () => {
 
   const quickStats: QuickStatsType[] = [
     {
-      stats: `$${data?.vitals?.averageSalary.toFixed(0)}k`, 
+      stats: `$${data?.vitals?.averageSalary?.toFixed(0)}k`, 
       title: 'Average Salary in AUD',
       icon: "/images/cards/user_icon.png"
     },
     {
-      stats: data?.vitals?.totalLeaveLiabilities.toFixed(2),
+      stats: data?.vitals?.totalLeaveLiabilities?.toFixed(2),
       title: 'Total Leave Liabilities (days)',
       icon: "/images/cards/total_leave_liabilities.png"
     },
@@ -380,7 +381,7 @@ const Dashboard = () => {
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.totalDays.toFixed(2)}
+                          {data.leaveDetails.totalDays?.toFixed(2)}
                         </Typography>
                         <Typography variant='caption'>Total Days</Typography>
                       </Box>
@@ -393,7 +394,7 @@ const Dashboard = () => {
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.excessDays.toFixed(2)}
+                          {data.leaveDetails.excessDays?.toFixed(2)}
                         </Typography>
                         <Typography variant='caption'>Excess Days</Typography>
                       </Box>
@@ -406,7 +407,7 @@ const Dashboard = () => {
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.cashoutValue.toFixed(2)}k
+                          {data.leaveDetails.cashoutValue?.toFixed(2)}k
                         </Typography>
                         <Typography variant='caption'>Cashout Value</Typography>
                       </Box>
@@ -439,11 +440,11 @@ const Dashboard = () => {
                 <StyledBox>
                   <Box sx={{ py: 1.25, mb: 6, display: 'flex', alignItems: 'center' }}>
                     <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                    <Typography variant='body2'>Department : {data.team.department} </Typography>
+                    <Typography variant='body2'>Department : {data.profile.department} </Typography>
                   </Box>
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                    <Typography variant='body2'>Manager : {data.team.name ? data.team.name : 'No manager assigned'} </Typography>
+                    <Typography variant='body2'>Manager : {data.profile.managerName ? data.profile.managerName : 'No manager assigned'} </Typography>
                   </Box><br />
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
@@ -508,7 +509,7 @@ const Dashboard = () => {
                               </TableCell>
                               <TableCell align='center'>{row.fullname}</TableCell>
                               <TableCell align='right'>{row.department}</TableCell>
-                              <TableCell align='right'>{row.excessDays.toFixed(2)}</TableCell>
+                              <TableCell align='right'>{row.excessDays?.toFixed(2)}</TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

@@ -82,10 +82,6 @@ const VerticalLayout = (props: LayoutProps) => {
 
   useEffect(() => {
     const handleRouteChange = (url: string, { shallow = false }) => {
-      console.log(
-        `App is changing to ${url} ${shallow ? 'with' : 'without'
-        } shallow routing`
-      )
       var data = {
         canShow: false,
         redirect: false,

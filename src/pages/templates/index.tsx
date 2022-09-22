@@ -41,6 +41,10 @@ import { useAuth } from 'src/hooks/useAuth'
 // ** config import
 import API from '../../configs/apiEndpoints'
 
+// ** Toaster import
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Templates = () => {
   // ** State
   const [value, setValue] = useState<string>('0')
@@ -68,7 +72,7 @@ const Templates = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
-        const data = res.data.organisationstemplates
+        const data = res.data.data[0].organisationstemplates;
         const editorState: any[] = []
         const tabList: string[] = []
         setIsLoading(false);
@@ -100,22 +104,21 @@ const Templates = () => {
     for (let i = 0; i < getdata.length; i++) {
       const data = {
         "id": getdata[i].id,
-        "defaulttext": draftToHtml(convertToRaw(editorState[i].getCurrentContent()))
+        "text": draftToHtml(convertToRaw(editorState[i].getCurrentContent()))
       }
       organisationstemplates.push(data);
     }
     const data = {
       "organisationstemplates": organisationstemplates
     }
-    axios.put(API.updateTemplateData, data, {
+    axios.patch(API.updateTemplateData, data, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
-        if (res) { }
-        alert("Data Updated Successfully")
+        toast.success("Successfully updated templates")
       })
       .catch((err) => {
-        alert("Error occured while updating data")
+        toast.success("Failed to updated templates")
       })
 
   }
@@ -150,6 +153,7 @@ const Templates = () => {
 
   return (
     <Card>
+      <ToastContainer  />
       <TabContext value={value}>
         <TabList onChange={handleChangeTab} aria-label='card navigation example'>
           {getTabList && getTabList.map((data: string, i: any) =>

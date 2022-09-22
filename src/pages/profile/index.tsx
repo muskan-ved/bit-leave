@@ -60,7 +60,7 @@ const Profile = () => {
 			>
 				{value === index && (
 					<Box sx={{ p: 3 }}>
-						<Typography>{children}</Typography>
+						<Typography variant='subtitle2'>{children}</Typography>
 					</Box>
 				)}
 			</div>
@@ -108,7 +108,7 @@ const Profile = () => {
 		const file = event.target.files[0];
 
 		reader.onloadend = (e: any) => {
-			let image = e.target.result
+			const image = e.target.result
 			setImagePreviewUrl(image);
 		};
 		reader.readAsDataURL(file);
@@ -132,7 +132,7 @@ const Profile = () => {
 
 	return (<>
 		<Grid container spacing={5}>
-			<Grid item xs={12}>
+			<Grid item xs={12} >
 				<Card>
 					<CardHeader title='Your Profile Details' subheader={<Divider></Divider>} />
 					<Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
@@ -140,9 +140,43 @@ const Profile = () => {
 							<Tab label={data} key={i} {...a11yProps(i)} />
 						)}
 					</Tabs>
-					<TabPanel value={value} index={0}>
-						<CardContent>
+					<TabPanel value={value} index={0} >
+						<CardContent >
 							<Grid container spacing={5}>
+								<Grid item xs={12} >
+									<TextField
+										fullWidth
+										type='string'
+										label='First Name'
+										name='First Name'
+										defaultValue={profileData?.Firstname}
+										InputProps={{
+											readOnly: true,
+											startAdornment: (
+												<InputAdornment position='start'>
+													<PersonOutlineIcon />
+												</InputAdornment>
+											)
+										}}
+									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										fullWidth
+										type='string'
+										label='Last Name'
+										name='Last Name'
+										defaultValue={profileData?.Lastname}
+										InputProps={{
+											readOnly: true,
+											startAdornment: (
+												<InputAdornment position='start'>
+													<PersonOutlineIcon />
+												</InputAdornment>
+											)
+										}}
+									/>
+								</Grid>
 								<Grid item xs={12}>
 									<TextField
 										fullWidth
@@ -216,7 +250,7 @@ const Profile = () => {
 					</TabPanel>
 					<TabPanel value={value} index={1}>
 						<CardContent>
-							<Box sx={{  width: '100%' }}>
+							<Box sx={{  width: '100%' }} >
 							<TableContainer component={Paper}>
 								<Table sx={{ minWidth: 650 }} aria-label="simple table">
 									<TableHead>
@@ -226,7 +260,7 @@ const Profile = () => {
 									</TableRow>
 									</TableHead>
 									<TableBody>
-									{employeeData && employeeData.directReports.map((row:any,i:number) => (
+									{employeeData && employeeData.directReports.directReports.map((row:any,i:number) => (
 										<TableRow
 										key={i}
 										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -251,7 +285,7 @@ const Profile = () => {
 										type='string'
 										label='Manager Name'
 										name='Manager Name'
-										defaultValue={employeeData && employeeData.team.managerName}
+										defaultValue={employeeData && employeeData.profile.managerName}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -268,7 +302,7 @@ const Profile = () => {
 										type='string'
 										label='Department'
 										name='Department'
-										defaultValue={employeeData && employeeData.team.department}
+										defaultValue={employeeData && employeeData.profile.department}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (

@@ -9,11 +9,6 @@ type leavesbyDepartment = {
   averageExcessDays: number
 }
 
-type team = {
-  name: string
-  department: string
-}
-
 type vitals = {
   averageSalary: number
   totalLeaveLiabilities: number
@@ -32,12 +27,14 @@ type profile = {
   fullname: string,
   onboarded: boolean,
   hrisLogin: string,
+  managerName: string
+  department: string
 }
 
 type directReport = {
   fullname: string,
   department: string,
-  excessDays: number
+  excessDays: number,
 }
 
 export type employeeType = {
@@ -47,6 +44,5 @@ export type employeeType = {
   leavesByOrg: Array<leavesbyOrg>
   leavesByDepartment: Array<leavesbyDepartment>
   directReports: Array<directReport>
-  team: team
   vitals: vitals
 }

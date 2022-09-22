@@ -21,10 +21,9 @@ import { Eraser, Close } from 'mdi-material-ui'
 import SignaturePad from 'react-signature-canvas';
 import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } from 'src/store/employee'
 import { ApiResult, error } from 'src/types/error'
-
-// MUI Icon
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+
 interface cashoutResultModel {
 	success: boolean
 }
@@ -193,7 +192,7 @@ const CashoutDialog = (props: any) => {
 			return dataURL;
 		}
 	}
-	const onError = (e: any) => console.log('errors', e);
+	const onError = (e: any) => {return ''};
 
 	const onChangeCashOutDays = async (e: any) => {
 		if (e.target.value != null) {

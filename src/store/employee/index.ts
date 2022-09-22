@@ -197,8 +197,8 @@ const employeeSlice = createSlice({
       }
 
       state.team = {
-        department: employee.team.department,
-        managerName: employee.team.managerName
+        department: employee.profile.department,
+        managerName: employee.profile.managerName
       }
       state.leaveDetail = {
         excessDays: employee.leaveDetails.excessDays,

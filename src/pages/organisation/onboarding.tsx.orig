@@ -186,7 +186,7 @@ const Onboarding = (props:any) => {
 
   const dispatch = useDispatch<AppDispatch>()
   const store = useSelector((state: RootState) => state.onboarding)
-  //console.log(store)
+
 
   const getComplianceContent = () => {
     switch (complianceSelected) {
@@ -324,7 +324,7 @@ const Onboarding = (props:any) => {
       stateData
     ))
 
-    //console.log(onBoarding)
+  
   }
   const formatIntoPng = () => {
     if (sigCanvas.current) {
@@ -339,7 +339,7 @@ const Onboarding = (props:any) => {
       signature: ''
     })
   }
-  const onError = () => console.log('errors, e');
+  const onError = () => ;
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:

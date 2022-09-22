@@ -172,7 +172,8 @@ const ActionApproval = () =>{
                     InputProps={{
                       readOnly: true,
                       startAdornment: (
-                      <img src={dataa?.signatureOfEmployee}  width='200px' />
+
+                      <img src={dataa?.signatureOfEmployee} alt='signature of employee' width='200px' />
                       )
                     }}
                     />
