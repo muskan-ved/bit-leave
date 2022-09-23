@@ -110,8 +110,8 @@ const UpdateOrganisation = () => {
 				validate: isFullNameValid
 			},
 			{
-				name: 'manager_id',
-				inputName: 'manager_id',
+				name: 'managerId ',
+				inputName: 'managerId ',
 				required: false
 			},
 			{
@@ -203,7 +203,7 @@ const UpdateOrganisation = () => {
 			disableColumnMenu: true,
 		},
 		{
-			field: 'manager_id',
+			field: 'managerId ',
 			headerName: 'Manager Id',
 			type: 'number',
 			minWidth: 110,
@@ -292,7 +292,6 @@ const UpdateOrganisation = () => {
 				//csv validation
 				CSVFileValidator(e.target.files[0], columns)
 					.then((csvData) => {
-
 						csvData.inValidMessages.forEach(message => {
 							toast.error(message)
 						})
@@ -382,8 +381,8 @@ const UpdateOrganisation = () => {
 			}
 
 			// ** Check ManagerId**
-			if (csvHeader.includes("manager_id") || !(csvHeader.includes("manager_id"))) {
-				const index = csvHeader.indexOf("manager_id")
+			if (csvHeader.includes("managerId ") || !(csvHeader.includes("managerId "))) {
+				const index = csvHeader.indexOf("managerId ")
 				if (index) { }
 			}
 

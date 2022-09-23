@@ -20,7 +20,7 @@ export const getExcessLeave = createAsyncThunk('excessLeaveData',
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
-        .get(API.loadOrganisation + "me",
+        .get(API.loadOrganisation,
           {
             headers: {
               'Authorization': `Bearer ${token}`

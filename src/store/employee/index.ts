@@ -120,7 +120,7 @@ export const loadEmployee = createAsyncThunk('emp/load',
     try{
     const token = localStorage.getItem("accessToken");
     const result = await axios
-      .get(API.loadEmployee + "me", {
+      .get(API.loadEmployee, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
     return result.data

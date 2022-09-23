@@ -112,16 +112,16 @@ const Dashboard = () => {
     directReportsOfExcessDays: number[] = [];
 
   if (data) {
-    for (let index = 0; index < data?.leavesByDepartment.length; index++) {
+    for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
       avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)));
     }
-    for (let index = 0; index < data?.leavesByDepartment.length; index++) {
+    for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
       departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
     }
-    for (let index = 0; index < data?.directReports.length; index++) {
+    for (let index = 0; index < data?.directReports?.length; index++) {
       directReportsOfFullname.push(data?.directReports[index].fullname);
     }
-    for (let index = 0; index < data?.directReports.length; index++) {
+    for (let index = 0; index < data?.directReports?.length; index++) {
       directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)));
     }
   }
@@ -290,12 +290,12 @@ const Dashboard = () => {
       icon: "/images/cards/user_icon.png"
     },
     {
-      stats: data?.vitals?.totalLeaveLiabilities?.toFixed(2),
+      stats: `$${data?.vitals?.totalLeaveLiabilities?.toFixed(2)}`,
       title: 'Total Leave Liabilities (days)',
       icon: "/images/cards/total_leave_liabilities.png"
     },
     {
-      stats: data?.vitals.headcount,
+      stats: data?.vitals?.headCount,
       title: 'Organisational Headcount',
       icon: "/images/cards/org_headcount.png"
     },
@@ -309,7 +309,7 @@ const Dashboard = () => {
   if (isLoading)
     return (<CircularProgress color="success" />)
 
-  if (!isLoading && data && Object.keys(data.leaveDetails).length == 0) {
+  if (!isLoading && data && Object.keys(data.leaveDetails)?.length == 0) {
 
     return (
       <Grid container spacing={6}>
@@ -342,7 +342,7 @@ const Dashboard = () => {
     ))
   }
 
-  if (!isLoading && data && data.profile.onboarded) {
+  if (!isLoading && data && data.profile.onboarded ) {
     return (
       <>
          <Grid container spacing={9}>
@@ -419,14 +419,20 @@ const Dashboard = () => {
                 <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
                 <br></br>
                 <Grid container spacing={1}>
-                  <Grid item xs={5} sm={6}>
+                  <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
                       <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Leave</Button>
                     </Box>
                   </Grid>
-                  <Grid item xs={5} sm={6}>
+                  <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={takeLeaveButtonClick} disabled>Take Leave</Button>
+                      <Button variant='contained' onClick={takeLeaveButtonClick}>Take Leave</Button>
+                    </Box>
+                  </Grid>
+                  {/* data.leaveDetails.totalDays */}
+                   <Grid item xs={4} sm={4}>
+                    <Box  sx={{ display: 'grid', alignItems: 'left' }}>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Bit.Leave</Button>
                     </Box>
                   </Grid>
                 </Grid>
@@ -448,7 +454,7 @@ const Dashboard = () => {
                   </Box><br />
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                    <Typography variant='body2'>Number Direct Reports : {data.directReports.length} </Typography>
+                    <Typography variant='body2'>Number Direct Reports : {data.directReports?.length} </Typography>
                   </Box>
                 </StyledBox>
               </CardContent>
@@ -456,27 +462,6 @@ const Dashboard = () => {
           </Grid>
         </Grid>
         <br />
-        <Grid container spacing={6} >
-          {ability?.can('read', 'analytics') ? (
-            <Grid item md={6} xs={12} >
-              <Card sx={{ width: '100%' }}>
-                <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
-                <CardContent>
-                  <ReactApexcharts type='bar' height={294} series={series} options={options} />
-                </CardContent>
-              </Card>
-            </Grid>
-          ) : null}
-          <Grid item md={6} xs={12}  >
-            <Card >
-              <CardHeader title='Leaves by Direct Reports 📈' subheader={<><Typography variant='body2'>Above the thresholds</Typography><Divider></Divider></>} />
-              <CardContent>
-                <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-        <br></br>
         <Grid container spacing={6}>
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
@@ -521,6 +506,29 @@ const Dashboard = () => {
             </Grid>
           ) : null}
         </Grid>
+        <br></br>
+        {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ?(
+        <Grid container spacing={6} >
+          {ability?.can('read', 'analytics') ? (
+            <Grid item md={6} xs={12} >
+              <Card sx={{ width: '100%' }}>
+                <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
+                <CardContent>
+                  <ReactApexcharts type='bar' height={294} series={series} options={options} />
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+          <Grid item md={6} xs={12}  >
+            <Card >
+              <CardHeader title='Leaves by Direct Reports 📈' subheader={<><Typography variant='body2'>Above the thresholds</Typography><Divider></Divider></>} />
+              <CardContent>
+                <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>):null}
+        
         <CashoutDialog open={dialogOpen} handleClose={handleDialogClose}></CashoutDialog>
       </>
     )

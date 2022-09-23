@@ -136,7 +136,7 @@ const Profile = () => {
 				<Card>
 					<CardHeader title='Your Profile Details' subheader={<Divider></Divider>} />
 					<Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
-						{getTabList && getTabList.map((data: string, i: any) =>
+						{getTabList && getTabList?.map((data: string, i: any) =>
 							<Tab label={data} key={i} {...a11yProps(i)} />
 						)}
 					</Tabs>
@@ -149,7 +149,7 @@ const Profile = () => {
 										type='string'
 										label='First Name'
 										name='First Name'
-										defaultValue={profileData?.Firstname}
+										defaultValue={profileData?.firstname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -166,7 +166,7 @@ const Profile = () => {
 										type='string'
 										label='Last Name'
 										name='Last Name'
-										defaultValue={profileData?.Lastname}
+										defaultValue={profileData?.lastname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -260,7 +260,7 @@ const Profile = () => {
 									</TableRow>
 									</TableHead>
 									<TableBody>
-									{employeeData && employeeData.directReports.directReports.map((row:any,i:number) => (
+									{employeeData && employeeData?.directReports?.directReports?.map((row:any,i:number) => (
 										<TableRow
 										key={i}
 										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

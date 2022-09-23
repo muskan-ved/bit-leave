@@ -68,7 +68,7 @@ const Templates = () => {
   const fetchData = async () => {
 
     axios
-      .get(API.loadOrganisation + "me", {
+      .get(API.loadOrganisation, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
       .then(res => {
@@ -93,7 +93,7 @@ const Templates = () => {
       })
       .catch((reason: AxiosError) => {
         if (reason.response && reason.response!.status === 401) {
-          logout()
+          logout();
         } else {
           // Handle else
         }
