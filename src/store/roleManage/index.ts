@@ -12,7 +12,7 @@ import { userLogout } from '../user';
 interface Redux {
     getState: any
     dispatch: Dispatch<any>,
-  }
+  }  
 
 export const roleManagement = createAsyncThunk('role/manage',
   async (_:void, { dispatch, getState }: Redux) => {
@@ -21,6 +21,31 @@ export const roleManagement = createAsyncThunk('role/manage',
       const token = localStorage.getItem("accessToken");
       const response = await axios
         .get(API.roleManage,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      return response.data
+    }
+    catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401) {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+
+  export const roleUpdate = createAsyncThunk('role/update',
+  async (params: any, { dispatch, getState }: Redux) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios
+        .patch(API.roleUpdate,
+          params,
           {
             headers: {
               'Authorization': `Bearer ${token}`

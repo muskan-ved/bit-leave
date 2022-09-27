@@ -20,6 +20,8 @@ export default {
   xeroReturnUrl: `${BASE_URL}/organisation/xeroConnect`,
   xeroConnectionUrl:  `${BASE_URL}/organisation/xerogetconnection`,
   loadEmployeeByXero:`${BASE_URL}/employees/fetch`,
-  roleManage:`${BASE_URL}/employees/allbyRoles`
+  roleManage:`${BASE_URL}/employees/allbyRoles`,
+  roleUpdate:`${BASE_URL}/employees/roles`
+
 
 }
