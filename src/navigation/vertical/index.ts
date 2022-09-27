@@ -1,6 +1,7 @@
 // ** Icon imports
 import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline } from 'mdi-material-ui'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -59,33 +60,81 @@ const navigation = (): VerticalNavItemsType => {
       subject: 'settingsSection'
     },
     {
-      title: 'Thresholds',
-      icon: ShieldOutline,
-      path: '/thresholds',
-      action: 'manage',
-      subject: 'admin'
-    },
-    {
-      title: 'Templates',
-      icon: EmailOutline,
-      path: '/templates',
-      action: 'manage',
-      subject: 'admin'
-    },
-    {
-      title: 'Sync Org',
-      icon: FileUploadOutline,
-      path: '/organisation',
-      action: 'manage',
-      subject: 'admin'
-    },
-    {
-      title: 'Setup',
+      title: 'Org Setting',
       icon: SettingsOutlinedIcon,
-      path: '/setup',
       action: 'manage',
-      subject: 'admin'
+      subject: 'admin',
+      children: [
+        {
+          title: 'Thresholds',
+          icon: ShieldOutline,
+          path: '/thresholds',
+          action: 'manage',
+          subject: 'admin'
+        },
+        {
+          title: 'Templates',
+          icon: EmailOutline,
+          path: '/templates',
+          action: 'manage',
+          subject: 'admin'
+        },
+
+      ]
     },
+    {
+      title: 'Org Setup',
+      icon: ManageAccountsOutlinedIcon,
+      action: 'manage',
+      subject: 'admin',
+      children: [
+        {
+          title: 'Sync Org',
+          icon: FileUploadOutline,
+          path: '/organisation',
+          action: 'manage',
+          subject: 'admin',
+        },
+        {
+          title: 'Setup',
+          icon: SettingsOutlinedIcon,
+          path: '/setup',
+          action: 'manage',
+          subject: 'admin'
+        },
+        {
+          title: 'Roles',
+          icon: SettingsOutlinedIcon,
+          path: '/roleManage',
+          action: 'manage',
+          subject: 'admin'
+        }
+      ]
+    },
+    // {
+    //   title: 'Sync Org',
+    //   icon: FileUploadOutline,
+    //   path: '/organisation',
+    //   action: 'manage',
+    //   subject: 'admin',
+    //   children: [
+    //     {
+    //       title: 'Roles',
+    //       path: '/apps/roles'
+    //     },
+    //     {
+    //       title: 'Permissions',
+    //       path: '/apps/permissions'
+    //     }
+    //   ]
+    // },
+    // {
+    //   title: 'Setup',
+    //   icon: SettingsOutlinedIcon,
+    //   path: '/setup',
+    //   action: 'manage',
+    //   subject: 'admin'
+    // },
     {
       sectionTitle: 'Benefits',
       action: 'read',

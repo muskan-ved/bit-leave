@@ -20,6 +20,7 @@ import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 //  ** Types Imports
 import { setup } from 'src/types/setup'
+import { Checkbox, FormControlLabel } from '@mui/material'
 
 const Setup = () => {
 
@@ -61,6 +62,10 @@ const Setup = () => {
           <form onSubmit={handleSubmit} >
             <Grid container spacing={5}>
               <Grid item xs={12}>
+              <FormControlLabel disabled control={<Checkbox />} label="IsPaidLeave" checked />
+              <FormControlLabel disabled control={<Checkbox />} label="ShowOnPayslip" checked />
+              </Grid>
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
                   type='string'
@@ -91,42 +96,6 @@ const Setup = () => {
                     startAdornment: (
                       <InputAdornment position='start'>
                         <AccessTimeOutlinedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                  onChange={(ele) => handleOnChange(ele)}
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  type='boolean'
-                  label='IsPaidLeave'
-                  name='IsPaidLeave'
-                  defaultValue={true}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>
-                        <CalendarMonthOutlinedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                  onChange={(ele) => handleOnChange(ele)}
-                  disabled
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  type='boolean'
-                  label='ShowOnPayslip'
-                  name='ShowOnPayslip'
-                  defaultValue={true}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position='start'>
-                        <ReceiptLongOutlinedIcon />
                       </InputAdornment>
                     )
                   }}
