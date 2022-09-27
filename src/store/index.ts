@@ -10,6 +10,7 @@ import organisation from 'src/store/organisation'
 import thresholds from 'src/store/thresholds'
 import profile from 'src/store/profile'
 import actionApproval from 'src/store/actionapproval'
+import roleManage from './roleManage'
 
 export const reducers = {
   onboarding,
@@ -20,6 +21,7 @@ export const reducers = {
   thresholds,
   profile,
   actionApproval,
+  roleManage,
 }
 
 const combinedReducer = combineReducers(reducers);

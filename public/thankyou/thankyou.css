@@ -37,8 +37,8 @@ body{
    ========================================================================== */
 
 
-   .thankyou-wrapper {margin: 50px 0 0; color: #616476; background: url(../public/images/pages/misc-mask-light.png) no-repeat bottom center; background-size: 100%; min-height: 950px; width: 100%; position: relative; text-align: center;font-family:Arial, Helvetica, sans-serif;}
-   .ball-icon {background: url(../public/images/pages/misc-401-object.png) no-repeat left; width: 212px; height: 165px; position: absolute; left:300px; bottom:160px;}
+   .thankyou-wrapper {margin: 50px 0 0; color: #616476; background: url(../images/pages/misc-mask-light.png) no-repeat bottom center; background-size: 100%; min-height: 950px; width: 100%; position: relative; text-align: center;font-family:Arial, Helvetica, sans-serif;}
+   .ball-icon {background: url(../images/pages/misc-401-object.png) no-repeat left; width: 212px; height: 165px; position: absolute; left:300px; bottom:160px;}
    .thankyou-img{margin: 60px 0 0;}
    .thankyou-img img{max-height: 520px; height: auto; max-width: 100%;}
    .auto-container{max-width: 1200px; margin: 0 auto; padding: 0 15px !important;}

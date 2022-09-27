@@ -110,8 +110,8 @@ const UpdateOrganisation = () => {
 				validate: isFullNameValid
 			},
 			{
-				name: 'managerId ',
-				inputName: 'managerId ',
+				name: 'managerId',
+				inputName: 'managerId',
 				required: false
 			},
 			{
@@ -203,7 +203,7 @@ const UpdateOrganisation = () => {
 			disableColumnMenu: true,
 		},
 		{
-			field: 'managerId ',
+			field: 'managerId',
 			headerName: 'Manager Id',
 			type: 'number',
 			minWidth: 110,
@@ -381,8 +381,8 @@ const UpdateOrganisation = () => {
 			}
 
 			// ** Check ManagerId**
-			if (csvHeader.includes("managerId ") || !(csvHeader.includes("managerId "))) {
-				const index = csvHeader.indexOf("managerId ")
+			if (csvHeader.includes("managerId") || !(csvHeader.includes("managerId"))) {
+				const index = csvHeader.indexOf("managerId")
 				if (index) { }
 			}
 
