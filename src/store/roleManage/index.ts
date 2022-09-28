@@ -3,7 +3,11 @@ import { createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+
+// ** API Import
 import API from 'src/configs/apiEndpoints';
+
+// ** Types Import
 import { roles } from 'src/types/roleManage';
 
 // ** Logout function

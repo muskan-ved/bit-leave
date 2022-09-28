@@ -21,7 +21,9 @@ export default {
   xeroConnectionUrl:  `${BASE_URL}/organisation/xerogetconnection`,
   loadEmployeeByXero:`${BASE_URL}/employees/fetch`,
   roleManage:`${BASE_URL}/employees/allbyRoles`,
-  roleUpdate:`${BASE_URL}/employees/roles`
+  roleUpdate:`${BASE_URL}/employees/roles`,
+  getNotification:`${BASE_URL}/employees/me/notifications`,
+
 
 
 }

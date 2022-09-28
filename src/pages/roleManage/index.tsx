@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react'
 // ** Icons Imports
 import Divider from '@mui/material/Divider'
 
-// ** MUI Import
+// ** MUI Style Import
 import { useTheme } from '@mui/material/styles'
+import { SelectChangeEvent } from '@mui/material/Select'
+
+// ** MUI ICon Import
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined'
+
+// ** MUI Import
 import {
   Table,
   Box,
@@ -20,17 +25,17 @@ import {
   CircularProgress,
   CardContent,
   CardHeader,
-  Card
+  Card,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select
 } from '@mui/material'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 // ** Redux Import
 import { useDispatch } from 'react-redux'
@@ -40,6 +45,7 @@ import { roleManagement, roleUpdate } from 'src/store/roleManage'
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+
 interface Data {
   fullname: string
   role: string
@@ -103,9 +109,9 @@ const RoleManagement = () => {
   const [open, setOpen] = useState(false)
   const [selectedData, setSelectedData] = useState('')
 
-  var roles = ['admin', 'user'];
-  
-  var result = roles.filter((role: any) => {
+  const roles = ['admin', 'user']
+
+  const result = roles.filter((role: any) => {
     return role !== roleData?.roleName
   })
   const handleRoleUpdate = (data: any) => {
@@ -242,7 +248,11 @@ const RoleManagement = () => {
                     }}
                   >
                     {result.map(item => {
-                      return <MenuItem value={roleData.roleId}>{item}</MenuItem>
+                      return (
+                        <MenuItem key={roleData.id} value={roleData.roleId}>
+                          {item}
+                        </MenuItem>
+                      )
                     })}
                   </Select>
                 </FormControl>
