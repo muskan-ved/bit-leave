@@ -24,6 +24,4 @@ export default {
   roleUpdate:`${BASE_URL}/employees/roles`,
   getNotification:`${BASE_URL}/employees/me/notifications`,
 
-
-
 }

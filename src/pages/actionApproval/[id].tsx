@@ -59,7 +59,9 @@ const ActionApproval = () =>{
       setIsLoading(true);
          await dispatch(cashoutActionApproval(id))
           .then(res => {
-            setData(res.payload.data.action)
+            setData(res.payload.data)
+            setIsLoading(false);
+          }).catch(err => {
             setIsLoading(false);
           })
       };

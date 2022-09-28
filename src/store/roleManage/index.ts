@@ -36,7 +36,7 @@ export const roleManagement = createAsyncThunk('role/manage',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.response?.status === 0) {
            dispatch(userLogout())
          }
         }

@@ -11,6 +11,7 @@ import thresholds from 'src/store/thresholds'
 import profile from 'src/store/profile'
 import actionApproval from 'src/store/actionapproval'
 import roleManage from './roleManage'
+import notification from './notification'
 
 export const reducers = {
   onboarding,
@@ -22,6 +23,7 @@ export const reducers = {
   profile,
   actionApproval,
   roleManage,
+  notification
 }
 
 const combinedReducer = combineReducers(reducers);

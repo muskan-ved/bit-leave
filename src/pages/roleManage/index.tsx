@@ -42,6 +42,9 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { roleManagement, roleUpdate } from 'src/store/roleManage'
 
+// ** Types Import
+import { roles } from 'src/types/roleManage'
+
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -100,20 +103,22 @@ function EnhancedTableHead() {
   )
 }
 const RoleManagement = () => {
-  const [rows, setRows] = useState([])
+  const [rows, setRows] = useState<roles | any>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const dispatch = useDispatch<AppDispatch>()
   const [roleData, setData] = useState<any>('')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [open, setOpen] = useState(false)
   const [selectedData, setSelectedData] = useState('')
+  const dispatch = useDispatch<AppDispatch>()
 
-  const roles = ['admin', 'user']
+  const arrayUniqueByKey = [...new Map(rows.map((item:any) =>
+	[item['roleName'], item])).values()];
 
-  const result = roles.filter((role: any) => {
-    return role !== roleData?.roleName
+  const result = arrayUniqueByKey.filter((role: any) => {
+    return role.roleName !== roleData?.roleName
   })
+
   const handleRoleUpdate = (data: any) => {
     setOpen(true)
     setData(data)
@@ -126,7 +131,7 @@ const RoleManagement = () => {
   const handleSaveRole = async () => {
     const payload = {
       id: roleData.id,
-      roleId: parseInt(selectedData) !== 1 ? 1 : 2
+      roleId: parseInt(selectedData)
     }
     await dispatch(roleUpdate(payload)).then(res => {
       if (res.payload !== undefined) {
@@ -134,7 +139,9 @@ const RoleManagement = () => {
         setOpen(false)
         fetchData()
       }
-    })
+    }).catch(()=>{
+		toast.error('Server Error')
+	})
   }
 
   const handleRoleChange = (event: SelectChangeEvent) => {
@@ -163,7 +170,9 @@ const RoleManagement = () => {
     await dispatch(roleManagement()).then(res => {
       setRows(res.payload.data)
       setIsLoading(false)
-    })
+    }).catch(() =>{
+	setIsLoading(false)
+	})
   }
 
   if (isLoading) return <CircularProgress color='success' />
@@ -242,15 +251,12 @@ const RoleManagement = () => {
                     value={selectedData}
                     onChange={handleRoleChange}
                     label='Roles'
-                    inputProps={{
-                      name: 'Roles',
-                      id: 'Roles'
-                    }}
+					margin="dense"
                   >
-                    {result.map(item => {
+                    {result.map((item:any) => {
                       return (
-                        <MenuItem key={roleData.id} value={roleData.roleId}>
-                          {item}
+                        <MenuItem key={item.roleId} value={item.roleId}>
+                          {item.roleName}
                         </MenuItem>
                       )
                     })}

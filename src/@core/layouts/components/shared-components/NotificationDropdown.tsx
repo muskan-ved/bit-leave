@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment, ReactNode } from 'react'
+import { useState, SyntheticEvent, Fragment, ReactNode, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -9,7 +9,7 @@ import { styled, Theme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import MuiMenu, { MenuProps } from '@mui/material/Menu'
 import MuiMenuItem, { MenuItemProps } from '@mui/material/MenuItem'
-import Typography from '@mui/material/Typography'
+import Typography, { TypographyProps } from '@mui/material/Typography'
 
 // ** Icons Imports
 import BellOutline from 'mdi-material-ui/BellOutline'
@@ -22,6 +22,13 @@ import CustomChip from 'src/@core/components/mui/chip'
 
 // ** Type Imports
 import { Settings } from 'src/@core/context/settingsContext'
+import { Avatar, CircularProgress } from '@mui/material'
+
+// ** Redux Import
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
+import { notificationTypes } from 'src/types/notification'
+import { load_Notifcation } from 'src/store/notification'
 
 interface Props {
   settings: Settings
@@ -49,6 +56,25 @@ const MenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`
 }))
 
+// ** Styled component for the title in MenuItems
+const MenuItemTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
+  fontWeight: 600,
+  flex: '1 1 100%',
+  overflow: 'hidden',
+  fontSize: '0.875rem',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  marginBottom: theme.spacing(0.75)
+}))
+
+// ** Styled component for the subtitle in MenuItems
+const MenuItemSubtitle = styled(Typography)<TypographyProps>({
+  flex: '1 1 100%',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis'
+})
+
 const styles = {
   maxHeight: 344,
   '& .MuiMenuItem-root:last-of-type': {
@@ -67,6 +93,8 @@ const NotificationDropdown = (props: Props) => {
 
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [data, setData] = useState<notificationTypes | any>([])
 
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
@@ -74,12 +102,20 @@ const NotificationDropdown = (props: Props) => {
   // ** Vars
   const { direction } = settings
 
+  const dispatch = useDispatch<AppDispatch>()
+
   const handleDropdownOpen = (event: SyntheticEvent) => {
     setAnchorEl(event.currentTarget)
   }
 
   const handleDropdownClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleNotification = (data: any) => {
+    if (data?.nextAction?.type === 'actionApproval') {
+      window.location.replace(`/actionApproval/${data?.nextAction?.identifier}`)
+    }
   }
 
   const ScrollWrapper = ({ children }: { children: ReactNode }) => {
@@ -91,6 +127,22 @@ const NotificationDropdown = (props: Props) => {
       )
     }
   }
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    setIsLoading(true)
+    await dispatch(load_Notifcation()).then(res => {
+      setData(res.payload)
+      setIsLoading(false)
+    }).catch(()=>{
+		setIsLoading(false)
+	})
+  }
+  if (isLoading) return <CircularProgress color='success' />
 
   return (
     <Fragment>
@@ -110,25 +162,28 @@ const NotificationDropdown = (props: Props) => {
             <CustomChip
               skin='light'
               size='small'
-              label='0 New'
+              label={`${data?.length} new`}
               color='primary'
               sx={{ height: 20, fontSize: '0.75rem', fontWeight: 500, borderRadius: '10px' }}
             />
           </Box>
         </MenuItem>
         <ScrollWrapper>
-          {/* <MenuItem onClick={handleDropdownClose}>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-              <Avatar alt='Flora' src='/images/avatars/4.png' />
-              <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
-                <MenuItemTitle>Congratulation Flora! 🎉</MenuItemTitle>
-                <MenuItemSubtitle variant='body2'>Won the monthly best seller badge</MenuItemSubtitle>
-              </Box>
-              <Typography variant='caption' sx={{ color: 'text.disabled' }}>
-                Today
-              </Typography>
-            </Box>
-          </MenuItem>  */}
+          {data.length > 0 &&
+            data.map((item: any, index: number) => (
+              <MenuItem key={index} onClick={() => handleNotification(item)}>
+                <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
+                  <Avatar alt='Flora' src='/images/avatars/4.png' />
+                  <Box sx={{ mx: 4, flex: '1 1', display: 'flex', overflow: 'hidden', flexDirection: 'column' }}>
+                    <MenuItemTitle>{item?.title}</MenuItemTitle>
+                    <MenuItemSubtitle variant='body2'>{item?.description}</MenuItemSubtitle>
+                  </Box>
+                  <Typography variant='caption' sx={{ color: 'text.disabled' }}>
+                    Today
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
         </ScrollWrapper>
         <MenuItem
           disableRipple

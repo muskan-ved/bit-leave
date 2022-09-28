@@ -9,5 +9,5 @@ export default {
   bucket_name:'bl-bck-process-upload',
   accessKeyId:'AKIAYPANZ4CMMK3LXE5B',
   secretAccessKey:'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',
-
 }
+
