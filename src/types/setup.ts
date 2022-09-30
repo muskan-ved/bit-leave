@@ -1,7 +1,9 @@
 export type organisationssetup ={
-    fieldone:number,
-    fieldtwo:number,
-    fieldthree:number
+  name:string,
+  typeOfUnits:string,
+  normalEntitlement:number,
+  isPaidLeave:boolean,
+  showOnPayslip:boolean
   }
   
 export type setup = 

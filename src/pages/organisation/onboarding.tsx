@@ -824,22 +824,26 @@ const Onboarding = () => {
 						<Typography variant='body2' gutterBottom sx={{ float: "left" ,color: 'error.main'}}>No connection to Xero was established.</Typography>}
 					</Grid>
 			         <Grid item xs={12}>
-					   {tenantData.length > 0 ? tenantData?.map((item:any)=>{
-						return(
-			           <FormControl fullWidth key={item?.tenantId}>
+					
+			           <FormControl fullWidth >
 			             <Controller
 			               rules={{ required: true }}
 			               control={tenantIdControl}
 			               name="tenantId"
 			               render={({ field: { value, onChange } }) => (
-			                 <RadioGroup row={false}
+							   <RadioGroup row={true}
 			                   value={value}
-			                   onChange={onChange}>
-			                   <FormControlLabel
-			                     value={item?.tenantId}
-			                     control={<Radio />}
-			                     label={(item?.tenantName) +" - "+ (item?.tenantId)}
-								 />
+			                   onChange={onChange}
+							   sx={{flexDirection: 'column'}}>
+							   {tenantData.length > 0 ? tenantData?.map((item:any)=>{
+								   return(
+									<FormControlLabel
+										value={item?.tenantId}
+										control={<Radio />}
+										key={item?.tenantId}
+										label={(item?.tenantName) +" - "+ (item?.tenantId)}
+										/>
+								)}):""} 
 			                 </RadioGroup>
 			               )}
 			             />
@@ -849,7 +853,6 @@ const Onboarding = () => {
 			               </FormHelperText>
 			             )}
 			           </FormControl>
-						)}):""}
 			           </Grid>
 			         <Grid item xs={12}>
 						<Box sx={{ float: "left" }}>

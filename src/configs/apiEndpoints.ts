@@ -23,5 +23,5 @@ export default {
   roleManage:`${BASE_URL}/employees/allbyRoles`,
   roleUpdate:`${BASE_URL}/employees/roles`,
   getNotification:`${BASE_URL}/employees/me/notifications`,
-
+  setupPost:`${BASE_URL}/organisation/leave`,
 }

@@ -13,14 +13,19 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icons Imports
 import Divider from '@mui/material/Divider'
-import { CurrencyUsd,OfficeBuildingOutline } from 'mdi-material-ui'
+import { OfficeBuildingOutline } from 'mdi-material-ui'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 
 //  ** Types Imports
 import { setup } from 'src/types/setup'
-import { Checkbox, FormControlLabel } from '@mui/material'
+import { Checkbox, CircularProgress, FormControlLabel } from '@mui/material'
+import { setUPPost } from 'src/store/setup'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from 'src/store'
+
+// ** Import Toaster
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Setup = () => {
 
@@ -29,31 +34,39 @@ const Setup = () => {
   const [normalEntitlement, setNormalEntitlement] = useState<setup | number>();
   const [isPaidLeave, setIsPaidLeave] = useState<setup | boolean>();
   const [showOnPayslip, setShowOnPayslip] = useState<setup | boolean>();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+	const dispatch = useDispatch<AppDispatch>()
+
 
   const handleOnChange = (element:any) =>{
-    if(element.target.name === "Name"){
-      setName(element.target.value)
-    }
-    else if(element.target.name === "TypeOfUnits"){
-      setTypeOfUnits(element.target.value)
-    }
-    else if(element.target.name === "NormalEntitlement"){
+
+    if(element.target.name === "NormalEntitlement"){
       setNormalEntitlement(element.target.value)
-    }
-    else if(element.target.name === "IsPaidLeave"){
-      setIsPaidLeave(element.target.value)
-    }
-    else if(element.target.name === "ShowOnPayslip"){
-      setShowOnPayslip(element.target.value)
     }
   }
 
   const handleSubmit = async(e:any) =>{
     e.preventDefault();
+
+    const request = {
+      normalEntitlement:normalEntitlement,
+    }
+
+    const setupResponse = await dispatch(setUPPost(request)).then((res)=>{
+      setIsLoading(false);
+      toast.success("Successfully uploaded ")
+    }).catch((err)=>{
+      setIsLoading(false);
+        toast.error("Failed to upload the data")
+      })
   }
+
+  if (isLoading)
+    return (<CircularProgress color="success" />)
 
     return (
       <Card>
+         <ToastContainer/>
         <CardHeader title='Setup - Add bit.leave to XERO' subheader={<Divider></Divider>} />
         <CardContent>
           <Typography sx={{ mb: 4.5 }}>

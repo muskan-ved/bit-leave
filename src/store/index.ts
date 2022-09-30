@@ -12,6 +12,7 @@ import profile from 'src/store/profile'
 import actionApproval from 'src/store/actionapproval'
 import roleManage from './roleManage'
 import notification from './notification'
+import setUPPost  from './setup'
 
 export const reducers = {
   onboarding,
@@ -23,7 +24,9 @@ export const reducers = {
   profile,
   actionApproval,
   roleManage,
-  notification
+  notification,
+  setUPPost
+
 }
 
 const combinedReducer = combineReducers(reducers);
