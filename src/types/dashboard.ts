@@ -12,7 +12,8 @@ type leavesbyDepartment = {
 type vitals = {
   averageSalary: number
   totalLeaveLiabilities: number
-  headCount:number
+  headCount:number,
+  leaveMobilised:number
 }
 
 type leaveDetails = {

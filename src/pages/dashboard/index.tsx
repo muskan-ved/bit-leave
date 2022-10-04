@@ -300,7 +300,7 @@ const Dashboard = () => {
       icon: "/images/cards/org_headcount.png"
     },
     {
-      stats: '4',
+      stats: data?.vitals?.leaveMobilised,
       title: 'Leave Mobilesed (Days)',
       icon: "/images/cards/leave_mobilised.png"
     }

@@ -44,6 +44,7 @@ import API from '../../configs/apiEndpoints'
 // ** Toaster import
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Divider from '@mui/material/Divider';
 
 const Templates = () => {
   // ** State
@@ -153,6 +154,7 @@ const Templates = () => {
 
   return (
     <Card>
+       <CardHeader title='Manage Templates' subheader={<Divider></Divider>} />
       <ToastContainer  />
       <TabContext value={value}>
         <TabList onChange={handleChangeTab} aria-label='card navigation example'>
@@ -160,6 +162,7 @@ const Templates = () => {
             <Tab key={i} value={i.toString()} label={data} />)}
         </TabList>
         <CardContent>
+        <Typography sx={{ mb: 4 }}>Tip: anything between double curly braces is a special token.</Typography>
           {getTabList && getTabList.map((data: string, i: any) =>
             <TabPanel key={i} value={i.toString()} sx={{ p: 0 }}>
               {getdata && getdata.filter(x => x.templatetype === data).map((templtedata: any, i: any) =>

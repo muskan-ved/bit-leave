@@ -169,7 +169,7 @@ const NotificationDropdown = (props: Props) => {
           </Box>
         </MenuItem>
         <ScrollWrapper>
-          {data.length > 0 &&
+          {data && data.length > 0 &&
             data.map((item: any, index: number) => (
               <MenuItem key={index} onClick={() => handleNotification(item)}>
                 <Box sx={{ width: '100%', display: 'flex', alignItems: 'center' }}>
