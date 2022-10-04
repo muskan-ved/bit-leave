@@ -1,6 +1,6 @@
-export const BASE_URL = "https://app-dev.api.bitleave.co/api/v1"; 
-export const APP_URL = "https://app-dev.bitleave.co";
-export const ORG_URL = "https://app-dev.api.bitleave.co"
+export const BASE_URL = "https://app-stag.api.bitleave.co/api/v1"; 
+export const APP_URL = "https://app-stag.bitleave.co";
+export const ORG_URL = "https://app-stag.api.bitleave.co"
 
 export default {
   handleRegister:`${ORG_URL}/checkorganisations`,
