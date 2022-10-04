@@ -39,7 +39,6 @@ const Profile = () => {
 	const [employeeData, setemployeeData] = useState<any>('')
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
-	const userData = localStorage.getItem("userData")
 	const getTabList = ['Profile Detail', 'Direct Reports', 'Team']
 	interface TabPanelProps {
 		children?: React.ReactNode;
@@ -77,11 +76,6 @@ const Profile = () => {
 	const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
 		if (event) { }
 		setValue(newValue)
-	}
-
-	let profileData;
-	if (userData != null) {
-		profileData = JSON.parse(userData)
 	}
 
 	const fetchDataFromRedux = async () => {
@@ -149,7 +143,7 @@ const Profile = () => {
 										type='string'
 										label='First Name'
 										name='First Name'
-										defaultValue={profileData?.firstname}
+										defaultValue={employeeData && employeeData.profile?.firstname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -166,7 +160,7 @@ const Profile = () => {
 										type='string'
 										label='Last Name'
 										name='Last Name'
-										defaultValue={profileData?.lastname}
+										defaultValue={employeeData && employeeData.profile?.lastname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -183,7 +177,7 @@ const Profile = () => {
 										type='string'
 										label='User Name'
 										name='User Name'
-										defaultValue={profileData?.username}
+										defaultValue={employeeData && employeeData.profile?.username}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -200,7 +194,7 @@ const Profile = () => {
 										type='string'
 										label='Full Name'
 										name='Full Name'
-										defaultValue={profileData?.fullName}
+										defaultValue={employeeData && employeeData.profile?.fullname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -217,7 +211,7 @@ const Profile = () => {
 										type='string'
 										label='Organisation Name'
 										name='Organisation Name'
-										defaultValue={profileData?.companyname}
+										defaultValue={employeeData && employeeData.profile?.companyname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -234,7 +228,7 @@ const Profile = () => {
 										type='string'
 										label='Email'
 										name='Email'
-										defaultValue={profileData?.email}
+										defaultValue={employeeData && employeeData.profile?.email}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (

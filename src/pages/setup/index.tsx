@@ -20,8 +20,8 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import { setup } from 'src/types/setup'
 import { Checkbox, CircularProgress, FormControlLabel } from '@mui/material'
 import { setUPPost } from 'src/store/setup'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from 'src/store'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'src/store'
 
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify';
@@ -29,11 +29,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Setup = () => {
 
-  const [name, setName] = useState<setup | string>();
-  const [typeOfUnits, setTypeOfUnits] = useState<setup | string>();
-  const [normalEntitlement, setNormalEntitlement] = useState<setup | number>();
-  const [isPaidLeave, setIsPaidLeave] = useState<setup | boolean>();
-  const [showOnPayslip, setShowOnPayslip] = useState<setup | boolean>();
+  const [normalEntitlement, setNormalEntitlement] = useState<setup | number>(38);
   const [isLoading, setIsLoading] = useState<boolean>(false)
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -49,16 +45,22 @@ const Setup = () => {
     e.preventDefault();
 
     const request = {
-      normalEntitlement:normalEntitlement,
+      name:'bit.leave',
+      normalEntitlement:(normalEntitlement && typeof(normalEntitlement) === "string"?parseInt(normalEntitlement): normalEntitlement),
+      typeOfUnits:'hours',
+      isPaidLeave:true,
+      showOnPayslip:true,
     }
 
     const setupResponse = await dispatch(setUPPost(request)).then((res)=>{
-      setIsLoading(false);
-      toast.success("Successfully uploaded ")
-    }).catch((err)=>{
-      setIsLoading(false);
+      if(res.payload !== undefined){
+        setIsLoading(false);
+        toast.success("Successfully uploaded ")}
+      else{
+        setIsLoading(false);
         toast.error("Failed to upload the data")
-      })
+      }
+    })
   }
 
   if (isLoading)
@@ -122,7 +124,7 @@ const Setup = () => {
                   type='number'
                   label='NormalEntitlement'
                   name='NormalEntitlement'
-                  defaultValue={38}
+                  defaultValue={normalEntitlement}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
