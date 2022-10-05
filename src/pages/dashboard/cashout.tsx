@@ -16,7 +16,7 @@ import FormControl from '@mui/material/FormControl'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
-import { FormHelperText, IconButton, InputAdornment, useMediaQuery, useTheme } from '@mui/material'
+import { Card, CardContent, CardHeader, Divider, FormHelperText, IconButton, InputAdornment, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { Eraser, Close } from 'mdi-material-ui'
 import SignaturePad from 'react-signature-canvas';
 import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } from 'src/store/employee'
@@ -239,7 +239,7 @@ const CashoutDialog = (props: any) => {
 
 			cashoutApiResponse.errors?.map(x => {
 				i++
-				return <Alert key={i} variant="outlined" severity="error">{x.message}</Alert>
+				return <Alert key={i} variant="outlined" severity="error" sx={{marginBottom: '20px'}}>{x.message}</Alert>
 			})
 		)
 	}
@@ -341,57 +341,6 @@ const CashoutDialog = (props: any) => {
 										Required
 									</FormHelperText>
 								)}
-								{toggleValue && calculateAmount ?
-									<Box >
-										<Box sx={{
-											display: 'flex',
-											alignItems: 'flex-start',
-											pb: '1.25rem',
-											pt: '1.25rem',
-										}}>
-											<TextField
-												fullWidth
-												type='string'
-												label='Cash Amount (Before tax)'
-												defaultValue='0.00'
-												value={calculateAmount}
-												InputProps={{
-
-													startAdornment: (
-														<InputAdornment position='start'>
-															<AttachMoneyIcon />
-														</InputAdornment>
-													)
-												}}
-												disabled
-												sx={{ background: '#91919121' }}
-											/>
-										</Box>
-										<Box sx={{
-											display: 'flex',
-											alignItems: 'flex-start',
-
-										}}>
-											<TextField
-												fullWidth
-												type='string'
-												label='Leave Balance After Cash Out'
-												name='Leave Balance After Cash Out'
-												defaultValue='0.00'
-												value={leaveBalanceAfterCashout}
-												InputProps={{
-													startAdornment: (
-														<InputAdornment position='start'>
-															<AttachMoneyIcon />
-														</InputAdornment>
-													)
-												}}
-												disabled
-												sx={{ background: '#91919121' }}
-											/>
-										</Box>
-									</Box>
-									: ""}
 
 								{toggleValue && calculateAmount ?
 									<Controller
@@ -410,13 +359,41 @@ const CashoutDialog = (props: any) => {
 												sx={{ mt: '1.25rem' }}
 
 											/>
-										)}
-									/> : ''}
+											)}
+											/>
+									 : ''} 
 								{toggleValue && calculateAmount ? cashOutErrors.cashoutreason && (
 									<FormHelperText id='cashoutreason' sx={{ color: 'error.main' }} >
 										Required
 									</FormHelperText>
 								) : ""}
+
+								{toggleValue && calculateAmount ?
+								<Card sx={{marginTop:'1.50rem'}}>
+								{/* <CardHeader title='Your Profile Details' subheader={<Divider></Divider>} /> */}
+								<CardContent >
+									<Box sx={{ py: 1.25, mb: 6, display: 'flex', alignItems: 'center' }}>
+										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+										<Typography variant='body2'>Department   </Typography><Typography variant='body2' marginLeft={'34px'}>-</Typography> <Typography variant='body2' marginLeft={'43px'}>{"65"}</Typography> 
+									</Box>
+									<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+										<Typography variant='body2'>Manager  </Typography><Typography variant='body2' marginLeft={'56px'}>-</Typography> <Typography variant='body2' marginLeft={'43px'}>{"32"} </Typography>
+									</Box><br />
+									<Box sx={{ display: 'flex', alignItems: 'center' }}>
+										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+										<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'92px'}>-</Typography><Typography variant='body2' marginLeft={'43px'}>{"23"} </Typography>
+									</Box><br />
+									<Divider></Divider>
+									<Box sx={{  display: 'flex', alignItems: 'center' }}>
+										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+										<Typography variant='body2'>Total Amount  </Typography><Typography variant='body2' marginLeft={'24px'}>-</Typography><Typography variant='body2' marginLeft={'43px'}>{"163"} </Typography>
+									</Box><br />
+								</CardContent>
+								</Card>
+
+								: ""}
+
 							</FormControl>
 						</DialogContent>
 						<DialogActions disableSpacing={true} className='dialog-actions-dense'>

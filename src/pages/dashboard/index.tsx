@@ -355,6 +355,7 @@ const Dashboard = () => {
             <Divider></Divider>
             </Grid>
           </Grid>
+          {ability?.can('read', 'analytics') ? (
           <Grid container spacing={6}>
             <Grid item  xs={12}>
               <Card>
@@ -366,7 +367,7 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Grid>
-          </Grid>
+          </Grid>):null}
           <br />
         <Grid container spacing={6}>
           <Grid item md={7} xs={12} >
@@ -421,7 +422,7 @@ const Dashboard = () => {
                 <Grid container spacing={1}>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} >Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={4} sm={4}>
