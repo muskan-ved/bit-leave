@@ -109,14 +109,13 @@ const Templates = () => {
       }
       organisationstemplates.push(data);
     }
-    const data = {
-      "organisationstemplates": organisationstemplates
-    }
-    axios.patch(API.updateTemplateData, data, {
+    
+    axios.patch(API.updateTemplateData, organisationstemplates, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
-        toast.success("Successfully updated templates")
+        toast.success("Successfully updated templates");
+        fetchData();
       })
       .catch((err) => {
         toast.success("Failed to updated templates")

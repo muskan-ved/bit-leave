@@ -7,6 +7,7 @@ export default {
   userPoolAppClientId :'7n3noglvpkm4aho3m8fq5j7vbu',
   region:'ap-southeast-2',
   bucket_name:'bl-bck-process-upload',
+  bucket_image_name:'bl-org-assets',
   accessKeyId:'AKIAYPANZ4CMMK3LXE5B',
   secretAccessKey:'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',
 }

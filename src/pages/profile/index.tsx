@@ -25,11 +25,21 @@ import { loadEmployee } from 'src/store/employee';
 import { AppDispatch } from 'src/store';
 import { putOrganisationLogo } from 'src/store/profile';
 
+// ** SDK Import
+import AWS from 'aws-sdk';
+import auth from 'src/configs/auth';
+
 // ** Styled Avatar component
 const Avatar = styled(CustomAvatar)<AvatarProps>(({ theme }) => ({
 	width: 50,
 	height: 50,
 }))
+
+interface TabPanelProps {
+	children?: React.ReactNode;
+	index: number;
+	value: number;
+}
 
 const Profile = () => {
 
@@ -41,11 +51,19 @@ const Profile = () => {
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
 	const getTabList = ['Profile Detail', 'Direct Reports', 'Team']
-	interface TabPanelProps {
-		children?: React.ReactNode;
-		index: number;
-		value: number;
-	}
+
+	const S3_BUCKET = auth.bucket_image_name;
+	const REGION = auth.region;
+
+	AWS.config.update({
+		accessKeyId: auth.accessKeyId,
+		secretAccessKey: auth.secretAccessKey,
+	})
+
+	const myBucket = new AWS.S3({
+		params: { Bucket: S3_BUCKET },
+		region: REGION,
+	})
 
 	function TabPanel(props: TabPanelProps) {
 		const { children, value, index, ...other } = props;
@@ -101,18 +119,57 @@ const Profile = () => {
 		}
 	}, []);
 
+	
 	const handleOnChange = async (event: any) => {
 		event.preventDefault();
+		if (event.target.files[0]) {
+			const reader = new FileReader();
+			const file = event.target.files[0];
+			
+			const userData = localStorage.getItem("userData")
+			let OrgId;
+			if (userData != null) {
+			  const data = JSON.parse(userData)
+			  OrgId = data.orgId;
+			}  
 
-		const reader = new FileReader();
-		const file = event.target.files[0];
+
+			const params = {
+				Bucket: S3_BUCKET,
+				Key: `${OrgId}/${file.name}`,
+				Body: file,
+				ACL: 'public-read',
+			  };
+		
+			  const upload = new AWS.S3.ManagedUpload({
+				params: {
+					Bucket: S3_BUCKET,
+					Key: `${OrgId}/${file.name}`,
+					Body: file,
+				}
+			  });
+			
+			  const promise = upload.promise();
+			
+			  promise.then(
+				function(data) {
+				  alert("Successfully uploaded photo.");
+				
+				},
+				function(err) {
+				  return alert(err.message);
+				}
+			  );
 
 		reader.onloadend = (e: any) => {
 			const image = e.target.result
 			setImagePreviewUrl(image);
 		};
+
 		reader.readAsDataURL(file);
-		await dispatch(putOrganisationLogo(file))
+		}
+
+		// await dispatch(putOrganisationLogo(file))
 	}
 
 	const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -332,7 +389,7 @@ const Profile = () => {
 							The size of the Organisation logo should be 500*500.
 						</Typography>
 						<Box sx={{ ml: 3, pl: 3, pb: 4 }} className="btndivider">
-							<Button variant="contained" component="label" disabled>
+							<Button variant="contained" component="label" >
 								Upload Organisation Logo
 								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} hidden />
 							</Button>
