@@ -24,14 +24,12 @@ const OnboardingProvider = ({ children }: Props) => {
   // ** Hooks
   const router = useRouter()
   const organisationStore = useSelector((state: RootState) => state.organisation)
-
   const store = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch<AppDispatch>()
   const initOnboarding = async (): Promise<void> => {
     const path = router.asPath
     const onboarded = store.userOnboarded
-
-    if (path == '/login/' || path == '/logout/') {
+    if (path == '/login/' || path == '/logout/' || path == '/register/' || path == `/confirm-user/${window.location.search}`) {
       return;
     }
 

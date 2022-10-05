@@ -19,6 +19,10 @@ import { useRouter } from 'next/router';
 import CustomAvatar from 'src/@core/components/mui/avatar'
 import { loadOrganisation } from 'src/store/organisation';
 
+// ** Import Toaster
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 	padding: theme.spacing(7)
 }))
@@ -310,7 +314,6 @@ const Onboarding = () => {
 		}
 		setOnBoardingState(stateData)
 		handleNext()
-
 	}
 
 	const onTenantIdSubmit = async (data:any) => {
@@ -319,11 +322,17 @@ const Onboarding = () => {
 			 tenantId: data.tenantId,
 		}
 		setOnBoardingState(stateData)
-		await dispatch(postOrgOnboarding(
+		const org = await dispatch(postOrgOnboarding(
 			  stateData
 		))
-		await dispatch(loadOrganisation())
-		router.push('/home')
+		if(org.payload !== undefined){
+			await dispatch(loadOrganisation())
+			router.push('/home')
+		}else{
+			toast.error("Your onboarding process is incompleted, So you are on re-onboarded")
+			setActiveStep(0)
+			setButtonToggle(false)
+		}
 	}
 	
 	const formatIntoPng = () => {
@@ -878,6 +887,7 @@ const Onboarding = () => {
 	return (
 
 		<Grid container spacing={1}>
+			 <ToastContainer />
 			<Grid item xs={2}>
 				<StepperWrapper>
 					<Stepper activeStep={activeStep} orientation='vertical'>

@@ -271,9 +271,10 @@ const Dashboard = () => {
     }
     setIsLoading(false)
   }
-  
+
   useEffect(() => {
-    if (employeeDetails?.employeeDetail === null) {
+    const ReduxCheckEmpData = employeeDetails?.employeeDetail?.data?.leavesByDepartment[0];
+    if (ReduxCheckEmpData?.department === null && ReduxCheckEmpData?.averageExcessDays === null || employeeDetails?.employeeDetail === null) {
       fetchDataFromRedux();
     }else{
       setData(employeeDetails?.employeeDetail?.data)
@@ -306,11 +307,10 @@ const Dashboard = () => {
     }
   ]
 
-  if (isLoading)
+  if (isLoading && !data)
     return (<CircularProgress color="success" />)
 
   if (!isLoading && data && Object.keys(data.leaveDetails)?.length == 0) {
-
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -342,7 +342,7 @@ const Dashboard = () => {
     ))
   }
 
-  if (!isLoading && data && data.profile.onboarded ) {
+  if (!isLoading && data  && data?.profile?.onboarded ) {
     return (
       <>
          <Grid container spacing={9}>

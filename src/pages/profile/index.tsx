@@ -39,6 +39,7 @@ const Profile = () => {
 	const [employeeData, setemployeeData] = useState<any>('')
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
+	const userData = localStorage.getItem("userData")
 	const getTabList = ['Profile Detail', 'Direct Reports', 'Team']
 	interface TabPanelProps {
 		children?: React.ReactNode;
@@ -76,6 +77,11 @@ const Profile = () => {
 	const handleChangeTab = (event: SyntheticEvent, newValue: number) => {
 		if (event) { }
 		setValue(newValue)
+	}
+
+	let profileData;
+	if (userData != null) {
+		profileData = JSON.parse(userData)
 	}
 
 	const fetchDataFromRedux = async () => {
@@ -177,7 +183,7 @@ const Profile = () => {
 										type='string'
 										label='User Name'
 										name='User Name'
-										defaultValue={employeeData && employeeData.profile?.username}
+										defaultValue={profileData?.username}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -211,7 +217,7 @@ const Profile = () => {
 										type='string'
 										label='Organisation Name'
 										name='Organisation Name'
-										defaultValue={employeeData && employeeData.profile?.companyname}
+										defaultValue={profileData?.companyname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
