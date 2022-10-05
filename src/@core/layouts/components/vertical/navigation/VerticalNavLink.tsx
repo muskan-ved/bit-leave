@@ -140,7 +140,6 @@ const VerticalNavLink = ({
         {position: 'absolute',
           bottom: '0px',mt: 1.5,
           transition: 'padding .25s ease-in-out',
-          background:theme.palette.customColors.lightBg,
           px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`}:{
           mt: 1.5,
           transition: 'padding .25s ease-in-out',

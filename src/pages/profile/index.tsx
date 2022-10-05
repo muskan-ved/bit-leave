@@ -134,12 +134,12 @@ const Profile = () => {
 			}  
 
 
-			const params = {
-				Bucket: S3_BUCKET,
-				Key: `${OrgId}/${file.name}`,
-				Body: file,
-				ACL: 'public-read',
-			  };
+			// const params = {
+			// 	Bucket: S3_BUCKET,
+			// 	Key: `${OrgId}/${file.name}`,
+			// 	Body: file,
+			// 	ACL: 'public-read',
+			//   };
 		
 			  const upload = new AWS.S3.ManagedUpload({
 				params: {
