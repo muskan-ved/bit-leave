@@ -161,7 +161,6 @@ const Templates = () => {
             <Tab key={i} value={i.toString()} label={data} />)}
         </TabList>
         <CardContent>
-        <Typography sx={{ mb: 4 }}>Tip: anything between double curly braces is a special token.</Typography>
           {getTabList && getTabList.map((data: string, i: any) =>
             <TabPanel key={i} value={i.toString()} sx={{ p: 0 }}>
               {getdata && getdata.filter(x => x.templatetype === data).map((templtedata: any, i: any) =>

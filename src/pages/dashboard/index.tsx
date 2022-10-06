@@ -292,7 +292,7 @@ const Dashboard = () => {
     },
     {
       stats: `$${data?.vitals?.totalLeaveLiabilities?.toFixed(2)}`,
-      title: 'Total Leave Liabilities (days)',
+      title: 'Total Leave Liabilities',
       icon: "/images/cards/total_leave_liabilities.png"
     },
     {
@@ -301,8 +301,8 @@ const Dashboard = () => {
       icon: "/images/cards/org_headcount.png"
     },
     {
-      stats: data?.vitals?.leaveMobilised,
-      title: 'Leave Mobilesed (Days)',
+      stats: `$${data?.vitals?.leaveMobilised}`,
+      title: 'Leave Mobilised (Days)',
       icon: "/images/cards/leave_mobilised.png"
     }
   ]
@@ -467,7 +467,7 @@ const Dashboard = () => {
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
-                <CardHeader title='Top Leaves By Organisation 📊' subheader={<Divider></Divider>} />
+                <CardHeader title='Top Leave Balances In The Organisation 📊' subheader={<Divider></Divider>} />
                 <CardContent>
                   <Divider></Divider>
                   <Grid item md={12} xs={12}>

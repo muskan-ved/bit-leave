@@ -188,12 +188,6 @@ const UserDropdown = (props: Props) => {
             Contact Us
           </Box>
         </MenuItem>
-        <MenuItem  onClick={() => handleDropdownClose()} sx={{ p: 0 }}>
-          <Box sx={styles}>
-            <AccountQuestionOutline sx={{ marginRight: 2 }} />
-            FAQ (coming soon)
-          </Box>
-        </MenuItem>
         <Divider />
         <MenuItem  onClick={handleLogout} sx={{ py: 2 }}>
           <LogoutVariant

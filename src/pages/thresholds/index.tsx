@@ -138,7 +138,7 @@ const Thresholds = () => {
                 <TextField
                   fullWidth
                  
-                  label='Excess Leave Notification'
+                  label='Excess Leave Notification (in days)'
                   name='Excess Leave Notification'
                   defaultValue={
                     leaveNotification
@@ -157,7 +157,7 @@ const Thresholds = () => {
                 <TextField
                   fullWidth
                 
-                  label='Excess Leave Warning'
+                  label='Excess Leave Warning (in days)'
                   name='Excess Leave Warning'
                   defaultValue={leaveWarning}
                   InputProps={{
@@ -174,7 +174,7 @@ const Thresholds = () => {
                 <TextField
                   fullWidth
                  
-                  label='Maximum Payout'
+                  label='Maximum Payout (in days) every 12 months'
                   name='Maximum Payout'
                   defaultValue={maximumPayout}
                   InputProps={{
