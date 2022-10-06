@@ -23,11 +23,15 @@ import { useDispatch } from 'react-redux'
 //  ** Store Import
 import { loadEmployee } from 'src/store/employee';
 import { AppDispatch } from 'src/store';
-import { putOrganisationLogo } from 'src/store/profile';
 
 // ** SDK Import
 import AWS from 'aws-sdk';
 import auth from 'src/configs/auth';
+
+// ** Import Toaster
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 // ** Styled Avatar component
 const Avatar = styled(CustomAvatar)<AvatarProps>(({ theme }) => ({
@@ -112,7 +116,7 @@ const Profile = () => {
 	}
 
 	useEffect(() => {
-
+		
 		if (!employeeData) {
 			setIsLoading(true);
 			fetchDataFromRedux();
@@ -125,51 +129,35 @@ const Profile = () => {
 		if (event.target.files[0]) {
 			const reader = new FileReader();
 			const file = event.target.files[0];
+
+				const userData = localStorage.getItem("userData")
+				let OrgId;
+				if (userData != null) {
+				  const data = JSON.parse(userData)
+				  OrgId = data.orgId;
+				}  
+
+				const fileName = (event.target.files[0].name.replace(event.target.files[0].name), `logo`)
 			
-			const userData = localStorage.getItem("userData")
-			let OrgId;
-			if (userData != null) {
-			  const data = JSON.parse(userData)
-			  OrgId = data.orgId;
-			}  
-
-
-			// const params = {
-			// 	Bucket: S3_BUCKET,
-			// 	Key: `${OrgId}/${file.name}`,
-			// 	Body: file,
-			// 	ACL: 'public-read',
-			//   };
-		
-			  const upload = new AWS.S3.ManagedUpload({
-				params: {
+				const params = {
 					Bucket: S3_BUCKET,
-					Key: `${OrgId}/${file.name}`,
+					Key: `${OrgId}/${fileName}`,
 					Body: file,
 				}
-			  });
-			
-			  const promise = upload.promise();
-			
-			  promise.then(
-				function(data) {
-				  alert("Successfully uploaded photo.");
-				
-				},
-				function(err) {
-				  return alert(err.message);
-				}
-			  );
 
-		reader.onloadend = (e: any) => {
-			const image = e.target.result
-			setImagePreviewUrl(image);
-		};
-
-		reader.readAsDataURL(file);
+				 myBucket.upload(params, (err:any, data:any) =>{
+					if(data){
+						window.localStorage.setItem('orgLogo',data.Location)
+						reader.onloadend = (e: any) => {
+							const image = e.target.result
+							setImagePreviewUrl(image);
+						};
+						reader.readAsDataURL(file);
+					}else{
+						toast.error("Failed to Upload Organisation Logo")
+					}
+					})
 		}
-
-		// await dispatch(putOrganisationLogo(file))
 	}
 
 	const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -189,6 +177,7 @@ const Profile = () => {
 
 	return (<>
 		<Grid container spacing={5}>
+			<ToastContainer/>
 			<Grid item xs={12} >
 				<Card>
 					<CardHeader title='Your Profile Details' subheader={<Divider></Divider>} />
@@ -391,7 +380,7 @@ const Profile = () => {
 						<Box sx={{ ml: 3, pl: 3, pb: 4 }} className="btndivider">
 							<Button variant="contained" component="label" >
 								Upload Organisation Logo
-								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} hidden />
+								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} accept='image/*' hidden />
 							</Button>
 
 						</Box>

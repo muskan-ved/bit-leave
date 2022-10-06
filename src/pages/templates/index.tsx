@@ -115,7 +115,8 @@ const Templates = () => {
     })
       .then(res => {
         toast.success("Successfully updated templates");
-        fetchData();
+        
+        // fetchData();
       })
       .catch((err) => {
         toast.success("Failed to updated templates")

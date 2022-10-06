@@ -85,7 +85,14 @@ const VerticalNavLink = ({
   // ** Hooks
   const theme = useTheme()
   const router = useRouter()
-
+  const userData = localStorage.getItem("userData")
+  let OrgId;
+  if (userData != null) {
+          const data = JSON.parse(userData)
+          OrgId = data.orgId;
+        }  
+  const logo = window.localStorage.getItem('orgLogo');
+  const imageUrl = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`;
   // ** Vars
   const { skin, navCollapsed } = settings
 
@@ -177,11 +184,7 @@ const VerticalNavLink = ({
                   ...(parent ? { ml: 2, mr: 4 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
                 }}
               >
-              {item.subject === "orgname" ? 
-              <span >
-                <img src="/images/cards/company_logo.png" alt="Organisation Logo" width='70px' />
-              </span>
-          
+              {item.subject === "orgname" ?  (<span><img src={logo ? logo : imageUrl} alt="Organisation Logo" width='70px' /></span>)
        : 
                 <UserIcon
                   icon={IconTag}

@@ -35,7 +35,7 @@ export const postOrgOnboarding = createAsyncThunk('onboarding/org',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -66,7 +66,7 @@ export const xeroReturlUrl = createAsyncThunk('xero/returnUrl',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -88,7 +88,7 @@ export const xeroReturlUrl = createAsyncThunk('xero/returnUrl',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }

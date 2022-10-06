@@ -33,7 +33,7 @@ export const putOrganisationLogo = createAsyncThunk('profile/uploadLogo',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }

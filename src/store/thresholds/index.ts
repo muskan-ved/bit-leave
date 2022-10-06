@@ -32,7 +32,7 @@ export const getExcessLeave = createAsyncThunk('excessLeaveData',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -57,7 +57,7 @@ export const excessLeaveThresholds = createAsyncThunk('excessLeaveThreadsholds',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }

@@ -40,7 +40,7 @@ export const postEmployeeOnboarding = createAsyncThunk('emp/onboarding',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -66,7 +66,7 @@ export const postEmployeeCashout = createAsyncThunk('emp/cashout',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -88,7 +88,7 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -128,7 +128,7 @@ export const loadEmployee = createAsyncThunk('emp/load',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
@@ -147,7 +147,7 @@ export const listEmployee = createAsyncThunk('emp/list',
     }catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
