@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 // ** MUI Imports
@@ -40,14 +41,23 @@ const Home = () => {
 
   // ** Hooks
   const router = useRouter()
-
+  let fullName,OrgId:any;
   const userData = localStorage.getItem("userData")
-  let fullName;
   if (userData != null) {
     const data = JSON.parse(userData)
     fullName = data.fullName;
+    OrgId = data.orgId;
   }
 
+  useEffect(() => {
+
+    const orgLogo_Url = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`;
+          const http = new XMLHttpRequest();
+          http.open('HEAD', orgLogo_Url, false);
+          http.send();
+          window.localStorage.setItem('orgLogo',JSON.stringify(http.status))
+  }, [])
+  
   const onGoToDashboard = (url?: string) => {
     if (url) {
       router.push(url)

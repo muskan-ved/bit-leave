@@ -19,7 +19,6 @@ export default {
   updateThresholds:`${BASE_URL}/organisation/threshold`,
   xeroReturnUrl: `${BASE_URL}/organisation/xeroConnect`,
   xeroConnectionUrl:  `${BASE_URL}/organisation/xerogetconnection`,
-  loadEmployeeByXero:`${BASE_URL}/employees/fetch`,
   roleManage:`${BASE_URL}/employees/allbyRoles`,
   roleUpdate:`${BASE_URL}/employees/roles`,
   getNotification:`${BASE_URL}/employees/me/notifications`,

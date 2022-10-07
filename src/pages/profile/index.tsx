@@ -147,12 +147,12 @@ const Profile = () => {
 
 				 myBucket.upload(params, (err:any, data:any) =>{
 					if(data){
-						window.localStorage.setItem('orgLogo',data.Location)
 						reader.onloadend = (e: any) => {
 							const image = e.target.result
 							setImagePreviewUrl(image);
 						};
 						reader.readAsDataURL(file);
+						toast.success(`Organisation Logo Uploaded!  You can refresh the app `)
 					}else{
 						toast.error("Failed to Upload Organisation Logo")
 					}
@@ -380,7 +380,7 @@ const Profile = () => {
 						<Box sx={{ ml: 3, pl: 3, pb: 4 }} className="btndivider">
 							<Button variant="contained" component="label" >
 								Upload Organisation Logo
-								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} accept='image/*' hidden />
+								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} onClick={(event:any)=> {event.target.value = null}} accept='image/*' hidden />
 							</Button>
 
 						</Box>
