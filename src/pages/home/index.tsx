@@ -57,7 +57,6 @@ const Home = () => {
           http.send();
           window.localStorage.setItem('orgLogo',JSON.stringify(http.status))
   }, [])
-  
   const onGoToDashboard = (url?: string) => {
     if (url) {
       router.push(url)

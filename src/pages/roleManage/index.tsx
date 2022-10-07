@@ -112,8 +112,7 @@ const RoleManagement = () => {
   const [selectedData, setSelectedData] = useState('')
   const dispatch = useDispatch<AppDispatch>()
 
-  const arrayUniqueByKey = [...new Map(rows.map((item:any) =>
-	[item['roleName'], item])).values()];
+  const arrayUniqueByKey = [...new Map(rows.map((item: any) => [item['roleName'], item])).values()]
 
   const result = arrayUniqueByKey.filter((role: any) => {
     return role.roleName !== roleData?.roleName
@@ -133,15 +132,17 @@ const RoleManagement = () => {
       id: roleData.id,
       roleId: parseInt(selectedData)
     }
-    await dispatch(roleUpdate(payload)).then(res => {
-      if (res.payload !== undefined) {
-        toast.success('Role update')
-        setOpen(false)
-        fetchData()
-      }
-    }).catch(()=>{
-		toast.error('Server Error')
-	})
+    await dispatch(roleUpdate(payload))
+      .then(res => {
+        if (res.payload !== undefined) {
+          toast.success('Role update')
+          setOpen(false)
+          fetchData()
+        }
+      })
+      .catch(() => {
+        toast.error('Server Error')
+      })
   }
 
   const handleRoleChange = (event: SelectChangeEvent) => {
@@ -167,12 +168,14 @@ const RoleManagement = () => {
 
   const fetchData = async () => {
     setIsLoading(true)
-    await dispatch(roleManagement()).then(res => {
-      setRows(res.payload.data)
-      setIsLoading(false)
-    }).catch(() =>{
-	setIsLoading(false)
-	})
+    await dispatch(roleManagement())
+      .then(res => {
+        setRows(res.payload.data)
+        setIsLoading(false)
+      })
+      .catch(() => {
+        setIsLoading(false)
+      })
   }
 
   if (isLoading) return <CircularProgress color='success' />
@@ -246,14 +249,8 @@ const RoleManagement = () => {
               >
                 <FormControl sx={{ mt: 5, minWidth: 420 }}>
                   <InputLabel htmlFor='Roles'>Roles</InputLabel>
-                  <Select
-                    autoFocus
-                    value={selectedData}
-                    onChange={handleRoleChange}
-                    label='Roles'
-					margin="dense"
-                  >
-                    {result.map((item:any) => {
+                  <Select autoFocus value={selectedData} onChange={handleRoleChange} label='Roles' margin='dense'>
+                    {result.map((item: any) => {
                       return (
                         <MenuItem key={item.roleId} value={item.roleId}>
                           {item.roleName}

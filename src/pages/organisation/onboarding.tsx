@@ -110,7 +110,7 @@ const Onboarding = () => {
 	const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
 		employeeAwardType: 'award',
 		thresholdLeaveNotification: 20,
-		thresholdLeaveWarning: 50,
+		thresholdLeaveWarning: 18,
 		thresholdPayoutFrequency: 10,
 		email: '',
 		payrollEmail: '',

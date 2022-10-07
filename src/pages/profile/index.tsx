@@ -26,6 +26,8 @@ import { AppDispatch } from 'src/store';
 
 // ** SDK Import
 import AWS from 'aws-sdk';
+
+// ** Config Import
 import auth from 'src/configs/auth';
 
 // ** Import Toaster

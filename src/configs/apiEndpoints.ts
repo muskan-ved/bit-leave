@@ -1,26 +1,26 @@
-export const BASE_URL = "https://app-stag.api.bitleave.co/api/v1"; 
-export const APP_URL = "https://app-stag.bitleave.co";
-export const ORG_URL = "https://app-stag.api.bitleave.co"
+export const BASE_URL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+export const APP_URL =  `${process.env.NEXT_PUBLIC_APP_URL}`;
+export const ORG_URL =  `${process.env.NEXT_PUBLIC_ORG_URL}`;
 
 export default {
-  handleRegister:`${ORG_URL}/checkorganisations`,
+  handleRegister:`${ORG_URL}${process.env.NEXT_PUBLIC_HANDLE_REGISTER}`,
   
-  loadOrganisation:`${BASE_URL}/organisation/me`,
-  uploadCSVToS3:`${BASE_URL}/employees/SyncOrg`,
-  cashoutActionApproval:`${BASE_URL}/employeeactions/`,
-  updateTemplateData:`${BASE_URL}/organisation/template`,
-  postEmployeeOnboarding:`${BASE_URL}/employees/onboarding`,
-  postEmployeeCashout:`${BASE_URL}/employeeactions/cashout`,
-  calculateEmployeeCashout:`${BASE_URL}/employeeactions/calculate`,
-  getCashOutContract:`${BASE_URL}/employeeactions/cashoutcontract`,
-  loadEmployee:`${BASE_URL}/employees/me`,
-  listEmployee:`${BASE_URL}/employees/list`,
-  postOrgOnboarding:`${BASE_URL}/organisation/onboarding`,
-  updateThresholds:`${BASE_URL}/organisation/threshold`,
-  xeroReturnUrl: `${BASE_URL}/organisation/xeroConnect`,
-  xeroConnectionUrl:  `${BASE_URL}/organisation/xerogetconnection`,
-  roleManage:`${BASE_URL}/employees/allbyRoles`,
-  roleUpdate:`${BASE_URL}/employees/roles`,
-  getNotification:`${BASE_URL}/employees/me/notifications`,
-  setupPost:`${BASE_URL}/organisation/leave`,
+  loadOrganisation:`${BASE_URL}${process.env.NEXT_PUBLIC_LOAD_ORGANISATION}`,
+  uploadCSVToS3:`${BASE_URL}${process.env.NEXT_PUBLIC_UPLOAD_CSV_TO_S3}`,
+  cashoutActionApproval:`${BASE_URL}${process.env.NEXT_PUBLIC_CASHOUT_ACTION_APPROVAL}`,
+  updateTemplateData:`${BASE_URL}${process.env.NEXT_PUBLIC_UPDATE_TEMPLATE_DATA}`,
+  postEmployeeOnboarding:`${BASE_URL}${process.env.NEXT_PUBLIC_POST_EMPLOYEE_ONBOARDING}`,
+  postEmployeeCashout:`${BASE_URL}${process.env.NEXT_PUBLIC_POST_EMPLOYEE_CASHOUT}`,
+  calculateEmployeeCashout:`${BASE_URL}${process.env.NEXT_PUBLIC_CALCULATE_EMPLOYEE_CASHOUT}`,
+  getCashOutContract:`${BASE_URL}${process.env.NEXT_PUBLIC_GET_CASHOUT_CONTRACT}`,
+  loadEmployee:`${BASE_URL}${process.env.NEXT_PUBLIC_LOAD_EMPLOYEE}`,
+  listEmployee:`${BASE_URL}${process.env.NEXT_PUBLIC_LIST_EMPLOYEE}`,
+  postOrgOnboarding:`${BASE_URL}${process.env.NEXT_PUBLIC_POST_ORG_ONBOARDING}`,
+  updateThresholds:`${BASE_URL}${process.env.NEXT_PUBLIC_UPDATE_THRESHOLDS}`,
+  xeroReturnUrl: `${BASE_URL}${process.env.NEXT_PUBLIC_XERO_RETURN_URL}`,
+  xeroConnectionUrl:  `${BASE_URL}${process.env.NEXT_PUBLIC_XERO_CONNECTION_URL}`,
+  roleManage:`${BASE_URL}${process.env.NEXT_PUBLIC_ROLE_MANAGE}`,
+  roleUpdate:`${BASE_URL}${process.env.NEXT_PUBLIC_ROLE_UPDATE}`,
+  getNotification:`${BASE_URL}${process.env.NEXT_PUBLIC_GET_NOTIFICATION}`,
+  setupPost:`${BASE_URL}${process.env.NEXT_PUBLIC_SET_UP_POST}`,
 }
