@@ -1,5 +1,5 @@
 // ** React Imports
-import {  useEffect, useState } from 'react'
+import {  useContext, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -17,7 +17,7 @@ import Divider from '@mui/material/Divider'
 import {actionApproval} from 'src/types/actionApproval'
 
 // ** MUI Import
-import { Grid, InputAdornment, TextField } from '@mui/material'
+import { Button, Grid, InputAdornment, TextField } from '@mui/material'
 
 // ** MUI Icon Import
 import QueryBuilderIcon from '@mui/icons-material/QueryBuilder';
@@ -26,16 +26,22 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 
 // ** Redux Import
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
-import { cashoutActionApproval } from 'src/store/actionapproval'
+import { cashoutActionApproval, cashoutUploadActionApproval } from 'src/store/actionapproval'
+
+// ** Context Imports
+import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 const ActionApproval = () =>{
   
   const [data, setData] = useState<actionApproval | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
   
   // demo data 
@@ -66,12 +72,29 @@ const ActionApproval = () =>{
           })
       };
 
+    const handleApprove = async () =>{
+
+      const params = {
+
+      }
+      setIsLoading(true);
+         await dispatch(cashoutUploadActionApproval(params))
+          .then(res => {
+            setData(res.payload.data)
+            setIsLoading(false);
+          }).catch(err => {
+            setIsLoading(false);
+          })
+    }
+
     if (isLoading)
     return (<CircularProgress color="success" />)
 
     if (!isLoading && data) { 
 
     return (
+      <>
+            {!ability?.can('read', 'analytics') ? 
         <Card>
               <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />
               <CardContent>
@@ -131,14 +154,14 @@ const ActionApproval = () =>{
                     <TextField
                     fullWidth
                     type='string'
-                    label={data.approvalreason ? 'Approval Reason' : 'Rejected Reason' }
-                    name={data.approvalreason ? 'Approval Reason' : 'Rejected Reason' }
-                    defaultValue={data.approvalreason ? data.approvalreason : data.rejectreason } 
+                    label={data?.approvalreason ? 'Approval Reason' : 'Rejected Reason' }
+                    name={data?.approvalreason ? 'Approval Reason' : 'Rejected Reason' }
+                    defaultValue={data?.approvalreason ? data?.approvalreason : data?.rejectreason } 
                     InputProps={{
                       readOnly: true,
                       startAdornment: (
                       <InputAdornment position='start'>
-                        {data.approvalreason ? <CheckCircleOutlineIcon/> : <HighlightOffIcon/>}
+                        {data?.approvalreason ? <CheckCircleOutlineIcon/> : <HighlightOffIcon/>}
                       </InputAdornment>
                       )
                     }}
@@ -182,8 +205,118 @@ const ActionApproval = () =>{
                   </Grid>
                 </Grid>
               </CardContent>
-            </Card>
+            </Card>:
+            <Card>
+            <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />
+            <CardContent>
+            <Grid container spacing={5}>
+              <Grid item xs={12}>
+                <TextField
+                fullWidth
+                type='string'
+                label="Employee Name"
+                name="Employee Name"
+                defaultValue={data?.submitApproval} 
+                InputProps={{
+                  readOnly: true,
+                  startAdornment: (
+                  <InputAdornment position='start'>
+                    <PersonOutlineIcon/>
+                  </InputAdornment>
+                  )
+                }}
+                />
+              </Grid> 
+              <Grid item xs={12}>
+                  <TextField
+                  fullWidth
+                  type='number'
+                  label='Cashout Days'
+                  name='Cashout Days'
+                  defaultValue={data?.cashoutdays} 
+                  InputProps={{
+                    readOnly: true,
+                    startAdornment: (
+                    <InputAdornment position='start'>
+                      <TodayOutlinedIcon/>
+                    </InputAdornment>
+                    )
+                  }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                  fullWidth
+                  type='number'
+                  label='Cashout Amount'
+                  name='Cashout Amount'
+                  defaultValue={data?.cashoutamt} 
+                  InputProps={{
+                    readOnly: true,
+                    startAdornment: (
+                    <InputAdornment position='start'>
+                      <AttachMoneyIcon/>
+                    </InputAdornment>
+                    )
+                  }}
+                  />
+                </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                    fullWidth
+                    type='string'
+                    label={'Cashout Reason' }
+                    name={'Cashout Reason' }
+                    defaultValue={data?.approvalreason ? data?.approvalreason : data?.rejectreason } 
+                    InputProps={{
+                      readOnly: true,
+                      startAdornment: (
+                      <InputAdornment position='start'>
+                      <LiveHelpOutlinedIcon/>
+                      </InputAdornment>
+                        )
+                  }}
+                    />
+                  </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                  fullWidth
+                  type='string'
+                  label='Action Date'
+                  name='Action Date'
+                  defaultValue={data?.actiondate} 
+                  InputProps={{
+                    readOnly: true,
+                    startAdornment: (
+                    <InputAdornment position='start'>
+                      <CalendarMonthIcon/>
+                    </InputAdornment>
+                    )
+                  }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button variant='contained' onClick={handleApprove}>Submit</Button>
+                </Grid>
+              </Grid>
+            </CardContent>
+            </Card>}
+        </>
       )
+}else{
+  return(
+  <Card>
+  <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />
+  <CardContent>
+  <Grid container spacing={5}>
+    <Grid item xs={12}>
+      Data not appear
+    </Grid>
+  </Grid>
+  </CardContent>
+  </Card>
+  )
+
 }
 }
 

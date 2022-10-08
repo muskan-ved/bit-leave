@@ -39,6 +39,31 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
     }
   })
 
+  export const cashoutUploadActionApproval = createAsyncThunk('cashout/uploadActionApproval',
+  async (params: any, { dispatch, getState }: Redux) => {
+ 
+    try {
+      const token = localStorage.getItem("accessToken");
+      const response = await axios
+        .post(API.uploadActionApproval,params,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
+      return response.data
+    }
+    catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
+           dispatch(userLogout())
+         }
+        }
+    }
+  }) 
+
 const actionApprovalSlice = createSlice({
     name: 'actionApproval',
     initialState: {

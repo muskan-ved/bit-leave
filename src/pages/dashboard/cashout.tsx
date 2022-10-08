@@ -23,6 +23,7 @@ import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } fro
 import { ApiResult, error } from 'src/types/error'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { clippingParents } from '@popperjs/core';
 
 interface cashoutResultModel {
 	success: boolean
@@ -66,6 +67,7 @@ const CashoutDialog = (props: any) => {
 	const [loading, setloading] = React.useState(false)
 	const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null)
 	const [toggleValue, setToggleValue] = React.useState(false)
+	const [calculateData, setCalculateData] = React.useState<any>('')
 
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -124,9 +126,10 @@ const CashoutDialog = (props: any) => {
 		}
 		setcashoutState(stateData)
 
-		const cashoutContractResponse = await dispatch(getCashOutContract(cashout))
-		if (cashoutContractResponse.payload != null && cashoutContractResponse.payload.data != null && cashoutContractResponse.payload.data.contract != null) {
-			setemployeeContract(cashoutContractResponse.payload.data.contract)
+		const cashoutContractResponse = await dispatch(getCashOutContract(stateData))
+		console.log(cashoutContractResponse,"cashoutContractResponse")
+		if (cashoutContractResponse.payload !== null) {
+			setemployeeContract(cashoutContractResponse.payload)
 			setActiveStep(1);
 			resetError()
 			setloading(false)
@@ -200,9 +203,11 @@ const CashoutDialog = (props: any) => {
 			setToggleValue(true)
 			const result = await dispatch(calculateEmployeeCashout(e.target.value))
 			if (result.payload != null) {
-				if (result.payload.data.cashoutAmount != null) {
-					setcalculateAmount(result.payload.data.cashoutAmount)
-					setleaveBalanceAfterCashout(result.payload.data.leaveBalanceAfterCashout)
+					if (result.payload.cashoutAmount != null) {
+					setCalculateData(result.payload)
+					setcalculateAmount(result.payload.cashoutAmount)
+					setleaveBalanceAfterCashout(result.payload.leaveBalanceAfterCashout)
+
 				}
 			}
 			else {
@@ -247,7 +252,6 @@ const CashoutDialog = (props: any) => {
 	const displayContract = () => {
 		return { __html: employeeContract };
 	}
-
 	const maxWidth = 'sm'
 	return (
 		<Dialog fullWidth={true} scroll={'paper'} fullScreen={fullScreen} maxWidth={maxWidth} open={props.open} onClose={handleDialogClose} aria-labelledby='form-dialog-title'>
@@ -370,24 +374,23 @@ const CashoutDialog = (props: any) => {
 
 								{toggleValue && calculateAmount ?
 								<Card sx={{marginTop:'1.50rem'}}>
-								{/* <CardHeader title='Your Profile Details' subheader={<Divider></Divider>} /> */}
 								<CardContent >
-									<Box sx={{ py: 1.25, mb: 6, display: 'flex', alignItems: 'center' }}>
-										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Department   </Typography><Typography variant='body2' marginLeft={'34px'}>-</Typography> <Typography variant='body2' marginLeft={'43px'}>{"65"}</Typography> 
-									</Box>
 									<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Manager  </Typography><Typography variant='body2' marginLeft={'56px'}>-</Typography> <Typography variant='body2' marginLeft={'43px'}>{"32"} </Typography>
-									</Box><br />
-									<Box sx={{ display: 'flex', alignItems: 'center' }}>
+										<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.cashoutAmount}</Typography> 
+									</Box>
+									<Box sx={{  display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'92px'}>-</Typography><Typography variant='body2' marginLeft={'43px'}>{"23"} </Typography>
-									</Box><br />
+										<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'138px'}>{calculateData?.taxAmount} </Typography>
+									</Box>
 									<Divider></Divider>
 									<Box sx={{  display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Total Amount  </Typography><Typography variant='body2' marginLeft={'24px'}>-</Typography><Typography variant='body2' marginLeft={'43px'}>{"163"} </Typography>
+										<Typography variant='body2'>Total Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount} </Typography>
+									</Box>
+									<Divider></Divider>
+									<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+										<Typography variant='body2'>Leave Balance After Cashout </Typography><Typography variant='body2' marginLeft={'56px'}>-</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.leaveBalanceAfterCashout} </Typography>
 									</Box><br />
 								</CardContent>
 								</Card>
