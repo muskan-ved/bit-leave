@@ -127,7 +127,6 @@ const CashoutDialog = (props: any) => {
 		setcashoutState(stateData)
 
 		const cashoutContractResponse = await dispatch(getCashOutContract(stateData))
-		console.log(cashoutContractResponse,"cashoutContractResponse")
 		if (cashoutContractResponse.payload !== null) {
 			setemployeeContract(cashoutContractResponse.payload)
 			setActiveStep(1);
@@ -151,20 +150,14 @@ const CashoutDialog = (props: any) => {
 	}
 
 	const onSignatureSubmit = async (data: any) => {
-
 		const stateData = {
 			...cashout,
 			signature: data.signature
 		}
 		setloading(true)
-		const result = await dispatch(postEmployeeCashout({
-			cashoutdays: stateData.cashoutdays,
-			cashoutreason: stateData.cashoutreason,
-			signature: stateData.signature
-		}))
-
-		if (result.payload != null && result.payload.data != null && result.payload.data?.success == true) {
-			setcashoutState(stateData)
+		const result = await dispatch(postEmployeeCashout(stateData))
+		if (result.payload) {
+			setcashoutState(result.payload)
 			setActiveStep(2)
 			resetError()
 		}
@@ -464,7 +457,7 @@ const CashoutDialog = (props: any) => {
 						}
 						{loading == true &&
 							<LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
-								Sign Contract
+								Sign ggContract
 							</LoadingButton>
 						}
 					</DialogActions>
