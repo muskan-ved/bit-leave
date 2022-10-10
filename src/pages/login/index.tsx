@@ -243,6 +243,7 @@ const LoginPage = () => {
                           </IconButton>
                         </InputAdornment>
                       }
+                      autoComplete={'true'}
                     />
                   )}
                 />

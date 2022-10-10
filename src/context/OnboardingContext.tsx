@@ -29,7 +29,7 @@ const OnboardingProvider = ({ children }: Props) => {
   const initOnboarding = async (): Promise<void> => {
     const path = router.asPath
     const onboarded = store.userOnboarded
-    if (path == '/login/' || path == '/logout/' || path == '/register/' || path == `/confirm-user/${window.location.search}`) {
+    if (path == '/login/' || path == '/logout/' || path == '/register/' || path == `/confirm-user/${window.location.search}` || path == '/forgot-password/') {
       return;
     }
 

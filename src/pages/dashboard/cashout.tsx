@@ -194,7 +194,7 @@ const CashoutDialog = (props: any) => {
 		if (e.target.value != null) {
 			setloading(true)
 			setToggleValue(true)
-			const result = await dispatch(calculateEmployeeCashout(e.target.value))
+			const result = await dispatch(calculateEmployeeCashout(parseInt(e.target.value)))
 			if (result.payload != null) {
 					if (result.payload.cashoutAmount != null) {
 					setCalculateData(result.payload)
@@ -370,21 +370,17 @@ const CashoutDialog = (props: any) => {
 								<CardContent >
 									<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.cashoutAmount}</Typography> 
+										<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.cashoutAmount?.toFixed(2)}</Typography> 
 									</Box>
 									<Box sx={{  display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'138px'}>{calculateData?.taxAmount} </Typography>
+										<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'138px'}>{calculateData?.taxAmount?.toFixed(2)} </Typography>
 									</Box>
 									<Divider></Divider>
 									<Box sx={{  display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Total Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount} </Typography>
+										<Typography variant='body2'>Total Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
 									</Box>
-									<Divider></Divider>
-									<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
-										<Typography variant='body2'>Leave Balance After Cashout </Typography><Typography variant='body2' marginLeft={'56px'}>-</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.leaveBalanceAfterCashout} </Typography>
-									</Box><br />
 								</CardContent>
 								</Card>
 
@@ -393,8 +389,8 @@ const CashoutDialog = (props: any) => {
 							</FormControl>
 						</DialogContent>
 						<DialogActions disableSpacing={true} className='dialog-actions-dense'>
-							{loading == false &&
-								<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }}> Cash Out Leave</Button>
+							{loading == false && 
+								<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }} disabled={calculateAmount === 0 || calculateAmount === null}> Cash Out Leave</Button>
 							}
 							{loading == true &&
 								<LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
@@ -417,7 +413,7 @@ const CashoutDialog = (props: any) => {
 							being you and your employer.Once both parties execute the document you will recieve asigned copy.
 						</DialogContentText>
 						<DialogContentText>
-							<div dangerouslySetInnerHTML={displayContract()} />
+							<span dangerouslySetInnerHTML={displayContract()} />
 						</DialogContentText>
 
 						<IconButton onClick={onClearSignature} style={{ display: 'block', position: 'relative', textAlign: 'right', left: '365px', top: '40px', 'zIndex': '100' }}>
@@ -430,7 +426,6 @@ const CashoutDialog = (props: any) => {
 								control={signatureControl}
 								render={({ field }) => (
 									<>
-
 										<SignaturePad
 											ref={sigCanvas}
 											onEnd={() => field.onChange(formatIntoPng())}

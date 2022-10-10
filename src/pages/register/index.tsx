@@ -295,6 +295,7 @@ const Register = () => {
                           </IconButton>
                         </InputAdornment>
                       }
+                      autoComplete='true'
                     />
                   )}
                 />
