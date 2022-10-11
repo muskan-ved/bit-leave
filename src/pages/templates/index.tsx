@@ -154,7 +154,7 @@ const Templates = () => {
 
   return (
     <Card>
-       <CardHeader title='Manage Templates' subheader={<Divider></Divider>} />
+       <CardHeader title='Manage Email Templates' subheader={<Divider></Divider>} />
       <ToastContainer  />
       <TabContext value={value}>
         <TabList onChange={handleChangeTab} aria-label='card navigation example'>

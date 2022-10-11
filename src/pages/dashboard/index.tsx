@@ -467,7 +467,7 @@ const Dashboard = () => {
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
-                <CardHeader title='Top Leave Balances In The Organisation 📊' subheader={<Divider></Divider>} />
+                <CardHeader title='Top Annual Leave Balances In The Organisation 📊' subheader={<Divider></Divider>} />
                 <CardContent>
                   <Divider></Divider>
                   <Grid item md={12} xs={12}>
