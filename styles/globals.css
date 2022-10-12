@@ -30,7 +30,7 @@ html body .MuiDataGrid-columnHeaders {
   
 .MuiBox-root.css-19q7vmd.btndivider{
   display: flex;
-  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .css-m3k6wd-MuiPaper-root-MuiCard-root svg tspan {
@@ -43,4 +43,16 @@ html body .MuiDataGrid-columnHeaders {
 
 .apexcharts-tooltip .apexcharts-tooltip-title, .apexcharts-tooltip-series-group .apexcharts-tooltip-text{
   color: #30334E;
+}
+
+.video { position: relative; }
+
+.video img{
+   position: absolute;
+   display: block;
+   background: url(/images/cards/trophy.png);
+   height: 40px;
+   width: 40px;
+   top: 20px;
+   left: 20px;
 }

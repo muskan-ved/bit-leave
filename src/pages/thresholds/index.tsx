@@ -11,6 +11,8 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import CircularProgress from '@mui/material/CircularProgress'
+import Tooltip from '@mui/material/Tooltip'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 // ** Icons Imports
 import Divider from '@mui/material/Divider'
@@ -137,7 +139,6 @@ const Thresholds = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                 
                   label='Excess Leave Notification (in days)'
                   name='Excess Leave Notification'
                   defaultValue={
@@ -148,6 +149,14 @@ const Thresholds = () => {
                       <InputAdornment position='start'>
                         <OfficeBuildingOutline />
                       </InputAdornment>
+                    ),
+                    endAdornment:(
+                      <InputAdornment position='end'>
+                         <Tooltip title='Helper text' arrow >
+                         <HelpOutlineIcon />
+                         </Tooltip>
+                        </InputAdornment>
+
                     )
                   }}
                   onChange={(ele) => handleOnChange(ele)}
@@ -165,6 +174,14 @@ const Thresholds = () => {
                       <InputAdornment position='start'>
                         <AlertBoxOutline />
                       </InputAdornment>
+                    ),
+                    endAdornment:(
+                      <InputAdornment position='end'>
+                         <Tooltip title='Helper text' arrow >
+                         <HelpOutlineIcon />
+                         </Tooltip>
+                        </InputAdornment>
+
                     )
                   }}
                   onChange={(ele) => handleOnChange(ele)}
@@ -182,6 +199,16 @@ const Thresholds = () => {
                       <InputAdornment position='start'>
                         <CurrencyUsd />
                       </InputAdornment>
+                    ),
+                    endAdornment:(
+                      <InputAdornment position='end'>
+                         <Tooltip title=' <li>Reduction in excess leave liabilities</li>
+                    <li>Time in Lieu and RDO management</li>
+                    <li>Reduction of ineffective wellness spend/programs</li>' arrow >
+                         <HelpOutlineIcon />
+                         </Tooltip>
+                        </InputAdornment>
+
                     )
                   }}
                   onChange={(ele) => handleOnChange(ele)}
