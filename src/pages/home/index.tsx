@@ -10,7 +10,7 @@ import CardContent from '@mui/material/CardContent'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
-import { ChevronDown } from 'mdi-material-ui'
+import { ChevronDown, Translate } from 'mdi-material-ui'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
@@ -45,13 +45,9 @@ const TrophyImg = styled('img')(({ theme }) => ({
 }))
 
 const PlayIcon = styled('img')(({ theme }) => ({
-	position: 'absolute',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: 0,
-    left: 18,
-  
+  position: 'absolute',
+  left: '50%',
+  transform:'translate(-50%,0px)'
 }))
 
 const Home = () => {
@@ -115,45 +111,134 @@ const Home = () => {
         <Grid item xs={12}>
           <Card>
             <CardHeader title='Get up to speed with bit.leave' subheader={<Divider></Divider>}></CardHeader>
-            <CardContent sx={{ p: theme => `${theme.spacing(0, 7.5, 7, 7.5)} !important` }}> 
-            <Typography variant='body2' >Quick video FAQs</Typography>
-              <Grid container sx={{textAlign: 'center',columnGap: '20px',flexWrap: 'wrap'}}>
-			  <Grid item xs={2.8} sx={{border:`1px solid ${theme.palette.grey[500]}`,borderRadius:'5px',padding:'10px 0px',marginTop:'10px'}} >
-			  <Box sx={{backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),margin:'0px 10px',paddingTop:'5px',position:'relative'}}>
-				<img src='/images/misc/paypal.png' width='100px' height='100px' alt='youtube-image' onClick={() => setShow(true)}/>
-				<PlayIcon src='/images/cards/play-icon.png' className='play-icon'/>
-				 </Box>
-				 <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
-				   Play the video
-				 </Typography>
-			 </Grid>{' '}
-			 <Grid item xs={2.8} sx={{border:`1px solid ${theme.palette.grey[500]}`,borderRadius:'5px',padding:'10px 0px',marginTop:'10px'}}>
-			 <Box sx={{backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),margin:'0px 10px',paddingTop:'5px',position:'relative'}}>
-				<img src='/images/misc/paypal.png' width='100px' height='100px' alt='youtube-image' onClick={() => setShow(true)}/>
-				<PlayIcon src='/images/cards/play-icon.png' className='play-icon'/>
-				</Box>
-				 <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
-				   Play the video
-				 </Typography>
-			 </Grid>{' '}
-			 <Grid item xs={2.8} sx={{border:`1px solid ${theme.palette.grey[500]}`,borderRadius:'5px',padding:'10px 0px',marginTop:'10px'}} >
-			  <Box sx={{backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),margin:'0px 10px',paddingTop:'5px',position:'relative'}}>
-				<img src='/images/misc/paypal.png' width='100px' height='100px' alt='youtube-image' onClick={() => setShow(true)}/>
-				<PlayIcon src='/images/cards/play-icon.png' className='play-icon'/>
-				 </Box>
-				 <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
-				   Play the video
-				 </Typography>
-			 </Grid>{' '}
-			 <Grid item xs={2.8} sx={{border:`1px solid ${theme.palette.grey[500]}`,borderRadius:'5px',padding:'10px 0px',marginTop:'10px'}} >
-			  <Box sx={{backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),margin:'0px 10px',paddingTop:'5px',position:'relative'}}>
-				<img src='/images/misc/paypal.png' width='100px' height='100px' alt='youtube-image' onClick={() => setShow(true)}/>
-				<PlayIcon src='/images/cards/play-icon.png' className='play-icon'/>
-				 </Box>
-				 <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
-				   Play the video
-				 </Typography>
-			 </Grid>{' '}	
+            <CardContent sx={{ p: theme => `${theme.spacing(0, 7.5, 7, 7.5)} !important` }}>
+              <Typography variant='body2'>Quick video FAQs</Typography>
+              <Grid container sx={{ textAlign: 'center', columnGap: '20px' }}>
+                <Grid
+                  item
+                  xs={2.8}
+                  sx={{
+                    border: `1px solid ${theme.palette.grey[500]}`,
+                    borderRadius: '5px',
+                    padding: '10px 0px',
+                    marginTop: '10px'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),
+                      margin: '0px 10px',
+                      paddingTop: '5px',
+                      position: 'relative'
+                    }}
+                  >
+                    <img
+                      src='/images/misc/paypal.png'
+                      width='100px'
+                      height='100px'
+                      alt='youtube-image'
+                      onClick={() => setShow(true)}
+                    />
+                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                  </Box>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                    Play the video
+                  </Typography>
+                </Grid>{' '}
+                <Grid
+                  item
+                  xs={2.8}
+                  sx={{
+                    border: `1px solid ${theme.palette.grey[500]}`,
+                    borderRadius: '5px',
+                    padding: '10px 0px',
+                    marginTop: '10px',
+					maxWidth:'50%'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),
+                      margin: '0px 10px',
+                      paddingTop: '5px',
+                      position: 'relative'
+                    }}
+                  >
+                    <img
+                      src='/images/misc/paypal.png'
+                      width='100px'
+                      height='100px'
+                      alt='youtube-image'
+                      onClick={() => setShow(true)}
+                    />
+                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                  </Box>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                    Play the video
+                  </Typography>
+                </Grid>{' '}
+                <Grid
+                  item
+                  xs={2.8}
+                  sx={{
+                    border: `1px solid ${theme.palette.grey[500]}`,
+                    borderRadius: '5px',
+                    padding: '10px 0px',
+                    marginTop: '10px'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),
+                      margin: '0px 10px',
+                      paddingTop: '5px',
+                      position: 'relative'
+                    }}
+                  >
+                    <img
+                      src='/images/misc/paypal.png'
+                      width='100px'
+                      height='100px'
+                      alt='youtube-image'
+                      onClick={() => setShow(true)}
+                    />
+                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                  </Box>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                    Play the video
+                  </Typography>
+                </Grid>{' '}
+                <Grid
+                  item
+                  xs={2.8}
+                  sx={{
+                    border: `1px solid ${theme.palette.grey[500]}`,
+                    borderRadius: '5px',
+                    padding: '10px 0px',
+                    marginTop: '10px'
+                  }}
+                >
+                  <Box
+                    sx={{
+                      backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),
+                      margin: '0px 10px',
+                      paddingTop: '5px',
+                      position: 'relative'
+                    }}
+                  >
+                    <img
+                      src='/images/misc/paypal.png'
+                      width='100px'
+                      height='100px'
+                      alt='youtube-image'
+                      onClick={() => setShow(true)}
+                    />
+                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                  </Box>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                    Play the video
+                  </Typography>
+                </Grid>{' '}
               </Grid>
             </CardContent>
           </Card>
@@ -366,9 +451,14 @@ const Home = () => {
               sx={{ position: 'absolute', right: '1rem', top: '1rem' }}
             >
               <Close />
-            </IconButton> 
-			<ReactPlayer url='https://www.youtube.com/watch?v=7KDRqBpT8NA' playing={true} muted={false} controls={true}/>
-			</DialogContent>
+            </IconButton>
+            <ReactPlayer
+              url='https://www.youtube.com/watch?v=7KDRqBpT8NA'
+              playing={true}
+              muted={false}
+              controls={true}
+            />
+          </DialogContent>
         </Dialog>
       </Grid>
     </>

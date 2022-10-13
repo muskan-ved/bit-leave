@@ -1,5 +1,5 @@
 // ** React Imports
-import {  useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -12,15 +12,15 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import CircularProgress from '@mui/material/CircularProgress'
 import Tooltip from '@mui/material/Tooltip'
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 
 // ** Icons Imports
 import Divider from '@mui/material/Divider'
 import { AlertBoxOutline, CurrencyUsd, OfficeBuildingOutline } from 'mdi-material-ui'
 
 // ** Import Toaster
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 //  ** Types Imports
 import { thresholds } from 'src/types/thresholds'
@@ -31,109 +31,114 @@ import { AppDispatch } from 'src/store'
 import { excessLeaveThresholds, getExcessLeave } from 'src/store/thresholds'
 
 const Thresholds = () => {
-  const [data, setData] = useState<thresholds | null>(null);
-  const [leaveNotification, setLeaveNotification] = useState<thresholds | number>();
-  const [leaveWarning, setLeaveWarning] = useState<thresholds | number>();
-  const [maximumPayout, setMaximumPayout] = useState<thresholds | number>();
+  const [data, setData] = useState<thresholds | null>(null)
+  const [leaveNotification, setLeaveNotification] = useState<thresholds | number>()
+  const [leaveWarning, setLeaveWarning] = useState<thresholds | number>()
+  const [maximumPayout, setMaximumPayout] = useState<thresholds | number>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
 
   const fetchData = async () => {
-    const excessleave = await dispatch(getExcessLeave()).then((res) => {
-        const data = res.payload?.data;
-        setLeaveNotification(data[0]?.organisationssettings?.[0].thrleavenotification)
-        setLeaveWarning(data[0]?.organisationssettings?.[0].thrleavewarning)
-        setMaximumPayout(data[0]?.organisationssettings?.[0].thrpayoutfrequency)
-        setData(data)
-        setIsLoading(false);
-      })
-  };
+    const excessleave = await dispatch(getExcessLeave()).then(res => {
+      const data = res.payload?.data
+      setLeaveNotification(data[0]?.organisationssettings?.[0].thrleavenotification)
+      setLeaveWarning(data[0]?.organisationssettings?.[0].thrleavewarning)
+      setMaximumPayout(data[0]?.organisationssettings?.[0].thrpayoutfrequency)
+      setData(data)
+      setIsLoading(false)
+    })
+  }
 
   useEffect(() => {
     if (!data) {
-      setIsLoading(true);
-      fetchData();
+      setIsLoading(true)
+      fetchData()
     }
-  }, []);
+  }, [])
 
-  const handleOnChange = (element:any) =>{
-    if(element.target.name === "Excess Leave Notification"){
+  const handleOnChange = (element: any) => {
+    if (element.target.name === 'Excess Leave Notification') {
       setLeaveNotification(element.target.value)
-    }
-    else if(element.target.name === "Excess Leave Warning"){
+    } else if (element.target.name === 'Excess Leave Warning') {
       setLeaveWarning(element.target.value)
-    }
-    else if(element.target.name === "Maximum Payout"){
+    } else if (element.target.name === 'Maximum Payout') {
       setMaximumPayout(element.target.value)
     }
   }
 
-  const handleSubmit = async(e:any) =>{
-    e.preventDefault();
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
 
-    if(leaveNotification || leaveWarning || maximumPayout){
-    const data = {
-      thresholdLeaveNotification: typeof(leaveNotification) === "string" ? parseInt(leaveNotification) : leaveNotification,
-      thresholdLeaveWarning: typeof(leaveWarning) === "string" ? parseInt(leaveWarning) : leaveWarning,
-      thresholdPayoutFrequency: typeof(maximumPayout) === "string" ? parseInt(maximumPayout) : maximumPayout
-    }
-    setIsLoading(true);
-     await dispatch(excessLeaveThresholds(data)).then((res)=>{
-        setIsLoading(false);
-        if(res.payload){
-        toast.success("Successfully updated thresholds", {
-          autoClose: 5000,
-          hideProgressBar: false,
-        })
+    if (leaveNotification || leaveWarning || maximumPayout) {
+      const data = {
+        thresholdLeaveNotification:
+          typeof leaveNotification === 'string' ? parseInt(leaveNotification) : leaveNotification,
+        thresholdLeaveWarning: typeof leaveWarning === 'string' ? parseInt(leaveWarning) : leaveWarning,
+        thresholdPayoutFrequency: typeof maximumPayout === 'string' ? parseInt(maximumPayout) : maximumPayout
       }
-      else{
-        toast.error("Failed to updated thresholds", {
-          autoClose: 5000,
-          hideProgressBar: false,
+      setIsLoading(true)
+      await dispatch(excessLeaveThresholds(data))
+        .then(res => {
+          setIsLoading(false)
+          if (res.payload) {
+            toast.success('Successfully updated thresholds', {
+              autoClose: 5000,
+              hideProgressBar: false
+            })
+          } else {
+            toast.error('Failed to updated thresholds', {
+              autoClose: 5000,
+              hideProgressBar: false
+            })
+          }
+          fetchData()
         })
-      }
-        fetchData();
-      }).catch(()=>{
-        setIsLoading(false);
-        toast.error("Failed to updated thresholds", {
-          autoClose: 5000,
-          hideProgressBar: false,
+        .catch(() => {
+          setIsLoading(false)
+          toast.error('Failed to updated thresholds', {
+            autoClose: 5000,
+            hideProgressBar: false
+          })
         })
-    })
-  }else{
-    //else statement
-  }
-  }
-
-  if (isLoading)
-    return (<CircularProgress color="success" />)
-
-    if (!isLoading && !data) {
-
-      return (
-        <Grid container spacing={6}>
-          <Grid item md={12} xs={12}>
-            <Card>
-              <CardHeader title='Your Dashboard' />
-              <CardContent>
-                <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
-                <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
-                <br />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>)
+    } else {
+      //else statement
     }
+  }
+
+  if (isLoading) return <CircularProgress color='success' />
+
+  if (!isLoading && !data) {
+    return (
+      <Grid container spacing={6}>
+        <Grid item md={12} xs={12}>
+          <Card>
+            <CardHeader title='Your Dashboard' />
+            <CardContent>
+              <Typography sx={{ mb: 4 }}>You are not fully onboarded !</Typography>
+              <Typography>Please use the sync org functionality to upload your and other employee details.</Typography>
+              <br />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    )
+  }
 
   if (!isLoading && data) {
     return (
       <Card>
-        <ToastContainer position="top-right" autoClose={false} newestOnTop={false} closeOnClick	rtl={false}	pauseOnFocusLoss draggable />
+        <ToastContainer
+          position='top-right'
+          autoClose={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+        />
         <CardHeader title='Excess Leave Thresholds' subheader={<Divider></Divider>} />
         <CardContent>
-          <Typography sx={{ mb: 4.5 }}>
-            Adjust the excess Leave thresholds
-          </Typography>
+          <Typography sx={{ mb: 4.5 }}>Adjust the excess Leave thresholds</Typography>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={5}>
               <Grid item xs={12}>
@@ -141,31 +146,27 @@ const Thresholds = () => {
                   fullWidth
                   label='Excess Leave Notification (in days)'
                   name='Excess Leave Notification'
-                  defaultValue={
-                    leaveNotification
-                  }
+                  defaultValue={leaveNotification}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
                         <OfficeBuildingOutline />
                       </InputAdornment>
                     ),
-                    endAdornment:(
+                    endAdornment: (
                       <InputAdornment position='end'>
-                         <Tooltip title='Helper text' arrow >
-                         <HelpOutlineIcon />
-                         </Tooltip>
-                        </InputAdornment>
-
+                        <Tooltip title='Helper text' arrow>
+                          <HelpOutlineIcon />
+                        </Tooltip>
+                      </InputAdornment>
                     )
                   }}
-                  onChange={(ele) => handleOnChange(ele)}
+                  onChange={ele => handleOnChange(ele)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                
                   label='Excess Leave Warning (in days)'
                   name='Excess Leave Warning'
                   defaultValue={leaveWarning}
@@ -175,22 +176,20 @@ const Thresholds = () => {
                         <AlertBoxOutline />
                       </InputAdornment>
                     ),
-                    endAdornment:(
+                    endAdornment: (
                       <InputAdornment position='end'>
-                         <Tooltip title='Helper text' arrow >
-                         <HelpOutlineIcon />
-                         </Tooltip>
-                        </InputAdornment>
-
+                        <Tooltip title='Helper text' arrow>
+                          <HelpOutlineIcon />
+                        </Tooltip>
+                      </InputAdornment>
                     )
                   }}
-                  onChange={(ele) => handleOnChange(ele)}
+                  onChange={ele => handleOnChange(ele)}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                 
                   label='Maximum Payout (in days) every 12 months'
                   name='Maximum Payout'
                   defaultValue={maximumPayout}
@@ -200,18 +199,20 @@ const Thresholds = () => {
                         <CurrencyUsd />
                       </InputAdornment>
                     ),
-                    endAdornment:(
+                    endAdornment: (
                       <InputAdornment position='end'>
-                         <Tooltip title=' <li>Reduction in excess leave liabilities</li>
+                        <Tooltip
+                          title=' <li>Reduction in excess leave liabilities</li>
                     <li>Time in Lieu and RDO management</li>
-                    <li>Reduction of ineffective wellness spend/programs</li>' arrow >
-                         <HelpOutlineIcon />
-                         </Tooltip>
-                        </InputAdornment>
-
+                    <li>Reduction of ineffective wellness spend/programs</li>'
+                          arrow
+                        >
+                          <HelpOutlineIcon />
+                        </Tooltip>
+                      </InputAdornment>
                     )
                   }}
-                  onChange={(ele) => handleOnChange(ele)}
+                  onChange={ele => handleOnChange(ele)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -233,5 +234,3 @@ Thresholds.acl = {
 }
 
 export default Thresholds
-
-

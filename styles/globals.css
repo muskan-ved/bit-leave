@@ -44,15 +44,3 @@ html body .MuiDataGrid-columnHeaders {
 .apexcharts-tooltip .apexcharts-tooltip-title, .apexcharts-tooltip-series-group .apexcharts-tooltip-text{
   color: #30334E;
 }
-
-.video { position: relative; }
-
-.video img{
-   position: absolute;
-   display: block;
-   background: url(/images/cards/trophy.png);
-   height: 40px;
-   width: 40px;
-   top: 20px;
-   left: 20px;
-}
