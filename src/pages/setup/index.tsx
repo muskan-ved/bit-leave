@@ -72,7 +72,7 @@ const Setup = () => {
         <CardHeader title='Setup - Add bit.leave to XERO' subheader={<Divider></Divider>} />
         <CardContent>
           <Typography sx={{ mb: 4.5 }}>
-          Filling out below, adds a new leave type if you have allowed connection to xero
+          Filling out below, adds a new leave type if you have allowed connection to Xero
           </Typography>
           <form onSubmit={handleSubmit} >
             <Grid container spacing={5}>
