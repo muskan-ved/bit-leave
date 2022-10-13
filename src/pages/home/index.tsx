@@ -21,8 +21,8 @@ import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import IconButton from '@mui/material/IconButton'
 import Close from 'mdi-material-ui/Close'
-import ReactPlayer from 'react-player'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import ReactPlay from './reactPlayer'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -47,14 +47,22 @@ const TrophyImg = styled('img')(({ theme }) => ({
 const PlayIcon = styled('img')(({ theme }) => ({
   position: 'absolute',
   left: '50%',
-  transform:'translate(-50%,0px)'
+  transform: 'translate(-50%,0px)'
 }))
 
 const Home = () => {
   // ** Hooks
   const router = useRouter()
   const [show, setShow] = useState(false)
+  const [url, setURL] = useState('')
+
   let fullName, OrgId: any
+
+  const link_1 = 'https://www.youtube.com/watch?v=SccSCuHhOw0'
+  const link_2 = 'https://www.youtube.com/watch?v=HqFVdz9GpwE'
+  const link_3 = 'https://www.youtube.com/watch?v=GoQ85cs5fk0'
+  const link_4 = 'https://www.youtube.com/watch?v=i0jZJtE1KhU'
+
   const userData = localStorage.getItem('userData')
   if (userData != null) {
     const data = JSON.parse(userData)
@@ -69,12 +77,20 @@ const Home = () => {
     http.send()
     window.localStorage.setItem('orgLogo', JSON.stringify(http.status))
   }, [])
+
   const onGoToDashboard = (url?: string) => {
     if (url) {
       router.push(url)
     } else router.push('/dashboard')
   }
   const theme = useTheme()
+
+  const youtubeURL = (url: any) => {
+    if (url) {
+      setShow(true)
+      setURL(url)
+    }
+  }
 
   return (
     <>
@@ -137,11 +153,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => setShow(true)}
+                      onClick={() => youtubeURL(link_1)}
                     />
-                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                    <PlayIcon
+                      src='/images/cards/play-icon.png'
+                      className='play-icon'
+                      onClick={() => youtubeURL(link_1)}
+                    />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1)}>
                     Play the video
                   </Typography>
                 </Grid>{' '}
@@ -153,7 +173,7 @@ const Home = () => {
                     borderRadius: '5px',
                     padding: '10px 0px',
                     marginTop: '10px',
-					maxWidth:'50%'
+                    maxWidth: '50%'
                   }}
                 >
                   <Box
@@ -169,11 +189,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => setShow(true)}
+                      onClick={() => youtubeURL(link_2)}
                     />
-                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                    <PlayIcon
+                      src='/images/cards/play-icon.png'
+                      className='play-icon'
+                      onClick={() => youtubeURL(link_2)}
+                    />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2)}>
                     Play the video
                   </Typography>
                 </Grid>{' '}
@@ -200,11 +224,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => setShow(true)}
+                      onClick={() => youtubeURL(link_3)}
                     />
-                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                    <PlayIcon
+                      src='/images/cards/play-icon.png'
+                      className='play-icon'
+                      onClick={() => youtubeURL(link_3)}
+                    />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_3)}>
                     Play the video
                   </Typography>
                 </Grid>{' '}
@@ -231,11 +259,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => setShow(true)}
+                      onClick={() => youtubeURL(link_4)}
                     />
-                    <PlayIcon src='/images/cards/play-icon.png' className='play-icon' onClick={() => setShow(true)} />
+                    <PlayIcon
+                      src='/images/cards/play-icon.png'
+                      className='play-icon'
+                      onClick={() => youtubeURL(link_4)}
+                    />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => setShow(true)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_4)}>
                     Play the video
                   </Typography>
                 </Grid>{' '}
@@ -452,12 +484,7 @@ const Home = () => {
             >
               <Close />
             </IconButton>
-            <ReactPlayer
-              url='https://www.youtube.com/watch?v=7KDRqBpT8NA'
-              playing={true}
-              muted={false}
-              controls={true}
-            />
+            <ReactPlay url={url} />
           </DialogContent>
         </Dialog>
       </Grid>
