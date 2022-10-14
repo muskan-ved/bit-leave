@@ -154,7 +154,7 @@ const Profile = () => {
 							setImagePreviewUrl(image);
 						};
 						reader.readAsDataURL(file);
-						toast.success(`Organisation Logo Uploaded!  You can refresh the app `)
+						toast.success(`Organisation Logo Uploaded. Please navigate to dashboard, it will be updated shortly`)
 					}else{
 						toast.error("Failed to Upload Organisation Logo")
 					}

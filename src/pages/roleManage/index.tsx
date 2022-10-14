@@ -112,9 +112,19 @@ const RoleManagement = () => {
   const [selectedData, setSelectedData] = useState('')
   const dispatch = useDispatch<AppDispatch>()
 
-  const arrayUniqueByKey = [...new Map(rows.map((item: any) => [item['roleName'], item])).values()]
+  const arrayUniqueByKey = [
+    {
+        roleId: 1,
+        roleName:"admin"
+    },
+    {
+        roleId: 2,
+        roleName:"user"
 
-  const result = arrayUniqueByKey.filter((role: any) => {
+    }
+]
+
+const result = arrayUniqueByKey.filter((role: any) => {
     return role.roleName !== roleData?.roleName
   })
 
@@ -132,7 +142,7 @@ const RoleManagement = () => {
       id: roleData.id,
       roleId: parseInt(selectedData)
     }
-    await dispatch(roleUpdate(payload))
+    await dispatch(roleUpdate([payload]))
       .then(res => {
         if (res.payload !== undefined) {
           toast.success('Role update')

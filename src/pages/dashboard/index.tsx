@@ -32,8 +32,8 @@ import CurrencyUsd from 'mdi-material-ui/CurrencyUsd'
 import { employeeType } from 'src/types/dashboard'
 
 // ** Custom Component Import
-import { AccountAlertOutline, BagPersonalOutline, ChevronUp, DotsVertical, HomeLightbulbOutline, OfficeBuildingOutline, Poll, TrendingUp } from 'mdi-material-ui'
-import { Button, IconButton } from '@mui/material';
+import { AccountAlertOutline, BagPersonalOutline, HomeLightbulbOutline, OfficeBuildingOutline } from 'mdi-material-ui'
+import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { BoxProps } from '@mui/material/Box';
 
@@ -67,17 +67,6 @@ import CashoutDialog from './cashout';
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     borderRight: `0px solid ${theme.palette.divider}`
-  }
-}))
-
-const TrophyImg = styled('img')(({ theme }) => ({
-  right: 0,
-  left: 50,
-  bottom: 0,
-  width: 40,
-  position: 'relative',
-  [theme.breakpoints.down('sm')]: {
-    width: 10
   }
 }))
 
@@ -328,9 +317,10 @@ const Dashboard = () => {
 
   const renderStats = () => {
     return data && quickStats.map((item: QuickStatsType, index: number) => (
+      <>
       <Grid item xs={12} sm={3} key={index}>
         <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-          <CustomAvatar src={item.icon}  variant='rounded' color={'primary'}  sx={{ mr: 4 ,width:"auto"}} />
+          <CustomAvatar src={item.icon}  variant='rounded' color={'primary'} sx={{ mr: 4 }}/>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography variant='h6' sx={{ fontWeight: 600 }}>
             {item.stats}
@@ -339,6 +329,8 @@ const Dashboard = () => {
           </Box>
         </Box>
       </Grid>
+
+    </>
     ))
   }
 

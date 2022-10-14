@@ -124,20 +124,21 @@ const Home = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} >
           <Card>
             <CardHeader title='Get up to speed with bit.leave' subheader={<Divider></Divider>}></CardHeader>
             <CardContent sx={{ p: theme => `${theme.spacing(0, 7.5, 7, 7.5)} !important` }}>
               <Typography variant='body2'>Quick video FAQs</Typography>
-              <Grid container sx={{ textAlign: 'center', columnGap: '20px' }}>
+              <Grid container sx={{ textAlign: 'center' ,justifyContent:'space-between', columnGap: '20px'}} >
                 <Grid
                   item
-                  xs={2.8}
+                  xs={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -146,6 +147,7 @@ const Home = () => {
                       margin: '0px 10px',
                       paddingTop: '5px',
                       position: 'relative'
+                      
                     }}
                   >
                     <img
@@ -167,13 +169,13 @@ const Home = () => {
                 </Grid>{' '}
                 <Grid
                   item
-                  xs={2.8}
+                  xs={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
                     marginTop: '10px',
-                    maxWidth: '50%'
+                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -203,12 +205,13 @@ const Home = () => {
                 </Grid>{' '}
                 <Grid
                   item
-                  xs={2.8}
+                  xs={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -238,12 +241,13 @@ const Home = () => {
                 </Grid>{' '}
                 <Grid
                   item
-                  xs={2.8}
+                  xs={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    maxWidth:'50%'
                   }}
                 >
                   <Box

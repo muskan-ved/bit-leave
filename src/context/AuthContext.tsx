@@ -62,12 +62,16 @@ const AuthProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
-
+  
   const dispatch = useDispatch<AppDispatch>()
-
+  
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       setIsInitialized(true)
+      const exist = window.location.href.includes("/actionApproval/")
+      if(exist){
+      localStorage.setItem('cashoutRequest',window.location.pathname)
+      }
       const storedToken = window.localStorage.getItem(Auth.storageTokenKeyName)!
       if (storedToken) {
         setLoading(true)
@@ -85,6 +89,7 @@ const AuthProvider = ({ children }: Props) => {
     }
     initAuth()
   }, [])
+
 
   const handleLogin = (params: LoginParams, errorCallback?: ErrCallbackType) => {
     const user = new CognitoUser({
@@ -117,7 +122,8 @@ const AuthProvider = ({ children }: Props) => {
         dispatch(refreshUserState(userData))
 
         const returnUrl = router.query.returnUrl
-         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
+        const actionApprovalURL = window.localStorage.getItem('cashoutRequest')
+         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : actionApprovalURL ? actionApprovalURL : '/'
          router.replace(redirectURL as string)
       },
       onFailure: (err) => {

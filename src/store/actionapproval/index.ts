@@ -17,7 +17,6 @@ interface Redux {
 export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
   async (id: any, { dispatch, getState }: Redux) => {
  
-    alert("Id to be passed " + id)
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios
@@ -68,13 +67,11 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
 const actionApprovalSlice = createSlice({
     name: 'actionApproval',
     initialState: {
-        cashoutamt:  null,
-        actiondate:  null,
-        approvalreason:  null,
-        rejectreason:  null,
-        cashoutreason:  null,
-        signatureOfEmployee:  null,
-        submitApproval:  null,
+      CashoutDays: null,
+      CashoutAmount: null,
+      RequestDate: null,
+      CashoutReason: null,
+      EmployeeName: null,
     } as actionApproval,
     reducers: {
   
