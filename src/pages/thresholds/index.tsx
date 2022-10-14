@@ -16,7 +16,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 
 // ** Icons Imports
 import Divider from '@mui/material/Divider'
-import { AlertBoxOutline, CurrencyUsd, OfficeBuildingOutline } from 'mdi-material-ui'
+import { AlertBoxOutline, AlertCircle, CurrencyUsd, OfficeBuildingOutline } from 'mdi-material-ui'
 
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify'
@@ -155,7 +155,7 @@ const Thresholds = () => {
                     ),
                     endAdornment: (
                       <InputAdornment position='end'>
-                        <Tooltip title='Helper text' arrow>
+                        <Tooltip title='Refers to number of days before the excess leave notification is triggered.' arrow>
                           <HelpOutlineIcon />
                         </Tooltip>
                       </InputAdornment>
@@ -178,7 +178,7 @@ const Thresholds = () => {
                     ),
                     endAdornment: (
                       <InputAdornment position='end'>
-                        <Tooltip title='Helper text' arrow>
+                        <Tooltip title='Refers to number of days before the excess leave warning is triggered.' arrow>
                           <HelpOutlineIcon />
                         </Tooltip>
                       </InputAdornment>
@@ -196,22 +196,17 @@ const Thresholds = () => {
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position='start'>
-                        <CurrencyUsd />
+                        <AlertCircle />
                       </InputAdornment>
                     ),
                     endAdornment: (
                       <InputAdornment position='end'>
-                        <Tooltip
-                          title=' <li>Reduction in excess leave liabilities</li>
-                    <li>Time in Lieu and RDO management</li>
-                    <li>Reduction of ineffective wellness spend/programs</li>'
-                          arrow
-                        >
+                        <Tooltip title='The amount of days an employee can cash out in a 12 month period.' arrow>
                           <HelpOutlineIcon />
                         </Tooltip>
                       </InputAdornment>
                     )
-                  }}
+                  }} 
                   onChange={ele => handleOnChange(ele)}
                 />
               </Grid>

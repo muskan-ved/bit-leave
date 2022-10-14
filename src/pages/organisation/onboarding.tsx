@@ -533,7 +533,7 @@ const Onboarding = () => {
 								Contacts
 							</Typography>
 							<Typography variant='body2' gutterBottom>
-								Who are the key contact in the leave management process?
+								Who are the key contacts in the leave management process?
 							</Typography>
 						</Grid>
 						<Grid item xs={12} md={8}>
@@ -548,7 +548,7 @@ const Onboarding = () => {
 												<TextField
 													value={value}
 													type='email'
-													label='HR Email'
+													label='HR Email or Approver Email'
 													onChange={onChange}
 													error={Boolean(contactErrors.email)}
 													placeholder=''
@@ -756,6 +756,7 @@ const Onboarding = () => {
 										</ListItemText>
 									</ListItem>
 								</List>
+								Sign Here :
 								<IconButton onClick={onClearSignature} style={{ display: 'block', position: 'relative', textAlign: 'right', left: '365px', top: '40px', 'zIndex': '100' }}>
 									<Eraser></Eraser>
 								</IconButton>

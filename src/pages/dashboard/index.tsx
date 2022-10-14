@@ -301,7 +301,7 @@ const Dashboard = () => {
       icon: "/images/cards/org_headcount.png"
     },
     {
-      stats: `$${data?.vitals?.leaveMobilised}`,
+      stats: `${data?.vitals?.leaveMobilised}`,
       title: 'Leave Mobilised (Days)',
       icon: "/images/cards/leave_mobilised.png"
     }

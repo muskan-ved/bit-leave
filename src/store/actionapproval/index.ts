@@ -17,6 +17,7 @@ interface Redux {
 export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
   async (id: any, { dispatch, getState }: Redux) => {
  
+    alert("Id to be passed " + id)
     try {
       const token = localStorage.getItem("accessToken");
       const response = await axios

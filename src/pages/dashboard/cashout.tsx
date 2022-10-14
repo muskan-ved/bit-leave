@@ -379,7 +379,7 @@ const CashoutDialog = (props: any) => {
 									<Divider></Divider>
 									<Box sx={{  display: 'flex', alignItems: 'center' }}>
 										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Total Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
+										<Typography variant='body2'>After Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
 									</Box>
 								</CardContent>
 								</Card>

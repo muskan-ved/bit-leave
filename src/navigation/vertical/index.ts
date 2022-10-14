@@ -97,7 +97,7 @@ const navigation = (): VerticalNavItemsType => {
           subject: 'admin',
         },
         {
-          title: 'Setup',
+          title: 'bit.leave Setup',
           icon: SettingsOutlinedIcon,
           path: '/setup',
           action: 'manage',

@@ -496,7 +496,7 @@ const UpdateOrganisation = () => {
     <>
       <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
         <Button variant='contained' onClick={() => setShow(true)} sx={{backgroundColor : theme.palette.warning.main}}>
-          Intro for organisation data upload{' '}
+          Instructions for importing{' '}
         </Button>
       </Grid>
       <Grid container spacing={6}>
@@ -547,19 +547,18 @@ const UpdateOrganisation = () => {
           </IconButton>
           <Box sx={{ mb: 8, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-              Organisation Data Upload Information
+              Organisation Data Upload Instructions
             </Typography>
             <Typography variant='body2'>
-              Updating user details will receive a privacy audit. orem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
-              an unknown printer took a galley of type and scrambled it to make a type specimen book
+              This functionality can be used to manually upload employee information into bit.leave. Please download the sample template csv 
+              file. The file contains header column names for importing.
             </Typography>
           </Box>
         </DialogContent>
         <DialogActions sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: 'center' }}>
           <a href='/templateCSV/Template.csv' download style={{ textDecoration: 'none', color: '061A16' }}>
             <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => setShow(false)}>
-              Download File
+              Download Sample Template File
             </Button>
           </a>
         </DialogActions>

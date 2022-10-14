@@ -30,6 +30,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Setup = () => {
 
   const [normalEntitlement, setNormalEntitlement] = useState<setup | number>(38);
+  const [leaveName, setLeaveName] = useState<setup | string>('bit.leave');
   const [isLoading, setIsLoading] = useState<boolean>(false)
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -39,16 +40,19 @@ const Setup = () => {
     if(element.target.name === "NormalEntitlement"){
       setNormalEntitlement(element.target.value)
     }
+    if(element.target.name === "Name"){
+      setLeaveName(element.target.value)
+    }
   }
 
   const handleSubmit = async(e:any) =>{
     e.preventDefault();
 
     const request = {
-      name:'bit.leave',
+      name:leaveName,
       normalEntitlement:(normalEntitlement && typeof(normalEntitlement) === "string"?parseInt(normalEntitlement): normalEntitlement),
       typeOfUnits:'hours',
-      isPaidLeave:true,
+      isPaidLeave:false,
       showOnPayslip:true,
     }
 
@@ -77,7 +81,7 @@ const Setup = () => {
           <form onSubmit={handleSubmit} >
             <Grid container spacing={5}>
               <Grid item xs={12}>
-              <FormControlLabel disabled control={<Checkbox />} label="IsPaidLeave" checked />
+              <FormControlLabel disabled control={<Checkbox />} label="IsPaidLeave" />
               <FormControlLabel disabled control={<Checkbox />} label="ShowOnPayslip" checked />
               </Grid>
               <Grid item xs={12}>
@@ -97,7 +101,8 @@ const Setup = () => {
                     )
                   }}
                   onChange={(ele) => handleOnChange(ele)}
-                  disabled
+                  
+                  // disabled
                 />
               </Grid>
               <Grid item xs={12}>

@@ -59,7 +59,7 @@ const Home = () => {
   let fullName, OrgId: any
 
   const link_1 = 'https://www.youtube.com/watch?v=SccSCuHhOw0'
-  const link_2 = 'https://www.youtube.com/watch?v=HqFVdz9GpwE'
+  const link_2 = 'https://www.youtube.com/watch?v=K4TOrB7at0Y'
   const link_3 = 'https://www.youtube.com/watch?v=GoQ85cs5fk0'
   const link_4 = 'https://www.youtube.com/watch?v=i0jZJtE1KhU'
 
