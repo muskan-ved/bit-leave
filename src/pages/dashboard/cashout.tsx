@@ -24,6 +24,8 @@ import { ApiResult, error } from 'src/types/error'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { clippingParents } from '@popperjs/core';
+import Tooltip from '@mui/material/Tooltip'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 
 interface cashoutResultModel {
 	success: boolean
@@ -188,7 +190,7 @@ const CashoutDialog = (props: any) => {
 			return dataURL;
 		}
 	}
-	const onError = (e: any) => {return ''};
+	const onError = (e: any) => { return '' };
 
 	const onChangeCashOutDays = async (e: any) => {
 		if (e.target.value != null) {
@@ -196,7 +198,7 @@ const CashoutDialog = (props: any) => {
 			setToggleValue(true)
 			const result = await dispatch(calculateEmployeeCashout(parseInt(e.target.value)))
 			if (result.payload != null) {
-					if (result.payload.cashoutAmount != null) {
+				if (result.payload.cashoutAmount != null) {
 					setCalculateData(result.payload)
 					setcalculateAmount(result.payload.cashoutAmount)
 					setleaveBalanceAfterCashout(result.payload.leaveBalanceAfterCashout)
@@ -237,7 +239,7 @@ const CashoutDialog = (props: any) => {
 
 			cashoutApiResponse.errors?.map(x => {
 				i++
-				return <Alert key={i} variant="outlined" severity="error" sx={{marginBottom: '20px'}}>{x.message}</Alert>
+				return <Alert key={i} variant="outlined" severity="error" sx={{ marginBottom: '20px' }}>{x.message}</Alert>
 			})
 		)
 	}
@@ -356,9 +358,9 @@ const CashoutDialog = (props: any) => {
 												sx={{ mt: '1.25rem' }}
 
 											/>
-											)}
-											/>
-									 : ''} 
+										)}
+									/>
+									: ''}
 								{toggleValue && calculateAmount ? cashOutErrors.cashoutreason && (
 									<FormHelperText id='cashoutreason' sx={{ color: 'error.main' }} >
 										Required
@@ -366,30 +368,33 @@ const CashoutDialog = (props: any) => {
 								) : ""}
 
 								{toggleValue && calculateAmount ?
-								<Card sx={{marginTop:'1.50rem'}}>
-								<CardContent >
-									<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
-										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.cashoutAmount?.toFixed(2)}</Typography> 
-									</Box>
-									<Box sx={{  display: 'flex', alignItems: 'center' }}>
-										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'138px'}>{calculateData?.taxAmount?.toFixed(2)} </Typography>
-									</Box>
-									<Divider></Divider>
-									<Box sx={{  display: 'flex', alignItems: 'center' }}>
-										<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-										<Typography variant='body2'>After Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
-									</Box>
-								</CardContent>
-								</Card>
+									<Card sx={{ marginTop: '1.50rem' }}>
+										<CardContent >
+											<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+												<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.cashoutAmount?.toFixed(2)}</Typography>
+											</Box>
+											<Box sx={{ display: 'flex', alignItems: 'center' }}>
+												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+												<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'138px'}>{calculateData?.taxAmount?.toFixed(2)} </Typography>
+											</Box>
+											<Divider></Divider>
+											<Box sx={{ display: 'flex', alignItems: 'center' }}>
+												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
+												<Tooltip title='Your payroll system calculates this for you when it gets added to your next payslip.' arrow>
+													<HelpOutlineIcon />
+												</Tooltip>
+												<Typography variant='body2'>Estimated Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
+											</Box>
+										</CardContent>
+									</Card>
 
-								: ""}
+									: ""}
 
 							</FormControl>
 						</DialogContent>
 						<DialogActions disableSpacing={true} className='dialog-actions-dense'>
-							{loading == false && 
+							{loading == false &&
 								<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }} disabled={calculateAmount === 0 || calculateAmount === null}> Cash Out Leave</Button>
 							}
 							{loading == true &&
@@ -465,8 +470,7 @@ const CashoutDialog = (props: any) => {
 						Thank you for using bit.leave!
 					</DialogContentText>
 					<DialogContentText>
-						You will recieve a notification once your leave cash out has been approved.
-						You will be able to view this contract in your 'My contracts & History' section.
+						You will recieve a notification once your leave cash out has been approved, based on your organisation's policy.
 					</DialogContentText>
 				</DialogContent>
 				</>
