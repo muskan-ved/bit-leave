@@ -1,2 +1,4 @@
 id,firstname,lastname,fullname,managerId,emailaddress,awardtype,datejoined,annualleavebalance,department,annualsalary,ordinaryhoursperweek,hourlyrate,employmenttype
 M04,dev,testing,Dev testing,M01,dev@yopmail.com,EA,4/2/2022,1000,Marketing,500000,97.8,21,Full-time
+M01,test,manager,Dev testing,M03,hr@yopmail.com,EA,4/2/2022,1000,Marketing,500000,97.8,21,Full-time
+M03,test,manager,Dev testing,M03,final@yopmail.com,EA,4/2/2022,1000,Marketing,500000,97.8,21,Full-time

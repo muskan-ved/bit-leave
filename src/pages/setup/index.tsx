@@ -26,6 +26,7 @@ import { AppDispatch } from 'src/store'
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const Setup = () => {
 
@@ -56,7 +57,8 @@ const Setup = () => {
       showOnPayslip:true,
     }
     setIsLoading(true)
-    const setupResponse = await dispatch(setUPPost(request)).then((res)=>{
+     await dispatch(setUPPost(request)).then((res)=>{
+      console.log(res,"tret")
       if(res.payload !== undefined){
         setIsLoading(false);
         toast.success("Successfully uploaded ")}
@@ -66,9 +68,6 @@ const Setup = () => {
       }
     })
   }
-
-  if (isLoading)
-    return (<CircularProgress color="success" />)
 
     return (
       <Card>
@@ -141,9 +140,14 @@ const Setup = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type='submit' variant='contained' size='large' disabled={isLoading}>
+                {!isLoading ?
+                <Button type='submit' variant='contained' size='large'>
                 Create bit.leave
-                </Button>
+                </Button>:
+                <LoadingButton loading={isLoading} type='submit' variant='contained' size='large' disabled>
+                      Create bit.leave
+                </LoadingButton>
+                }
               </Grid>
             </Grid>
           </form>

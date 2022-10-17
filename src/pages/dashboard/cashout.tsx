@@ -11,7 +11,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
-import React from 'react'
+import React, { createRef, useRef } from 'react'
 import FormControl from '@mui/material/FormControl'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,7 +23,6 @@ import { calculateEmployeeCashout, getCashOutContract, postEmployeeCashout } fro
 import { ApiResult, error } from 'src/types/error'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import { clippingParents } from '@popperjs/core';
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { ToastContainer, toast } from 'react-toastify';
@@ -72,6 +71,7 @@ const CashoutDialog = (props: any) => {
 	const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null)
 	const [toggleValue, setToggleValue] = React.useState(false)
 	const [calculateData, setCalculateData] = React.useState<any>('')
+	
 
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -193,21 +193,22 @@ const CashoutDialog = (props: any) => {
 		}
 	}
 	const onError = (e: any) => { return '' };
-
 	const onChangeCashOutDays = async (e: any) => {
+
+		
 		if (e.target.value != null) {
 			setloading(true)
 			setToggleValue(true)
 			const result = await dispatch(calculateEmployeeCashout(parseInt(e.target.value)))
 			if (result.payload != null) {
-				console.log(result,"trete")
 				if (result.payload.cashoutAmount != null) {
 					setCalculateData(result.payload)
 					setcalculateAmount(result.payload.cashoutAmount)
 					setleaveBalanceAfterCashout(result.payload.leaveBalanceAfterCashout)
 				}
-				else if(result?.payload?.response?.data?.errors[0]?.message){
-					toast.error(result?.payload?.response?.data?.errors[0]?.message)
+				else if(result?.payload?.response?.data?.errors?.[0]?.message){
+					toast.error(result?.payload?.response?.data?.errors?.[0]?.message)
+					setcalculateAmount(null)
 				}
 			}
 			else {
@@ -253,6 +254,8 @@ const CashoutDialog = (props: any) => {
 		return { __html: employeeContract };
 	}
 	const maxWidth = 'sm'
+
+
 	return (
 		<>
 		<ToastContainer/>
@@ -348,7 +351,7 @@ const CashoutDialog = (props: any) => {
 									</FormHelperText>
 								)}
 
-								{toggleValue && calculateAmount ?
+								{toggleValue && calculateAmount?
 									<Controller
 										rules={{ required: true }}
 										control={cashOutControl}
@@ -374,26 +377,24 @@ const CashoutDialog = (props: any) => {
 									</FormHelperText>
 								) : ""}
 
-								{toggleValue && calculateAmount ?
+								{toggleValue && calculateAmount?
 									<Card sx={{ marginTop: '1.50rem' }}>
 										<CardContent >
 											<Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
 												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-												<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'88px'}>{calculateData?.cashoutAmount?.toFixed(2)}</Typography>
+												<Typography variant='body2'>Cashout Amount</Typography> <Typography variant='body2' marginLeft={'43px'}>{calculateData?.cashoutAmount?.toFixed(2)}</Typography>
 											</Box>
 											<Box sx={{ display: 'flex', alignItems: 'center' }}>
 												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-												<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'185px'}>{calculateData?.taxAmount?.toFixed(2)} </Typography>
+												<Typography variant='body2'>Tax  </Typography><Typography variant='body2' marginLeft={'138px'}>{calculateData?.taxAmount?.toFixed(2)} </Typography>
 											</Box>
 											<Divider></Divider>
 											<Box sx={{ display: 'flex', alignItems: 'center' }}>
 												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-												<Typography variant='body2'>Estimated Tax Amount  </Typography><Typography variant='body2' marginLeft={'60px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
-												
-												<Tooltip title='Your payroll system calculates this for you when it gets added to your next payslip.' arrow placement="right-end" sx={{marginLeft:'205px'}}>
+												<Typography variant='body2'>Estimated Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
+												<Tooltip title='Your payroll system calculates this for you when it gets added to your next payslip.' arrow sx={{marginLeft: 'auto'}}>
 													<HelpOutlineIcon />
 												</Tooltip>
-												{/* </Box> */}
 											</Box>
 										</CardContent>
 									</Card>
@@ -403,7 +404,15 @@ const CashoutDialog = (props: any) => {
 							</FormControl>
 						</DialogContent>
 						<DialogActions disableSpacing={true} className='dialog-actions-dense'>
-								<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }} disabled={calculateAmount === 0 || calculateAmount === null || loading}> Cash Out Leave</Button>
+							{loading == false &&
+								<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }} disabled={calculateAmount === 0 || calculateAmount === null}> Cash Out Leave</Button>
+							}
+							{loading == true &&
+								<LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
+									CashOutLeave
+								</LoadingButton>
+							}
+
 						</DialogActions>
 					</form>
 
@@ -453,7 +462,10 @@ const CashoutDialog = (props: any) => {
 						</FormControl>
 					</DialogContent>
 					<DialogActions className='dialog-actions-dense'>
-							<Button type='submit' variant="contained" disabled={loading} style={{ marginTop: '0.75em' }} >Sign Contract</Button>
+					{!loading ?	<Button type='submit' variant="contained" style={{ marginTop: '0.75em' }} >Sign Contract</Button> : 
+					 <LoadingButton style={{ marginTop: '0.75em' }} loading={loading} variant="contained" disabled>
+					 Sign Contract
+				   </LoadingButton>}
 					</DialogActions>
 				</form>
 			}

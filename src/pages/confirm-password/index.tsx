@@ -35,6 +35,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import LoadingButton from '@mui/lab/LoadingButton';
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -98,6 +99,7 @@ interface FormData {
 
 const ConfirmPassword = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   // ** Hooks
   const auth = useAuth()
@@ -122,6 +124,7 @@ const ConfirmPassword = () => {
 
   const onSubmit = (data: FormData) => {
      const { code, password } = data
+     setIsProcessing(true)
      auth.confirmUserPassword({ code, password }, err => {
       if(err.Message)
       {
@@ -130,6 +133,7 @@ const ConfirmPassword = () => {
           message: err.Message
         })
       }
+      setIsProcessing(false)
     })
   }
 
@@ -228,9 +232,12 @@ const ConfirmPassword = () => {
                 sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
               >
               </Box>
-              <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              <LoadingButton loading={isProcessing} fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              Reset Password
+              </LoadingButton>
+              {/* <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
                 Reset Password
-              </Button>
+              </Button> */}
             </form>
           </BoxWrapper>
         </Box>

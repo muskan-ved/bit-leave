@@ -22,6 +22,7 @@ import { loadOrganisation } from 'src/store/organisation';
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 	padding: theme.spacing(7)
@@ -881,9 +882,14 @@ const Onboarding = () => {
 						<Button type='submit' variant="contained" onClick={handlePrevious} sx={{marginRight:"1rem"}}>
 							{activeStep === 0 ? 'Start' : 'Back'}
 						</Button>
-						<Button type='submit' variant="contained" disabled={isLoading}>
+						{!isLoading ?
+						<Button type='submit' variant="contained" >
 							{activeStep === 0 ? 'Start' : 'Finish'}
-						</Button>
+						</Button> :
+						<LoadingButton loading={isLoading} type='submit' variant='contained' disabled>
+								Update
+						</LoadingButton>
+						}
 					</Box>
 				</Grid>
 			       </Grid>

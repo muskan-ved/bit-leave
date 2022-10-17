@@ -58,6 +58,8 @@ const ActionApproval = () =>{
   
   const [data, setData] = useState<actionApproval | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loading1, setLoading1] = useState<boolean>(false);
   const [empSignature, setEmpSignature] = useState<string | null>('');
   const [reason, setReason] = useState<string | null>('');
   const [approvalErrors,setApprovalErrors] = useState<boolean>(false);
@@ -68,7 +70,7 @@ const ActionApproval = () =>{
   const router = useRouter();
   const {id} = router.query;
 	const sigCanvas = useRef() as React.MutableRefObject<any>;
-  
+  console.log(id,"efewr")
   const {
     control: approvalControl,
 		watch: watchApproval,
@@ -85,7 +87,6 @@ const ActionApproval = () =>{
 			const dataURL = sigCanvas.current.toDataURL();
       setEmpSignature(dataURL)
 			return dataURL;
-
 		}
 	}
 
@@ -95,7 +96,7 @@ const ActionApproval = () =>{
       setIsLoading(true);
         fetchData();
       }
-    }, []);
+    }, [id]);
     
     const fetchData = async () => {
       setIsLoading(true);
@@ -119,10 +120,15 @@ const ActionApproval = () =>{
       if(!empSignature){
         setApprovalErrors(true)
       }else{
-        setIsLoading(true);
-         await dispatch(cashoutUploadActionApproval(params))
+        if(val){
+          setLoading(true);
+        }else{
+          setLoading1(true);      
+        }
+          await dispatch(cashoutUploadActionApproval(params))
           .then((res) => {
-            setIsLoading(false);
+            setLoading(false);
+            setLoading1(false);
             if(!res.payload.response && val === true){
               toast.success('Cashout Request Approved')
               router.replace('/dashboard')
@@ -135,11 +141,14 @@ const ActionApproval = () =>{
               toast.error(res.payload.response.data.errors[0].message)
             }
             setReason('');
+            onClearSignature()
             setApprovalErrors(false);
+         
             
           }).catch(err => {
-            setIsLoading(false);
-            toast.success('Server Issue')
+            setLoading(false);
+            setLoading1(false)
+            toast.error('Server Issue')
           })
         }
     }
@@ -298,32 +307,37 @@ const ActionApproval = () =>{
 								</FormControl>
                 </Grid>          
                 <Grid item xs={12}>
-                  {!isLoading ?
-                  <Button variant='contained' onClick={() => handleApproveRejected(true)} >Approved</Button>:  <LoadingButton loading={isLoading}  fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-                  Login
-                </LoadingButton>}
-                  <Button variant='contained' onClick={() => handleApproveRejected(false)} disabled={isLoading} sx={{marginLeft:'10px'}}>Rejected</Button>
+                  {!loading ?
+                  <Button variant='contained' onClick={() => handleApproveRejected(true)} >Approved</Button>: 
+                   <LoadingButton loading={loading} size='large' type='submit' variant='contained'disabled>
+                  Approved
+                  </LoadingButton>}
+                  {!loading1 ?
+                  <Button variant='contained' onClick={() => handleApproveRejected(false)} sx={{marginLeft:'10px'}}>Rejected</Button>:
+                  <LoadingButton loading={loading1} size='large' type='submit' variant='contained' sx={{marginLeft:'10px'}} disabled>
+                  Rejected
+                  </LoadingButton>}
                 </Grid>
               </Grid>
             </CardContent>
             </Card>
         </>
       )
-}else if(!data){
-  return(
-  <Card>
-  <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />
-  <CardContent>
-  <Grid container spacing={5}>
-    <Grid item xs={12}>
-      Data not appear
-    </Grid>
-  </Grid>
-  </CardContent>
-  </Card>
-  )
+    }else if(!data){
+      return(
+      <Card>
+      <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />
+      <CardContent>
+      <Grid container spacing={5}>
+        <Grid item xs={12}>
+          Data not appear
+        </Grid>
+      </Grid>
+      </CardContent>
+      </Card>
+      )
 
-}
+    }
 }
 
 ActionApproval.acl = {

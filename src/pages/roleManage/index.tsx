@@ -48,6 +48,7 @@ import { roles } from 'src/types/roleManage'
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 interface Data {
   fullname: string
@@ -105,6 +106,7 @@ function EnhancedTableHead() {
 const RoleManagement = () => {
   const [rows, setRows] = useState<roles | any>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [roleData, setData] = useState<any>('')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
@@ -142,18 +144,18 @@ const result = arrayUniqueByKey.filter((role: any) => {
       id: roleData.id,
       roleId: parseInt(selectedData)
     }
-    setIsLoading(true)
+    setLoading(true)
     await dispatch(roleUpdate([payload]))
       .then(res => {
         if (res.payload !== undefined) {
           toast.success('Role update')
           setOpen(false)
-          setIsLoading(false)
+          setLoading(false)
           fetchData()
         }
       })
       .catch(() => {
-        setIsLoading(false)
+        setLoading(false)
         toast.error('Server Error')
       })
   }
@@ -275,7 +277,10 @@ const result = arrayUniqueByKey.filter((role: any) => {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleSaveRole} disabled={isLoading}>Save</Button>
+              {!loading ? <Button onClick={handleSaveRole}>Save</Button> : 
+              <LoadingButton loading={loading} disabled>
+								Update
+						</LoadingButton>}
               <Button onClick={handleClose}>Close</Button>
             </DialogActions>
           </Dialog>

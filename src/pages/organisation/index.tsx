@@ -33,10 +33,12 @@ import auth from '../../configs/auth'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { uploadCSVToS3 } from 'src/store/organisation'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const UpdateOrganisation = () => {
   const [array, setArray] = useState([])
   const [show, setShow] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const S3_BUCKET = auth.bucket_name
   const REGION = auth.region
   const dispatch = useDispatch<AppDispatch>()
@@ -320,7 +322,7 @@ const UpdateOrganisation = () => {
                 Bucket: S3_BUCKET,
                 Key: fileName
               }
-
+              setIsLoading(true)
               myBucket
                 .putObject(params)
                 .on('httpUploadProgress', async evt => {
@@ -338,6 +340,7 @@ const UpdateOrganisation = () => {
                             autoClose: 5000,
                             hideProgressBar: false
                           })
+                          setIsLoading(false)
                         }
                       })
                       .catch(err => {
@@ -347,6 +350,7 @@ const UpdateOrganisation = () => {
                           autoClose: 5000,
                           hideProgressBar: false
                         })
+                        setIsLoading(false)
                       })
                   }
                 })
@@ -513,6 +517,7 @@ const UpdateOrganisation = () => {
           <Card>
             <CardHeader title='Import Organisation Data' style={{ borderBottom: '2px solid #aaaaaa' }}></CardHeader>
             <Box sx={{ m: 3, p: 3 }} className='btndivider'>
+              {!isLoading ?
               <Button variant='contained' component='label' sx={{ marginRight: '10px' }}>
                 Upload File
                 <input
@@ -526,7 +531,9 @@ const UpdateOrganisation = () => {
                   hidden
                   style={{ marginLeft: 60 }}
                 />
-              </Button>
+              </Button> :<LoadingButton loading={isLoading} component='label' variant='contained'  sx={{ marginRight: '10px' }} disabled>
+                  Update
+            </LoadingButton>}
             </Box>
             <CardContent>
               <Box sx={{ height: 400, width: '100%' }}>

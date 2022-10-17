@@ -128,14 +128,13 @@ const ConfirmUser = () => {
 
   const handleSubmit = () => {
 
-    setIsProcessing(true);
     setCode(() => '')
-
+    
     if (userEmail != null) {
       const email = userEmail as string;
-
+      
       if (email != null) {
-
+        setIsProcessing(true);
         auth.confirmUser({ email, code }, err => {
           if (err.Message) {
             setError('apiErrors', {
@@ -143,8 +142,8 @@ const ConfirmUser = () => {
               message: err.Message
             })
           }
+          setIsProcessing(false);
         })
-        setIsProcessing(false);
       }
     }
     else {

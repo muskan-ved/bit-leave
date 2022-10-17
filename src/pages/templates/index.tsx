@@ -45,6 +45,7 @@ import API from '../../configs/apiEndpoints'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Divider from '@mui/material/Divider';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const Templates = () => {
   // ** State
@@ -54,6 +55,7 @@ const Templates = () => {
   const [getdata, setGetData] = useState<any[]>([])
   const [editorState, setEditorState] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const token = localStorage.getItem("accessToken")
 
@@ -109,17 +111,17 @@ const Templates = () => {
       }
       organisationstemplates.push(data);
     }
-    setIsLoading(true)
+    setLoading(true)
     axios.patch(API.updateTemplateData, organisationstemplates, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
         toast.success("Successfully updated templates");
-        setIsLoading(false)
+        setLoading(false)
         fetchData();
       })
       .catch((err) => {
-        setIsLoading(false)
+        setLoading(false)
         toast.error("Failed to updated templates")
       })
 
@@ -191,7 +193,10 @@ const Templates = () => {
               )}
             </TabPanel>
           )} <br />
-          <Button onClick={updateData} variant='contained' disabled={isLoading}>Update</Button>
+          {!loading ? <Button onClick={updateData} variant='contained' >Update</Button> : 
+           <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
+                  Update
+            </LoadingButton>}
         </CardContent>
       </TabContext>
     </Card >

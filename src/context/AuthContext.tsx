@@ -12,14 +12,14 @@ import API from 'src/configs/apiEndpoints'
 import Auth from 'src/configs/auth'
 
 // ** Types
-import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams,ConfirmPasswordUserParams, ErrCallbackType, UserDataType } from './types'
+import { AuthValuesType, RegisterParams, ConfirmUserParams, LoginParams, ResendCodeParams, ConfirmPasswordUserParams, ErrCallbackType, UserDataType } from './types'
 
 //Cognito Integration
 import { CognitoUser, AuthenticationDetails, CognitoUserPool, CognitoUserAttribute } from "amazon-cognito-identity-js"; //
 import { resolve } from 'path'
 import { AppDispatch } from 'src/store'
 import { useDispatch } from 'react-redux'
-import {refreshUserState} from 'src/store/user'
+import { refreshUserState } from 'src/store/user'
 
 //
 const poolData = {
@@ -62,15 +62,16 @@ const AuthProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter()
-  
+
   const dispatch = useDispatch<AppDispatch>()
-  
+
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       setIsInitialized(true)
       const exist = window.location.href.includes("/actionApproval/")
-      if(exist){
-      localStorage.setItem('cashoutRequest',window.location.pathname)
+      if (exist) {
+        //window.location.
+        localStorage.setItem('cashoutRequest', window.location.href)
       }
       const storedToken = window.localStorage.getItem(Auth.storageTokenKeyName)!
       if (storedToken) {
@@ -123,8 +124,8 @@ const AuthProvider = ({ children }: Props) => {
 
         const returnUrl = router.query.returnUrl
         const actionApprovalURL = window.localStorage.getItem('cashoutRequest')
-         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : actionApprovalURL ? actionApprovalURL : '/'
-         router.replace(redirectURL as string)
+        const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : actionApprovalURL ? actionApprovalURL : '/'
+        router.replace(redirectURL as string)
       },
       onFailure: (err) => {
         if (errorCallback) errorCallback({ 'Message': err.message })
@@ -256,33 +257,33 @@ const AuthProvider = ({ children }: Props) => {
   const handleConfirmUserPassword = (params: ConfirmPasswordUserParams, errorCallback?: ErrCallbackType) => {
 
     const {
-     query: { emailId }
+      query: { emailId }
     } = router
 
     const props = {
-     emailId
+      emailId
     }
 
-   const userEmail = props.emailId
-     if(userEmail!= null){
-        const user = new CognitoUser({
+    const userEmail = props.emailId
+    if (userEmail != null) {
+      const user = new CognitoUser({
         Username: userEmail as string,
         Pool: UserPool
       });
 
       user.confirmPassword(params.code, params.password, {
-            onFailure(err) {
-              if (err) {
-                if (errorCallback) errorCallback({ 'Message': err.message })
-              }
-              router.push('/forgot-password');
-            },
-            onSuccess() {
-              router.push('/login');
-                resolve();
-            },
-        });
-      }
+        onFailure(err) {
+          if (err) {
+            if (errorCallback) errorCallback({ 'Message': err.message })
+          }
+          router.push('/forgot-password');
+        },
+        onSuccess() {
+          router.push('/login');
+          resolve();
+        },
+      });
+    }
   }
 
   const handleConfirmPassword = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
@@ -304,7 +305,7 @@ const AuthProvider = ({ children }: Props) => {
     forgotPassword: handleForgotPassword,
     confirmPassword: handleConfirmPassword,
     resendCode: handleResendCode,
-    confirmUserPassword : handleConfirmUserPassword
+    confirmUserPassword: handleConfirmUserPassword
   }
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>

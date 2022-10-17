@@ -37,6 +37,7 @@ const Thresholds = () => {
   const [leaveWarning, setLeaveWarning] = useState<thresholds | number>()
   const [maximumPayout, setMaximumPayout] = useState<thresholds | number>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
 
   const fetchData = async () => {
@@ -77,11 +78,12 @@ const Thresholds = () => {
         thresholdLeaveWarning: typeof leaveWarning === 'string' ? parseInt(leaveWarning) : leaveWarning,
         thresholdPayoutFrequency: typeof maximumPayout === 'string' ? parseInt(maximumPayout) : maximumPayout
       }
-      setIsLoading(true)
+      setLoading(true)
       await dispatch(excessLeaveThresholds(data))
         .then(res => {
-          setIsLoading(false)
+          setLoading(false)
           if (res.payload) {
+            fetchData();
             toast.success('Successfully updated thresholds', {
               autoClose: 5000,
               hideProgressBar: false
@@ -95,7 +97,7 @@ const Thresholds = () => {
           fetchData()
         })
         .catch(() => {
-          setIsLoading(false)
+          setLoading(false)
           toast.error('Failed to updated thresholds', {
             autoClose: 5000,
             hideProgressBar: false
@@ -106,7 +108,7 @@ const Thresholds = () => {
     }
   }
 
-  // if (isLoading) return <CircularProgress color='success' />
+  if (isLoading) return <CircularProgress color='success' />
 
   if (!isLoading && !data) {
     return (
@@ -212,12 +214,13 @@ const Thresholds = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-              <LoadingButton loading={isLoading} size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
-              submit
-              </LoadingButton>
-                {/* <Button type='submit' variant='contained' size='large' disabled={isLoading}>
+                {!loading ? <Button type='submit' variant='contained' size='large'>
                   Update
-                </Button> */}
+                </Button> :
+                <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
+                  Update
+                </LoadingButton>
+                }
               </Grid>
             </Grid>
           </form>
