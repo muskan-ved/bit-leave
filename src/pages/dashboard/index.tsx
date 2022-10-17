@@ -340,7 +340,7 @@ const Dashboard = () => {
          <Grid container spacing={9}>
             <Grid item xs={12} mb={5} sx={{textAlign:"right"}}>
             <Box sx={{maxWidth: 'inherit'}}>
-              <Button variant='contained' onClick={refreshbtn}> 
+              <Button variant='contained' onClick={refreshbtn} disabled={isLoading}> 
                   <RefreshIcon sx={{fontSize: '1.1rem',mr:'4px'}}/>Refresh
               </Button>
             </Box>
@@ -414,7 +414,7 @@ const Dashboard = () => {
                 <Grid container spacing={1}>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} >Cashout Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={data.leaveDetails.excessDays === 0 }>Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={4} sm={4}>

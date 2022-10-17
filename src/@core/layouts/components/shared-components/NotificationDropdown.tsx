@@ -142,11 +142,10 @@ const NotificationDropdown = (props: Props) => {
 		setIsLoading(false)
 	})
   }
-  if (isLoading) return <CircularProgress color='success' />
 
   return (
     <Fragment>
-      <IconButton color='inherit' aria-haspopup='true' onClick={handleDropdownOpen} aria-controls='customized-menu'>
+      <IconButton color='inherit' aria-haspopup='true' onClick={handleDropdownOpen} aria-controls='customized-menu' disabled={isLoading}>
         <BellOutline />
       </IconButton>
       <Menu

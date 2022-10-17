@@ -29,6 +29,7 @@ import { thresholds } from 'src/types/thresholds'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { excessLeaveThresholds, getExcessLeave } from 'src/store/thresholds'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 const Thresholds = () => {
   const [data, setData] = useState<thresholds | null>(null)
@@ -105,7 +106,7 @@ const Thresholds = () => {
     }
   }
 
-  if (isLoading) return <CircularProgress color='success' />
+  // if (isLoading) return <CircularProgress color='success' />
 
   if (!isLoading && !data) {
     return (
@@ -211,9 +212,12 @@ const Thresholds = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type='submit' variant='contained' size='large'>
+              <LoadingButton loading={isLoading} size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              submit
+              </LoadingButton>
+                {/* <Button type='submit' variant='contained' size='large' disabled={isLoading}>
                   Update
-                </Button>
+                </Button> */}
               </Grid>
             </Grid>
           </form>

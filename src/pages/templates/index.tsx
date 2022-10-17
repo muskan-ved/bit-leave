@@ -109,17 +109,18 @@ const Templates = () => {
       }
       organisationstemplates.push(data);
     }
-    
+    setIsLoading(true)
     axios.patch(API.updateTemplateData, organisationstemplates, {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
         toast.success("Successfully updated templates");
-        
+        setIsLoading(false)
         fetchData();
       })
       .catch((err) => {
-        toast.success("Failed to updated templates")
+        setIsLoading(false)
+        toast.error("Failed to updated templates")
       })
 
   }
@@ -190,7 +191,7 @@ const Templates = () => {
               )}
             </TabPanel>
           )} <br />
-          <Button onClick={updateData} variant='contained'>Update</Button>
+          <Button onClick={updateData} variant='contained' disabled={isLoading}>Update</Button>
         </CardContent>
       </TabContext>
     </Card >

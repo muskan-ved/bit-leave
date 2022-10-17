@@ -3,7 +3,14 @@ import { createAsyncThunk, createSlice, Dispatch } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+
+// ** Toast Import
+import toast from 'react-hot-toast';
+
+// ** Config variables
 import API from 'src/configs/apiEndpoints';
+
+// ** Redux Import
 import { actionApproval } from 'src/types/actionApproval';
 
 // ** Logout function
@@ -32,10 +39,12 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
+
          } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
         }
+        return err
     }
   })
 
@@ -57,9 +66,10 @@ export const cashoutActionApproval = createAsyncThunk('cashout/actionApproval',
     catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
-         } else if (err.response?.status === 401 || err.message === "Network Error") {
-           dispatch(userLogout())
-         }
+        } else if (err.response?.status === 401 || err.message === "Network Error") {
+          dispatch(userLogout())
+        }
+        return err
         }
     }
   }) 

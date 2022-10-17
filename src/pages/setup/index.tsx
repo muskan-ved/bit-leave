@@ -55,7 +55,7 @@ const Setup = () => {
       isPaidLeave:false,
       showOnPayslip:true,
     }
-
+    setIsLoading(true)
     const setupResponse = await dispatch(setUPPost(request)).then((res)=>{
       if(res.payload !== undefined){
         setIsLoading(false);
@@ -141,7 +141,7 @@ const Setup = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type='submit' variant='contained' size='large'>
+                <Button type='submit' variant='contained' size='large' disabled={isLoading}>
                 Create bit.leave
                 </Button>
               </Grid>

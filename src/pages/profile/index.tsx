@@ -146,7 +146,6 @@ const Profile = () => {
 					Key: `${OrgId}/${fileName}`,
 					Body: file,
 				}
-
 				 myBucket.upload(params, (err:any, data:any) =>{
 					if(data){
 						reader.onloadend = (e: any) => {
@@ -154,6 +153,7 @@ const Profile = () => {
 							setImagePreviewUrl(image);
 						};
 						reader.readAsDataURL(file);
+    					window.localStorage.setItem('orgLogo', '1')
 						toast.success(`Organisation Logo Uploaded. Please navigate to dashboard, it will be updated shortly`)
 					}else{
 						toast.error("Failed to Upload Organisation Logo")

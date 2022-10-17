@@ -43,6 +43,7 @@ import { Eraser } from 'mdi-material-ui'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import LoadingButton from '@mui/lab/LoadingButton'
 
 
 const defaultApprovalValue = {
@@ -91,10 +92,10 @@ const ActionApproval = () =>{
   useEffect(() => {
     if (!id) {
     }else{
-        setIsLoading(true);
+      setIsLoading(true);
         fetchData();
       }
-    }, [id]);
+    }, []);
     
     const fetchData = async () => {
       setIsLoading(true);
@@ -118,19 +119,24 @@ const ActionApproval = () =>{
       if(!empSignature){
         setApprovalErrors(true)
       }else{
-      setIsLoading(true);
+        setIsLoading(true);
          await dispatch(cashoutUploadActionApproval(params))
-          .then(res => {
-            if(val === true){
-              toast.success('Cashout Request Approved')
-            }
-            else{
-              toast.success('Cashout Request Rejected')
-            }
+          .then((res) => {
             setIsLoading(false);
+            if(!res.payload.response && val === true){
+              toast.success('Cashout Request Approved')
+              router.replace('/dashboard')
+            }
+            else if(!res.payload.response && val === false){
+              toast.success('Cashout Request Rejected')
+              router.replace('/dashboard')
+            }
+            else if(res.payload.response.data.errors[0].message){
+              toast.error(res.payload.response.data.errors[0].message)
+            }
             setReason('');
             setApprovalErrors(false);
-            fetchData();
+            
           }).catch(err => {
             setIsLoading(false);
             toast.success('Server Issue')
@@ -292,15 +298,18 @@ const ActionApproval = () =>{
 								</FormControl>
                 </Grid>          
                 <Grid item xs={12}>
-                  <Button variant='contained' onClick={() => handleApproveRejected(true)}>Approved</Button>
-                  <Button variant='contained' onClick={() => handleApproveRejected(false)} sx={{marginLeft:'10px'}}>Rejected</Button>
+                  {!isLoading ?
+                  <Button variant='contained' onClick={() => handleApproveRejected(true)} >Approved</Button>:  <LoadingButton loading={isLoading}  fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+                  Login
+                </LoadingButton>}
+                  <Button variant='contained' onClick={() => handleApproveRejected(false)} disabled={isLoading} sx={{marginLeft:'10px'}}>Rejected</Button>
                 </Grid>
               </Grid>
             </CardContent>
             </Card>
         </>
       )
-}else if(isLoading && !data ){
+}else if(!data){
   return(
   <Card>
   <CardHeader title='Cashout Approval Details' subheader={<Divider></Divider>} />

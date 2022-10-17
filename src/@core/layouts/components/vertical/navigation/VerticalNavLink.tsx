@@ -187,7 +187,7 @@ const VerticalNavLink = ({
                   ...(parent ? { ml: 2, mr: 4 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
                 }}
               >
-              {item.subject === "orgname" ?  (<span><img src={localStorage.getItem('orgLogo') !== '404'? imageUrl : '/images/cards/company_logo.png' } alt="Organisation Logo" width='40px' /></span>)
+              {item.subject === "orgname" ?  (<span><img src={localStorage.getItem('orgLogo') === '1'? imageUrl : '/images/cards/company_logo.png' } alt="Organisation Logo" width='40px' /></span>)
        : 
                 <UserIcon
                   icon={IconTag}

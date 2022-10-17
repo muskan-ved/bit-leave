@@ -92,6 +92,7 @@ export const calculateEmployeeCashout = createAsyncThunk('emp/calculatecashout',
            dispatch(userLogout())
          }
         }
+        return err
     }
 
   })

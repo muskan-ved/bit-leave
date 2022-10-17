@@ -71,11 +71,7 @@ const Home = () => {
   }
 
   useEffect(() => {
-    const orgLogo_Url = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`
-    const http = new XMLHttpRequest()
-    http.open('HEAD', orgLogo_Url, false)
-    http.send()
-    window.localStorage.setItem('orgLogo', JSON.stringify(http.status))
+    window.localStorage.setItem('orgLogo', '0')
   }, [])
 
   const onGoToDashboard = (url?: string) => {

@@ -106,6 +106,7 @@ const Onboarding = () => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [buttonToggle, setButtonToggle] = React.useState(false);
 	const [tenantData, setTenantData] = React.useState([]);
+	const [isLoading, setIsLoading] = React.useState<boolean>(false)
 	const router = useRouter()
 	const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
 		employeeAwardType: 'award',
@@ -307,10 +308,14 @@ const Onboarding = () => {
 		const stateData = {
 			...onBoarding,
 		}
+		setIsLoading(true)
 		const xeroConnect = await dispatch(xeroConnectUrl())
 		if (xeroConnect.payload) {
 			setTenantData(xeroConnect.payload.data.connections)
-			} else {
+			setIsLoading(false)
+		}
+		else {
+			setIsLoading(false)
 		}
 		setOnBoardingState(stateData)
 		handleNext()
@@ -322,15 +327,18 @@ const Onboarding = () => {
 			 tenantId: data.tenantId,
 		}
 		setOnBoardingState(stateData)
+		setIsLoading(true);
 		const org = await dispatch(postOrgOnboarding(
 			  stateData
 		))
 		if(org.payload !== undefined){
+			setIsLoading(false);
 			await dispatch(loadOrganisation())
 			router.push('/home')
 		}else{
 			toast.error("Your onboarding process is incompleted, So you are on re-onboarded")
 			setActiveStep(0)
+			setIsLoading(false);
 			setButtonToggle(false)
 		}
 	}
@@ -352,9 +360,13 @@ const Onboarding = () => {
 	// Connect to XERO Step
 	const onXeroRedirectURL = async () => {
 		setButtonToggle(true)
+		setIsLoading(true)
 		const xeroUrl = await dispatch(xeroReturlUrl())
 		if (xeroUrl.payload) {
+			setIsLoading(false)
 			window.open(xeroUrl.payload.data.url)
+		}else{
+			setIsLoading(false)
 		}
 	}
 
@@ -810,11 +822,11 @@ const Onboarding = () => {
 					<Grid item xs={12}>
 						<Box sx={{ float: "left" }}>
 							{!buttonToggle ?
-							<Button type='submit' variant="contained" onClick={onXeroRedirectURL}>
+							<Button type='submit' variant="contained" onClick={onXeroRedirectURL} disabled={isLoading}>
 								{activeStep === 0 ? 'Start' : 'Connect to XERO'}
 							</Button>
 							:
-							<Button type='submit' variant="contained" onClick={onXeroSubmit} >
+							<Button type='submit' variant="contained" onClick={onXeroSubmit} disabled={isLoading} >
 								{activeStep === 0 ? 'Start' : 'Next'}
 							</Button>}
 						</Box>
@@ -869,9 +881,9 @@ const Onboarding = () => {
 						<Button type='submit' variant="contained" onClick={handlePrevious} sx={{marginRight:"1rem"}}>
 							{activeStep === 0 ? 'Start' : 'Back'}
 						</Button>
-						<Button type='submit' variant="contained" >
+						<Button type='submit' variant="contained" disabled={isLoading}>
 							{activeStep === 0 ? 'Start' : 'Finish'}
-						</Button>	
+						</Button>
 					</Box>
 				</Grid>
 			       </Grid>

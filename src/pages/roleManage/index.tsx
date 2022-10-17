@@ -142,15 +142,18 @@ const result = arrayUniqueByKey.filter((role: any) => {
       id: roleData.id,
       roleId: parseInt(selectedData)
     }
+    setIsLoading(true)
     await dispatch(roleUpdate([payload]))
       .then(res => {
         if (res.payload !== undefined) {
           toast.success('Role update')
           setOpen(false)
+          setIsLoading(false)
           fetchData()
         }
       })
       .catch(() => {
+        setIsLoading(false)
         toast.error('Server Error')
       })
   }
@@ -272,7 +275,7 @@ const result = arrayUniqueByKey.filter((role: any) => {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleSaveRole}>Save</Button>
+              <Button onClick={handleSaveRole} disabled={isLoading}>Save</Button>
               <Button onClick={handleClose}>Close</Button>
             </DialogActions>
           </Dialog>
