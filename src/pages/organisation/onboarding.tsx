@@ -111,8 +111,8 @@ const Onboarding = () => {
 	const router = useRouter()
 	const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
 		employeeAwardType: 'award',
-		thresholdLeaveNotification: 20,
-		thresholdLeaveWarning: 18,
+		thresholdLeaveNotification: 25,
+		thresholdLeaveWarning: 20,
 		thresholdPayoutFrequency: 10,
 		email: '',
 		payrollEmail: '',

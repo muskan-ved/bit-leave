@@ -92,9 +92,11 @@ const navigation = (): VerticalNavItemsType => {
         {
           title: 'Sync Org',
           icon: FileUploadOutline,
-          path: '/organisation',
+          //path: '/organisation',
           action: 'manage',
           subject: 'admin',
+          badgeColor: "primary",
+          badgeContent:'coming soon'
         },
         {
           title: 'bit.leave Setup',
@@ -139,7 +141,9 @@ const navigation = (): VerticalNavItemsType => {
       title: 'How To',
       icon: HelpCircleOutline,
       action: 'read',
-      subject: 'howTo'
+      subject: 'howTo',
+      disabled: false,
+      path: process.env.NEXT_PUBLIC_APP_URL +'/home/'
     },
   ]
 

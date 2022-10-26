@@ -391,7 +391,7 @@ const CashoutDialog = (props: any) => {
 											<Divider></Divider>
 											<Box sx={{ display: 'flex', alignItems: 'center' }}>
 												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
-												<Typography variant='body2'>Estimated Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
+												<Typography variant='body2'>Estimated Post Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
 												<Tooltip title='Your payroll system calculates this for you when it gets added to your next payslip.' arrow sx={{marginLeft: 'auto'}}>
 													<HelpOutlineIcon />
 												</Tooltip>

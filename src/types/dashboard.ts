@@ -21,6 +21,7 @@ type leaveDetails = {
   cashoutValue: number
   excessDays: number
   valueText: string
+  canCashoutLeave : boolean
 }
 
 type profile = {

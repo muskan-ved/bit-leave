@@ -53,7 +53,7 @@ const Setup = () => {
       name:leaveName,
       normalEntitlement:(normalEntitlement && typeof(normalEntitlement) === "string"?parseInt(normalEntitlement): normalEntitlement),
       typeOfUnits:'hours',
-      isPaidLeave:false,
+      isPaidLeave:true,
       showOnPayslip:true,
     }
     setIsLoading(true)
@@ -80,7 +80,7 @@ const Setup = () => {
           <form onSubmit={handleSubmit} >
             <Grid container spacing={5}>
               <Grid item xs={12}>
-              <FormControlLabel disabled control={<Checkbox />} label="IsPaidLeave" />
+              <FormControlLabel disabled control={<Checkbox />} label="IsPaidLeave" checked/>
               <FormControlLabel disabled control={<Checkbox />} label="ShowOnPayslip" checked />
               </Grid>
               <Grid item xs={12}>

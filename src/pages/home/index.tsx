@@ -58,10 +58,10 @@ const Home = () => {
 
   let fullName, OrgId: any
 
-  const link_1 = 'https://www.youtube.com/watch?v=SccSCuHhOw0'
-  const link_2 = 'https://www.youtube.com/watch?v=K4TOrB7at0Y'
-  const link_3 = 'https://www.youtube.com/watch?v=GoQ85cs5fk0'
-  const link_4 = 'https://www.youtube.com/watch?v=i0jZJtE1KhU'
+  const link_1 = 'https://www.youtube.com/watch?v=gwDXwHGUqfA'
+  const link_2 = 'https://www.youtube.com/watch?v=Ye0BOUuLkZk'
+  const link_3 = 'https://www.youtube.com/watch?v=gtAmZxhxR8E'
+  const link_4 = 'https://www.youtube.com/watch?v=gMbWUB5MWHw'
 
   const userData = localStorage.getItem('userData')
   if (userData != null) {
@@ -160,7 +160,7 @@ const Home = () => {
                     />
                   </Box>
                   <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1)}>
-                    Play the video
+                    Org Settings 
                   </Typography>
                 </Grid>{' '}
                 <Grid
@@ -196,7 +196,7 @@ const Home = () => {
                     />
                   </Box>
                   <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2)}>
-                    Play the video
+                    Add bit.leave to your payroll
                   </Typography>
                 </Grid>{' '}
                 <Grid
@@ -232,7 +232,7 @@ const Home = () => {
                     />
                   </Box>
                   <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_3)}>
-                    Play the video
+                    The cash out process
                   </Typography>
                 </Grid>{' '}
                 <Grid
@@ -268,7 +268,7 @@ const Home = () => {
                     />
                   </Box>
                   <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_4)}>
-                    Play the video
+                    Add a logo
                   </Typography>
                 </Grid>{' '}
               </Grid>
