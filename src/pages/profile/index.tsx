@@ -5,7 +5,7 @@ import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 // ** MUI Imports
-import { Typography, Box, Grid, CardHeader, Card, CardContent, Divider, styled, AvatarProps, Button, TextField, InputAdornment, CircularProgress, Tabs, TableContainer,Table,TableBody,TableCell,TableHead,TableRow,Paper, tableCellClasses } from '@mui/material';
+import { Typography, Box, Grid, CardHeader, Card, CardContent, Divider, styled, AvatarProps, Button, TextField, InputAdornment, CircularProgress, Tabs, TableContainer,Table,TableBody,TableCell,TableHead,TableRow,Paper, tableCellClasses, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 // ** Custom Components Imports
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -56,16 +56,22 @@ const Profile = () => {
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
-	const getTabList = ['Profile Detail', 'Direct Reports', 'Team']
+	const getTabList = ['Profile Detail', 'Direct Reports', 'Team','Persona Edit']
+	const femaleList = ['/images/avatars/4.png', '/images/avatars/6.png', '/images/avatars/7.png']
+	const maleList = ['/images/avatars/1.png', '/images/avatars/3.png', '/images/avatars/5.png','/images/avatars/8.png']
+	const whiteList = ['/images/avatars/9.png', '/images/avatars/10.png']
+	const brownList = ['/images/avatars/2.png', '/images/avatars/11.jpg', '/images/avatars/12.png']
+	const [persona, setPersona] = React.useState('');
 
+	
 	const S3_BUCKET = auth.bucket_image_name;
 	const REGION = auth.region;
-
+	
 	AWS.config.update({
 		accessKeyId: auth.accessKeyId,
 		secretAccessKey: auth.secretAccessKey,
 	})
-
+	
 	const myBucket = new AWS.S3({
 		params: { Bucket: S3_BUCKET },
 		region: REGION,
@@ -117,6 +123,10 @@ const Profile = () => {
 		setIsLoading(false)
 	}
 
+	const handlePersonaSelect = (event:any) => {
+		setPersona(event.target.value);
+	  };
+
 	useEffect(() => {
 		
 		if (!employeeData) {
@@ -124,6 +134,12 @@ const Profile = () => {
 			fetchDataFromRedux();
 		}
 	}, []);
+
+	const handleOnChangePersona = async (event: any) => {
+		event.preventDefault();
+		if (event) {
+		}
+	}
 
 	
 	const handleOnChange = async (event: any) => {
@@ -363,6 +379,56 @@ const Profile = () => {
 								</Grid>
 							</Grid>
 						</CardContent>
+					</TabPanel>
+					<TabPanel value={value} index={3} >
+					<CardContent>
+					<Grid container spacing={5}>
+					<Grid item xs={12}>
+					<FormControl>
+						<RadioGroup
+							row
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="row-radio-buttons-group"
+							onChange={handlePersonaSelect}
+							value={persona}
+						>
+							<FormControlLabel value="female" control={<Radio />} label="Female" />
+							<FormControlLabel value="male" control={<Radio />} label="Male" />
+							<FormControlLabel value="white" control={<Radio />} label="white" />
+							<FormControlLabel value="brown" control={<Radio />} label="brown" />
+						</RadioGroup>
+    				</FormControl>
+					</Grid>
+					{persona === 'female' ? 
+					femaleList.map((item,index)=> {return (
+						<Grid item xs={2} key={index}>
+							<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
+						</Grid>
+					)})
+						: persona === 'male' ? 
+						maleList.map((item,index)=> {return (
+							<Grid item xs={2} key={index}>
+								<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
+							</Grid>
+						)})
+							: persona === 'white' ? 
+							whiteList.map((item,index)=> {return (
+								<Grid item xs={2} key={index}>
+									<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
+								</Grid>
+							)})
+								: persona === 'brown' ? 
+								brownList.map((item,index)=> {return (
+									<Grid item xs={2} key={index}>
+										<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
+									</Grid>
+								)})
+								: null }	
+					<Grid item xs={12}>
+						<Button variant="contained" component="label">Save</Button>
+					</Grid>
+					</Grid>
+					</CardContent>
 					</TabPanel>
 				</Card>
 			</Grid>

@@ -264,7 +264,7 @@ const result = arrayUniqueByKey.filter((role: any) => {
               >
                 <FormControl sx={{ mt: 5, minWidth: 420 }}>
                   <InputLabel htmlFor='Roles'>Roles</InputLabel>
-                  <Select autoFocus value={selectedData} onChange={handleRoleChange} label='Roles' margin='dense'>
+                  <Select value={selectedData} onChange={handleRoleChange} label='Roles' margin='dense'>
                     {result.map((item: any) => {
                       return (
                         <MenuItem key={item.roleId} value={item.roleId}>
