@@ -58,7 +58,6 @@ const Setup = () => {
     }
     setIsLoading(true)
      await dispatch(setUPPost(request)).then((res)=>{
-      console.log(res,"tret")
       if(res.payload !== undefined){
         setIsLoading(false);
         toast.success("Successfully uploaded ")}

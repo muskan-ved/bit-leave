@@ -70,7 +70,7 @@ const ActionApproval = () =>{
   const router = useRouter();
   const {id} = router.query;
 	const sigCanvas = useRef() as React.MutableRefObject<any>;
-  console.log(id,"efewr")
+
   const {
     control: approvalControl,
 		watch: watchApproval,

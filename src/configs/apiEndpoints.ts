@@ -24,4 +24,5 @@ export default {
   getNotification:`${BASE_URL}${process.env.NEXT_PUBLIC_GET_NOTIFICATION}`,
   setupPost:`${BASE_URL}${process.env.NEXT_PUBLIC_SET_UP_POST}`,
   uploadActionApproval:`${BASE_URL}${process.env.NEXT_PUBLIC_UPLOAD_ACTION_APPROVAL}`,
+  uploadProfileAvatar:`${BASE_URL}${process.env.NEXT_PUBLIC_UPLOAD_EMPLOYEE_PROFILE}`,
 }

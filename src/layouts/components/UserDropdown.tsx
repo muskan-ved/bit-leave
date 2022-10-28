@@ -51,12 +51,14 @@ const UserDropdown = (props: Props) => {
   let userRole = "";
   let userEmail = "";
   let userCompany = "";
+  let userAvatar = "";
   if (userData != null && storedToken) {
     const user = JSON.parse(userData)
     userName = user.fullName;
     userEmail = user.email
     userRole = user.role
     userCompany = user.companyname
+    userAvatar = user.avatar
   }
 
   // ** Props
@@ -122,7 +124,7 @@ const UserDropdown = (props: Props) => {
         <Avatar
           alt='John Doe'
           onClick={handleDropdownOpen}
-          src='/images/avatars/1.png'
+          src={userAvatar}
           sx={{ width: 40, height: 40 }}
         />
       </Badge>
@@ -152,7 +154,7 @@ const UserDropdown = (props: Props) => {
             >
               <Avatar
                 alt='John Doe'
-                src='/images/avatars/1.png'
+                src={userAvatar}
                 sx={{ width: '2.5rem', height: '2.5rem' }}
               />
             </Badge>

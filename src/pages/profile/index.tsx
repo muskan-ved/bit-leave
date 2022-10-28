@@ -5,7 +5,8 @@ import React, { SyntheticEvent, useContext, useEffect, useState } from 'react';
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 // ** MUI Imports
-import { Typography, Box, Grid, CardHeader, Card, CardContent, Divider, styled, AvatarProps, Button, TextField, InputAdornment, CircularProgress, Tabs, TableContainer,Table,TableBody,TableCell,TableHead,TableRow,Paper, tableCellClasses, FormControl, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Typography, Box, Grid, CardHeader, Card, CardContent, Divider, styled, AvatarProps, Button, TextField, InputAdornment, CircularProgress, Tabs, TableContainer,Table,TableBody,TableCell,TableHead,TableRow,Paper, tableCellClasses } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 
 // ** Custom Components Imports
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -33,13 +34,24 @@ import auth from 'src/configs/auth';
 // ** Import Toaster
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { putAvatar } from 'src/store/profile';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
 // ** Styled Avatar component
-const Avatar = styled(CustomAvatar)<AvatarProps>(({ theme }) => ({
+const CusAvatar = styled(CustomAvatar)<AvatarProps>(({ theme }) => ({
 	width: 50,
 	height: 50,
 }))
+
+const AvatarPersona = styled(Avatar)(({ theme }) => ({
+	width: 60,
+	height: 60,
+	'&.active': {
+		border:`4px solid ${theme.palette.primary.main}`
+	}
+}))
+
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -52,16 +64,16 @@ const Profile = () => {
 	const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 	const [value, setValue] = useState<number>(0)
 	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [loading, setLoading] = useState<boolean>(false)
 	const [employeeData, setemployeeData] = useState<any>('')
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
 	const getTabList = ['Profile Detail', 'Direct Reports', 'Team','Persona Edit']
-	const femaleList = ['/images/avatars/4.png', '/images/avatars/6.png', '/images/avatars/7.png']
-	const maleList = ['/images/avatars/1.png', '/images/avatars/3.png', '/images/avatars/5.png','/images/avatars/8.png']
-	const whiteList = ['/images/avatars/9.png', '/images/avatars/10.png']
-	const brownList = ['/images/avatars/2.png', '/images/avatars/11.jpg', '/images/avatars/12.png']
-	const [persona, setPersona] = React.useState('');
+	const personaList = ['/images/avatars/one.png', '/images/avatars/two.png', '/images/avatars/three.png','/images/avatars/four.png','/images/avatars/five.png','/images/avatars/six.png','/images/avatars/seven.png','/images/avatars/eight.png'];
+	const [classadd, setClassAdd] = React.useState('');
+	const [imageName, setImageName] = React.useState('');
+	
 
 	
 	const S3_BUCKET = auth.bucket_image_name;
@@ -109,7 +121,7 @@ const Profile = () => {
 		setValue(newValue)
 	}
 
-	let profileData;
+	let profileData:any;
 	if (userData != null) {
 		profileData = JSON.parse(userData)
 	}
@@ -123,10 +135,6 @@ const Profile = () => {
 		setIsLoading(false)
 	}
 
-	const handlePersonaSelect = (event:any) => {
-		setPersona(event.target.value);
-	  };
-
 	useEffect(() => {
 		
 		if (!employeeData) {
@@ -137,10 +145,30 @@ const Profile = () => {
 
 	const handleOnChangePersona = async (event: any) => {
 		event.preventDefault();
-		if (event) {
-		}
+		const imageName = event.target.alt.substring(event.target.alt.lastIndexOf('/') + 1)
+		setClassAdd(event.target.alt);	
+		setImageName(imageName)
 	}
 
+	const handleSubmitPersona = async () =>{
+	
+		if(imageName !== ''){
+		setLoading(true)
+		await dispatch(putAvatar(imageName)).then((response:any) => {
+                        if (response.payload !== undefined) {
+                          toast.success('Avatar Uploaded. Please navigate to dashboard, it will be updated shortly')
+                          setLoading(false)
+                        }else{
+                          toast.error('Failed to update the Avatar')
+                          setLoading(false)
+                        }
+                      })
+                      .catch((err:any) => {
+						toast.error('Failed to update the Avatar')
+						setLoading(false)
+					})
+				}
+	}
 	
 	const handleOnChange = async (event: any) => {
 		event.preventDefault();
@@ -382,50 +410,28 @@ const Profile = () => {
 					</TabPanel>
 					<TabPanel value={value} index={3} >
 					<CardContent>
-					<Grid container spacing={5}>
-					<Grid item xs={12}>
-					<FormControl>
-						<RadioGroup
-							row
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="row-radio-buttons-group"
-							onChange={handlePersonaSelect}
-							value={persona}
-						>
-							<FormControlLabel value="female" control={<Radio />} label="Female" />
-							<FormControlLabel value="male" control={<Radio />} label="Male" />
-							<FormControlLabel value="white" control={<Radio />} label="white" />
-							<FormControlLabel value="brown" control={<Radio />} label="brown" />
-						</RadioGroup>
-    				</FormControl>
+					<Grid container spacing={5} >
+					{personaList.map((item,index)=> {
+					const str = item.substring(item.lastIndexOf('/') + 1)
+					const imageName = str.split('.')[0].charAt(0).toUpperCase() + str.split('.')[0].slice(1);
+						return (
+						
+					<Grid item xs={2} key={index}  marginLeft={'3.3%'} >
+						<AvatarPersona src={item} key={index} className={item === classadd ? 'active' : ''} alt={item} onClick={handleOnChangePersona} />
+						<Typography variant="body2" component="p" marginLeft='15px'>
+						{imageName}
+						</Typography>
 					</Grid>
-					{persona === 'female' ? 
-					femaleList.map((item,index)=> {return (
-						<Grid item xs={2} key={index}>
-							<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
-						</Grid>
-					)})
-						: persona === 'male' ? 
-						maleList.map((item,index)=> {return (
-							<Grid item xs={2} key={index}>
-								<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
-							</Grid>
-						)})
-							: persona === 'white' ? 
-							whiteList.map((item,index)=> {return (
-								<Grid item xs={2} key={index}>
-									<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
-								</Grid>
-							)})
-								: persona === 'brown' ? 
-								brownList.map((item,index)=> {return (
-									<Grid item xs={2} key={index}>
-										<img src={item} alt='ppersona' height={'60px'} width={'60px'} onClick={handleOnChangePersona} />
-									</Grid>
-								)})
-								: null }	
+					
+					) })}
 					<Grid item xs={12}>
-						<Button variant="contained" component="label">Save</Button>
+					{!loading ? <Button type='submit' variant='contained' size='large' onClick={handleSubmitPersona}  disabled={imageName === '' ? true : false}>
+						Update
+						</Button> :
+						<LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
+						Update
+						</LoadingButton>
+					}
 					</Grid>
 					</Grid>
 					</CardContent>
@@ -438,7 +444,7 @@ const Profile = () => {
 						<CardHeader title='Upload your organisation logo ' subheader={<Divider></Divider>}></CardHeader>
 						<CardContent sx={{ m: 3, p: 3 }} >
 							<Box sx={{ width: '100%' }}>
-								{imagePreviewUrl ? <Avatar src={imagePreviewUrl} skin='light' variant='rounded' sx={{ width: 100, height: 100 }} /> : null}
+								{imagePreviewUrl ? <CusAvatar src={imagePreviewUrl} skin='light' variant='rounded' sx={{ width: 100, height: 100 }} /> : null}
 							</Box>
 						</CardContent>
 

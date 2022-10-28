@@ -1,2 +1,1 @@
-id,firstname,lastname,fullname,managerId,emailaddress,awardtype,datejoined,annualleavebalance,department,annualsalary,ordinaryhoursperweek,hourlyrate,employmenttype
-
+id,firstname,lastname,fullname,managerid,manageremail,emailaddress,department
