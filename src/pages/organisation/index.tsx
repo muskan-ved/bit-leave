@@ -1,5 +1,5 @@
 // ** React Import
-import { Ref, useState, forwardRef, ReactElement } from 'react'
+import { useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -399,15 +399,12 @@ const UpdateOrganisation = () => {
   }
 
   const csvFileToArray = (string: string) => {
-    const csvHeader = string.slice(0, string.indexOf('\n')).split(',')
+    const csvHeader = string.slice(0, string.indexOf('\n')-1).split(',')
     const csvRows = string.slice(string.indexOf('\n') + 1).split('\n')
-    
-    // const Rows = string.slice(string.indexOf('\n') + 1).split(',')
-    // if (Rows) {
-    // }
-
+   
     csvRows.splice(-1)
     if (csvHeader.length > 0) {
+
       // ** Check EmpId **
       if (csvHeader.includes('id')) {
         const index = csvHeader.indexOf('id')
