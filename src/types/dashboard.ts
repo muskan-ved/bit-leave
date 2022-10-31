@@ -29,8 +29,9 @@ type profile = {
   fullname: string,
   onboarded: boolean,
   hrisLogin: string,
-  managerName: string
-  department: string
+  managerName: string,
+  avatar:string,
+  department: string,
 }
 
 type directReport = {
@@ -47,4 +48,5 @@ export type employeeType = {
   leavesByDepartment: Array<leavesbyDepartment>
   directReports: Array<directReport>
   vitals: vitals
+
 }

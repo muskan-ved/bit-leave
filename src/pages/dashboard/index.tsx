@@ -414,7 +414,7 @@ const Dashboard = () => {
                 <Grid container spacing={1}>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={data.leaveDetails.canCashoutLeave} >Cashout Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={!data.leaveDetails.canCashoutLeave} >Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={4} sm={4}>

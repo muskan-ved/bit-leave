@@ -69,13 +69,11 @@ const Profile = () => {
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
-	const getTabList = ['Profile Detail', 'Direct Reports', 'Team','Persona Edit']
+	const getTabList = ['Profile Detail', 'Direct Reports', 'Team','Avatar']
 	const personaList = ['/images/avatars/one.png', '/images/avatars/two.png', '/images/avatars/three.png','/images/avatars/four.png','/images/avatars/five.png','/images/avatars/six.png','/images/avatars/seven.png','/images/avatars/eight.png'];
 	const [classadd, setClassAdd] = React.useState('');
 	const [imageName, setImageName] = React.useState('');
-	
-
-	
+		
 	const S3_BUCKET = auth.bucket_image_name;
 	const REGION = auth.region;
 	
@@ -157,6 +155,7 @@ const Profile = () => {
 		await dispatch(putAvatar(imageName)).then((response:any) => {
                         if (response.payload !== undefined) {
                           toast.success('Avatar Uploaded. Please navigate to dashboard, it will be updated shortly')
+						  localStorage.setItem('avatar',imageName)
                           setLoading(false)
                         }else{
                           toast.error('Failed to update the Avatar')
@@ -369,6 +368,7 @@ const Profile = () => {
 						</CardContent>
 					</TabPanel>
 					<TabPanel value={value} index={2}>
+
 					<CardContent>
 							<Grid container spacing={5}>
 								<Grid item xs={12}>
@@ -409,20 +409,15 @@ const Profile = () => {
 						</CardContent>
 					</TabPanel>
 					<TabPanel value={value} index={3} >
+					{/* <CardHeader title='Choose your avatar​​'/> */}
 					<CardContent>
+					<Typography variant='body2' sx={{marginBottom:'20px'}}>Choose your avatar​</Typography>
 					<Grid container spacing={5} >
 					{personaList.map((item,index)=> {
-					const str = item.substring(item.lastIndexOf('/') + 1)
-					const imageName = str.split('.')[0].charAt(0).toUpperCase() + str.split('.')[0].slice(1);
 						return (
-						
 					<Grid item xs={2} key={index}  marginLeft={'3.3%'} >
 						<AvatarPersona src={item} key={index} className={item === classadd ? 'active' : ''} alt={item} onClick={handleOnChangePersona} />
-						<Typography variant="body2" component="p" marginLeft='15px'>
-						{imageName}
-						</Typography>
 					</Grid>
-					
 					) })}
 					<Grid item xs={12}>
 					{!loading ? <Button type='submit' variant='contained' size='large' onClick={handleSubmitPersona}  disabled={imageName === '' ? true : false}>

@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, SyntheticEvent, Fragment } from 'react'
+import { useState, SyntheticEvent, Fragment, useEffect } from 'react'
 
 // ** Next Import
 import { useRouter } from 'next/router'
@@ -18,7 +18,6 @@ import Typography from '@mui/material/Typography'
 import CardAccountPhone from 'mdi-material-ui/CardAccountPhoneOutline'
 import LogoutVariant from 'mdi-material-ui/LogoutVariant'
 import AccountOutline from 'mdi-material-ui/AccountOutline'
-import AccountQuestionOutline from 'mdi-material-ui/AccountQuestionOutline'
 
 // ** Context
 import { useAuth } from 'src/hooks/useAuth'
@@ -29,6 +28,12 @@ import { Settings } from 'src/@core/context/settingsContext'
 // ** Config
 import API from 'src/configs/auth'
 
+// ** API Call
+import { loadEmployee } from 'src/store/employee';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'src/store';
+import { employeeType } from 'src/types/dashboard';
+import { CircularProgress } from '@mui/material'
 interface Props {
   settings: Settings
 }
@@ -46,19 +51,20 @@ const UserDropdown = (props: Props) => {
 
   const storedToken = window.localStorage.getItem(API.storageTokenKeyName)
   const userData = window.localStorage.getItem('userData')
+  const dispatch = useDispatch<AppDispatch>()
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [data, setData] = useState<employeeType | null>(null);
 
   let userName = "";
   let userRole = "";
   let userEmail = "";
   let userCompany = "";
-  let userAvatar = "";
   if (userData != null && storedToken) {
     const user = JSON.parse(userData)
     userName = user.fullName;
     userEmail = user.email
     userRole = user.role
     userCompany = user.companyname
-    userAvatar = user.avatar
   }
 
   // ** Props
@@ -90,6 +96,21 @@ const UserDropdown = (props: Props) => {
     setAnchorEl(null)
   }
 
+  const fetchDataFromRedux = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    fetchDataFromRedux()
+  }, [])
+  
+
   const styles = {
     py: 2,
     px: 4,
@@ -109,6 +130,11 @@ const UserDropdown = (props: Props) => {
     handleDropdownClose()
   }
 
+  if (isLoading && !data)
+  return (<CircularProgress color="success" />)
+
+  const localStorageAvatar = localStorage.getItem('avatar')
+
   return (
     <Fragment>
       <Badge
@@ -124,7 +150,7 @@ const UserDropdown = (props: Props) => {
         <Avatar
           alt='John Doe'
           onClick={handleDropdownOpen}
-          src={userAvatar}
+          src={localStorageAvatar ? '/images/avatars/'+localStorageAvatar : data?.profile?.avatar ? '/images/avatars/'+data?.profile?.avatar : '/images/avatars/one.png'}
           sx={{ width: 40, height: 40 }}
         />
       </Badge>
@@ -154,7 +180,7 @@ const UserDropdown = (props: Props) => {
             >
               <Avatar
                 alt='John Doe'
-                src={userAvatar}
+                src={localStorageAvatar ? '/images/avatars/'+localStorageAvatar : data?.profile?.avatar ? '/images/avatars/'+data?.profile?.avatar : '/images/avatars/one.png'}
                 sx={{ width: '2.5rem', height: '2.5rem' }}
               />
             </Badge>

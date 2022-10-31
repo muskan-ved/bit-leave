@@ -11,7 +11,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/store'
-import React, { createRef, useRef } from 'react'
+import React from 'react'
 import FormControl from '@mui/material/FormControl'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -255,6 +255,7 @@ const CashoutDialog = (props: any) => {
 	}
 	const maxWidth = 'sm'
 
+	const tooltipLink = 'https://www.ato.gov.au/rates/schedule-5---tax-table-for-back-payments,-commissions,-bonuses-and-similar-payments/#iiAdditionalpaymentsappliedoverthewholef';
 
 	return (
 		<>
@@ -392,7 +393,7 @@ const CashoutDialog = (props: any) => {
 											<Box sx={{ display: 'flex', alignItems: 'center' }}>
 												<AttachMoneyIcon sx={{ color: 'primary.main', mr: 2.5, fontSize: 'medium' }} />
 												<Typography variant='body2'>Estimated Post Tax Amount  </Typography><Typography variant='body2' marginLeft={'73px'}>{calculateData?.totalAmount?.toFixed(2)} </Typography>
-												<Tooltip title='Your payroll system calculates this for you when it gets added to your next payslip.' arrow sx={{marginLeft: 'auto'}}>
+												<Tooltip title={<Typography variant='caption' sx={{color:'white',textAlign:'justify'}}>This is an indicative amount as payroll uses the <a href={tooltipLink} style={{textDecoration:'none',color:'blue'}}>Method B (ii) calculation</a> to calculate the correct post-tax amount</Typography> } arrow sx={{marginLeft: 'auto'}}>
 													<HelpOutlineIcon />
 												</Tooltip>
 											</Box>

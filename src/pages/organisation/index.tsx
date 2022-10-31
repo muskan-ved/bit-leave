@@ -399,7 +399,7 @@ const UpdateOrganisation = () => {
   }
 
   const csvFileToArray = (string: string) => {
-    const csvHeader = string.slice(0, string.indexOf('\n')-1).split(',')
+    const csvHeader = string.slice(0, string.indexOf('\n')).split(',')
     const csvRows = string.slice(string.indexOf('\n') + 1).split('\n')
    
     csvRows.splice(-1)
