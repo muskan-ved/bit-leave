@@ -147,6 +147,20 @@ const UpdateOrganisation = () => {
         validate: isEmailValid
       },
 
+      {
+        name: 'jobtitle',
+        inputName: 'jobtitle',
+        required: true,
+        validate: isNameValid
+      },
+
+      {
+        name: 'country',
+        inputName: 'country',
+        required: true,
+        validate: isNameValid
+      },
+
       // {
       //   name: 'awardtype',
       //   inputName: 'awardtype',
@@ -248,6 +262,22 @@ const UpdateOrganisation = () => {
       headerName: 'Email Address',
       sortable: false,
       minWidth: 200,
+      disableColumnMenu: true
+    },
+
+    {
+      field: 'jobtitle',
+      headerName: 'Job Title',
+      minWidth: 120,
+      sortable: false,
+      disableColumnMenu: true
+    },
+
+    {
+      field: 'country',
+      headerName: 'Country',
+      minWidth: 120,
+      sortable: false,
       disableColumnMenu: true
     },
 
@@ -443,6 +473,20 @@ const UpdateOrganisation = () => {
       // ** Check Email **
       if (csvHeader.includes('emailaddress')) {
         const index = csvHeader.indexOf('emailaddress')
+        if (index) {
+        }
+      }
+
+      // ** jobtitle
+      if (csvHeader.includes('jobtitle')) {
+        const index = csvHeader.indexOf('jobtitle')
+        if (index) {
+        }
+      }
+
+      // ** country
+      if (csvHeader.includes('country')) {
+        const index = csvHeader.indexOf('country')
         if (index) {
         }
       }

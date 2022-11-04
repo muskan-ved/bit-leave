@@ -349,7 +349,8 @@ const Dashboard = () => {
           </Grid>
           {ability?.can('read', 'analytics') ? (
           <Grid container spacing={6}>
-            <Grid item  xs={12}>
+    
+            <Grid item md={9} xs={12}>
               <Card>
                 <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>}  />
                 <CardContent>
@@ -359,7 +360,24 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Grid>
-          </Grid>):null}
+                  <Grid item md={3} xs={12} sx={{display:"inline-grid"}} >
+                  <Card>
+                    <CardHeader title='Your Details 👨‍💼' subheader={<Divider></Divider>} />
+                    <CardContent>
+                      <StyledBox>
+                        <Box sx={{  mb: 3, display: 'flex', alignItems: 'center' }}>
+                          <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
+                          <Typography variant='body2'>Job title : {data.profile.jobtitle} </Typography>
+                        </Box>
+                        <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+                          <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
+                          <Typography variant='body2'>Country : {data.profile.country} </Typography>
+                        </Box>                 
+                      </StyledBox>
+                    </CardContent>
+                  </Card>
+                </Grid>
+                </Grid>):null}
           <br />
         <Grid container spacing={6}>
           <Grid item md={7} xs={12} >

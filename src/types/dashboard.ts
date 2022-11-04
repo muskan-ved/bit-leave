@@ -32,6 +32,8 @@ type profile = {
   managerName: string,
   avatar:string,
   department: string,
+  jobtitle:string,
+  country:string,
 }
 
 type directReport = {

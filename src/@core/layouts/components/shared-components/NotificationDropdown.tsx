@@ -94,7 +94,17 @@ const NotificationDropdown = (props: Props) => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [data, setData] = useState<notificationTypes | any>([])
+  const [data, setData] = useState<notificationTypes | any>([
+    {
+      title:"approve request",
+      description:'test approve request',
+      nextAction:{
+        type:'actionApffproval',
+        identifier:'31'
+      }
+    }
+  ]
+  )
 
   // ** Hook
   const hidden = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
@@ -128,20 +138,20 @@ const NotificationDropdown = (props: Props) => {
     }
   }
 
-  useEffect(() => {
-    setIsLoading(true)
-    fetchData()
-  }, [])
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   fetchData()
+  // }, [])
 
-  const fetchData = async () => {
-    setIsLoading(true)
-    await dispatch(load_Notifcation()).then(res => {
-      setData(res.payload)
-      setIsLoading(false)
-    }).catch(()=>{
-		setIsLoading(false)
-	})
-  }
+  // const fetchData = async () => {
+  //   setIsLoading(true)
+  //   await dispatch(load_Notifcation()).then(res => {
+  //     setData(res.payload)
+  //     setIsLoading(false)
+  //   }).catch(()=>{
+	// 	setIsLoading(false)
+	// })
+  // }
 
   return (
     <Fragment>
@@ -187,10 +197,14 @@ const NotificationDropdown = (props: Props) => {
         <MenuItem
           disableRipple
           sx={{ py: 3.5, borderBottom: 0, borderTop: theme => `1px solid ${theme.palette.divider}` }}
-        >
+        > 
+        {data && data.length > 0 ? (
           <Button fullWidth variant='contained' onClick={handleDropdownClose}>
             Read All Notifications
-          </Button>
+          </Button>)  :
+        ( <Typography variant='caption' sx={{ color: 'text.disabled' ,marginLeft:'30%'}}>
+             No Notification Yet!
+      </Typography>)}
         </MenuItem>
       </Menu>
     </Fragment>
