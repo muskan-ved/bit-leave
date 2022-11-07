@@ -1,9 +1,9 @@
 // ** React Imports
-import { ReactNode} from 'react'
+import { ReactNode, useEffect, useState} from 'react'
 
 // ** Next Imports
 import Head from 'next/head'
-import { Router } from 'next/router'
+import { Router, useRouter } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 
@@ -61,6 +61,9 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 // ** Global css styles
 import '../../styles/globals.css'
 import { OnboardingProvider } from 'src/context/OnboardingContext'
+import * as gtag from '../lib/gtag'
+import Script from 'next/script'
+import auth from 'src/configs/auth'
 
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
@@ -115,6 +118,27 @@ const App = (props: ExtendedAppProps) => {
   const aclAbilities = Component.acl ?? defaultACLObj
 
   const maintainenceMode = false;
+  let userId;
+  const userData =window.localStorage.getItem("userData")
+  if (userData != null) {
+      const data = JSON.parse(userData)
+      userId = data.id;
+    }  
+    
+  const router = useRouter()
+  useEffect(() => { 
+     
+    const handleRouteChange = (url:any) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    router.events.on('hashChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+      router.events.off('hashChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
+  
 
   if(maintainenceMode)
   {
@@ -131,10 +155,30 @@ const App = (props: ExtendedAppProps) => {
       Platform under maintainence.
     </CacheProvider>);
   }
-
   return (
 
+    <>
+      <Script
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${auth.ga_tracking_id}`}
+          />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${auth.ga_tracking_id}', {
+              page_path: window.location.pathname,
+              'user_id': '${userId}
+            });
+          `,
+        }}
+      />
     <CacheProvider value={emotionCache}>
+            
       <Head>
         <title>{`${themeConfig.templateName} - Optimising your Leave, Well-being and Balance Sheet`}</title>
         <meta
@@ -175,6 +219,7 @@ const App = (props: ExtendedAppProps) => {
         </AuthProvider>
       </Provider>
     </CacheProvider>
+    </>
   )
 }
 

@@ -29,6 +29,7 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { notificationTypes } from 'src/types/notification'
 import { load_Notifcation } from 'src/store/notification'
+import * as gtag from '../../../../lib/gtag'
 
 interface Props {
   settings: Settings
@@ -115,10 +116,22 @@ const NotificationDropdown = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>()
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
+    gtag.event({
+      action: 'notification_dropdown',
+      category: 'notification_dropdown',
+      label: "notification_dropdown",
+      value:'open'
+    })
     setAnchorEl(event.currentTarget)
   }
 
   const handleDropdownClose = () => {
+    gtag.event({
+      action: 'notification_dropdown',
+      category: 'notification_dropdown',
+      label: "notification_dropdown",
+      value:'close'
+    })
     setAnchorEl(null)
   }
 

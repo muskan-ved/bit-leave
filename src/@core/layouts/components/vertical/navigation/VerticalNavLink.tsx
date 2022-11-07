@@ -28,6 +28,7 @@ import CanViewNavLink from 'src/layouts/components/acl/CanViewNavLink'
 
 // ** Utils
 import { handleURLQueries } from 'src/@core/layouts/utils'
+import * as gtag from '../../../../../lib/gtag'
 
 interface Props {
   parent?: boolean
@@ -161,7 +162,12 @@ const VerticalNavLink = ({
             component={'a'}
             className={isNavLinkActive() ? 'active' : ''}
             {...(item.openInNewTab ? { target: '_blank' } : null)}
-            onClick={e => {
+            onClick={e => {gtag.event({
+              action: item.title,
+              category: 'nav_link',
+              label: item.title,
+              value:item.title
+              });
               if (item.path === undefined) {
                 e.preventDefault()
                 e.stopPropagation()

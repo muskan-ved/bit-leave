@@ -34,6 +34,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { uploadCSVToS3 } from 'src/store/organisation'
 import LoadingButton from '@mui/lab/LoadingButton'
+import * as gtag from '../../lib/gtag'
+
 
 const UpdateOrganisation = () => {
   const [array, setArray] = useState([])
@@ -344,6 +346,12 @@ const UpdateOrganisation = () => {
 
   const handleOnChange = (e: any) => {
     setArray([])
+    gtag.event({
+      action: 'upload_file',
+      category: 'sync_org',
+      label: "upload_file",
+      value:'upload_file'
+    })
     if (e.target.files[0]) {
       fileReader.onload = function (event: any) {
         const text = event.target.result
@@ -565,7 +573,12 @@ const UpdateOrganisation = () => {
   return (
     <>
       <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
-        <Button variant='contained' onClick={() => setShow(true)} sx={{backgroundColor : theme.palette.warning.main}}>
+        <Button variant='contained' onClick={() => {setShow(true), gtag.event({
+      action: 'Instructions_for_importing',
+      category: 'sync_org',
+      label: "Instructions_for_importing",
+      value:'Instructions_for_importing'
+    })}} sx={{backgroundColor : theme.palette.warning.main}}>
           Instructions for importing{' '}
         </Button>
       </Grid>
@@ -630,7 +643,12 @@ const UpdateOrganisation = () => {
         </DialogContent>
         <DialogActions sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: 'center' }}>
           <a href='/templateCSV/Template.csv' download style={{ textDecoration: 'none', color: '061A16' }}>
-            <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => setShow(false)}>
+            <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => {setShow(false),gtag.event({
+      action: 'Download_sample_template_file',
+      category: 'sync_org',
+      label: "Download_sample_template_file",
+      value:'Download_sample_template_file'
+    })}}>
               Download Sample Template File
             </Button>
           </a>

@@ -31,6 +31,8 @@ import { FormControl } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import * as gtag from '../../lib/gtag'
+
 
 // Styled Components
 const ForgotPasswordIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -116,6 +118,12 @@ const ForgotPassword = () => {
   const onSubmit = (data: FormData) => {
     const { email } = data
     setIsProcessing(true)
+    gtag.event({
+      action: 'send_reset_link',
+      category: 'send_reset_link',
+      label: "send_reset_link",
+      value:'send_reset_link'
+    })
     auth.forgotPassword({ email }, err => {
       if (err.email) {
         setError('email', {
@@ -199,6 +207,14 @@ const ForgotPassword = () => {
                 <Link passHref href='/login'>
                   <Typography
                     component={MuiLink}
+                    onClick={() => {
+                      gtag.event({
+                        action: 'back_to_login',
+                        category: 'back_to_login',
+                        label: "back_to_login",
+                        value:'back_to_login'
+                      })
+                    }}
                     sx={{ display: 'flex', alignItems: 'center', color: 'primary.main', justifyContent: 'center' }}
                   >
                     <ChevronLeft sx={{ mr: 1.5, fontSize: '2rem' }} />

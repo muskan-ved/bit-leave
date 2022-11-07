@@ -8,6 +8,8 @@ import WeatherSunny from 'mdi-material-ui/WeatherSunny'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
+import * as gtag from '../../../../lib/gtag'
+
 
 interface Props {
   settings: Settings
@@ -23,6 +25,12 @@ const ModeToggler = (props: Props) => {
   }
 
   const handleModeToggle = () => {
+    gtag.event({
+      action: 'mode_toggler',
+      category: 'mode_toggler',
+      label: "mode_toggler",
+      value:'mode_toggler'
+    })
     if (settings.mode === 'light') {
       handleModeChange('dark')
     } else {

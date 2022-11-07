@@ -49,6 +49,7 @@ import { roles } from 'src/types/roleManage'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import LoadingButton from '@mui/lab/LoadingButton'
+import * as gtag from '../../lib/gtag'
 
 interface Data {
   fullname: string
@@ -133,6 +134,13 @@ const result = arrayUniqueByKey.filter((role: any) => {
   const handleRoleUpdate = (data: any) => {
     setOpen(true)
     setData(data)
+    gtag.event({
+      action: 'role_edit',
+      category: 'role_management',
+      label: "role_edit",
+      value:'role_modal_open'
+    })
+
   }
 
   const handleClose = () => {
@@ -144,7 +152,19 @@ const result = arrayUniqueByKey.filter((role: any) => {
       id: roleData.id,
       roleId: parseInt(selectedData)
     }
+    gtag.event({
+      action: 'role_close',
+      category: 'role_management',
+      label: "role_close",
+      value:'role_modal_close'
+    })
     setLoading(true)
+    gtag.event({
+      action: 'role_update',
+      category: 'role_management',
+      label: "role_update",
+      value:'role_modal_update'
+    })
     await dispatch(roleUpdate([payload]))
       .then(res => {
         if (res.payload !== undefined) {
@@ -277,7 +297,7 @@ const result = arrayUniqueByKey.filter((role: any) => {
               </Box>
             </DialogContent>
             <DialogActions>
-              {!loading ? <Button onClick={handleSaveRole}>Save</Button> : 
+              {!loading ? <Button onClick={handleSaveRole}>Update</Button> : 
               <LoadingButton loading={loading} disabled>
 								Update
 						</LoadingButton>}

@@ -36,6 +36,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { putAvatar } from 'src/store/profile';
 import LoadingButton from '@mui/lab/LoadingButton';
+import * as gtag from '../../lib/gtag'
 
 
 // ** Styled Avatar component
@@ -149,7 +150,12 @@ const Profile = () => {
 	}
 
 	const handleSubmitPersona = async () =>{
-	
+		gtag.event({
+			action: 'avatar_update',
+			category: 'profile',
+			label: "avatar_update",
+			value:'update'
+		  })
 		if(imageName !== ''){
 		setLoading(true)
 		await dispatch(putAvatar(imageName)).then((response:any) => {
@@ -171,6 +177,12 @@ const Profile = () => {
 	
 	const handleOnChange = async (event: any) => {
 		event.preventDefault();
+		gtag.event({
+			action: 'upload_organisation_logo',
+			category: 'profile',
+			label: 'upload_organisation_logo',
+			value:'update'
+		  })
 		if (event.target.files[0]) {
 			const reader = new FileReader();
 			const file = event.target.files[0];

@@ -46,6 +46,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Divider from '@mui/material/Divider';
 import LoadingButton from '@mui/lab/LoadingButton';
+import * as gtag from '../../lib/gtag'
+
 
 const Templates = () => {
   // ** State
@@ -111,6 +113,12 @@ const Templates = () => {
       }
       organisationstemplates.push(data);
     }
+    gtag.event({
+      action: 'templates_update',
+      category: 'templates',
+      label: "templates_update",
+      value:'templates_update'
+    })
     setLoading(true)
     axios.patch(API.updateTemplateData, organisationstemplates, {
       headers: { 'Authorization': `Bearer ${token}` }

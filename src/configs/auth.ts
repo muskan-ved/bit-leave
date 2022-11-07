@@ -9,6 +9,7 @@ export default {
   bucket_name:`${process.env.NEXT_PUBLIC_BUCKET_NAME}`,
   bucket_image_name:`${process.env.NEXT_PUBLIC_BUCKET_IMAGE_NAME}`,
   accessKeyId:`${process.env.NEXT_PUBLIC_ACCESS_KEY_ID}`,
-  secretAccessKey:`${process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY}`
+  secretAccessKey:`${process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY}`,
+  ga_tracking_id:`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`
 }
 

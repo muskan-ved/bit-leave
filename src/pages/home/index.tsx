@@ -23,6 +23,7 @@ import IconButton from '@mui/material/IconButton'
 import Close from 'mdi-material-ui/Close'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import ReactPlay from './reactPlayer'
+import * as gtag from '../../lib/gtag'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -77,14 +78,28 @@ const Home = () => {
   const onGoToDashboard = (url?: string) => {
     if (url) {
       router.push(url)
-    } else router.push('/dashboard')
+     
+    } else {router.push('/dashboard')
+      gtag.event({
+        action: 'go_to_dashboard',
+        category: 'home',
+        label: "go_to_dashboard",
+        value:'go_to_dashboard'
+      })
+    }
   }
   const theme = useTheme()
 
-  const youtubeURL = (url: any) => {
+  const youtubeURL = (url: any,GA_textname:string) => {
     if (url) {
       setShow(true)
       setURL(url)
+      gtag.event({
+        action: GA_textname,
+        category: 'home',
+        label: "youtube_videos",
+        value:'youtube_video'
+      })
     }
   }
 
@@ -151,15 +166,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_1)}
+                      onClick={() => youtubeURL(link_1,'Org Settings')}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_1)}
+                      onClick={() => youtubeURL(link_1,'Org Settings')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1,'Org Settings')}>
                     Org Settings 
                   </Typography>
                 </Grid>{' '}
@@ -187,15 +202,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_2)}
+                      onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_2)}
+                      onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}>
                     Add bit.leave to your payroll
                   </Typography>
                 </Grid>{' '}
@@ -223,15 +238,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_3)}
+                      onClick={() => youtubeURL(link_3,'The cash out process')}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_3)}
+                      onClick={() => youtubeURL(link_3,'The cash out process')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_3)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_3,'The cash out process')}>
                     The cash out process
                   </Typography>
                 </Grid>{' '}
@@ -259,15 +274,15 @@ const Home = () => {
                       width='100px'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_4)}
+                      onClick={() => youtubeURL(link_4,'Add a logo')}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_4)}
+                      onClick={() => youtubeURL(link_4,'Add a logo')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_4)}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_4,'Add a logo')}>
                     Add a logo
                   </Typography>
                 </Grid>{' '}

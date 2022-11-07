@@ -30,6 +30,8 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { excessLeaveThresholds, getExcessLeave } from 'src/store/thresholds'
 import LoadingButton from '@mui/lab/LoadingButton'
+import * as gtag from '../../lib/gtag'
+
 
 const Thresholds = () => {
   const [data, setData] = useState<thresholds | null>(null)
@@ -71,6 +73,12 @@ const Thresholds = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
+    gtag.event({
+      action: 'thresholds_update',
+      category: 'thresholds',
+      label: "thresholds_update",
+      value:'thresholds_update'
+    })
     if (leaveNotification || leaveWarning || maximumPayout) {
       const data = {
         thresholdLeaveNotification:

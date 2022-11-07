@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next'
 
 // ** Type Import
 import { Settings } from 'src/@core/context/settingsContext'
+import * as gtag from '../../../../lib/gtag'
+
 
 interface Props {
   settings: Settings
@@ -42,10 +44,22 @@ const LanguageDropdown = ({ settings, saveSettings }: Props) => {
   }, [i18n.language, direction])
 
   const handleLangDropdownOpen = (event: SyntheticEvent) => {
+    gtag.event({
+      action: 'language_dropdown',
+      category: 'language_dropdown',
+      label: "language_dropdown",
+      value:'open'
+    })
     setAnchorEl(event.currentTarget)
   }
 
   const handleLangDropdownClose = () => {
+    gtag.event({
+      action: 'language_dropdown',
+      category: 'language_dropdown',
+      label: "language_dropdown",
+      value:'close'
+    })
     setAnchorEl(null)
   }
 

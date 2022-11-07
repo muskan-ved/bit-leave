@@ -40,6 +40,8 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import * as gtag from '../../lib/gtag'
+
 
 const defaultValues = {
   email: '',
@@ -145,7 +147,12 @@ const Register = () => {
     const { email, username, password, companyname } = data
    
     setIsProcessing(true);
-
+    gtag.event({
+      action: 'sing_up',
+      category: 'register',
+      label: "sing_up",
+      value:'sing_up'
+    })
     register({ email, username, password, companyname }, err => {
       if (err.email) {
         setError('email', {
@@ -336,7 +343,12 @@ const Register = () => {
                                 variant='body2'
                                 component={MuiLink}
                                 sx={{ color: 'primary.main' }}
-                                onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}
+                                onClick={(e: MouseEvent<HTMLElement>) => {e.preventDefault(),gtag.event({
+                                  action: 'privacy_policy_&_terms',
+                                  category: 'register',
+                                  label: "privacy_policy_&_terms",
+                                  value:'privacy_policy_&_terms'
+                                })}}
                               >
                                 privacy policy & terms
                               </Typography>
@@ -358,7 +370,12 @@ const Register = () => {
                 <Typography sx={{ mr: 2, color: 'text.secondary' }}>Already have an account?</Typography>
                 <Typography>
                   <Link passHref href='/login'>
-                    <Typography component={MuiLink} sx={{ color: 'primary.main' }}>
+                    <Typography component={MuiLink} onClick={() =>{gtag.event({
+                                  action: 'log_in',
+                                  category: 'register',
+                                  label: "log_in",
+                                  value:'log_in'
+                                })}} sx={{ color: 'primary.main' }}>
                       Log In
                     </Typography>
                   </Link>

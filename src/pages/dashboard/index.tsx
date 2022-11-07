@@ -62,6 +62,7 @@ import { loadEmployee } from 'src/store/employee';
 
 // ** Modal Import
 import CashoutDialog from './cashout';
+import * as gtag from '../../lib/gtag'
 
 // Styled Box component
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -90,9 +91,21 @@ const Dashboard = () => {
   }
   const cashoutLeaveButtonClick = () => {
     setDialogOpen(true)
+    gtag.event({
+      action: 'cashout_leave',
+      category: 'dashboard',
+      label: "cashout_leave",
+      value:'modal'
+    })
   }
   const takeLeaveButtonClick = () => {
     window.open(data?.profile.hrisLogin)
+    gtag.event({
+      action: 'take_leave',
+      category: 'dashboard',
+      label: "take_leave",
+      value:'take_leave'
+    })
   }
 
   const avgExcessDays: number[] = [],

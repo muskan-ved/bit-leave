@@ -23,6 +23,8 @@ import { loadOrganisation } from 'src/store/organisation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton';
+import * as gtag from '../../lib/gtag'
+
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 	padding: theme.spacing(7)
@@ -175,7 +177,12 @@ const Onboarding = () => {
 	})
 
 	const handleNext = () => { setActiveStep((prevActiveStep) => prevActiveStep + 1); };
-	const handlePrevious = () => { setActiveStep((prevActiveStep) => prevActiveStep - 1);setButtonToggle(false) };
+	const handlePrevious = () => { setActiveStep((prevActiveStep) => prevActiveStep - 1);setButtonToggle(false); gtag.event({
+		action: 'back',
+		category: 'onboarding',
+		label: "back",
+		value:'back'
+	  }) };
 
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -280,6 +287,12 @@ const Onboarding = () => {
 	}
 	const onStart = () => {
 		handleNext()
+		gtag.event({
+			action: 'start',
+			category: 'onboarding',
+			label: "start",
+			value:'start'
+		  })
 	}
 
 	const onContactSubmit = (data: any) => {
@@ -291,6 +304,12 @@ const Onboarding = () => {
 		}
 
 		setOnBoardingState(stateData)
+		gtag.event({
+			action: 'next',
+			category: 'onboarding',
+			label: "next",
+			value:'next'
+		  })
 		handleNext()
 	}
 
@@ -301,6 +320,12 @@ const Onboarding = () => {
 			signature: data.signature
 		}
 		setOnBoardingState(stateData)
+		gtag.event({
+			action: 'next',
+			category: 'onboarding',
+			label: "next",
+			value:'next'
+		  })
 		handleNext()
 
 	}
@@ -319,6 +344,12 @@ const Onboarding = () => {
 			setIsLoading(false)
 		}
 		setOnBoardingState(stateData)
+		gtag.event({
+			action: 'next',
+			category: 'onboarding',
+			label: "next",
+			value:'next'
+		  })
 		handleNext()
 	}
 
@@ -342,6 +373,12 @@ const Onboarding = () => {
 			setIsLoading(false);
 			setButtonToggle(false)
 		}
+		gtag.event({
+			action: 'finish',
+			category: 'onboarding',
+			label: "finish",
+			value:'finish'
+		  })
 	}
 	
 	const formatIntoPng = () => {
@@ -362,6 +399,12 @@ const Onboarding = () => {
 	const onXeroRedirectURL = async () => {
 		setButtonToggle(true)
 		setIsLoading(true)
+		gtag.event({
+			action: 'connect_to_XERO',
+			category: 'onboarding',
+			label: "connect_to_XERO",
+			value:'connect_to_XERO'
+		  })
 		const xeroUrl = await dispatch(xeroReturlUrl())
 		if (xeroUrl.payload) {
 			setIsLoading(false)
@@ -373,6 +416,7 @@ const Onboarding = () => {
 
 	const onError = () => {return ""};
 	const getStepContent = (step: number) => {
+
 		switch (step) {
 			case 0:
 				return (startOnBoarding())

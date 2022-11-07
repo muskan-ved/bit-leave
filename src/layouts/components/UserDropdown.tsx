@@ -34,6 +34,9 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'src/store';
 import { employeeType } from 'src/types/dashboard';
 import { CircularProgress } from '@mui/material'
+import * as gtag from '../../lib/gtag'
+
+
 interface Props {
   settings: Settings
 }
@@ -81,17 +84,41 @@ const UserDropdown = (props: Props) => {
   const { direction } = settings
 
   const handleDropdownOpen = (event: SyntheticEvent) => {
+    gtag.event({
+      action: 'user_dropdown',
+      category: 'user_dropdown',
+      label: "user_dropdown",
+      value:'open'
+    })
     setAnchorEl(event.currentTarget)
   }
 
   const handleContactUs =() =>{
+    gtag.event({
+      action: 'contact_us',
+      category: 'contact_us',
+      label: "contact_us",
+      value:'contact_us'
+    })
     window.open("mailto:brett@bitleave.co")
     setAnchorEl(null)
   }
 
   const handleDropdownClose = (url?: string) => {
+    gtag.event({
+      action: 'user_dropdown',
+      category: 'user_dropdown',
+      label: "user_dropdown",
+      value:'close'
+    })
     if (url) {
       router.push(url)
+      gtag.event({
+        action: 'profile',
+        category: 'profile',
+        label: "profile",
+        value:'profile'
+      })
     }
     setAnchorEl(null)
   }
@@ -126,6 +153,12 @@ const UserDropdown = (props: Props) => {
   }
 
   const handleLogout = () => {
+    gtag.event({
+      action: 'logout',
+      category: 'logout',
+      label: "logout",
+      value:'logout'
+    })
     logout()
     handleDropdownClose()
   }

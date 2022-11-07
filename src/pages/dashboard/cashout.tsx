@@ -39,7 +39,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { useRouter } from 'next/router'
 import { styled } from '@mui/material/styles'
 import Grid, { GridProps } from '@mui/material/Grid'
-
+import * as gtag from '../../lib/gtag'
 
 interface cashoutResultModel {
   success: boolean
@@ -82,7 +82,7 @@ const CashoutDialog = (props: any) => {
     React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
   const [employeeContract, setemployeeContract] = React.useState('')
   const [loading, setloading] = React.useState(false)
-  const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null)
+  const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null);
   const [toggleValue, setToggleValue] = React.useState(false)
   const [calculateData, setCalculateData] = React.useState<any>('')
   const [errMessage, setErrorMessage] = React.useState<any>('')
@@ -144,6 +144,12 @@ const CashoutDialog = (props: any) => {
       cashoutreason: data.cashoutreason
     }
     setcashoutState(stateData)
+    gtag.event({
+      action: 'cash_out_leave',
+      category: 'dashboard',
+      label: "cash_out_leave",
+      value:'modal'
+    })
 
     const cashoutContractResponse = await dispatch(getCashOutContract(stateData))
     if (cashoutContractResponse.payload !== null) {
@@ -174,6 +180,12 @@ const CashoutDialog = (props: any) => {
       signature: data.signature
     }
     setloading(true)
+    gtag.event({
+      action: 'sign_contract',
+      category: 'dashboard',
+      label: "sign_contract",
+      value:'modal'
+    })
     const result = await dispatch(postEmployeeCashout(stateData))
     if (result.payload) {
       setcashoutState(result.payload)
@@ -198,6 +210,12 @@ const CashoutDialog = (props: any) => {
     sigCanvas.current.clear()
     signatureReset({
       signature: ''
+    })
+    gtag.event({
+      action: 'signature_clear',
+      category: 'dashboard',
+      label: "signature_clear",
+      value:'modal'
     })
   }
 
@@ -264,6 +282,12 @@ const CashoutDialog = (props: any) => {
 	router.push('/dashboard')
     props.handleClose()
   }
+  gtag.event({
+    action: 'close_and_refresh_dashboard',
+    category: 'dashboard',
+    label: "close_and_refresh_dashboard",
+    value:'moddal'
+  })
   const errorControl = () => {
     let i = 0
     return cashoutApiResponse.errors?.map(x => {

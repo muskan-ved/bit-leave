@@ -27,6 +27,8 @@ import { AppDispatch } from 'src/store'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton'
+import * as gtag from '../../lib/gtag'
+
 
 const Setup = () => {
 
@@ -56,6 +58,12 @@ const Setup = () => {
       isPaidLeave:true,
       showOnPayslip:true,
     }
+    gtag.event({
+			action: 'create_bit.leave',
+			category: 'bitleave_setup',
+			label: "create_bit.leave",
+			value:'create_bit.leave'
+		  })
     setIsLoading(true)
      await dispatch(setUPPost(request)).then((res)=>{
       if(res.payload !== undefined){

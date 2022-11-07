@@ -44,6 +44,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+import * as gtag from '../../lib/gtag'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -141,6 +142,13 @@ const LoginPage = () => {
   const onSubmit = (data: FormData) => {
     setIsProcessing(true);
      const { email, password } = data
+     gtag.event({
+      action: 'login',
+      category: 'login',
+      label: "login",
+      value:'login'
+    })
+
      auth.login({ email, password }, err => {
       if(err.email)
       {
@@ -262,7 +270,12 @@ const LoginPage = () => {
                   sx={{ '& .MuiFormControlLabel-label': { color: 'text.primary' } }}
                 />
                 <Link passHref href='/forgot-password'>
-                  <Typography component={MuiLink} variant='body2' sx={{ color: 'primary.main' }}>
+                  <Typography component={MuiLink} variant='body2' onClick={() => {gtag.event({
+                    action: 'Forgot_Password',
+                    category: 'Forgot_Password',
+                    label: "Forgot_Password",
+                    value:'Forgot_Password'
+                  })}} sx={{ color: 'primary.main' }}>
                     Forgot Password?
                   </Typography>
                 </Link>
@@ -274,7 +287,12 @@ const LoginPage = () => {
                 <Typography sx={{ mr: 2, color: 'text.secondary' }}>New on our platform?</Typography>
                 <Typography>
                   <Link passHref href='/register'>
-                    <Typography component={MuiLink} sx={{ color: 'primary.main' }}>
+                    <Typography component={MuiLink} sx={{ color: 'primary.main' }} onClick={() => {gtag.event({
+                      action: 'Create_an_account',
+                      category: 'Create_an_account',
+                      label: "Create_an_account",
+                      value:'Create_an_account'
+                    })}}>
                       Create an account
                     </Typography>
                   </Link>
