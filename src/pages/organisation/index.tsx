@@ -36,7 +36,6 @@ import { uploadCSVToS3 } from 'src/store/organisation'
 import LoadingButton from '@mui/lab/LoadingButton'
 import * as gtag from '../../lib/gtag'
 
-
 const UpdateOrganisation = () => {
   const [array, setArray] = useState([])
   const [show, setShow] = useState<boolean>(false)

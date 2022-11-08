@@ -102,7 +102,6 @@ const tenantIdSchema = yup.object().shape({
 	tenantId: yup.string().required()
 })
 
-
 const Onboarding = () => {
 
 	const steps = ['Start', 'Contacts', 'Approval', 'Connect to XERO','Choose Xero Tenant'];

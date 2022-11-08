@@ -78,7 +78,6 @@ interface QuickStatsType {
 }
 
 const Dashboard = () => {
-
   // ** Hooks
   const ability = useContext(AbilityContext)
   const [data, setData] = useState<employeeType | null>(null);

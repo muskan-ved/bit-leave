@@ -29,7 +29,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton'
 import * as gtag from '../../lib/gtag'
 
-
 const Setup = () => {
 
   const [normalEntitlement, setNormalEntitlement] = useState<setup | number>(38);

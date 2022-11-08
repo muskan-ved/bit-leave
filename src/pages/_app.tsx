@@ -118,12 +118,6 @@ const App = (props: ExtendedAppProps) => {
   const aclAbilities = Component.acl ?? defaultACLObj
 
   const maintainenceMode = false;
-  let userId;
-  const userData =window.localStorage.getItem("userData")
-  if (userData != null) {
-      const data = JSON.parse(userData)
-      userId = data.id;
-    }  
     
   const router = useRouter()
   useEffect(() => { 
@@ -172,7 +166,6 @@ const App = (props: ExtendedAppProps) => {
             gtag('js', new Date());
             gtag('config', '${auth.ga_tracking_id}', {
               page_path: window.location.pathname,
-              'user_id': '${userId}
             });
           `,
         }}
