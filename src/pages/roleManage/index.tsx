@@ -50,6 +50,8 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import LoadingButton from '@mui/lab/LoadingButton'
 import * as gtag from '../../lib/gtag'
+import { loadEmployee } from 'src/store/employee'
+import { employeeType } from 'src/types/dashboard'
 
 interface Data {
   fullname: string
@@ -113,8 +115,9 @@ const RoleManagement = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [open, setOpen] = useState(false)
   const [selectedData, setSelectedData] = useState('')
+  const [empData, setEmpData] = useState<employeeType | null>(null)
   const dispatch = useDispatch<AppDispatch>()
-
+  
   const arrayUniqueByKey = [
     {
         roleId: 1,
@@ -123,8 +126,11 @@ const RoleManagement = () => {
     {
         roleId: 2,
         roleName:"user"
-
-    }
+    },
+    {
+      roleId: 3,
+      roleName:"viewer"
+  }
 ]
 
 const result = arrayUniqueByKey.filter((role: any) => {
@@ -141,6 +147,16 @@ const result = arrayUniqueByKey.filter((role: any) => {
       value:'role_modal_open'
     })
 
+  }
+
+  const fetchEmpData = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
   }
 
   const handleClose = () => {
@@ -172,12 +188,15 @@ const result = arrayUniqueByKey.filter((role: any) => {
           setOpen(false)
           setLoading(false)
           fetchData()
+          fetchEmpData()
+
         }
       })
       .catch(() => {
         setLoading(false)
         toast.error('Server Error')
       })
+
   }
 
   const handleRoleChange = (event: SelectChangeEvent) => {
@@ -199,6 +218,7 @@ const result = arrayUniqueByKey.filter((role: any) => {
   useEffect(() => {
     setIsLoading(true)
     fetchData()
+    fetchEmpData();
   }, [])
 
   const fetchData = async () => {
@@ -237,10 +257,12 @@ const result = arrayUniqueByKey.filter((role: any) => {
                             {row.fullname}
                           </TableCell>
                           <TableCell align='left'>{row.roleName}</TableCell>
-                          <TableCell align='right'>
-                            <i onClick={() => handleRoleUpdate(row)}>
+                          <TableCell align='right' >
+                            {empData?.profile?.role === 3 ?<i>
                               <ModeEditOutlineOutlinedIcon />
-                            </i>
+                            </i>:<i onClick={() => handleRoleUpdate(row)}>
+                              <ModeEditOutlineOutlinedIcon />
+                            </i>}
                           </TableCell>
                         </TableRow>
                       )

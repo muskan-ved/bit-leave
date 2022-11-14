@@ -120,10 +120,18 @@ export const loadEmployee = createAsyncThunk('emp/load',
   async (_: void, { dispatch, getState }: Redux) => {
     try{
     const token = localStorage.getItem("accessToken");
+    const userData = window.localStorage.getItem("userData")
+    let data;
+    if (userData != null) {
+        data = JSON.parse(userData)
+      }  
     const result = await axios
       .get(API.loadEmployee, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
+      const roleIdentifier = result.data.data.profile.role === 2 ? 'user' : result.data.data.profile.role === 3 ? 'viewer' : data.role
+      const mergeData = ({...data,'role':roleIdentifier})
+      localStorage.setItem('userData',JSON.stringify(mergeData))
     return result.data
     } 
     catch(err){

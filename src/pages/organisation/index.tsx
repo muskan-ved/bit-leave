@@ -1,5 +1,5 @@
 // ** React Import
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -35,14 +35,33 @@ import { AppDispatch } from 'src/store'
 import { uploadCSVToS3 } from 'src/store/organisation'
 import LoadingButton from '@mui/lab/LoadingButton'
 import * as gtag from '../../lib/gtag'
+import { employeeType } from 'src/types/dashboard'
+import { loadEmployee } from 'src/store/employee'
 
 const UpdateOrganisation = () => {
   const [array, setArray] = useState([])
   const [show, setShow] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [empData, setEmpData] = useState<employeeType | null>(null)
   const S3_BUCKET = auth.bucket_name
   const REGION = auth.region
   const dispatch = useDispatch<AppDispatch>()
+
+
+  const fetchEmpData = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchEmpData()
+  }, []);
 
   AWS.config.update({
     accessKeyId: auth.accessKeyId,
@@ -596,7 +615,7 @@ const UpdateOrganisation = () => {
             <CardHeader title='Import Organisation Data' style={{ borderBottom: '2px solid #aaaaaa' }}></CardHeader>
             <Box sx={{ m: 3, p: 3 }} className='btndivider'>
               {!isLoading ?
-              <Button variant='contained' component='label' sx={{ marginRight: '10px' }}>
+              <Button variant='contained' component='label' disabled={empData?.profile?.role === 3} sx={{ marginRight: '10px' }}>
                 Upload File
                 <input
                   type={'file'}

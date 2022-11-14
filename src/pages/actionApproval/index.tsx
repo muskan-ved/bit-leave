@@ -44,6 +44,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { employeeType } from 'src/types/dashboard'
+import { loadEmployee } from 'src/store/employee'
 
 
 const defaultApprovalValue = {
@@ -63,6 +65,7 @@ const ActionApproval = () =>{
   const [empSignature, setEmpSignature] = useState<string | null>('');
   const [reason, setReason] = useState<string | null>('');
   const [approvalErrors,setApprovalErrors] = useState<boolean>(false);
+  const [empData, setEmpData] = useState<employeeType | null>(null)
 
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -90,11 +93,22 @@ const ActionApproval = () =>{
 		}
 	}
 
+  const fetchEmpData = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     if (!id) {
     }else{
       setIsLoading(true);
         fetchData();
+        fetchEmpData();
       }
     }, [id]);
     
@@ -308,12 +322,12 @@ const ActionApproval = () =>{
                 </Grid>          
                 <Grid item xs={12}>
                   {!loading ?
-                  <Button variant='contained' onClick={() => handleApproveRejected(true)} >Approved</Button>: 
-                   <LoadingButton loading={loading} size='large' type='submit' variant='contained'disabled>
+                  <Button variant='contained' onClick={() => handleApproveRejected(true)} disabled={empData?.profile?.role === 3}>Approved</Button>: 
+                   <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
                   Approved
                   </LoadingButton>}
                   {!loading1 ?
-                  <Button variant='contained' onClick={() => handleApproveRejected(false)} sx={{marginLeft:'10px'}}>Rejected</Button>:
+                  <Button variant='contained' onClick={() => handleApproveRejected(false)} disabled={empData?.profile?.role === 3} sx={{marginLeft:'10px'}}>Rejected</Button>:
                   <LoadingButton loading={loading1} size='large' type='submit' variant='contained' sx={{marginLeft:'10px'}} disabled>
                   Rejected
                   </LoadingButton>}

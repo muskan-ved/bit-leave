@@ -47,6 +47,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Divider from '@mui/material/Divider';
 import LoadingButton from '@mui/lab/LoadingButton';
 import * as gtag from '../../lib/gtag'
+import { loadEmployee } from 'src/store/employee';
+import { useDispatch } from 'react-redux'
+import { employeeType } from 'src/types/dashboard'
+import { AppDispatch } from 'src/store'
 
 
 const Templates = () => {
@@ -58,6 +62,8 @@ const Templates = () => {
   const [editorState, setEditorState] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(false)
+  const [emppData, setEmpData] = useState<employeeType | null>(null)
+  const dispatch = useDispatch<AppDispatch>()
 
   const token = localStorage.getItem("accessToken")
 
@@ -66,9 +72,21 @@ const Templates = () => {
   useEffect(() => {
     setIsLoading(true);
     fetchData();
+    fetchEmpData()
   }, []);
 
   const { logout } = useAuth()
+
+  const fetchEmpData = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
 
   const fetchData = async () => {
 
@@ -201,7 +219,7 @@ const Templates = () => {
               )}
             </TabPanel>
           )} <br />
-          {!loading ? <Button onClick={updateData} variant='contained' >Update</Button> : 
+          {!loading ? <Button onClick={updateData} variant='contained' disabled={emppData?.profile?.role === 3} >Update</Button> : 
            <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
                   Update
             </LoadingButton>}

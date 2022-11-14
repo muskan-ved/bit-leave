@@ -71,7 +71,7 @@ const Profile = () => {
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
 	const getTabList = ['Profile Detail', 'Direct Reports', 'Team','Avatar']
-	const personaList = ['/images/avatars/one.png', '/images/avatars/two.png', '/images/avatars/three.png','/images/avatars/four.png','/images/avatars/five.png','/images/avatars/six.png','/images/avatars/seven.png','/images/avatars/eight.png'];
+	const personaList = ['/images/avatars/one.png', '/images/avatars/two.png', '/images/avatars/three.png','/images/avatars/four.png','/images/avatars/five.png','/images/avatars/six.png','/images/avatars/seven.png','/images/avatars/eight.png','/images/avatars/nine.png','/images/avatars/ten.png','/images/avatars/eleven.png','/images/avatars/twelve.png','/images/avatars/thirteen.jpeg','/images/avatars/fourteen.jpeg','/images/avatars/fifteen.png','/images/avatars/sixteen.jpeg','/images/avatars/seventeen.png','/images/avatars/eighteen.png','/images/avatars/nineteen.jpeg','/images/avatars/twenty.jpeg','/images/avatars/twenty-one.jpeg','/images/avatars/twenty-two.jpeg','/images/avatars/twenty-three.jpeg','/images/avatars/twenty-four.jpeg','/images/avatars/twenty-five.jpeg'];
 	const [classadd, setClassAdd] = React.useState('');
 	const [imageName, setImageName] = React.useState('');
 		
@@ -176,24 +176,24 @@ const Profile = () => {
 	}
 	
 	const handleOnChange = async (event: any) => {
+
 		event.preventDefault();
 		gtag.event({
 			action: 'upload_organisation_logo',
 			category: 'profile',
 			label: 'upload_organisation_logo',
 			value:'update'
-		  })
+		})
 		if (event.target.files[0]) {
 			const reader = new FileReader();
 			const file = event.target.files[0];
-
-				const userData = localStorage.getItem("userData")
-				let OrgId;
-				if (userData != null) {
-				  const data = JSON.parse(userData)
-				  OrgId = data.orgId;
-				}  
-
+			
+			const userData = localStorage.getItem("userData")
+			let OrgId;
+			if (userData != null) {
+				const data = JSON.parse(userData)
+				OrgId = data.orgId;
+			}  
 				const fileName = (event.target.files[0].name.replace(event.target.files[0].name), `logo`)
 			
 				const params = {
@@ -208,7 +208,7 @@ const Profile = () => {
 							setImagePreviewUrl(image);
 						};
 						reader.readAsDataURL(file);
-    					window.localStorage.setItem('orgLogo', '1')
+						localStorage.setItem('orgLogo','1');
 						toast.success(`Organisation Logo Uploaded. Please navigate to dashboard, it will be updated shortly`)
 					}else{
 						toast.error("Failed to Upload Organisation Logo")
@@ -236,6 +236,7 @@ const Profile = () => {
 		<Grid container spacing={5}>
 			<ToastContainer/>
 			<Grid item xs={12} >
+	
 				<Card>
 					<CardHeader title='Your Profile Details' subheader={<Divider></Divider>} />
 					<Tabs value={value} onChange={handleChangeTab} aria-label="basic tabs example">
@@ -432,7 +433,7 @@ const Profile = () => {
 					</Grid>
 					) })}
 					<Grid item xs={12}>
-					{!loading ? <Button type='submit' variant='contained' size='large' onClick={handleSubmitPersona}  disabled={imageName === '' ? true : false}>
+					{!loading ? <Button type='submit' variant='contained' size='large' onClick={handleSubmitPersona}  disabled={employeeData?.profile?.role === 3 ? true : imageName === ''? true : false}>
 						Update
 						</Button> :
 						<LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
@@ -459,7 +460,7 @@ const Profile = () => {
 							The size of the Organisation logo should be 500*500.
 						</Typography>
 						<Box sx={{ ml: 3, pl: 3, pb: 4 }} className="btndivider">
-							<Button variant="contained" component="label" >
+							<Button variant="contained" component="label" disabled={employeeData?.profile?.role === 3}>
 								Upload Organisation Logo
 								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} onClick={(event:any)=> {event.target.value = null}} accept='image/*' hidden />
 							</Button>

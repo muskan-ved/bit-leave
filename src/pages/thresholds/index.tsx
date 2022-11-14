@@ -31,10 +31,12 @@ import { AppDispatch } from 'src/store'
 import { excessLeaveThresholds, getExcessLeave } from 'src/store/thresholds'
 import LoadingButton from '@mui/lab/LoadingButton'
 import * as gtag from '../../lib/gtag'
-
+import { loadEmployee } from 'src/store/employee'
+import { employeeType } from 'src/types/dashboard'
 
 const Thresholds = () => {
   const [data, setData] = useState<thresholds | null>(null)
+  const [empData, setEmpData] = useState<employeeType | null>(null)
   const [leaveNotification, setLeaveNotification] = useState<thresholds | number>()
   const [leaveWarning, setLeaveWarning] = useState<thresholds | number>()
   const [maximumPayout, setMaximumPayout] = useState<thresholds | number>()
@@ -53,10 +55,21 @@ const Thresholds = () => {
     })
   }
 
+  const fetchDataFromRedux = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     if (!data) {
       setIsLoading(true)
       fetchData()
+      fetchDataFromRedux();
     }
   }, [])
 
@@ -222,7 +235,7 @@ const Thresholds = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                {!loading ? <Button type='submit' variant='contained' size='large'>
+                {!loading ? <Button type='submit' variant='contained' size='large' disabled={empData?.profile?.role === 3}>
                   Update
                 </Button> :
                 <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>

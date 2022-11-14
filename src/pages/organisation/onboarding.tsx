@@ -3,7 +3,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import SignaturePad from 'react-signature-canvas';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import * as yup from 'yup'
@@ -24,6 +24,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton';
 import * as gtag from '../../lib/gtag'
+import { loadEmployee } from 'src/store/employee';
+import { employeeType } from 'src/types/dashboard';
 
 
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
@@ -109,6 +111,7 @@ const Onboarding = () => {
 	const [buttonToggle, setButtonToggle] = React.useState(false);
 	const [tenantData, setTenantData] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState<boolean>(false)
+	const [empData, setEmpData] = React.useState<employeeType | null>(null)
 	const router = useRouter()
 	const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
 		employeeAwardType: 'award',
@@ -122,6 +125,21 @@ const Onboarding = () => {
 		signature: '',
 		tenantId:''
 	});
+
+  const fetchEmpData = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+      setIsLoading(true)
+      fetchEmpData();
+  }, [])
 
 	const sigCanvas = React.useRef() as React.MutableRefObject<any>;
 
@@ -254,7 +272,7 @@ const Onboarding = () => {
 				</Typography>
 			</Grid>
 			<Grid item xs={12}>
-				<Button type='submit' variant="contained" onClick={onStart}>
+				<Button type='submit' variant="contained" onClick={onStart} disabled={empData?.profile.role === 3}>
 					{activeStep === 0 ? 'Start' : 'Next'}
 				</Button>
 			</Grid>
@@ -858,7 +876,7 @@ const Onboarding = () => {
 				<Grid container spacing={5}>
 					<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
 						<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Connect to Xero</Typography>
-						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,width:'50px',height:'50px'}} />
+						<CustomAvatar src={"/images/cards/xero_icon.png"}  variant='rounded'  sx={{ float: "right"  ,height:'40px'}} />
 					</Grid>
 					<Grid item xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
 						<Typography variant='body2' gutterBottom >Please click below, to link your Xero tenant with bit.leave. This will open a seperate window. Please note, you will be asked to allow bit.leave access to certain scopes (payroll etc.). This will enable bit.leave to automatically calculate excess leave amounts based on thresholds. Furthermore, please note, you will need to sign into Xero to complete the flow.</Typography>

@@ -444,18 +444,18 @@ const Dashboard = () => {
                 <Grid container spacing={1}>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={!data.leaveDetails.canCashoutLeave} >Cashout Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={!data.leaveDetails.canCashoutLeave || data.profile.role === 3} >Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={takeLeaveButtonClick}>Take Leave</Button>
+                      <Button variant='contained' onClick={takeLeaveButtonClick} disabled={ data.profile.role === 3}>Take Leave</Button>
                     </Box>
                   </Grid>
                   {/* data.leaveDetails.totalDays */}
                    <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Bit.Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={data.profile.role === 3}>Cashout Bit.Leave</Button>
                     </Box>
                   </Grid>
                 </Grid>

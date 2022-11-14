@@ -100,7 +100,7 @@ const NotificationDropdown = (props: Props) => {
       title:"approve request",
       description:'test approve request',
       nextAction:{
-        type:'actionApffproval',
+        type:'actionApproval',
         identifier:'31'
       }
     }

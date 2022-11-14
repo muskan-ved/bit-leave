@@ -1,5 +1,5 @@
 // ** React Imports
-import { ElementType, ReactNode } from 'react'
+import { ElementType, ReactNode, useEffect, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -96,6 +96,25 @@ const VerticalNavLink = ({
     }  
     
   const imageUrl = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`;
+
+  function UrlExists(url: any) {
+    var http = new XMLHttpRequest()
+    http.open('HEAD', url)
+    http.onreadystatechange = function () {
+      if (this.readyState == this.DONE) {
+        if(this.status === 200){
+			localStorage.setItem('orgLogo','1')
+		}else{
+			localStorage.setItem('orgLogo','0')
+		}
+      }
+    }
+    http.send()
+  }
+
+  useEffect(() => {
+	UrlExists(imageUrl)
+  }, [])
 
   // ** Vars
   const { skin, navCollapsed } = settings

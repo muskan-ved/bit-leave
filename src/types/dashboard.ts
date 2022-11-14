@@ -34,6 +34,7 @@ type profile = {
   department: string,
   jobtitle:string,
   country:string,
+  role:number,
 }
 
 type directReport = {

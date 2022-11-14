@@ -1,5 +1,5 @@
 // ** React Imports
-import {  useState } from 'react'
+import {  useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -28,17 +28,33 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton'
 import * as gtag from '../../lib/gtag'
+import { employeeType } from 'src/types/dashboard'
+import { loadEmployee } from 'src/store/employee'
 
 const Setup = () => {
 
   const [normalEntitlement, setNormalEntitlement] = useState<setup | number>(38);
   const [leaveName, setLeaveName] = useState<setup | string>('bit.leave');
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [empData, setEmpData] = useState<employeeType | null>(null)
 	const dispatch = useDispatch<AppDispatch>()
 
+  const fetchDataFromRedux = async () => {
+    setIsLoading(true);
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setEmpData(empData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
+  useEffect(() => {
+      setIsLoading(true)
+      fetchDataFromRedux();
+  }, [])
 
   const handleOnChange = (element:any) =>{
-
     if(element.target.name === "NormalEntitlement"){
       setNormalEntitlement(element.target.value)
     }
@@ -147,7 +163,7 @@ const Setup = () => {
               </Grid>
               <Grid item xs={12}>
                 {!isLoading ?
-                <Button type='submit' variant='contained' size='large'>
+                <Button type='submit' variant='contained' size='large' disabled={empData?.profile?.role === 3}>
                 Create bit.leave
                 </Button>:
                 <LoadingButton loading={isLoading} type='submit' variant='contained' size='large' disabled>

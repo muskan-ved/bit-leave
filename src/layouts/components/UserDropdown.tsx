@@ -183,7 +183,7 @@ const UserDropdown = (props: Props) => {
         <Avatar
           alt='John Doe'
           onClick={handleDropdownOpen}
-          src={localStorageAvatar ? '/images/avatars/'+localStorageAvatar : data?.profile?.avatar ? '/images/avatars/'+data?.profile?.avatar : '/images/avatars/one.png'}
+          src={localStorageAvatar ? '/images/avatars/'+localStorageAvatar : data?.profile?.avatar ? '/images/avatars/'+data?.profile?.avatar : '/images/avatars/questionMark.png'}
           sx={{ width: 40, height: 40 }}
         />
       </Badge>
@@ -213,7 +213,7 @@ const UserDropdown = (props: Props) => {
             >
               <Avatar
                 alt='John Doe'
-                src={localStorageAvatar ? '/images/avatars/'+localStorageAvatar : data?.profile?.avatar ? '/images/avatars/'+data?.profile?.avatar : '/images/avatars/one.png'}
+                src={localStorageAvatar ? '/images/avatars/'+localStorageAvatar : data?.profile?.avatar ? '/images/avatars/'+data?.profile?.avatar : '/images/avatars/questionMark.png'}
                 sx={{ width: '2.5rem', height: '2.5rem' }}
               />
             </Badge>

@@ -71,10 +71,6 @@ const Home = () => {
     OrgId = data.orgId
   }
 
-  useEffect(() => {
-    window.localStorage.setItem('orgLogo', '0')
-  }, [])
-
   const onGoToDashboard = (url?: string) => {
     if (url) {
       router.push(url)
