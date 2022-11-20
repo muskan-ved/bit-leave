@@ -455,7 +455,7 @@ const Dashboard = () => {
                   {/* data.leaveDetails.totalDays */}
                    <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={data.profile.role === 3}>Cashout Bit.Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Bit.Leave</Button>
                     </Box>
                   </Grid>
                 </Grid>

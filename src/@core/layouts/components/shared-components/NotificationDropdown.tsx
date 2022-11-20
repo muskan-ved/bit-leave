@@ -95,16 +95,7 @@ const NotificationDropdown = (props: Props) => {
   // ** States
   const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [data, setData] = useState<notificationTypes | any>([
-    {
-      title:"approve request",
-      description:'test approve request',
-      nextAction:{
-        type:'actionApproval',
-        identifier:'31'
-      }
-    }
-  ]
+  const [data, setData] = useState<notificationTypes | any>(
   )
 
   // ** Hook
@@ -137,7 +128,7 @@ const NotificationDropdown = (props: Props) => {
 
   const handleNotification = (data: any) => {
     if (data?.nextAction?.type === 'actionApproval') {
-      window.location.replace(`/actionApproval/${data?.nextAction?.identifier}`)
+      window.location.replace(`/actionApproval?id=${data?.nextAction?.identifier}`)
     }
   }
 
@@ -151,20 +142,20 @@ const NotificationDropdown = (props: Props) => {
     }
   }
 
-  // useEffect(() => {
-  //   setIsLoading(true)
-  //   fetchData()
-  // }, [])
+  useEffect(() => {
+    setIsLoading(true)
+    fetchData()
+  }, [])
 
-  // const fetchData = async () => {
-  //   setIsLoading(true)
-  //   await dispatch(load_Notifcation()).then(res => {
-  //     setData(res.payload)
-  //     setIsLoading(false)
-  //   }).catch(()=>{
-	// 	setIsLoading(false)
-	// })
-  // }
+  const fetchData = async () => {
+    setIsLoading(true)
+    await dispatch(load_Notifcation()).then(res => {
+      setData(res.payload)
+      setIsLoading(false)
+    }).catch(()=>{
+		setIsLoading(false)
+	})
+  }
 
   return (
     <Fragment>
@@ -184,7 +175,7 @@ const NotificationDropdown = (props: Props) => {
             <CustomChip
               skin='light'
               size='small'
-              label={`${data?.length} new`}
+              label={`${data ? data.length : 0} new`}
               color='primary'
               sx={{ height: 20, fontSize: '0.75rem', fontWeight: 500, borderRadius: '10px' }}
             />

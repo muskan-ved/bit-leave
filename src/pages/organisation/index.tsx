@@ -1,5 +1,5 @@
 // ** React Import
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -34,34 +34,14 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { uploadCSVToS3 } from 'src/store/organisation'
 import LoadingButton from '@mui/lab/LoadingButton'
-import * as gtag from '../../lib/gtag'
-import { employeeType } from 'src/types/dashboard'
-import { loadEmployee } from 'src/store/employee'
 
 const UpdateOrganisation = () => {
   const [array, setArray] = useState([])
   const [show, setShow] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [empData, setEmpData] = useState<employeeType | null>(null)
   const S3_BUCKET = auth.bucket_name
   const REGION = auth.region
   const dispatch = useDispatch<AppDispatch>()
-
-
-  const fetchEmpData = async () => {
-    setIsLoading(true);
-    const empData = await dispatch(loadEmployee())
-    if (empData.payload != null) {
-      setEmpData(empData.payload.data)
-      setIsLoading(false)
-    }
-    setIsLoading(false)
-  }
-
-  useEffect(() => {
-    setIsLoading(true);
-    fetchEmpData()
-  }, []);
 
   AWS.config.update({
     accessKeyId: auth.accessKeyId,
@@ -148,7 +128,7 @@ const UpdateOrganisation = () => {
         validate: isFullNameValid
       },
       {
-        name: 'managerid',
+        name: 'managerId',
         inputName: 'managerId',
         required: false
       },
@@ -156,8 +136,9 @@ const UpdateOrganisation = () => {
         name: 'manageremail',
         inputName: 'manageremail',
         required: false,
-        unique: true,
-        validate: isEmailValid
+        unique: false,
+        
+        //validate: isEmailValid
       },
       {
         name: 'emailaddress',
@@ -203,7 +184,8 @@ const UpdateOrganisation = () => {
         name: 'department',
         inputName: 'department',
         required: false,
-        validate: isNameValid
+
+        //validate: isNameValid
       },
 
       // {
@@ -263,7 +245,7 @@ const UpdateOrganisation = () => {
       disableColumnMenu: true
     },
     {
-      field: 'managerid',
+      field: 'managerId',
       headerName: 'Manager Id',
       type: 'number',
       minWidth: 110,
@@ -364,12 +346,6 @@ const UpdateOrganisation = () => {
 
   const handleOnChange = (e: any) => {
     setArray([])
-    gtag.event({
-      action: 'upload_file',
-      category: 'sync_org',
-      label: "upload_file",
-      value:'upload_file'
-    })
     if (e.target.files[0]) {
       fileReader.onload = function (event: any) {
         const text = event.target.result
@@ -591,12 +567,7 @@ const UpdateOrganisation = () => {
   return (
     <>
       <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
-        <Button variant='contained' onClick={() => {setShow(true), gtag.event({
-      action: 'Instructions_for_importing',
-      category: 'sync_org',
-      label: "Instructions_for_importing",
-      value:'Instructions_for_importing'
-    })}} sx={{backgroundColor : theme.palette.warning.main}}>
+        <Button variant='contained' onClick={() => setShow(true)} sx={{backgroundColor : theme.palette.warning.main}}>
           Instructions for importing{' '}
         </Button>
       </Grid>
@@ -615,7 +586,7 @@ const UpdateOrganisation = () => {
             <CardHeader title='Import Organisation Data' style={{ borderBottom: '2px solid #aaaaaa' }}></CardHeader>
             <Box sx={{ m: 3, p: 3 }} className='btndivider'>
               {!isLoading ?
-              <Button variant='contained' component='label' disabled={empData?.profile?.role === 3} sx={{ marginRight: '10px' }}>
+              <Button variant='contained' component='label' sx={{ marginRight: '10px' }}>
                 Upload File
                 <input
                   type={'file'}
@@ -661,12 +632,7 @@ const UpdateOrganisation = () => {
         </DialogContent>
         <DialogActions sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: 'center' }}>
           <a href='/templateCSV/Template.csv' download style={{ textDecoration: 'none', color: '061A16' }}>
-            <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => {setShow(false),gtag.event({
-      action: 'Download_sample_template_file',
-      category: 'sync_org',
-      label: "Download_sample_template_file",
-      value:'Download_sample_template_file'
-    })}}>
+            <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => setShow(false)}>
               Download Sample Template File
             </Button>
           </a>
@@ -681,3 +647,4 @@ UpdateOrganisation.acl = {
   subject: 'UpdateOrganisation'
 }
 export default UpdateOrganisation
+
