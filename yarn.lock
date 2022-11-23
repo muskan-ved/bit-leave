@@ -3745,6 +3745,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-currency-format@^1.0.0":
+  "integrity" "sha512-IUAd/fLv3uW+Z3gyRJ9gumx7jpBk9RLXHHmg1VFjQ806AsVIKljprPMZi3SPpbwjPBiHQEGrrV1H5XbiYcp2ug=="
+  "resolved" "https://registry.npmjs.org/@types/react-currency-format/-/react-currency-format-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-datepicker@4.3.2":
   "integrity" "sha512-vj8sN+tdQPF13bH4CU8DdTuT0Z4h6+3IG14lGCSDlIw1QvTe3svr2Yqp7KbDlcRpbdcnhya3e91SnCVk+kH/RQ=="
   "resolved" "https://registry.npmjs.org/@types/react-datepicker/-/react-datepicker-4.3.2.tgz"
@@ -7518,7 +7525,7 @@
   dependencies:
     "read" "1"
 
-"prop-types@^15.5.7", "prop-types@^15.6.1", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
+"prop-types@^15.5.7", "prop-types@^15.6.0", "prop-types@^15.6.1", "prop-types@^15.6.2", "prop-types@^15.7.2", "prop-types@^15.8.1":
   "integrity" "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   "version" "15.8.1"
@@ -7647,6 +7654,13 @@
   "version" "0.8.3"
   dependencies:
     "payment" "^2.3.0"
+
+"react-currency-format@^1.1.0":
+  "integrity" "sha512-WWrEOIp/3GbDSk1wlhFXaBc7IHGT3IwL306DHbGP3GVr4YFa0iS5hHPbKjHa0haruGL4Ly+WG4/5jBHpUtgqZg=="
+  "resolved" "https://registry.npmjs.org/react-currency-format/-/react-currency-format-1.1.0.tgz"
+  "version" "1.1.0"
+  dependencies:
+    "prop-types" "^15.6.0"
 
 "react-datepicker@4.5.0":
   "integrity" "sha512-mFP/SbtFSXx21Wx3Nfv+RREwd/x0q14x7QL79ZCi/PVkHSFLwLWhXyOtj3OIzi1AcVYb/fMMcvi8e5b12n8/sg=="

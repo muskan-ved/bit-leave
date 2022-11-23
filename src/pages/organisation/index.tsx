@@ -128,8 +128,8 @@ const UpdateOrganisation = () => {
         validate: isFullNameValid
       },
       {
-        name: 'managerId',
-        inputName: 'managerId',
+        name: 'managerid',
+        inputName: 'managerid',
         required: false
       },
       {
@@ -245,7 +245,7 @@ const UpdateOrganisation = () => {
       disableColumnMenu: true
     },
     {
-      field: 'managerId',
+      field: 'managerid',
       headerName: 'Manager Id',
       type: 'number',
       minWidth: 110,

@@ -139,13 +139,13 @@ const Home = () => {
               <Grid container sx={{ textAlign: 'center' ,justifyContent:'space-between', columnGap: '20px'}} >
                 <Grid
                   item
-                  xs={3}
+                  xs={5}
+                  md={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
                     marginTop: '10px',
-                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -158,11 +158,12 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/paypal.png'
-                      width='100px'
+                      src='/images/misc/orgSetting.png'
+                      width='100%'
                       height='100px'
                       alt='youtube-image'
                       onClick={() => youtubeURL(link_1,'Org Settings')}
+                      style={{padding:'0px 20px'}}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
@@ -176,13 +177,13 @@ const Home = () => {
                 </Grid>{' '}
                 <Grid
                   item
-                  xs={3}
+                  xs={5}
+                  md={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
                     marginTop: '10px',
-                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -194,11 +195,13 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/paypal.png'
-                      width='100px'
+                      src='/images/misc/addBitleave.png'
+                      width='100%'
+                     
                       height='100px'
                       alt='youtube-image'
                       onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}
+                      style={{padding:'0px 20px'}}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
@@ -212,13 +215,13 @@ const Home = () => {
                 </Grid>{' '}
                 <Grid
                   item
-                  xs={3}
+                  xs={5}
+                  md={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
                     marginTop: '10px',
-                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -227,14 +230,17 @@ const Home = () => {
                       margin: '0px 10px',
                       paddingTop: '5px',
                       position: 'relative'
+
                     }}
                   >
                     <img
-                      src='/images/misc/paypal.png'
-                      width='100px'
+                      src='/images/misc/cashoutProcess.png'
+                      
+                      width={'100%'}
                       height='100px'
                       alt='youtube-image'
                       onClick={() => youtubeURL(link_3,'The cash out process')}
+                      style={{padding:'0px 20px'}}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
@@ -248,13 +254,13 @@ const Home = () => {
                 </Grid>{' '}
                 <Grid
                   item
-                  xs={3}
+                  xs={5}
+                  md={3}
                   sx={{
                     border: `1px solid ${theme.palette.grey[500]}`,
                     borderRadius: '5px',
                     padding: '10px 0px',
                     marginTop: '10px',
-                    maxWidth:'50%'
                   }}
                 >
                   <Box
@@ -266,11 +272,13 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/paypal.png'
-                      width='100px'
+                      src='/images/misc/addLogo.png'
+                      width='100%'
+                   
                       height='100px'
                       alt='youtube-image'
                       onClick={() => youtubeURL(link_4,'Add a logo')}
+                      style={{padding:'0px 20px'}}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'

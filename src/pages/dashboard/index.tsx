@@ -284,15 +284,19 @@ const Dashboard = () => {
       setCount(1);
   }, []);
 
+  function currencyFormat(num:any) {
+    return '$' + num?.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+ }
+
 
   const quickStats: QuickStatsType[] = [
     {
-      stats: `$${data?.vitals?.averageSalary?.toFixed(0)}k`, 
+      stats: `${currencyFormat(data?.vitals?.averageSalary)}`, 
       title: 'Average Salary in AUD',
       icon: "/images/cards/user_icon.png"
     },
     {
-      stats: `$${data?.vitals?.totalLeaveLiabilities?.toFixed(2)}`,
+      stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities)}`,
       title: 'Total Leave Liabilities',
       icon: "/images/cards/total_leave_liabilities.png"
     },
@@ -302,7 +306,7 @@ const Dashboard = () => {
       icon: "/images/cards/org_headcount.png"
     },
     {
-      stats: `${data?.vitals?.leaveMobilised}`,
+      stats: data?.vitals?.leaveMobilised,
       title: 'Leave Mobilised (Days)',
       icon: "/images/cards/leave_mobilised.png"
     }
@@ -430,7 +434,7 @@ const Dashboard = () => {
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.cashoutValue?.toFixed(2)}k
+                          {currencyFormat(data.leaveDetails.cashoutValue)}
                         </Typography>
                         <Typography variant='caption'>Cashout Value</Typography>
                       </Box>
