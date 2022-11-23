@@ -158,7 +158,7 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/orgSetting.png'
+                      src='/images/youtube_Videos/orgSetting.png'
                       width='100%'
                       height='100px'
                       alt='youtube-image'
@@ -195,7 +195,7 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/addBitleave.png'
+                      src='/images/youtube_Videos/addBitleave.png'
                       width='100%'
                      
                       height='100px'
@@ -234,7 +234,7 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/cashoutProcess.png'
+                      src='/images/youtube_Videos/cashoutProcess.png'
                       
                       width={'100%'}
                       height='100px'
@@ -272,7 +272,7 @@ const Home = () => {
                     }}
                   >
                     <img
-                      src='/images/misc/addLogo.png'
+                      src='/images/youtube_Videos/addLogo.png'
                       width='100%'
                    
                       height='100px'
