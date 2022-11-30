@@ -351,6 +351,7 @@ const VerticalNavGroup = (props: Props) => {
             <VerticalNavItems
               {...props}
               parent={item}
+              orgLogoURL={''}
               navVisible={navVisible}
               verticalNavItems={item.children}
               isSubToSub={parent && item.children ? item : undefined}

@@ -1,5 +1,5 @@
 // ** React Import
-import { ReactNode, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 
 // ** MUI Import
 import List from '@mui/material/List'
@@ -69,6 +69,7 @@ const Navigation = (props: Props) => {
   // ** States
   const [groupActive, setGroupActive] = useState<string[]>([])
   const [currentActiveGroup, setCurrentActiveGroup] = useState<string[]>([])
+  const [imageURL, setImageURL] = useState('')
 
   // ** Ref
   const shadowRef = useRef(null)
@@ -79,6 +80,35 @@ const Navigation = (props: Props) => {
   // ** Var
   const { skin } = settings
   const { afterVerticalNavMenuContentPosition, beforeVerticalNavMenuContentPosition } = themeConfig
+
+  function UrlExists() {
+    var http = new XMLHttpRequest()
+    const userData = window.localStorage.getItem('userData')
+    let OrgId
+    if (userData != null) {
+      const data = JSON.parse(userData)
+      OrgId = data.orgId
+    }
+    const url = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`
+    http.open('HEAD', url, true)
+	http.setRequestHeader( 'Access-Control-Allow-Origin', '*');
+	http.setRequestHeader( 'Content-Type', 'application/json' );
+    http.onreadystatechange = function () {
+      if (this.readyState == this.DONE) {
+        if (this.status === 200) {
+          setImageURL(url)
+        } else {
+          localStorage.setItem('orgnLogo', '/images/cards/company_logo.png')
+          setImageURL('/images/cards/company_logo.png')
+        }
+      }
+    }
+    http.send()
+  }
+
+  useEffect(() => {
+    UrlExists()
+  }, [])
 
   // ** Fixes Navigation InfiniteScroll
   const handleInfiniteScroll = (ref: HTMLElement) => {
@@ -171,12 +201,13 @@ const Navigation = (props: Props) => {
           {userVerticalNavMenuContent ? (
             userVerticalNavMenuContent(props)
           ) : (
-            <List className='nav-items' sx={{ pt: 0,height:'110vh', '& > :first-child': { mt: '0' } }}>
+            <List className='nav-items' sx={{ pt: 0, height: '110vh', '& > :first-child': { mt: '0' } }}>
               <VerticalNavItems
                 groupActive={groupActive}
                 setGroupActive={setGroupActive}
                 currentActiveGroup={currentActiveGroup}
                 setCurrentActiveGroup={setCurrentActiveGroup}
+                orgLogoURL={imageURL}
                 {...props}
               />
             </List>

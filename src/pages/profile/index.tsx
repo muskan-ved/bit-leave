@@ -206,9 +206,9 @@ const Profile = () => {
 						reader.onloadend = (e: any) => {
 							const image = e.target.result
 							setImagePreviewUrl(image);
+							localStorage.setItem('orgnLogo',image);
 						};
 						reader.readAsDataURL(file);
-						localStorage.setItem('orgLogo','1');
 						toast.success(`Organisation Logo Uploaded. Please navigate to dashboard, it will be updated shortly`)
 					}else{
 						toast.error("Failed to Upload Organisation Logo")

@@ -396,6 +396,7 @@ const Dashboard = () => {
                 </Grid>):null}
           <br />
         <Grid container spacing={6}>
+        {data.profile.role !== 3 ?
           <Grid item md={7} xs={12} >
             <Card>
               <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
@@ -434,7 +435,8 @@ const Dashboard = () => {
                       </CustomAvatar>
                       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {currencyFormat(data.leaveDetails.cashoutValue)}
+                     
+                          {data?.leaveDetails?.cashoutValue? currencyFormat(data?.leaveDetails?.cashoutValue):''}
                         </Typography>
                         <Typography variant='caption'>Cashout Value</Typography>
                       </Box>
@@ -448,12 +450,12 @@ const Dashboard = () => {
                 <Grid container spacing={1}>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={!data.leaveDetails.canCashoutLeave || data.profile.role === 3} >Cashout Leave</Button>
+                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={!data.leaveDetails.canCashoutLeave } >Cashout Leave</Button>
                     </Box>
                   </Grid>
                   <Grid item xs={4} sm={4}>
                     <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={takeLeaveButtonClick} disabled={ data.profile.role === 3}>Take Leave</Button>
+                      <Button variant='contained' onClick={takeLeaveButtonClick}>Take Leave</Button>
                     </Box>
                   </Grid>
                   {/* data.leaveDetails.totalDays */}
@@ -466,7 +468,8 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item md={5} xs={12} sx={{display:"inline-grid"}} >
+          : null }
+          <Grid item md={data.profile.role !== 3 ? 5 : 12} xs={12} sx={{display:"inline-grid"}} >
             <Card>
               <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>

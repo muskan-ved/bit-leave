@@ -32,7 +32,6 @@ const OnboardingProvider = ({ children }: Props) => {
     if (path == '/login/' || path == '/login' || path == '/logout/' || path == '/register/' || path == `/confirm-password/${window.location.search}` || path == `/confirm-user/${window.location.search}` || path == '/forgot-password/') {
       return;
     }
-    console.log(path,"console path")
     setOnboarding(onboarded)
     if (path !== '/organisation/onboarding') {
       let orgOnBoarding: boolean

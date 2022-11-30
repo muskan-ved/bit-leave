@@ -14,7 +14,7 @@ export type ACLObj = {
 /**
  * Please define your own Ability rules according to your app requirements.
  * We have just shown Admin and Client rules for demo purpose where
- * admin can manage everything and client can just visit ACL page
+ * admin can manage everything and client can just visit ACL page 
  */
 const defineRulesFor = (role: string) => {
   const { can, rules } = new AbilityBuilder(AppAbility)
@@ -33,6 +33,9 @@ const defineRulesFor = (role: string) => {
     can('read', 'profile');
     can('read', 'howTo');
   }
+
+  if (role === 'viewer')
+  can('manage', 'all')
 
   return rules
 }

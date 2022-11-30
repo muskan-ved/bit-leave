@@ -32,6 +32,12 @@ const AclGuard = (props: AclGuardProps) => {
 
   const [ability, setAbility] = useState<AppAbility | undefined>(undefined)
 
+  const userData = localStorage.getItem("userData")
+  let data;
+  if (userData != null) {
+     data = JSON.parse(userData)
+  }
+
   // ** Hooks
   const auth = useAuth()
   const router = useRouter()
@@ -43,8 +49,8 @@ const AclGuard = (props: AclGuardProps) => {
   }
 
   // User is logged in, build ability for the user based on his role
-  if (auth.user && auth.user.role && !ability) {
-    setAbility(buildAbilityFor(auth.user.role, aclAbilities.subject))
+  if (data && data.role && !ability) {
+    setAbility(buildAbilityFor(data.role, aclAbilities.subject))
   }
   
   // Check the access of current user and render pages

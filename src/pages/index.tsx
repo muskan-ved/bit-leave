@@ -24,13 +24,18 @@ const Home = () => {
   const auth = useAuth()
   const router = useRouter()
 
+  const userData = localStorage.getItem("userData")
+  let data:any;
+  if (userData != null) {
+     data = JSON.parse(userData)
+  }
   useEffect(() => {
     if (!router.isReady) {
       return
     }
 
-    if (auth.user && auth.user.role) {
-      const homeRoute = getHomeRoute(auth.user.role)
+    if (data && data.role) {
+      const homeRoute = getHomeRoute(data.role)
 
       // Redirect user to Home URL
       router.replace(homeRoute)

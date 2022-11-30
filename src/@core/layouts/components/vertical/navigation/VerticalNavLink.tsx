@@ -17,7 +17,7 @@ import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButto
 // ** Configs Import
 import themeConfig from 'src/configs/themeConfig'
 
-// ** Types
+// ** Types 
 import { NavLink, NavGroup } from 'src/@core/layouts/types'
 import { Settings } from 'src/@core/context/settingsContext'
 
@@ -31,6 +31,7 @@ import { handleURLQueries } from 'src/@core/layouts/utils'
 import * as gtag from '../../../../../lib/gtag'
 
 interface Props {
+  orgLogo:string
   parent?: boolean
   item: NavLink
   navHover?: boolean
@@ -74,6 +75,7 @@ const MenuItemTextMetaWrapper = styled(Box)<BoxProps>({
 })
 
 const VerticalNavLink = ({
+  orgLogo,
   item,
   parent,
   navHover,
@@ -88,33 +90,6 @@ const VerticalNavLink = ({
   const theme = useTheme()
   const router = useRouter()
 
-  const userData =window.localStorage.getItem("userData")
-  let OrgId;
-  if (userData != null) {
-      const data = JSON.parse(userData)
-      OrgId = data.orgId;
-    }  
-    
-  const imageUrl = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`;
-
-  function UrlExists(url: any) {
-    var http = new XMLHttpRequest()
-    http.open('HEAD', url)
-    http.onreadystatechange = function () {
-      if (this.readyState == this.DONE) {
-        if(this.status === 200){
-			localStorage.setItem('orgLogo','1')
-		}else{
-			localStorage.setItem('orgLogo','0')
-		}
-      }
-    }
-    http.send()
-  }
-
-  useEffect(() => {
-	UrlExists(imageUrl)
-  }, [])
 
   // ** Vars
   const { skin, navCollapsed } = settings
@@ -212,7 +187,7 @@ const VerticalNavLink = ({
                   ...(parent ? { ml: 2, mr: 4 } : {}) // This line should be after (navCollapsed && !navHover) condition for proper styling
                 }}
               >
-              {item.subject === "orgname" ?  (<span><img src={localStorage.getItem('orgLogo') === '1'? imageUrl : '/images/cards/company_logo.png' } alt="Organisation Logo" width='40px' /></span>)
+              {item.subject === "orgname" ?  (<span><img src={localStorage.getItem('orgnLogo') ? `${localStorage.getItem('orgnLogo')}` : orgLogo} alt="" width='40px' /></span>)
        : 
                 <UserIcon
                   icon={IconTag}
