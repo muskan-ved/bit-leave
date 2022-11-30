@@ -60,7 +60,7 @@ const UpdateOrganisation = () => {
   }
 
   const isEmailValid = function (email: any) {
-    const reqExp = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
+    const reqExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
     return reqExp.test(email)
   }
@@ -151,8 +151,7 @@ const UpdateOrganisation = () => {
       {
         name: 'jobtitle',
         inputName: 'jobtitle',
-        required: true,
-        validate: isNameValid
+        required: false
       },
 
       {
