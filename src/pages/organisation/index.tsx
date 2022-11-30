@@ -60,7 +60,7 @@ const UpdateOrganisation = () => {
   }
 
   const isEmailValid = function (email: any) {
-    const reqExp = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
+    const reqExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
     return reqExp.test(email)
   }
@@ -128,8 +128,8 @@ const UpdateOrganisation = () => {
         validate: isFullNameValid
       },
       {
-        name: 'managerid',
-        inputName: 'managerid',
+        name: 'managerId',
+        inputName: 'managerId',
         required: false
       },
       {
@@ -151,8 +151,7 @@ const UpdateOrganisation = () => {
       {
         name: 'jobtitle',
         inputName: 'jobtitle',
-        required: true,
-        validate: isNameValid
+        required: false
       },
 
       {
@@ -245,7 +244,7 @@ const UpdateOrganisation = () => {
       disableColumnMenu: true
     },
     {
-      field: 'managerid',
+      field: 'managerId',
       headerName: 'Manager Id',
       type: 'number',
       minWidth: 110,
@@ -466,8 +465,8 @@ const UpdateOrganisation = () => {
       }
 
       // ** Check ManagerId**
-      if (csvHeader.includes('managerid') || !csvHeader.includes('managerid')) {
-        const index = csvHeader.indexOf('managerid')
+      if (csvHeader.includes('managerId') || !csvHeader.includes('managerId')) {
+        const index = csvHeader.indexOf('managerId')
         if (index) {
         }
       }
