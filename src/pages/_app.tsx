@@ -60,6 +60,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
+import '../../styles/style.css'
 import { OnboardingProvider } from 'src/context/OnboardingContext'
 import * as gtag from '../lib/gtag'
 import Script from 'next/script'

@@ -163,6 +163,25 @@ export const listEmployee = createAsyncThunk('emp/list',
     }
   })
 
+  export const allEmployeeList = createAsyncThunk('allEmp/list',
+  async (params: void, { dispatch, getState }: Redux) => {
+    const token = localStorage.getItem("accessToken");
+    try{
+    const result = await axios
+      .get(API.allEmployeeList, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    }catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+
 
 const employeeSlice = createSlice({
   name: 'employee',

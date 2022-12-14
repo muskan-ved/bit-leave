@@ -1,5 +1,5 @@
 // ** React Import
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Close from 'mdi-material-ui/Close'
 import { useTheme } from '@mui/material/styles'
+import { CSVLink } from "react-csv";
 
 //  ** Toast Import
 import { ToastContainer, toast } from 'react-toastify'
@@ -34,15 +35,35 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from 'src/store'
 import { uploadCSVToS3 } from 'src/store/organisation'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { allEmployeeList } from 'src/store/employee'
 
 const UpdateOrganisation = () => {
   const [array, setArray] = useState([])
+  const [data, setData] = useState([])
   const [show, setShow] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const S3_BUCKET = auth.bucket_name
   const REGION = auth.region
   const dispatch = useDispatch<AppDispatch>()
 
+  const fetchAllEmployeeData = async () => {
+    const empData = await dispatch(allEmployeeList())
+    if (empData.payload != null) {
+      setData(empData.payload.data)
+    }
+  }
+  
+  useEffect(() => {
+    fetchAllEmployeeData()
+  }, [])
+
+const arrayData:any = []
+  data.map((item:any,index:any) => {
+    const final = arrayData.push({id : index+1,firstname : item.firstname,lastname : item.lastname,fullname : item.fullname,emailaddress : item.email,managerId : '',manageremail : '',jobtitle : '',country : '',department : ''})
+    return final;
+  });
+
+  
   AWS.config.update({
     accessKeyId: auth.accessKeyId,
     secretAccessKey: auth.secretAccessKey
@@ -128,6 +149,13 @@ const UpdateOrganisation = () => {
         validate: isFullNameValid
       },
       {
+        name: 'emailaddress',
+        inputName: 'emailaddress',
+        required: true,
+        unique: true,
+        validate: isEmailValid
+      },
+      {
         name: 'managerId',
         inputName: 'managerId',
         required: false
@@ -140,18 +168,12 @@ const UpdateOrganisation = () => {
         
         //validate: isEmailValid
       },
-      {
-        name: 'emailaddress',
-        inputName: 'emailaddress',
-        required: true,
-        unique: true,
-        validate: isEmailValid
-      },
 
       {
         name: 'jobtitle',
         inputName: 'jobtitle',
-        required: false
+        required: true,
+        validate: isNameValid
       },
 
       {
@@ -182,9 +204,8 @@ const UpdateOrganisation = () => {
       {
         name: 'department',
         inputName: 'department',
-        required: false,
-
-        //validate: isNameValid
+        required: true,
+        validate: isNameValid
       },
 
       // {
@@ -244,6 +265,13 @@ const UpdateOrganisation = () => {
       disableColumnMenu: true
     },
     {
+      field: 'emailaddress',
+      headerName: 'Email Address',
+      sortable: false,
+      minWidth: 200,
+      disableColumnMenu: true
+    },
+    {
       field: 'managerId',
       headerName: 'Manager Id',
       type: 'number',
@@ -254,13 +282,6 @@ const UpdateOrganisation = () => {
     {
       field: 'manageremail',
       headerName: 'Manager Email',
-      sortable: false,
-      minWidth: 200,
-      disableColumnMenu: true
-    },
-    {
-      field: 'emailaddress',
-      headerName: 'Email Address',
       sortable: false,
       minWidth: 200,
       disableColumnMenu: true
@@ -456,7 +477,14 @@ const UpdateOrganisation = () => {
         if (index) {
         }
       }
-
+      
+      // ** Check Email **
+      if (csvHeader.includes('emailaddress')) {
+        const index = csvHeader.indexOf('emailaddress')
+        if (index) {
+        }
+      }
+      
       // ** Check FullName **
       if (csvHeader.includes('fullname')) {
         const index = csvHeader.indexOf('fullname')
@@ -467,13 +495,6 @@ const UpdateOrganisation = () => {
       // ** Check ManagerId**
       if (csvHeader.includes('managerId') || !csvHeader.includes('managerId')) {
         const index = csvHeader.indexOf('managerId')
-        if (index) {
-        }
-      }
-
-      // ** Check Email **
-      if (csvHeader.includes('emailaddress')) {
-        const index = csvHeader.indexOf('emailaddress')
         if (index) {
         }
       }
@@ -567,7 +588,7 @@ const UpdateOrganisation = () => {
     <>
       <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
         <Button variant='contained' onClick={() => setShow(true)} sx={{backgroundColor : theme.palette.warning.main}}>
-          Instructions for importing{' '}
+          Download template file for your organisation{' '}
         </Button>
       </Grid>
       <Grid container spacing={6}>
@@ -630,11 +651,9 @@ const UpdateOrganisation = () => {
           </Box>
         </DialogContent>
         <DialogActions sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: 'center' }}>
-          <a href='/templateCSV/Template.csv' download style={{ textDecoration: 'none', color: '061A16' }}>
             <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => setShow(false)}>
-              Download Sample Template File
+            <CSVLink data={arrayData} filename={"Template.csv"} target="_blank" style={{ textDecoration: 'none', color: '#061A16' }}> Download Organisation Template CSV</CSVLink>
             </Button>
-          </a>
         </DialogActions>
       </Dialog>
     </>

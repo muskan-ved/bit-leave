@@ -1,6 +1,7 @@
 // ** Icon imports
-import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline } from 'mdi-material-ui'
+import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline} from 'mdi-material-ui'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 
@@ -55,6 +56,15 @@ const navigation = (): VerticalNavItemsType => {
       action: 'read',
       subject: 'dashboard'
     },
+
+    // {
+    //   title: 'Org Chart',
+    //   icon: AccountTreeOutlinedIcon,
+    //   path: '/organisation-view',
+    //   action: 'read',
+    //   subject: 'orgChartView'
+    // },
+    
     {
       sectionTitle: 'Settings',
       action: 'read',

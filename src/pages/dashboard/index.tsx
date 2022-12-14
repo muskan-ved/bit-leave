@@ -93,8 +93,8 @@ const Dashboard = () => {
     gtag.event({
       action: 'cashout_leave',
       category: 'dashboard',
-      label: "cashout_leave",
-      value:'modal'
+      label: 'cashout_leave',
+      value: 'modal'
     })
   }
   const takeLeaveButtonClick = () => {
@@ -102,33 +102,33 @@ const Dashboard = () => {
     gtag.event({
       action: 'take_leave',
       category: 'dashboard',
-      label: "take_leave",
-      value:'take_leave'
+      label: 'take_leave',
+      value: 'take_leave'
     })
   }
 
   const avgExcessDays: number[] = [],
     departmentsOfAverageExcessDays: string[] = [],
     directReportsOfFullname: string[] = [],
-    directReportsOfExcessDays: number[] = [];
+    directReportsOfExcessDays: number[] = []
 
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)));
+      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)))
     }
     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-      departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department);
+      departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department)
     }
     for (let index = 0; index < data?.directReports?.length; index++) {
-      directReportsOfFullname.push(data?.directReports[index].fullname);
+      directReportsOfFullname.push(data?.directReports[index].fullname)
     }
     for (let index = 0; index < data?.directReports?.length; index++) {
-      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)));
+      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)))
     }
   }
 
-  const seriesData: number[] = avgExcessDays;
-  const seriesData1: number[] = directReportsOfExcessDays;
+  const seriesData: number[] = avgExcessDays
+  const seriesData1: number[] = directReportsOfExcessDays
   const series = [
     {
       name: 'Average Excess Days',
@@ -142,7 +142,7 @@ const Dashboard = () => {
     }
   ]
   const employees: string[] = directReportsOfFullname
-  const departments: string[] = departmentsOfAverageExcessDays;
+  const departments: string[] = departmentsOfAverageExcessDays
   const theme = useTheme()
 
   const options: ApexOptions = {
@@ -162,8 +162,7 @@ const Dashboard = () => {
     grid: {
       strokeDashArray: 8,
       xaxis: {
-        lines: { show: true },
-
+        lines: { show: true }
       },
       yaxis: {
         lines: { show: false }
@@ -194,7 +193,7 @@ const Dashboard = () => {
     xaxis: {
       axisTicks: { show: false },
       axisBorder: { show: false },
-      categories: departments,
+      categories: departments
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
@@ -240,7 +239,6 @@ const Dashboard = () => {
     states: {
       hover: {
         filter: { type: 'none' }
-
       },
       active: {
         filter: { type: 'none' }
@@ -249,22 +247,21 @@ const Dashboard = () => {
     xaxis: {
       axisTicks: { show: false },
       axisBorder: { show: false },
-      categories: employees,
+      categories: employees
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
-    },
+    }
   }
 
-
-  const employeeDetails = useSelector((state: RootState) => state.employee);
+  const employeeDetails = useSelector((state: RootState) => state.employee)
 
   const refreshbtn = async () => {
     fetchDataFromRedux()
   }
 
   const fetchDataFromRedux = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     const empData = await dispatch(loadEmployee())
     if (empData.payload != null) {
       setData(empData.payload.data)
@@ -274,46 +271,46 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    const ReduxCheckEmpData = employeeDetails?.employeeDetail?.data?.leavesByDepartment[0];
-    if (ReduxCheckEmpData?.department === null && ReduxCheckEmpData?.averageExcessDays === null || employeeDetails?.employeeDetail === null) {
-      fetchDataFromRedux();
-    }else{
+    const ReduxCheckEmpData = employeeDetails?.employeeDetail?.data?.leavesByDepartment[0]
+    if (
+      (ReduxCheckEmpData?.department === null && ReduxCheckEmpData?.averageExcessDays === null) ||
+      employeeDetails?.employeeDetail === null
+    ) {
+      fetchDataFromRedux()
+    } else {
       setData(employeeDetails?.employeeDetail?.data)
     }
-    if (count != 1)
-      setCount(1);
-  }, []);
+    if (count != 1) setCount(1)
+  }, [])
 
-  function currencyFormat(num:any) {
+  function currencyFormat(num: any) {
     return '$' + num?.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
- }
-
+  }
 
   const quickStats: QuickStatsType[] = [
     {
-      stats: `${currencyFormat(data?.vitals?.averageSalary)}`, 
+      stats: `${currencyFormat(data?.vitals?.averageSalary)}`,
       title: 'Average Salary in AUD',
-      icon: "/images/cards/user_icon.png"
+      icon: '/images/cards/user_icon.png'
     },
     {
       stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities)}`,
       title: 'Total Leave Liabilities',
-      icon: "/images/cards/total_leave_liabilities.png"
+      icon: '/images/cards/total_leave_liabilities.png'
     },
     {
       stats: data?.vitals?.headCount,
       title: 'Organisational Headcount',
-      icon: "/images/cards/org_headcount.png"
+      icon: '/images/cards/org_headcount.png'
     },
     {
       stats: data?.vitals?.leaveMobilised,
       title: 'Leave Mobilised (Days)',
-      icon: "/images/cards/leave_mobilised.png"
+      icon: '/images/cards/leave_mobilised.png'
     }
   ]
 
-  if (isLoading && !data)
-    return (<CircularProgress color="success" />)
+  if (isLoading && !data) return <CircularProgress color='success' />
 
   if (!isLoading && data && Object.keys(data.leaveDetails)?.length == 0) {
     return (
@@ -328,47 +325,58 @@ const Dashboard = () => {
             </CardContent>
           </Card>
         </Grid>
-      </Grid>)
+      </Grid>
+    )
   }
 
   const renderStats = () => {
-    return data && quickStats.map((item: QuickStatsType, index: number) => (
-      <>
-      <Grid item xs={12} sm={3} key={index}>
-        <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-          <CustomAvatar src={item.icon}  variant='rounded' color={'primary'} sx={{ mr: 4 }}/>
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant='h6' sx={{ fontWeight: 600 }}>
-            {item.stats}
-            </Typography>
-            <Typography variant='caption'>{item.title}</Typography>
-          </Box>
-        </Box>
-      </Grid>
-
-    </>
-    ))
+    return (
+      data &&
+      quickStats.map((item: QuickStatsType, index: number) => (
+        <>
+          <Grid item xs={12} sm={3} key={index}>
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
+              <CustomAvatar src={item.icon} variant='rounded' color={'primary'} sx={{ mr: 4 }} />
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                  {item.stats}
+                </Typography>
+                <Typography variant='caption'>{item.title}</Typography>
+              </Box>
+            </Box>
+          </Grid>
+        </>
+      ))
+    )
   }
 
-  if (!isLoading && data  && data?.profile?.onboarded ) {
+  if (!isLoading && data && data?.profile?.onboarded) {
     return (
       <>
-         <Grid container spacing={9}>
-            <Grid item xs={12} mb={5} sx={{textAlign:"right"}}>
-            <Box sx={{maxWidth: 'inherit'}}>
-              <Button variant='contained' onClick={refreshbtn} disabled={isLoading}> 
-                  <RefreshIcon sx={{fontSize: '1.1rem',mr:'4px'}}/>Refresh
-              </Button>
-            </Box>
+        <Grid container spacing={9}>
+          <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
+            <Box
+              component='img'
+              sx={{
+                width: '100px',
+                marginRight: '12px',
+                marginBottom: '-15px'
+              }}
+              alt='The Xero Connect logo.'
+              src='/images/cards/xero-connected-app-logo.png'
+            />
+            <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
+              <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+              Refresh
+            </Button>
             <Divider></Divider>
-            </Grid>
           </Grid>
-          {ability?.can('read', 'analytics') ? (
+        </Grid>
+        {ability?.can('read', 'analytics') ? (
           <Grid container spacing={6}>
-    
             <Grid item md={9} xs={12}>
               <Card>
-                <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>}  />
+                <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>} />
                 <CardContent>
                   <Grid container spacing={6}>
                     {renderStats()}
@@ -376,100 +384,110 @@ const Dashboard = () => {
                 </CardContent>
               </Card>
             </Grid>
-                  <Grid item md={3} xs={12} sx={{display:"inline-grid"}} >
-                  <Card>
-                    <CardHeader title='Your Details 👨‍💼' subheader={<Divider></Divider>} />
-                    <CardContent>
-                      <StyledBox>
-                        <Box sx={{  mb: 3, display: 'flex', alignItems: 'center' }}>
-                          <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                          <Typography variant='body2'>Job title : {data.profile.jobtitle} </Typography>
-                        </Box>
-                        <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
-                          <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                          <Typography variant='body2'>Country : {data.profile.country} </Typography>
-                        </Box>                 
-                      </StyledBox>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                </Grid>):null}
-          <br />
-        <Grid container spacing={6}>
-        {data.profile.role !== 3 ?
-          <Grid item md={7} xs={12} >
-            <Card>
-              <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
-              <CardContent>
-                <Grid container spacing={6}>
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
-                        <HomeLightbulbOutline />
-                      </CustomAvatar>
-                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.totalDays?.toFixed(2)}
-                        </Typography>
-                        <Typography variant='caption'>Total Days</Typography>
-                      </Box>
+            <Grid item md={3} xs={12} sx={{ display: 'inline-grid' }}>
+              <Card>
+                <CardHeader title='Your Details 👨‍💼' subheader={<Divider></Divider>} />
+                <CardContent>
+                  <StyledBox>
+                    <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
+                      <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
+                      <Typography variant='body2'>Job title : {data.profile.jobtitle} </Typography>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CustomAvatar skin='light' variant='rounded' color={'error'} sx={{ mr: 4 }}>
-                        <AccountAlertOutline />
-                      </CustomAvatar>
-                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                          {data.leaveDetails.excessDays?.toFixed(2)}
-                        </Typography>
-                        <Typography variant='caption'>Excess Days</Typography>
-                      </Box>
+                    <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
+                      <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
+                      <Typography variant='body2'>Country : {data.profile.country} </Typography>
                     </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CustomAvatar skin='light' variant='rounded' color={'success'} sx={{ mr: 4 }}>
-                        <CurrencyUsd />
-                      </CustomAvatar>
-                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                     
-                          {data?.leaveDetails?.cashoutValue? currencyFormat(data?.leaveDetails?.cashoutValue):''}
-                        </Typography>
-                        <Typography variant='caption'>Cashout Value</Typography>
-                      </Box>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <br></br>
-                <Divider></Divider>
-                <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
-                <br></br>
-                <Grid container spacing={1}>
-                  <Grid item xs={4} sm={4}>
-                    <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled={!data.leaveDetails.canCashoutLeave } >Cashout Leave</Button>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={4} sm={4}>
-                    <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={takeLeaveButtonClick}>Take Leave</Button>
-                    </Box>
-                  </Grid>
-                  {/* data.leaveDetails.totalDays */}
-                   <Grid item xs={4} sm={4}>
-                    <Box  sx={{ display: 'grid', alignItems: 'left' }}>
-                      <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>Cashout Bit.Leave</Button>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+                  </StyledBox>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-          : null }
-          <Grid item md={data.profile.role !== 3 ? 5 : 12} xs={12} sx={{display:"inline-grid"}} >
+        ) : null}
+        <br />
+        <Grid container spacing={6}>
+          {data.profile.role !== 3 ? (
+            <Grid item md={7} xs={12}>
+              <Card>
+                <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
+                <CardContent>
+                  <Grid container spacing={6}>
+                    <Grid item xs={12} sm={4}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
+                          <HomeLightbulbOutline />
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                          <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                            {data.leaveDetails.totalDays?.toFixed(2)}
+                          </Typography>
+                          <Typography variant='caption'>Total Days</Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar skin='light' variant='rounded' color={'error'} sx={{ mr: 4 }}>
+                          <AccountAlertOutline />
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                          <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                            {data.leaveDetails.excessDays?.toFixed(2)}
+                          </Typography>
+                          <Typography variant='caption'>Excess Days</Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <CustomAvatar skin='light' variant='rounded' color={'success'} sx={{ mr: 4 }}>
+                          <CurrencyUsd />
+                        </CustomAvatar>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                          <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                            {data?.leaveDetails?.cashoutValue ? currencyFormat(data?.leaveDetails?.cashoutValue) : ''}
+                          </Typography>
+                          <Typography variant='caption'>Cashout Value</Typography>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                  <br></br>
+                  <Divider></Divider>
+                  <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
+                  <br></br>
+                  <Grid container spacing={1}>
+                    <Grid item xs={4} sm={4}>
+                      <Box sx={{ display: 'grid', alignItems: 'left' }}>
+                        <Button
+                          variant='contained'
+                          onClick={cashoutLeaveButtonClick}
+                          disabled={!data.leaveDetails.canCashoutLeave}
+                        >
+                          Cashout Leave
+                        </Button>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={4} sm={4}>
+                      <Box sx={{ display: 'grid', alignItems: 'left' }}>
+                        <Button variant='contained' onClick={takeLeaveButtonClick}>
+                          Take Leave
+                        </Button>
+                      </Box>
+                    </Grid>
+                    {/* data.leaveDetails.totalDays */}
+                    <Grid item xs={4} sm={4}>
+                      <Box sx={{ display: 'grid', alignItems: 'left' }}>
+                        <Button variant='contained' onClick={cashoutLeaveButtonClick} disabled>
+                          Cashout Bit.Leave
+                        </Button>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+          <Grid item md={data.profile.role !== 3 ? 5 : 12} xs={12} sx={{ display: 'inline-grid' }}>
             <Card>
               <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>
@@ -480,8 +498,11 @@ const Dashboard = () => {
                   </Box>
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                    <Typography variant='body2'>Manager : {data.profile.managerName ? data.profile.managerName : 'No manager assigned'} </Typography>
-                  </Box><br />
+                    <Typography variant='body2'>
+                      Manager : {data.profile.managerName ? data.profile.managerName : 'No manager assigned'}{' '}
+                    </Typography>
+                  </Box>
+                  <br />
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
                     <Typography variant='body2'>Number Direct Reports : {data.directReports?.length} </Typography>
@@ -511,22 +532,23 @@ const Dashboard = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data && data.leavesByOrg.map((row: any, i: number) => (
-                            <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
-                              <TableCell component='th' scope='row' >
-                                <CustomAvatar
-                                  skin='light'
-                                  color={'primary'}
-                                  sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
-                                >
-                                  {getInitials(row.fullname)}
-                                </CustomAvatar>
-                              </TableCell>
-                              <TableCell align='center'>{row.fullname}</TableCell>
-                              <TableCell align='right'>{row.department}</TableCell>
-                              <TableCell align='right'>{row.excessDays?.toFixed(2)}</TableCell>
-                            </TableRow>
-                          ))}
+                          {data &&
+                            data.leavesByOrg.map((row: any, i: number) => (
+                              <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
+                                <TableCell component='th' scope='row'>
+                                  <CustomAvatar
+                                    skin='light'
+                                    color={'primary'}
+                                    sx={{ mr: 3, fontSize: '.8rem', width: '1.875rem', height: '1.875rem' }}
+                                  >
+                                    {getInitials(row.fullname)}
+                                  </CustomAvatar>
+                                </TableCell>
+                                <TableCell align='center'>{row.fullname}</TableCell>
+                                <TableCell align='right'>{row.department}</TableCell>
+                                <TableCell align='right'>{row.excessDays?.toFixed(2)}</TableCell>
+                              </TableRow>
+                            ))}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -537,28 +559,37 @@ const Dashboard = () => {
           ) : null}
         </Grid>
         <br></br>
-        {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ?(
-        <Grid container spacing={6} >
-          {ability?.can('read', 'analytics') ? (
-            <Grid item md={6} xs={12} >
-              <Card sx={{ width: '100%' }}>
-                <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
+        {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ? (
+          <Grid container spacing={6}>
+            {ability?.can('read', 'analytics') ? (
+              <Grid item md={6} xs={12}>
+                <Card sx={{ width: '100%' }}>
+                  <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
+                  <CardContent>
+                    <ReactApexcharts type='bar' height={294} series={series} options={options} />
+                  </CardContent>
+                </Card>
+              </Grid>
+            ) : null}
+            <Grid item md={6} xs={12}>
+              <Card>
+                <CardHeader
+                  title='Leaves by Direct Reports 📈'
+                  subheader={
+                    <>
+                      <Typography variant='body2'>Above the thresholds</Typography>
+                      <Divider></Divider>
+                    </>
+                  }
+                />
                 <CardContent>
-                  <ReactApexcharts type='bar' height={294} series={series} options={options} />
+                  <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
                 </CardContent>
               </Card>
             </Grid>
-          ) : null}
-          <Grid item md={6} xs={12}  >
-            <Card >
-              <CardHeader title='Leaves by Direct Reports 📈' subheader={<><Typography variant='body2'>Above the thresholds</Typography><Divider></Divider></>} />
-              <CardContent>
-                <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
-              </CardContent>
-            </Card>
           </Grid>
-        </Grid>):null}
-        
+        ) : null}
+
         <CashoutDialog open={dialogOpen} handleClose={handleDialogClose}></CashoutDialog>
       </>
     )
