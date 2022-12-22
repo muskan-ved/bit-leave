@@ -63,6 +63,7 @@ import { loadEmployee } from 'src/store/employee';
 // ** Modal Import
 import CashoutDialog from './cashout';
 import * as gtag from '../../lib/gtag'
+import { loadOrganisation } from 'src/store/organisation'
 
 // Styled Box component
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -81,9 +82,11 @@ const Dashboard = () => {
   // ** Hooks
   const ability = useContext(AbilityContext)
   const [data, setData] = useState<employeeType | null>(null);
+  const [organisationData, setOrgData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  
   const dispatch = useDispatch<AppDispatch>()
   const handleDialogClose = () => {
     setDialogOpen(false)
@@ -111,19 +114,32 @@ const Dashboard = () => {
     departmentsOfAverageExcessDays: string[] = [],
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays: number[] = []
-
-  if (data) {
-    for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)))
-    }
-    for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-      departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department)
-    }
-    for (let index = 0; index < data?.directReports?.length; index++) {
-      directReportsOfFullname.push(data?.directReports[index].fullname)
-    }
+    
+    if (data) {
+      for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
+        avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)))
+      }
+      for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
+        departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department)
+      }
+      for (let index = 0; index < data?.directReports?.length; index++) {
+        directReportsOfFullname.push(data?.directReports[index].fullname)
+      }
     for (let index = 0; index < data?.directReports?.length; index++) {
       directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)))
+    }
+  }
+  
+  const employees: string[] = directReportsOfFullname
+  const departments: string[] = departmentsOfAverageExcessDays
+  const theme = useTheme()
+  
+  const totalThresholdsLeave: number[] = [];
+  
+  if(organisationData){
+    const thresholdsLeaveValue: number = organisationData[0]?.organisationssettings[0]?.thrleavewarning;
+    for(let i = 0; i < employees.length; i++) {
+      totalThresholdsLeave.push(thresholdsLeaveValue);
     }
   }
 
@@ -138,12 +154,15 @@ const Dashboard = () => {
   const series1 = [
     {
       name: 'Average Excess Days By Employee',
+      type: 'scatter',
       data: seriesData1
+    },
+    {
+      name: 'Thresholds Limit',
+      type: 'line',
+      data: totalThresholdsLeave
     }
   ]
-  const employees: string[] = directReportsOfFullname
-  const departments: string[] = departmentsOfAverageExcessDays
-  const theme = useTheme()
 
   const options: ApexOptions = {
     chart: {
@@ -200,10 +219,20 @@ const Dashboard = () => {
     }
   }
 
+
+
   const options1: ApexOptions = {
     chart: {
       parentHeightOffset: 0,
-      toolbar: { show: false }
+      toolbar: { show: false },
+      height: 350,
+      type: 'line',
+    },
+    fill: {
+      type:'solid',
+    },
+    markers: {
+      size: [6, 0]
     },
     plotOptions: {
       bar: {
@@ -231,14 +260,14 @@ const Dashboard = () => {
     },
     colors: [
       hexToRGBA(theme.palette.primary.light, 1),
-      hexToRGBA(theme.palette.success.light, 1),
+      hexToRGBA(theme.palette.error.light, 1),
       hexToRGBA(theme.palette.warning.light, 1),
       hexToRGBA(theme.palette.info.light, 1),
-      hexToRGBA(theme.palette.error.light, 1)
+      hexToRGBA(theme.palette.success.light, 1)
     ],
     states: {
       hover: {
-        filter: { type: 'none' }
+        filter: { type: 'none' },
       },
       active: {
         filter: { type: 'none' }
@@ -249,9 +278,10 @@ const Dashboard = () => {
       axisBorder: { show: false },
       categories: employees
     },
-    yaxis: {
+    yaxis:{
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
     }
+    
   }
 
   const employeeDetails = useSelector((state: RootState) => state.employee)
@@ -270,6 +300,16 @@ const Dashboard = () => {
     setIsLoading(false)
   }
 
+  const fetchOrganisationData = async () => {
+    setIsLoading(true)
+    const orgData = await dispatch(loadOrganisation())
+    if (orgData.payload != null) {
+      setOrgData(orgData.payload.data)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     const ReduxCheckEmpData = employeeDetails?.employeeDetail?.data?.leavesByDepartment[0]
     if (
@@ -281,6 +321,7 @@ const Dashboard = () => {
       setData(employeeDetails?.employeeDetail?.data)
     }
     if (count != 1) setCount(1)
+    fetchOrganisationData()
   }, [])
 
   function currencyFormat(num: any) {
@@ -577,13 +618,13 @@ const Dashboard = () => {
                   title='Leaves by Direct Reports 📈'
                   subheader={
                     <>
-                      <Typography variant='body2'>Above the thresholds</Typography>
+                   
                       <Divider></Divider>
                     </>
                   }
                 />
                 <CardContent>
-                  <ReactApexcharts type='scatter' height={294} series={series1} options={options1} />
+                  <ReactApexcharts  height={294} series={series1} options={options1} type={"line"} />
                 </CardContent>
               </Card>
             </Grid>

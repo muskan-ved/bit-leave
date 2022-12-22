@@ -176,7 +176,7 @@ body {
   border-radius: 50%;
   width: 80px;
   height: 80px;
-  border: 13px solid #96f6b7;
+  border: 4px solid #96f6b7;
 }
 .card .card-body {
   background: #fff;
@@ -218,3 +218,8 @@ body {
   width: 25px;
   margin: 5px;
 }
+
+.card-footer .textSize {
+  font-size: '3px';
+}
+

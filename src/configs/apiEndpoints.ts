@@ -3,7 +3,7 @@ export const APP_URL =  `${process.env.NEXT_PUBLIC_APP_URL}`;
 export const ORG_URL =  `${process.env.NEXT_PUBLIC_ORG_URL}`;
 
 export default {
-  handleRegister:`${ORG_URL}${process.env.NEXT_PUBLIC_HANDLE_REGISTER}`,
+  handleRegister:`${BASE_URL}${process.env.NEXT_PUBLIC_HANDLE_REGISTER}`,
   
   loadOrganisation:`${BASE_URL}${process.env.NEXT_PUBLIC_LOAD_ORGANISATION}`,
   uploadCSVToS3:`${BASE_URL}${process.env.NEXT_PUBLIC_UPLOAD_CSV_TO_S3}`,

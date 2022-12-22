@@ -70,7 +70,7 @@ const Profile = () => {
 	const ability = useContext(AbilityContext)
 	const dispatch = useDispatch<AppDispatch>()
 	const userData = localStorage.getItem("userData")
-	const getTabList = ['Profile Detail', 'Direct Reports', 'Team','Avatar']
+	const getTabList = ['Profile Detail','Team','Avatar']
 	const personaList = ['/images/avatars/one.png', '/images/avatars/two.png', '/images/avatars/three.png','/images/avatars/four.png','/images/avatars/five.png','/images/avatars/six.png','/images/avatars/seven.png','/images/avatars/eight.png','/images/avatars/nine.png','/images/avatars/ten.png','/images/avatars/eleven.png','/images/avatars/twelve.png','/images/avatars/thirteen.jpeg','/images/avatars/fourteen.jpeg','/images/avatars/fifteen.png','/images/avatars/sixteen.jpeg','/images/avatars/seventeen.png','/images/avatars/eighteen.png','/images/avatars/nineteen.jpeg','/images/avatars/twenty.jpeg','/images/avatars/twenty-one.jpeg','/images/avatars/twenty-two.jpeg','/images/avatars/twenty-three.jpeg','/images/avatars/twenty-four.jpeg','/images/avatars/twenty-five.jpeg'];
 	const [classadd, setClassAdd] = React.useState('');
 	const [imageName, setImageName] = React.useState('');
@@ -352,7 +352,7 @@ const Profile = () => {
 							</Grid>
 						</CardContent>
 					</TabPanel>
-					<TabPanel value={value} index={1}>
+					{/* <TabPanel value={value} index={1}>
 						<CardContent>
 							<Box sx={{  width: '100%' }} >
 							<TableContainer component={Paper}>
@@ -379,8 +379,8 @@ const Profile = () => {
 							</Box>
 							
 						</CardContent>
-					</TabPanel>
-					<TabPanel value={value} index={2}>
+					</TabPanel> */}
+					<TabPanel value={value} index={1}>
 
 					<CardContent>
 							<Grid container spacing={5}>
@@ -421,7 +421,7 @@ const Profile = () => {
 							</Grid>
 						</CardContent>
 					</TabPanel>
-					<TabPanel value={value} index={3} >
+					<TabPanel value={value} index={2} >
 					{/* <CardHeader title='Choose your avatar​​'/> */}
 					<CardContent>
 					<Typography variant='body2' sx={{marginBottom:'20px'}}>Choose your avatar​</Typography>

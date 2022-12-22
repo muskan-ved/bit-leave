@@ -6,7 +6,10 @@ function randomIntFromInterval(min:any, max:any) { // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 const Card = (props:any) => {
-  const levelColor = randomcolor();
+  const levelColor = randomcolor({
+    luminosity: 'light',
+    hue: 'random'
+ });
   return (
     <ul>
       {props.data.map((item:any,index:any) => (
@@ -22,11 +25,12 @@ const Card = (props:any) => {
               </div>
               <div className="card-body">
                 <h4>{item.name}</h4>
-                <p>demo content</p>
+                <p >{item.currentPosition}</p>
               </div>
               <div className="card-footer" style={{ background: levelColor }}>
-                
-                <img
+                <p style={{fontSize:'smaller'}}>Date of Joining :  {item.DOJ}</p>
+                <p style={{fontSize:'smaller'}}>Previous Position : {item.previousPosition} </p>
+                {/* <img
                   src={'/images/avatars/one.png'}
                   alt="Chat"
                 />
@@ -37,11 +41,11 @@ const Card = (props:any) => {
                 <img
                   src={'/images/avatars/three.png'}
                   alt="Video"
-                />
+                /> */}
               </div>
               <div></div>
             </div>
-            {item.children?.length && <Card data={item.children} />}
+            {item.children?.length  && <Card data={item.children} />}
           </li>
         </Fragment>
       ))}

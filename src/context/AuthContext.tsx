@@ -150,9 +150,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleRegister = (params: RegisterParams, errorCallback?: ErrCallbackType) => {
     axios
-      .get(API.handleRegister, {
-        params: { name: params.companyname }
-      })
+      .get(`${API.handleRegister}${params.companyname}`)
       .then(res => {
         if (res.data.exists) {
           if (errorCallback)

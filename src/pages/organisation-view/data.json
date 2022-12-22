@@ -1,32 +1,111 @@
 [{
     "name": "Root",
+    "currentPosition":"Manager",
+    "previousPosition":"Senior Developer",
+    "DOJ":"15-03-1998",
     "children": [
       {
         "name": "Child 1",
+        "currentPosition":"Senior Developer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2007",
         "children": [
           {
-            "name": "Grand Child"
+            "name": "Grand Child",
+            "currentPosition":" Developer",
+        "previousPosition":" Tester",
+        "DOJ":"15-03-2014"
           }
         ]
       },
       {
         "name": "Child 2",
+        "currentPosition":"Senior Developer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2013",
         "children": [
           {
             "name": "Grand Child",
+            "currentPosition":"Front-end Developer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2022",
             "children": [
               {
-                "name": "Great Grand Child 1"
+                "name": "Great Grand Child 1",
+                "currentPosition":"Developer",
+        "previousPosition":"Developer",
+        "DOJ":"15-03-2007"
               },
               {
-                "name": "Grand Grand Child 2"
+                "name": "Grand Grand Child 2",
+                "currentPosition":"Developer",
+        "previousPosition":"Designer",
+        "DOJ":"15-03-2018"
               }
             ]
           }
         ]
       },
       {
-        "name": "Child 2"
+        "name": "Child 2",
+        "currentPosition":"Senior Developer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2014"
+      }
+    ]
+  },{
+    "name": "Root",
+    "currentPosition":"Senior Developer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2015",
+    "children": [
+      {
+        "name": "Child 1",
+        "currentPosition":"Developer",
+        "previousPosition":"Developer",
+        "DOJ":"15-03-2007",
+        "children": [
+          {
+            "name": "Grand Child",
+            "currentPosition":"Designer",
+        "previousPosition":"Junior Designer",
+        "DOJ":"15-03-2007"
+          }
+        ]
+      },
+      {
+        "name": "Child 2",
+        "currentPosition":"Senior BDE",
+        "previousPosition":"Marketter",
+        "DOJ":"15-03-2007",
+        "children": [
+          {
+            "name": "Grand Child",
+            "currentPosition":"Junior Designer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2008",
+            "children": [
+              {
+                "name": "Great Grand Child 1",
+                "currentPosition":"Developer",
+        "previousPosition":"Developer",
+        "DOJ":"15-03-2016"
+              },
+              {
+                "name": "Grand Grand Child 2",
+                "currentPosition":"Senior Designer",
+        "previousPosition":"Senior Developer",
+        "DOJ":"15-03-2016"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Child 2",
+        "currentPosition":"Senior Developer",
+        "previousPosition":"Junior Developer",
+        "DOJ":"15-03-2007"
       }
     ]
   }
