@@ -961,8 +961,46 @@ const Onboarding = () => {
 		}
 	}
 
+	const getStepContentActiveStep3 = (step: number) => {
+
+		switch (step) {
+			
+			case 3:
+				return (<>
+				
+				<Grid container spacing={5}>
+				<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
+					<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Connect to KEYPAY</Typography>
+					<Box src={"/images/cards/keypay_icon.png"} component={'img'}  sx={{ float: "right"  ,height:'28px'}} />
+				</Grid>
+				<Grid item xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
+					<Typography variant='body2' gutterBottom >KeyPay will be soon available. Please join the waiting list so we can keep you informed - LINK.</Typography>
+				</Grid>
+				<Grid item xs={12}>
+					<Box sx={{ float: "left" }}>
+						{!buttonToggle ?
+						<Button type='submit' variant="contained"  disabled={isLoading}>
+							{activeStep === 0 ? 'Start' : 'Connect to KEYPAY'}
+						</Button>
+						:
+						<Button type='submit' variant="contained"  disabled={isLoading} >
+							{activeStep === 0 ? 'Start' : 'Next'}
+						</Button>}
+					</Box>
+				</Grid>
+			</Grid>
+			</>)
+		
+			default:
+				break;
+		}
+	}
+
 	const renderContent = () => {
 		return getStepContent(activeStep)
+	}
+	const renderContentActiveStep3 = () => {
+		return getStepContentActiveStep3(activeStep)
 	}
 	return (
 
@@ -991,11 +1029,16 @@ const Onboarding = () => {
 				<Grid container>
 					<Grid item xs={12}>
 						<StepperContentWrapper>
-							<Card>
+							<Card sx={{ marginBottom:5}}>
 								<CardContent>
 									{renderContent()}
 								</CardContent>
 							</Card>
+							{activeStep === 3 && <Card>
+								<CardContent>
+									{renderContentActiveStep3()}
+								</CardContent>
+							</Card> }
 						</StepperContentWrapper>
 					</Grid>
 

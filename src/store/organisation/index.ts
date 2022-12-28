@@ -66,6 +66,25 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
     }
   })
 
+  export const OrgView = createAsyncThunk('organisation/orgView',
+  async (params: void, { dispatch, getState }: Redux) => {
+    const token = localStorage.getItem("accessToken");
+    try{
+    const result = await axios
+      .get(API.organisationOrgView, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    }catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+  
 const organisationSlice = createSlice({
   name: 'organisation',
   initialState: {

@@ -38,13 +38,14 @@ const VerticalLayoutWrapper = styled('div')({
   display: 'flex'
 })
 
-const MainContentWrapper = styled(Box)<BoxProps>({
+const MainContentWrapper = styled(Box)<BoxProps>(({theme}) => ({
   flexGrow: 1,
   minWidth: 0,
   display: 'flex',
   minHeight: '100vh',
-  flexDirection: 'column'
-})
+  flexDirection: 'column',
+  background: theme.palette.mode === 'light' ? '#FFFFFF' : '#17192b'
+}))
 
 const ContentWrapper = styled('main')(({ theme }) => ({
   flexGrow: 1,
@@ -64,7 +65,8 @@ const VerticalLayout = (props: LayoutProps) => {
   const dispatch = useDispatch<AppDispatch>()
 
   // ** Vars
-  const { skin, navHidden, contentWidth } = settings
+  const { skin, navHidden, contentWidth,mode } = settings
+  
   const { navigationSize, disableCustomizer, collapsedNavigationSize } = themeConfig
   const navWidth = navigationSize
   const navigationBorderWidth = skin === 'bordered' ? 1 : 0
@@ -149,7 +151,7 @@ const VerticalLayout = (props: LayoutProps) => {
                 mx: 'auto',
                 '@media (min-width:1440px)': { maxWidth: 1440 },
                 '@media (min-width:1200px)': { maxWidth: '100%' }
-              })
+              }),overflow:'auto'
             }}
           >
             <ErrorComponent></ErrorComponent>

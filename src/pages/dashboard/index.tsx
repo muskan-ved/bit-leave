@@ -82,7 +82,7 @@ const Dashboard = () => {
   // ** Hooks
   const ability = useContext(AbilityContext)
   const [data, setData] = useState<employeeType | null>(null);
-  const [organisationData, setOrgData] = useState<any>(null);
+  const [organisationData, setOrgData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [count, setCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
@@ -137,14 +137,14 @@ const Dashboard = () => {
   const totalThresholdsLeave: number[] = [];
   
   if(organisationData){
-    const thresholdsLeaveValue: number = organisationData[0]?.organisationssettings[0]?.thrleavewarning;
-    for(let i = 0; i < employees.length; i++) {
-      totalThresholdsLeave.push(thresholdsLeaveValue);
+    const thresholdsLeaveValue: number = organisationData[0]?.organisationssettings[0]?.thrleavewarning ?organisationData[0]?.organisationssettings[0]?.thrleavewarning : 20;
+    for(let i = 0; i < employees?.length; i++) {
+      totalThresholdsLeave?.push(thresholdsLeaveValue);
     }
   }
 
-  const seriesData: number[] = avgExcessDays
-  const seriesData1: number[] = directReportsOfExcessDays
+  const seriesData: number[] = (avgExcessDays ?avgExcessDays : [])
+  const seriesData1: number[] = (directReportsOfExcessDays ? directReportsOfExcessDays : [])
   const series = [
     {
       name: 'Average Excess Days',
@@ -175,7 +175,6 @@ const Dashboard = () => {
         barHeight: '60%',
         horizontal: true,
         distributed: true,
-        startingShape: 'rounded'
       }
     },
     grid: {
@@ -212,7 +211,7 @@ const Dashboard = () => {
     xaxis: {
       axisTicks: { show: false },
       axisBorder: { show: false },
-      categories: departments
+      categories: (departments ? [] : departments)
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
@@ -240,7 +239,6 @@ const Dashboard = () => {
         barHeight: '60%',
         horizontal: true,
         distributed: true,
-        startingShape: 'rounded'
       }
     },
     grid: {
@@ -604,10 +602,10 @@ const Dashboard = () => {
           <Grid container spacing={6}>
             {ability?.can('read', 'analytics') ? (
               <Grid item md={6} xs={12}>
-                <Card sx={{ width: '100%' }}>
+                <Card sx={{ width: '100%' ,height:'403px'}}>
                   <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
-                  <CardContent>
-                    <ReactApexcharts type='bar' height={294} series={series} options={options} />
+                  <CardContent >
+                  {departments[0] === null || !seriesData ?  <Typography variant='body2'>No data to display</Typography> :   <ReactApexcharts type='bar' height={294} series={series} options={options} />}
                   </CardContent>
                 </Card>
               </Grid>
@@ -624,7 +622,7 @@ const Dashboard = () => {
                   }
                 />
                 <CardContent>
-                  <ReactApexcharts  height={294} series={series1} options={options1} type={"line"} />
+                  <ReactApexcharts  type={"line"} height={294} series={series1} options={options1} />
                 </CardContent>
               </Card>
             </Grid>

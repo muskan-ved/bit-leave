@@ -1,9 +1,9 @@
 // ** Icon imports
 import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline} from 'mdi-material-ui'
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import AccountTreeOutlinedIcon from '@mui/icons-material/AccountTreeOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -87,6 +87,13 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Templates',
           icon: EmailOutline,
           path: '/templates',
+          action: 'manage',
+          subject: 'admin'
+        },
+        {
+          title: 'Payroll',
+          icon: AttachMoneyOutlinedIcon,
+          path: '/payroll',
           action: 'manage',
           subject: 'admin'
         },
