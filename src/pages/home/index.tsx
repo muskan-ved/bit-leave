@@ -24,6 +24,7 @@ import Close from 'mdi-material-ui/Close'
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import ReactPlay from './reactPlayer'
 import * as gtag from '../../lib/gtag'
+import { padding } from '@mui/system'
 
 // Styled Grid component
 const StyledGrid = styled(Grid)<GridProps>(({ theme }) => ({
@@ -74,19 +75,20 @@ const Home = () => {
   const onGoToDashboard = (url?: string) => {
     if (url) {
       router.push(url)
-     
-    } else {router.push('/dashboard')
+
+    } else {
+      router.push('/dashboard')
       gtag.event({
         action: 'go_to_dashboard',
         category: 'home',
         label: "go_to_dashboard",
-        value:'go_to_dashboard'
+        value: 'go_to_dashboard'
       })
     }
   }
   const theme = useTheme()
 
-  const youtubeURL = (url: any,GA_textname:string) => {
+  const youtubeURL = (url: any, GA_textname: string) => {
     if (url) {
       setShow(true)
       setURL(url)
@@ -94,7 +96,7 @@ const Home = () => {
         action: GA_textname,
         category: 'home',
         label: "youtube_videos",
-        value:'youtube_video'
+        value: 'youtube_video'
       })
     }
   }
@@ -136,7 +138,7 @@ const Home = () => {
             <CardHeader title='Get up to speed with bit.leave' subheader={<Divider></Divider>}></CardHeader>
             <CardContent sx={{ p: theme => `${theme.spacing(0, 7.5, 7, 7.5)} !important` }}>
               <Typography variant='body2'>Quick video FAQs</Typography>
-              <Grid container sx={{ textAlign: 'center' ,justifyContent:'space-between', columnGap: '20px'}} >
+              <Grid container sx={{ textAlign: 'center', justifyContent: 'space-between', columnGap: '20px' }} >
                 <Grid
                   item
                   xs={5}
@@ -154,7 +156,7 @@ const Home = () => {
                       margin: '0px 10px',
                       paddingTop: '5px',
                       position: 'relative'
-                      
+
                     }}
                   >
                     <img
@@ -162,17 +164,17 @@ const Home = () => {
                       width='100%'
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_1,'Org Settings')}
-                      style={{padding:'0px 20px'}}
+                      onClick={() => youtubeURL(link_1, 'Org Settings')}
+                      style={{ padding: '0px 20px' }}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_1,'Org Settings')}
+                      onClick={() => youtubeURL(link_1, 'Org Settings')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1,'Org Settings')}>
-                    Org Settings 
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1, 'Org Settings')}>
+                    Org Settings
                   </Typography>
                 </Grid>{' '}
                 <Grid
@@ -197,19 +199,19 @@ const Home = () => {
                     <img
                       src='/images/youtube_Videos/addBitleave.png'
                       width='100%'
-                     
+
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}
-                      style={{padding:'0px 20px'}}
+                      onClick={() => youtubeURL(link_2, 'Add bit.leave to your payroll')}
+                      style={{ padding: '0px 20px' }}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}
+                      onClick={() => youtubeURL(link_2, 'Add bit.leave to your payroll')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2,'Add bit.leave to your payroll')}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2, 'Add bit.leave to your payroll')}>
                     Add bit.leave to your payroll
                   </Typography>
                 </Grid>{' '}
@@ -235,20 +237,20 @@ const Home = () => {
                   >
                     <img
                       src='/images/youtube_Videos/cashoutProcess.png'
-                      
+
                       width={'100%'}
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_3,'The cash out process')}
-                      style={{padding:'0px 20px'}}
+                      onClick={() => youtubeURL(link_3, 'The cash out process')}
+                      style={{ padding: '0px 20px' }}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_3,'The cash out process')}
+                      onClick={() => youtubeURL(link_3, 'The cash out process')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_3,'The cash out process')}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_3, 'The cash out process')}>
                     The cash out process
                   </Typography>
                 </Grid>{' '}
@@ -274,19 +276,19 @@ const Home = () => {
                     <img
                       src='/images/youtube_Videos/addLogo.png'
                       width='100%'
-                   
+
                       height='100px'
                       alt='youtube-image'
-                      onClick={() => youtubeURL(link_4,'Add a logo')}
-                      style={{padding:'0px 20px'}}
+                      onClick={() => youtubeURL(link_4, 'Add a logo')}
+                      style={{ padding: '0px 20px' }}
                     />
                     <PlayIcon
                       src='/images/cards/play-icon.png'
                       className='play-icon'
-                      onClick={() => youtubeURL(link_4,'Add a logo')}
+                      onClick={() => youtubeURL(link_4, 'Add a logo')}
                     />
                   </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_4,'Add a logo')}>
+                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_4, 'Add a logo')}>
                     Add a logo
                   </Typography>
                 </Grid>{' '}
@@ -301,59 +303,61 @@ const Home = () => {
             <CardContent>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>What is bit.Leave ?</Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>What is bit.Leave ?</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    Bit.leave is an internal company currency. It allows you to reward staff with more money or more
-                    time off.
+                    Bit.leave is a HR compliance tool that helps companies reduce excess leave liabilities, burnout risk and the claims associated with it.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>How do I use bit.leave? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>How do I use bit.leave? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    When you set up a bit.leave account you can assign a preset amount of bit.leave to each employee.
-                    They can then use it or cash it out in accordance with company policy and rules.
+                    When you set up a bit.leave account you go through a simple onboarding process. You can select the features you would like to use and leave the rest for later. Start with our dashboard and go from there!
+                    <br />
+                    If you have any questions, our friendly customer support team will be there to assist.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>What can I spend bit.leave on? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>What can I spend my excess leave on? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
                     Bit.leave is designed to give employees autonomy. They can choose to take time off or spend it in a
-                    way that is intrinsically rewarding to them or in alignment with their financial needs or goals. You
-                    can manually approve each cash out if you would like to put structure around its use.
+                    way that is intrinsically rewarding to them or in alignment with their financial needs or goals.
+                    <br />
+                    You can manually approve each cash out if you would like to put structure around its use.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>How does my company benefit? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>How does my company benefit? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    With rules based spending you can control how and when employees can access or use bit.leave. For
-                    e?e, if they have excess annual leave you can set rules that encourage employees to use their excess
+                    With rules based spending you can control how and when employees can access or use bit.leave.
+                    <br />
+                    For example, if they have excess annual leave you can set rules that encourage employees to use their excess
                     leave first. This helps you manage leave and other balance sheet liabilities.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>What is the ROI of bit.leave?? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>What is the ROI of bit.leave? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography component='div'>
                     Depending on your company, the ROI will vary but here’s some of the areas bit.leave will help in
                     your business:
-                    <ul>
+                    <ul style={{ paddingLeft: "40px" }}>
                       <li>Reduction in excess leave liabilities</li>
                       <li>Time in Lieu and RDO management</li>
                       <li>Reduction of ineffective wellness spend/programs</li>
@@ -370,19 +374,19 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Why use leave as a currency? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Why use leave as a currency? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    60% or more of employees simply want more money or more time off when it comes to helping with cost
-                    of living pressures. Leave as a currency guarantees a 100% adoption rate across your organisation as
+                    84% or more of employees simply want more money or more time off when it comes to helping with cost
+                    of living pressures. <br /> Leave as a currency guarantees a 100% adoption rate across your organisation as
                     it can be used by everyone.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Is it compliant for my industry and employee type? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Is it compliant for my industry and employee type? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
@@ -393,7 +397,7 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Can I change the value of bit.leave? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Can I change the value of bit.leave? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
@@ -404,19 +408,19 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Why is bit.leave better than other benefits? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Why is bit.leave better than other benefits? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
                     The industry average for other benefits platforms or perks is less than 10%. They usually cater for
-                    only a small segment of your employee demographic. bit.leave applies to everyone regardless of
+                    only a small segment of your employee demographic.<br /> bit.leave applies to everyone regardless of
                     salary and life stage.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Can it be used it multiple countries and currencies? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Can it be used it multiple countries and currencies? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
@@ -427,7 +431,7 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Does it work with my current HRIS? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Does it work with my current HRIS? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>Yes. bit.leave works with any HRIS system on the market.</Typography>
@@ -435,7 +439,7 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Does it work with my current payroll? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Does it work with my current payroll? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
@@ -446,7 +450,7 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Can I use it alongside other benefits?</Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Can I use it alongside other benefits?</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
@@ -458,18 +462,19 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>How does it work alongside other leave types? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>How does it work alongside other leave types? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    Bit.leave works alongside all other leave types. A unique benefit of bit.leave is that it is easily
-                    installed and implemented which means minimal disruptions and ease of use.
+                    Yes! A unique benefit of bit.leave is that it is easily installed alongside your current leave entitlements which means minimal disruptions and ease of use.
+                    <br />
+                    Using our leave-as-a-currency solution you can even create custom leave types or simplify your current leave offering for better adoption, branding and use. Another great part, it can even be kept off your balance sheet.
                   </Typography>
                 </AccordionDetails>
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Do you help with onboarding, implementation and adoption?</Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Do you help with onboarding, implementation and adoption?</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
@@ -480,13 +485,15 @@ const Home = () => {
               </Accordion>
               <Accordion>
                 <AccordionSummary expandIcon={<ChevronDown />} aria-controls='panel1a-content' id='panel1a-header'>
-                  <Typography>Is this just another platform for me to manage? </Typography>
+                  <Typography sx={{ fontWeight: 'bold' }}>Is this just another platform for me to manage? </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    Thankfully no! Once you onboard your organisation it can run passively in the background with
-                    minimal human interaction. If you want more control over bit.leave you can set that during
-                    onboarding. We send you monthly updates and you can use bit.leave only when you need to.
+                    Thankfully no! Once you onboard your organisation it can run passively in the background with minimal human interaction. If you want more control over bit.leave you can set that during onboarding.
+                    <br />
+                    We send you monthly reports and you can use bit.leave only when you need to. Your employees will be able to access and manage their bit.leave without you having to lift a finger after you implement it.
+                    <br />
+                    Long term, you will be able to embed bit.leave into your HRIS and payroll systems.
                   </Typography>
                 </AccordionDetails>
               </Accordion>

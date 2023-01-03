@@ -23,7 +23,7 @@ const Payroll = () => {
               type='string'
               label='Payroll Name'
               name='Payroll Name'
-              defaultValue={'Payroll'}
+              defaultValue={'XERO'}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -39,8 +39,8 @@ const Payroll = () => {
       <CardActions>
         <Grid container spacing={5}>
           <Grid item xs={12}>
-            <Button variant='contained' disabled>
-              Submit
+            <Button variant='contained'>
+              Disconnect
             </Button>
           </Grid>
         </Grid>

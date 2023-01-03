@@ -45,7 +45,8 @@ interface OnBoardingState {
 	payrollLink: string,
 	approval: string,
 	signature: string,
-	tenantId: string
+	tenantId: string,
+	connectionId : string,
 }
 
 
@@ -123,7 +124,8 @@ const Onboarding = () => {
 		payrollLink: '',
 		approval: '',
 		signature: '',
-		tenantId:''
+		tenantId:'',
+		connectionId:'',
 	});
 
   const fetchEmpData = async () => {
@@ -374,6 +376,7 @@ const Onboarding = () => {
 		const stateData = {
 			...onBoarding,
 			 tenantId: data.tenantId,
+			 connectionId : data.tenantId //TEMP
 		}
 		setOnBoardingState(stateData)
 		setIsLoading(true);
