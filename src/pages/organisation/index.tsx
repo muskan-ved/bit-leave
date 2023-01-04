@@ -59,7 +59,7 @@ const UpdateOrganisation = () => {
 
 const arrayData:any = []
   data.map((item:any,index:any) => {
-    const final = arrayData.push({id : index+1,firstname : item.firstname,lastname : item.lastname,fullname : item.fullname,emailaddress : item.email,managerId : '',manageremail : '',jobtitle : '',country : '',department : ''})
+    const final = arrayData.push({id : index+1,firstname : item.firstname,lastname : item.lastname,fullname : item.fullname,emailaddress : item.email,managerId : '',jobtitle : '',country : '',department : ''})
     return final;
   });
 
@@ -92,35 +92,11 @@ const arrayData:any = []
     return reqExp.test(name)
   }
 
-  // const isEmpTypeValid = function (empType: any) {
-  //   const reqExp = /^[A-Za-z-]+$/
-
-  //   return reqExp.test(empType)
-  // }
-
   const isFullNameValid = function (fullname: any) {
     const reqExp = /^[A-Za-z]+ [A-Za-z]+$/
 
     return reqExp.test(fullname)
   }
-
-  // const isNumValid = function (num: any) {
-  //   const reqExp = /^[0-9]+$/
-
-  //   return reqExp.test(num)
-  // }
-
-  // const isFloatNumValid = function (num: any) {
-  //   const reqExp = /^[0-9.0-9]+$/
-
-  //   return reqExp.test(num)
-  // }
-
-  // const isDateValid = function (date: any) {
-  //   const reGoodDate = /^((0?[1-9]|[12][0-9]|3[01])[- /.](0?[1-9]|1[012])[- /.](19|20)?[0-9]{2})*$/
-
-  //   return reGoodDate.test(date)
-  // }
 
   const columns = {
     headers: [
@@ -161,15 +137,6 @@ const arrayData:any = []
         required: false
       },
       {
-        name: 'manageremail',
-        inputName: 'manageremail',
-        required: false,
-        unique: false,
-        
-        //validate: isEmailValid
-      },
-
-      {
         name: 'jobtitle',
         inputName: 'jobtitle',
         required: true,
@@ -182,56 +149,12 @@ const arrayData:any = []
         required: true,
         validate: isNameValid
       },
-
-      // {
-      //   name: 'awardtype',
-      //   inputName: 'awardtype',
-      //   required: true,
-      //   validate: isNameValid
-      // },
-      // {
-      //   name: 'datejoined',
-      //   inputName: 'datejoined',
-      //   required: true,
-      //   validate: isDateValid
-      // },
-      // {
-      //   name: 'annualleavebalance',
-      //   inputName: 'annualleavebalance',
-      //   required: true,
-      //   validate: isNumValid
-      // },
       {
         name: 'department',
         inputName: 'department',
         required: true,
         validate: isNameValid
       },
-
-      // {
-      //   name: 'annualsalary',
-      //   inputName: 'annualsalary',
-      //   required: true,
-      //   validate: isNumValid
-      // },
-      // {
-      //   name: 'ordinaryhoursperweek',
-      //   inputName: 'ordinaryhoursperweek',
-      //   required: true,
-      //   validate: isFloatNumValid
-      // },
-      // {
-      //   name: 'hourlyrate',
-      //   inputName: 'hourlyrate',
-      //   required: true,
-      //   validate: isFloatNumValid
-      // },
-      // {
-      //   name: 'employmenttype',
-      //   inputName: 'employmenttype',
-      //   required: true,
-      //   validate: isEmpTypeValid
-      // }
     ]
   }
 
@@ -261,36 +184,27 @@ const arrayData:any = []
       field: 'fullname',
       headerName: 'Full name',
       sortable: false,
-      minWidth: 160,
-      disableColumnMenu: true
+      minWidth: 180,
+      disableColumnMenu: true,
     },
     {
       field: 'emailaddress',
       headerName: 'Email Address',
       sortable: false,
-      minWidth: 200,
+      minWidth: 210,
       disableColumnMenu: true
     },
     {
       field: 'managerId',
       headerName: 'Manager Id',
-      type: 'number',
-      minWidth: 110,
+      minWidth: 120,
       sortable: false,
       disableColumnMenu: true
     },
-    {
-      field: 'manageremail',
-      headerName: 'Manager Email',
-      sortable: false,
-      minWidth: 200,
-      disableColumnMenu: true
-    },
-
     {
       field: 'jobtitle',
       headerName: 'Job Title',
-      minWidth: 120,
+      minWidth: 150,
       sortable: false,
       disableColumnMenu: true
     },
@@ -298,32 +212,10 @@ const arrayData:any = []
     {
       field: 'country',
       headerName: 'Country',
-      minWidth: 120,
+      minWidth: 150,
       sortable: false,
       disableColumnMenu: true
     },
-
-    // {
-    //   field: 'awardtype',
-    //   headerName: 'Award Type',
-    //   minWidth: 120,
-    //   sortable: false,
-    //   disableColumnMenu: true
-    // },
-    // {
-    //   field: 'datejoined',
-    //   headerName: 'Date Joined',
-    //   sortable: false,
-    //   minWidth: 120,
-    //   disableColumnMenu: true
-    // },
-    // {
-    //   field: 'annualleavebalance',
-    //   headerName: 'Annual Leave Balance',
-    //   sortable: false,
-    //   minWidth: 190,
-    //   disableColumnMenu: true
-    // },
     {
       field: 'department',
       headerName: 'Department',
@@ -331,35 +223,6 @@ const arrayData:any = []
       minWidth: 160,
       disableColumnMenu: true
     },
-
-    // {
-    //   field: 'annualsalary',
-    //   headerName: 'Annual Salary',
-    //   sortable: false,
-    //   minWidth: 160,
-    //   disableColumnMenu: true
-    // },
-    // {
-    //   field: 'ordinaryhoursperweek',
-    //   headerName: 'Ordinary Hours Per Week',
-    //   sortable: false,
-    //   minWidth: 220,
-    //   disableColumnMenu: true
-    // },
-    // {
-    //   field: 'hourlyrate',
-    //   headerName: 'Hourly Rate',
-    //   sortable: false,
-    //   disableColumnMenu: true,
-    //   minWidth: 140
-    // },
-    // {
-    //   field: 'employmenttype',
-    //   headerName: 'Employment Type',
-    //   sortable: false,
-    //   disableColumnMenu: true,
-    //   minWidth: 170
-    // }
   ]
 
   const fileReader = new FileReader()
@@ -513,62 +376,12 @@ const arrayData:any = []
         }
       }
 
-      // // ** Check AwardType **
-      // if (csvHeader.includes('awardtype') || !csvHeader.includes('awardtype')) {
-      //   const index = csvHeader.indexOf('awardtype')
-      //   if (index) {
-      //   }
-      // }
-
-      // // ** Check StartDate **
-      // if (csvHeader.includes('datejoined')) {
-      //   const index = csvHeader.indexOf('datejoined')
-      //   if (index) {
-      //   }
-      // }
-
-      // // ** Check AnnualLeaveBalance **
-      // if (csvHeader.includes('annualleavebalance')) {
-      //   const index = csvHeader.indexOf('annualleavebalance')
-      //   if (index) {
-      //   }
-      // }
-
       // ** Check Department **
       if (csvHeader.includes('department') || !csvHeader.includes('department')) {
         const index = csvHeader.indexOf('department')
         if (index) {
         }
       }
-
-      // ** Check AnnualSalary **
-      // if (csvHeader.includes('annualsalary')) {
-      //   const index = csvHeader.indexOf('annualsalary')
-      //   if (index) {
-      //   }
-      // }
-
-      // // ** Check OrdinaryHoursPerWeek **
-      // if (csvHeader.includes('ordinaryhoursperweek')) {
-      //   const index = csvHeader.indexOf('ordinaryhoursperweek')
-      //   if (index) {
-      //   }
-      // }
-
-      // // ** Check HourlyRate **
-      // if (csvHeader.includes('hourlyrate') || !csvHeader.includes('hourlyrate')) {
-      //   const index = csvHeader.indexOf('hourlyrate')
-      //   if (index) {
-      //   }
-      // }
-
-      // // ** Check EmploymentType **
-      // if (csvHeader.includes('employmenttype')) {
-      //   const index = csvHeader.indexOf('employmenttype')
-      //   if (index) {
-      //   }
-      // }
-
       const array = csvRows.map(i => {
         const values = i.split(',')
         const obj = csvHeader.reduce((object: any, header: any, index) => {
@@ -652,7 +465,7 @@ const arrayData:any = []
         </DialogContent>
         <DialogActions sx={{ pb: { xs: 8, sm: 12.5 }, justifyContent: 'center' }}>
             <Button variant='contained' component='label' sx={{ mr: 2 }} onClick={() => setShow(false)}>
-            <CSVLink data={arrayData} filename={"Template.csv"} target="_blank" style={{ textDecoration: 'none', color: '#061A16' }}> Download Organisation Template CSV</CSVLink>
+            <CSVLink data={arrayData} filename={"Template.csv"} target="_blank" enclosingCharacter='' style={{ textDecoration: 'none', color: '#061A16' }}> Download Organisation Template CSV</CSVLink>
             </Button>
         </DialogActions>
       </Dialog>

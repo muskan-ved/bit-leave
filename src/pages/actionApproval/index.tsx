@@ -162,7 +162,7 @@ const ActionApproval = () =>{
           }).catch(err => {
             setLoading(false);
             setLoading1(false)
-            toast.error('Server Issue')
+            toast.error('Unfortunately, there was an issue, please try again')
           })
         }
     }

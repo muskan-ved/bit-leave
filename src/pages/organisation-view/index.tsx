@@ -21,16 +21,16 @@ const Card = (props:any) => {
             <div className="card">
               <div className="image">
                 <img
-                  src={"https://randomuser.me/api/portraits/men/"+randomIntFromInterval(1,100)+".jpg"}
+                  src={item.avatar !== null? item.avatar : "https://randomuser.me/api/portraits/men/"+randomIntFromInterval(1,100)+".jpg"}
                   alt="Profile"
                   style={{ borderColor: levelColor }}
                 />
               </div>
               <div className="card-body" style={{background:'#f7f7f9'}}>
-                <h4>{item.fullname}</h4>
+                <h4>{item.firstname} {item.lastname}</h4>
               </div>
               <div className="card-footer" style={{ background: levelColor,padding:'10px' }}>
-                <p >Title: {item.title}</p>
+                <p >Title: {item.jobtitle}</p>
               </div>
               <div></div>
             </div>
@@ -46,109 +46,37 @@ const Chart = () => {
 
   const [orgviewdata, setOrgViewData] = useState<any>([
     {
-      "id": "MO1",
-      "fullname": "ROOT",
-      "title": "owner",
-      "items": [
-        {
-          "id": "MO2",
-          "fullname": "Child One",
-          "title": "Employee",
-          "items": [
-          ]
-        },
-        
-        {
-          "id": "MO4",
-          "fullname": "Child Two",
-          "title": "Employee",
-          "items": [
+        "id": "4a0c8f70-e077-4b86-9545-ccac771ccd41",
+        "firstname": "Kushal",
+        "lastname": "Vaghani",
+        "jobtitle": "Yaaari",
+        "avatar": null,
+        "items": [
             {
-              "id": "MO41",
-              "fullname": "Child Three",
-              "title": "Junior",
-              "items": [
-                {
-                  "id": "MO411",
-                  "fullname": "Child Three",
-                  "title": "Junior",
-                  "items": [
-                  ]
-                },
-                {
-                  "id": "MO412",
-                  "fullname": "Child Three",
-                  "title": "Junior",
-                  "items": [
-                    {
-                      "id": "MO4121",
-                      "fullname": "Child Three",
-                      "title": "Junior",
-                      "items": [
-                      ]
-                    },
-                    {
-                      "id": "MO4122",
-                      "fullname": "Child Three",
-                      "title": "Junior",
-                      "items": [
-                      ]
-                    }
-                  ]
-                }
-              ]
+                "id": "7af12f08-45f1-4e11-bf55-f9bb993e25a5",
+                "firstname": "Brett",
+                "lastname": "Turley",
+                "jobtitle": "DeshBhakth",
+                "avatar": null
             }
-          ]
-        },
-        {
-          "id": "MO3",
-          "fullname": "Child Two",
-          "title": "Employee",
-          "items": [
-            {
-              "id": "MO31",
-              "fullname": "Child Three",
-              "title": "Junior",
-              "items": [
-              ]
-            },
-            {
-              "id": "MO32",
-              "fullname": "Child Three",
-              "title": "Junior",
-              "items": [
-              ]
-            },
-            {
-              "id": "MO33",
-              "fullname": "Child Three",
-              "title": "Junior",
-              "items": [
-              ]
-            }					
-          ]
-        }
-      ]
-    }
-  ]);
+        ]
+    }]);
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const dispatch = useDispatch<AppDispatch>()
 
-  // const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+    fetchOrganisationData()
+  }, [])
 
-  // useEffect(() => {
-  //   fetchOrganisationData()
-  // }, [])
-
-  // const fetchOrganisationData = async () => {
-  //   setIsLoading(true)
-  //   const orgViewData = await dispatch(OrgView())
-  //   if (orgViewData.payload != null) {
-  //     setOrgViewData(orgViewData.payload.data)
-  //     setIsLoading(false)
-  //   }
-  //   setIsLoading(false)
-  // }
-
+  const fetchOrganisationData = async () => {
+    setIsLoading(true)
+    const orgViewData = await dispatch(OrgView())
+    if (orgViewData.payload != null) {
+      // setOrgViewData(orgViewData.payload.data.employees)
+      setIsLoading(false)
+    }
+    setIsLoading(false)
+  }
   if (isLoading && !orgviewdata) return <CircularProgress color='success' />
 
   return (

@@ -194,6 +194,7 @@ const Profile = () => {
 				const data = JSON.parse(userData)
 				OrgId = data.orgId;
 			}  
+			if(event.target.files[0].name.includes('.png')){
 				const fileName = (event.target.files[0].name.replace(event.target.files[0].name), `logo`)
 			
 				const params = {
@@ -214,6 +215,9 @@ const Profile = () => {
 						toast.error("Failed to Upload Organisation Logo")
 					}
 					})
+			}else{
+				toast.error("The Organisation logo should be png format.")
+			}
 		}
 	}
 

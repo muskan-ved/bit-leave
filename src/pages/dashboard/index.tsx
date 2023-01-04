@@ -134,17 +134,19 @@ const Dashboard = () => {
   const departments: string[] = departmentsOfAverageExcessDays
   const theme = useTheme()
   
-  const totalThresholdsLeave: number[] = [];
+  let totalThresholdsLeave: number[] = [];
+  const totalThresholdsLeaveWarning: number[] = [];
   
-  if(organisationData){
-    const thresholdsLeaveValue: number = organisationData[0]?.organisationssettings[0]?.thrleavewarning ?organisationData[0]?.organisationssettings[0]?.thrleavewarning : 20;
+  if(organisationData !== null){
+     totalThresholdsLeave = organisationData[0]?.organisationssettings[0]?.thrleavewarning ?organisationData[0]?.organisationssettings[0]?.thrleavewarning : 20;
     for(let i = 0; i < employees?.length; i++) {
-      totalThresholdsLeave?.push(thresholdsLeaveValue);
+      totalThresholdsLeaveWarning?.push(parseInt(`${totalThresholdsLeave}`, 10));
     }
   }
 
   const seriesData: number[] = (avgExcessDays ?avgExcessDays : [])
   const seriesData1: number[] = (directReportsOfExcessDays ? directReportsOfExcessDays : [])
+
   const series = [
     {
       name: 'Average Excess Days',
@@ -154,13 +156,11 @@ const Dashboard = () => {
   const series1 = [
     {
       name: 'Average Excess Days By Employee',
-      type: 'scatter',
       data: seriesData1
     },
     {
       name: 'Thresholds Limit',
-      type: 'line',
-      data: totalThresholdsLeave
+      data: totalThresholdsLeaveWarning
     }
   ]
 
@@ -218,21 +218,23 @@ const Dashboard = () => {
     }
   }
 
-
-
   const options1: ApexOptions = {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
-      height: 350,
-      type: 'line',
-    },
-    fill: {
-      type:'solid',
-    },
+         },
     markers: {
-      size: [6, 0]
+      size: [6, 0],
+      colors:[hexToRGBA(theme.palette.primary.light, 1),"#fff"]
     },
+    annotations: {
+      yaxis: [{
+        y: parseInt(`${totalThresholdsLeave}`, 10),
+        strokeDashArray: 0,
+        borderWidth:3,
+        borderColor: hexToRGBA(theme.palette.error.light, 1),
+      }],
+      },
     plotOptions: {
       bar: {
         borderRadius: 8,
@@ -282,7 +284,7 @@ const Dashboard = () => {
     
   }
 
-  const employeeDetails = useSelector((state: RootState) => state.employee)
+  const employeeDetails:any = useSelector((state: RootState) => state.employee)
 
   const refreshbtn = async () => {
     fetchDataFromRedux()
@@ -622,7 +624,7 @@ const Dashboard = () => {
                   }
                 />
                 <CardContent>
-                  <ReactApexcharts  type={"line"} height={294} series={series1} options={options1} />
+                  <ReactApexcharts  type={"scatter"} height={294} series={series1} options={options1} />
                 </CardContent>
               </Card>
             </Grid>

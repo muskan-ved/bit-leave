@@ -110,8 +110,10 @@ const Onboarding = () => {
 	const steps = ['Start', 'Contacts', 'Approval', 'Connect to XERO','Choose Xero Tenant'];
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [buttonToggle, setButtonToggle] = React.useState(false);
+	const [buttonToggle1, setButtonToggle1] = React.useState(false);
 	const [tenantData, setTenantData] = React.useState([]);
 	const [isLoading, setIsLoading] = React.useState<boolean>(false)
+	const [isLoading1, setIsLoading1] = React.useState<boolean>(false)
 	const [empData, setEmpData] = React.useState<employeeType | null>(null)
 	const router = useRouter()
 	const [onBoarding, setOnBoardingState] = React.useState<OnBoardingState>({
@@ -373,10 +375,13 @@ const Onboarding = () => {
 	}
 
 	const onTenantIdSubmit = async (data:any) => {
+		
+		const connectionIdFind:any = tenantData.find((res:any)=> res.tenantId === data.tenantId)
+
 		const stateData = {
 			...onBoarding,
 			 tenantId: data.tenantId,
-			 connectionId : data.tenantId //TEMP
+			 connectionId : (connectionIdFind ? connectionIdFind.connectionId : '') //TEMP
 		}
 		setOnBoardingState(stateData)
 		setIsLoading(true);
@@ -981,12 +986,12 @@ const Onboarding = () => {
 				</Grid>
 				<Grid item xs={12}>
 					<Box sx={{ float: "left" }}>
-						{!buttonToggle ?
-						<Button type='submit' variant="contained"  disabled={isLoading}>
+						{!buttonToggle1 ?
+						<Button type='submit' variant="contained"  disabled={isLoading1}>
 							{activeStep === 0 ? 'Start' : 'Connect to KEYPAY'}
 						</Button>
 						:
-						<Button type='submit' variant="contained"  disabled={isLoading} >
+						<Button type='submit' variant="contained"  disabled={isLoading1} >
 							{activeStep === 0 ? 'Start' : 'Next'}
 						</Button>}
 					</Box>
