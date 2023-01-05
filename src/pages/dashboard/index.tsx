@@ -175,12 +175,14 @@ const Dashboard = () => {
         barHeight: '60%',
         horizontal: true,
         distributed: true,
+        startingShape: 'rounded'
       }
     },
     grid: {
       strokeDashArray: 8,
       xaxis: {
-        lines: { show: true }
+        lines: { show: true },
+
       },
       yaxis: {
         lines: { show: false }
@@ -211,7 +213,7 @@ const Dashboard = () => {
     xaxis: {
       axisTicks: { show: false },
       axisBorder: { show: false },
-      categories: (departments ? [] : departments)
+      categories: (departments ? departments: []),
     },
     yaxis: {
       labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
