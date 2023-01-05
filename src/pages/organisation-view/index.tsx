@@ -5,9 +5,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/store";
 import { CircularProgress } from "@mui/material";
 
-function randomIntFromInterval(min:any, max:any) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min)
-}
 const Card = (props:any) => {
   const levelColor = randomcolor({
     luminosity: 'light',
@@ -21,7 +18,7 @@ const Card = (props:any) => {
             <div className="card">
               <div className="image">
                 <img
-                  src={item.avatar !== null? item.avatar : "https://randomuser.me/api/portraits/men/"+randomIntFromInterval(1,100)+".jpg"}
+                  src={item.avatar !== null? '/images/avatars/'+item.avatar : '/images/avatars/questionMark.png'}
                   alt="Profile"
                   style={{ borderColor: levelColor }}
                 />
@@ -44,23 +41,7 @@ const Card = (props:any) => {
 
 const Chart = () => {
 
-  const [orgviewdata, setOrgViewData] = useState<any>([
-    {
-        "id": "4a0c8f70-e077-4b86-9545-ccac771ccd41",
-        "firstname": "Kushal",
-        "lastname": "Vaghani",
-        "jobtitle": "Yaaari",
-        "avatar": null,
-        "items": [
-            {
-                "id": "7af12f08-45f1-4e11-bf55-f9bb993e25a5",
-                "firstname": "Brett",
-                "lastname": "Turley",
-                "jobtitle": "DeshBhakth",
-                "avatar": null
-            }
-        ]
-    }]);
+  const [orgviewdata, setOrgViewData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
 
@@ -72,7 +53,7 @@ const Chart = () => {
     setIsLoading(true)
     const orgViewData = await dispatch(OrgView())
     if (orgViewData.payload != null) {
-      // setOrgViewData(orgViewData.payload.data.employees)
+      setOrgViewData(orgViewData.payload.data.employees)
       setIsLoading(false)
     }
     setIsLoading(false)
@@ -80,7 +61,7 @@ const Chart = () => {
   if (isLoading && !orgviewdata) return <CircularProgress color='success' />
 
   return (
-    <div className="org-tree" style={{width:'max-content',textAlign:'center'}}>
+    <div className="org-tree" style={{display:'flex',justifyContent:'center'}}>
       <Card data={orgviewdata} />
     </div>
   );
