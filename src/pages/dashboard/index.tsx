@@ -616,15 +616,7 @@ const Dashboard = () => {
             ) : null}
             <Grid item md={6} xs={12}>
               <Card>
-                <CardHeader
-                  title='Leaves by Direct Reports 📈'
-                  subheader={
-                    <>
-                   
-                      <Divider></Divider>
-                    </>
-                  }
-                />
+                <CardHeader title='Leaves by Direct Reports 📈' subheader={<Divider></Divider>}/>
                 <CardContent>
                   <ReactApexcharts  type={"scatter"} height={294} series={series1} options={options1} />
                 </CardContent>

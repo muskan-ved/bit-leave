@@ -177,7 +177,7 @@ const Navigation = (props: Props) => {
   if (userData != null) {
       data = JSON.parse(userData)
     }  
-  const checkRoleForSideNavHeight = (data.role === 'user' ? '89vh' :  '120vh' )
+  const checkRoleForSideNavHeight = (data?.role === 'user' ? '89vh' :  '140vh' )
   return (
     <Drawer {...props}>
       <VerticalNavHeader {...props} />

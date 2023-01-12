@@ -1,10 +1,11 @@
 // ** Icon imports
 import { EmailOutline, GiftOpenOutline, ViewDashboardOutline, WalletOutline, HomeOutline, ShieldOutline, FileUploadOutline, OfficeBuildingMarkerOutline, HelpCircleOutline} from 'mdi-material-ui'
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
-import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import { GridTripleDotsVerticalIcon } from '@mui/x-data-grid';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -53,19 +54,39 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Dashboard',
       icon: ViewDashboardOutline,
-      path: '/dashboard', //User Dashboard
       action: 'read',
-      subject: 'dashboard'
-    },
-
-    {
-      title: 'Org View',
-      icon: GridTripleDotsVerticalIcon,
-      path: '/organisation-view',
-      action: 'read',
-      subject: 'orgChartView'
-    },
-    
+      subject: 'dashboard',
+      children: [
+        {
+          title: 'Stats',
+          icon: QueryStatsIcon,
+          path: '/dashboard/stats', //User Dashboard
+          action: 'read',
+          subject: 'dashboard'
+        },
+        {
+          title: 'My Leaves',
+          icon: CalendarMonthIcon,
+          path: '/dashboard/leaves', //User Dashboard
+          action: 'read',
+          subject: 'dashboard'
+        },
+        {
+          title: 'Org View',
+          icon: GridTripleDotsVerticalIcon,
+          path: '/dashboard/organisation-view',
+          action: 'read',
+          subject: 'orgChartView'
+        },
+        {
+          title: 'Scenarios',
+          icon: ReceiptLongIcon,
+          path: '/dashboard/scenarios', //User Dashboard
+          action: 'read',
+          subject: 'dashboard'
+        },
+      ]
+    },    
     {
       sectionTitle: 'Settings',
       action: 'read',
