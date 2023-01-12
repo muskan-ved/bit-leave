@@ -4,6 +4,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
+import { GridTripleDotsVerticalIcon } from '@mui/x-data-grid';
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -57,13 +58,13 @@ const navigation = (): VerticalNavItemsType => {
       subject: 'dashboard'
     },
 
-    // {
-    //   title: 'Org Chart',
-    //   icon: AccountTreeOutlinedIcon,
-    //   path: '/organisation-view',
-    //   action: 'read',
-    //   subject: 'orgChartView'
-    // },
+    {
+      title: 'Org View',
+      icon: GridTripleDotsVerticalIcon,
+      path: '/organisation-view',
+      action: 'read',
+      subject: 'orgChartView'
+    },
     
     {
       sectionTitle: 'Settings',
@@ -107,7 +108,7 @@ const navigation = (): VerticalNavItemsType => {
       subject: 'admin',
       children: [
         {
-          title: 'Sync Org',
+          title: 'Org Structure',
           icon: FileUploadOutline,
           path: '/organisation',
           action: 'manage',
@@ -115,13 +116,13 @@ const navigation = (): VerticalNavItemsType => {
           // badgeColor: "primary",
           // badgeContent:'coming soon'
         },
-        {
-          title: 'bit.leave Setup',
-          icon: SettingsOutlinedIcon,
-          path: '/setup',
-          action: 'manage',
-          subject: 'admin'
-        },
+        // {
+        //   title: 'bit.leave Setup',
+        //   icon: SettingsOutlinedIcon,
+        //   path: '/setup',
+        //   action: 'manage',
+        //   subject: 'admin'
+        // },
         {
           title: 'Roles',
           icon: PersonOutlineIcon,

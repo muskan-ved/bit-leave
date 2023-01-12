@@ -20,13 +20,13 @@ const Card = (props:any) => {
                 <img
                   src={item.avatar !== null? '/images/avatars/'+item.avatar : '/images/avatars/questionMark.png'}
                   alt="Profile"
-                  style={{ borderColor: levelColor }}
+                  style={{ borderColor: '#2DCCA7' }}
                 />
               </div>
               <div className="card-body" style={{background:'#f7f7f9'}}>
                 <h4>{item.firstname} {item.lastname}</h4>
               </div>
-              <div className="card-footer" style={{ background: levelColor,padding:'10px' }}>
+              <div className="card-footer" style={{ background: '#2DCCA7',padding:'10px' }}>
                 <p >Title: {item.jobtitle}</p>
               </div>
               <div></div>

@@ -978,7 +978,7 @@ const Onboarding = () => {
 				
 				<Grid container spacing={5}>
 				<Grid item xs={12} sx={{display: "flex", justifyContent: "space-between",  alignItems: "center"}}>
-					<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Connect to KEYPAY</Typography>
+					<Typography variant='h5' gutterBottom sx={{ mb: 1.5, fontWeight: 600, letterSpacing: '0.18px' }}>Connect to Keypay</Typography>
 					<Box src={"/images/cards/keypay_icon.png"} component={'img'}  sx={{ float: "right"  ,height:'28px'}} />
 				</Grid>
 				<Grid item xs={12} sx={{padding: "0px 0px 20px 20px",textAlign:"justify"}}>
