@@ -129,7 +129,7 @@ export const loadEmployee = createAsyncThunk('emp/load',
       .get(API.loadEmployee, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      const roleIdentifier = result.data.data.profile.role === 2 ? 'user' : result.data.data.profile.role === 3 ? 'viewer' : data.role
+      const roleIdentifier = result.data.data.profile.role === 2 ? 'user' : result.data.data.profile.role === 3 ? 'viewer' : result.data.data.profile.role === 1 ? 'admin': data.role
       const mergeData = ({...data,'role':roleIdentifier})
       localStorage.setItem('userData',JSON.stringify(mergeData))
     return result.data

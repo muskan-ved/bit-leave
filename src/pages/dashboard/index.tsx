@@ -401,12 +401,12 @@ const Dashboard = () => {
             <Box
               component='img'
               sx={{
-                width: '100px',
+                width: '40px',
                 marginRight: '12px',
                 marginBottom: '-15px'
               }}
               alt='The Xero Connect logo.'
-              src='/images/cards/xero-connected-app-logo.png'
+              src='/images/cards/xero_icon.png'
             />
             <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
               <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />

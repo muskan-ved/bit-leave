@@ -10,6 +10,13 @@ import Spinner from 'src/@core/components/spinner'
 // ** Hook Imports
 import { useAuth } from 'src/hooks/useAuth'
 
+// ** Redux Import
+import {  useDispatch } from 'react-redux';
+
+// ** Redux Store Import
+import {  AppDispatch } from 'src/store';
+import { loadEmployee } from 'src/store/employee'
+
 /**
  *  Set Home URL based on User Roles
  */
@@ -23,23 +30,29 @@ const Home = () => {
   // ** Hooks
   const auth = useAuth()
   const router = useRouter()
-
+  const dispatch = useDispatch<AppDispatch>()
   const userData = localStorage.getItem("userData")
-  let data:any;
-  if (userData != null) {
-     data = JSON.parse(userData)
+
+  const fetchEmpData = async () => {
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      const roleData = empData.payload.data.profile.role;
+      if (empData && roleData) {
+        const homeRoute = getHomeRoute(roleData)
+
+        // Redirect user to Home URL
+        router.replace(homeRoute)
+    }
+    }
   }
+
   useEffect(() => {
     if (!router.isReady) {
       return
     }
 
-    if (data && data.role) {
-      const homeRoute = getHomeRoute(data.role)
+    fetchEmpData()
 
-      // Redirect user to Home URL
-      router.replace(homeRoute)
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

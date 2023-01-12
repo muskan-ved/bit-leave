@@ -172,6 +172,12 @@ const Navigation = (props: Props) => {
 
   const ScrollWrapper = hidden ? Box : PerfectScrollbar
 
+  const userData = window.localStorage.getItem("userData")
+  let data;
+  if (userData != null) {
+      data = JSON.parse(userData)
+    }  
+  const checkRoleForSideNavHeight = (data.role === 'user' ? '89vh' :  '120vh' )
   return (
     <Drawer {...props}>
       <VerticalNavHeader {...props} />
@@ -201,7 +207,7 @@ const Navigation = (props: Props) => {
           {userVerticalNavMenuContent ? (
             userVerticalNavMenuContent(props)
           ) : (
-            <List className='nav-items' sx={{ pt: 0, height: '110vh', '& > :first-child': { mt: '0' } }}>
+            <List className='nav-items' sx={{ pt: 0, height: checkRoleForSideNavHeight, '& > :first-child': { mt: '0' } }}>
               <VerticalNavItems
                 groupActive={groupActive}
                 setGroupActive={setGroupActive}

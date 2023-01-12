@@ -59,7 +59,7 @@ const UpdateOrganisation = () => {
 
 const arrayData:any = []
   data.map((item:any,index:any) => {
-    const final = arrayData.push({id : index+1,firstname : item.firstname,lastname : item.lastname,fullname : item.fullname,emailaddress : item.email,managerId : '',jobtitle : '',country : '',department : ''})
+    const final = arrayData.push({id : index+1,firstname : item.firstname,lastname : item.lastname,fullname : item.fullname,emailaddress : item.email,managerId : '',jobtitle : '',department : ''})
     return final;
   });
 
@@ -142,13 +142,6 @@ const arrayData:any = []
         required: true,
         validate: isNameValid
       },
-
-      {
-        name: 'country',
-        inputName: 'country',
-        required: true,
-        validate: isNameValid
-      },
       {
         name: 'department',
         inputName: 'department',
@@ -162,7 +155,7 @@ const arrayData:any = []
     {
       field: 'id',
       headerName: 'Employee Id',
-      minWidth: 120,
+      minWidth: 130,
       sortable: false,
       disableColumnMenu: true
     },
@@ -191,31 +184,24 @@ const arrayData:any = []
       field: 'emailaddress',
       headerName: 'Email Address',
       sortable: false,
-      minWidth: 210,
+      minWidth: 220,
       disableColumnMenu: true
     },
     {
       field: 'managerId',
       headerName: 'Manager Id',
-      minWidth: 120,
+      minWidth: 150,
       sortable: false,
       disableColumnMenu: true
     },
     {
       field: 'jobtitle',
       headerName: 'Job Title',
-      minWidth: 150,
+      minWidth: 140,
       sortable: false,
       disableColumnMenu: true
     },
 
-    {
-      field: 'country',
-      headerName: 'Country',
-      minWidth: 150,
-      sortable: false,
-      disableColumnMenu: true
-    },
     {
       field: 'department',
       headerName: 'Department',
@@ -365,13 +351,6 @@ const arrayData:any = []
       // ** jobtitle
       if (csvHeader.includes('jobtitle')) {
         const index = csvHeader.indexOf('jobtitle')
-        if (index) {
-        }
-      }
-
-      // ** country
-      if (csvHeader.includes('country')) {
-        const index = csvHeader.indexOf('country')
         if (index) {
         }
       }

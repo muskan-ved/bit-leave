@@ -71,44 +71,30 @@ const navigation = (): VerticalNavItemsType => {
       action: 'read',
       subject: 'settingsSection'
     },
-    {
-      title: 'Org Setting',
-      icon: SettingsOutlinedIcon,
-      action: 'manage',
-      subject: 'admin',
-      children: [
         {
-          title: 'Thresholds',
+          title: 'Leave Thresholds',
           icon: ShieldOutline,
           path: '/thresholds',
           action: 'manage',
           subject: 'admin'
         },
         {
-          title: 'Templates',
+          title: 'Email Templates',
           icon: EmailOutline,
           path: '/templates',
           action: 'manage',
           subject: 'admin'
         },
         {
-          title: 'Payroll',
+          title: 'Payroll Connection',
           icon: AttachMoneyOutlinedIcon,
           path: '/payroll',
           action: 'manage',
           subject: 'admin'
         },
 
-      ]
-    },
-    {
-      title: 'Org Setup',
-      icon: ManageAccountsOutlinedIcon,
-      action: 'manage',
-      subject: 'admin',
-      children: [
         {
-          title: 'Org Structure',
+          title: 'Build Org Chart',
           icon: FileUploadOutline,
           path: '/organisation',
           action: 'manage',
@@ -116,22 +102,13 @@ const navigation = (): VerticalNavItemsType => {
           // badgeColor: "primary",
           // badgeContent:'coming soon'
         },
-        // {
-        //   title: 'bit.leave Setup',
-        //   icon: SettingsOutlinedIcon,
-        //   path: '/setup',
-        //   action: 'manage',
-        //   subject: 'admin'
-        // },
         {
           title: 'Roles',
           icon: PersonOutlineIcon,
           path: '/roleManage',
           action: 'manage',
           subject: 'admin'
-        }
-      ]
-    },
+        },
     {
       sectionTitle: 'Benefits',
       action: 'read',

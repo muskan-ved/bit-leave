@@ -61,7 +61,6 @@ const Home = () => {
   let fullName, OrgId: any
 
   const link_1 = 'https://www.youtube.com/watch?v=gwDXwHGUqfA'
-  const link_2 = 'https://www.youtube.com/watch?v=Ye0BOUuLkZk'
   const link_3 = 'https://www.youtube.com/watch?v=gtAmZxhxR8E'
   const link_4 = 'https://www.youtube.com/watch?v=gMbWUB5MWHw'
 
@@ -175,44 +174,6 @@ const Home = () => {
                   </Box>
                   <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_1, 'Org Settings')}>
                     Org Settings
-                  </Typography>
-                </Grid>{' '}
-                <Grid
-                  item
-                  xs={5}
-                  md={3}
-                  sx={{
-                    border: `1px solid ${theme.palette.grey[500]}`,
-                    borderRadius: '5px',
-                    padding: '10px 0px',
-                    marginTop: '10px',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      backgroundColor: hexToRGBA(theme.palette.primary.main, 0.2),
-                      margin: '0px 10px',
-                      paddingTop: '5px',
-                      position: 'relative'
-                    }}
-                  >
-                    <img
-                      src='/images/youtube_Videos/addBitleave.png'
-                      width='100%'
-
-                      height='100px'
-                      alt='youtube-image'
-                      onClick={() => youtubeURL(link_2, 'Add bit.leave to your payroll')}
-                      style={{ padding: '0px 20px' }}
-                    />
-                    <PlayIcon
-                      src='/images/cards/play-icon.png'
-                      className='play-icon'
-                      onClick={() => youtubeURL(link_2, 'Add bit.leave to your payroll')}
-                    />
-                  </Box>
-                  <Typography noWrap variant='subtitle2' sx={{ fontWeight: 600 }} onClick={() => youtubeURL(link_2, 'Add bit.leave to your payroll')}>
-                    Add bit.leave to your payroll
                   </Typography>
                 </Grid>{' '}
                 <Grid
