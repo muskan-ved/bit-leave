@@ -262,7 +262,7 @@ const VerticalNavGroup = (props: Props) => {
           className='nav-group'
           onClick={handleGroupClick}
           sx={{
-            mt: 1.5,
+            mt: '0 !important',
             flexDirection: 'column',
             transition: 'padding .25s ease-in-out',
             px:
@@ -298,14 +298,16 @@ const VerticalNavGroup = (props: Props) => {
                 <UserIcon
                   icon={IconTag}
                   componentType='vertical-menu'
-                  iconProps={{ sx: { ...(parent ? { fontSize: '0.5rem' } : {}) } }}
+                  iconProps={{ sx: { ...(parent ? { fontSize: '0.5rem' } : {fontSize: '1rem !important'}) } }}
                 />
               </ListItemIcon>
             )}
             <MenuItemTextWrapper sx={{ ...menuGroupCollapsedStyles, ...(isSubToSub ? { ml: 8 } : {}) }}>
               <Typography
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
-                  noWrap: true
+                  noWrap: true,
+                  fontSize:'0.9rem',
+                  mt:'0px !important'
                 })}
               >
                 <Translations text={item.title} />

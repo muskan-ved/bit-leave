@@ -1,10 +1,10 @@
 // ** React Imports
-import { ElementType, ReactNode, useEffect, useState } from 'react'
+import { ElementType, MouseEvent, ReactNode, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
+import {  alpha } from '@mui/material/styles';
 // ** MUI Imports
 import Chip from '@mui/material/Chip'
 import ListItem from '@mui/material/ListItem'
@@ -29,6 +29,13 @@ import CanViewNavLink from 'src/layouts/components/acl/CanViewNavLink'
 // ** Utils
 import { handleURLQueries } from 'src/@core/layouts/utils'
 import * as gtag from '../../../../../lib/gtag'
+
+import Button from '@mui/material/Button';
+import Menu, { MenuProps } from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { hexToRGBA } from 'src/@core/utils/hex-to-rgba';
+import { OfficeBuildingMarkerOutline } from 'mdi-material-ui';
 
 interface Props {
   orgLogo:string
@@ -74,6 +81,46 @@ const MenuItemTextMetaWrapper = styled(Box)<BoxProps>({
   ...(themeConfig.menuTextTruncate && { overflow: 'hidden' })
 })
 
+const StyledMenu = styled((props: MenuProps) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    color:
+      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 16,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+  },
+}));
+
 const VerticalNavLink = ({
   orgLogo,
   item,
@@ -89,7 +136,14 @@ const VerticalNavLink = ({
   // ** Hooks
   const theme = useTheme()
   const router = useRouter()
-
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // ** Vars
   const { skin, navCollapsed } = settings
@@ -143,10 +197,10 @@ const VerticalNavLink = ({
         disabled={item.disabled || false}
         sx={{ ...(item.title === "How To") ? 
         {position: 'absolute',
-          bottom: '0px',mt: 1.5,
+          bottom: '0px',mt:'0px !important',
           transition: 'padding .25s ease-in-out',
           px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`}:{
-          mt: 1.5,
+          mt: '0 !important',
           transition: 'padding .25s ease-in-out',
           px: parent ? '0 !important' : `${theme.spacing(navCollapsed && !navHover ? 2 : 3)} !important`}
         }}
@@ -175,7 +229,11 @@ const VerticalNavLink = ({
               ...conditionalBgColor(),
               ...(item.disabled ? { pointerEvents: 'none' } : { cursor: 'pointer' }),
               pr: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24 - 16) / 8 : 3,
-              pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24 - 16) / 8 : 4
+              pl: navCollapsed && !navHover ? (collapsedNavWidth - navigationBorderWidth - 24 - 16) / 8 : 4,
+              background : item.subject === "orgname" ? hexToRGBA(theme.palette.primary.main, 0.12) :'',
+              '&:hover': {
+                backgroundColor:item.subject === "orgname" ? hexToRGBA(theme.palette.primary.main, 0.12) :''
+              }
             }}
           >
             {isSubToSub ? null : (
@@ -209,13 +267,48 @@ const VerticalNavLink = ({
                 ...(navCollapsed && !navHover ? { opacity: 0 } : { opacity: 1 })
               }}
             >
+             {item.subject === "orgname" ? <> <Button
+        id="demo-customized-button"
+        aria-controls={open ? 'demo-customized-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        disableElevation
+        onClick={handleClick}
+        endIcon={<KeyboardArrowDownIcon />}
+        sx={{ borderRadius: '0px',fontSize: '12px', padding: '0px', marginTop: '-5px', background: 'none',
+         '&:hover': {
+          backgroundColor: 'transparent !important'
+        }}}
+      
+      >
+        {item.title}
+      </Button>
+      <StyledMenu
+        id="demo-customized-menu"
+        MenuListProps={{
+          'aria-labelledby': 'demo-customized-button',
+        }}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose} disableRipple sx={{fontSize:'14px'}}>
+          <OfficeBuildingMarkerOutline />
+          Demo
+        </MenuItem>
+        <MenuItem onClick={handleClose} disableRipple sx={{fontSize:'14px'}}>
+          <OfficeBuildingMarkerOutline />
+          Trial
+        </MenuItem>
+      </StyledMenu> </>: null }
               <Typography
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
-                  noWrap: true
+                  noWrap: true,
+                  fontSize:'0.9rem',
+                  mt:'0px !important'
                 })}
-                sx={{...(item.subject === "orgname" ? {fontSize:'14px'} : "") }}
               >
-                <Translations text={item.title} />
+                <Translations text={item.subject === "orgname" ? '' : item.title} />
               </Typography>
               {item.badgeContent ? (
                 <Chip

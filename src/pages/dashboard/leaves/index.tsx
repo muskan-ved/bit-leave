@@ -36,6 +36,9 @@ import { loadEmployee } from 'src/store/employee'
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
+// ** Icons Imports
+import RefreshIcon from '@mui/icons-material/Refresh';
+
 
 const Leaves = () => {
 
@@ -44,6 +47,10 @@ const Leaves = () => {
   
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
   
+  const refreshbtn = async () => {
+    fetchEmpData()
+  }
+
   const fetchEmpData = async () => {
       setIsLoading(true)
     const empData = await dispatch(loadEmployee())
@@ -92,6 +99,26 @@ const dispatch = useDispatch<AppDispatch>()
 
   if (!isLoading && data && data?.profile?.onboarded) {
     return (
+      <>
+      <Grid container spacing={9}>
+      <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
+        <Box
+          component='img'
+          sx={{
+            width: '40px',
+            marginRight: '12px',
+            marginBottom: '-15px'
+          }}
+          alt='The Xero Connect logo.'
+          src='/images/cards/xero_icon.png'
+        />
+        <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
+          <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+          Refresh
+        </Button>
+        <Divider></Divider>
+      </Grid>
+    </Grid>
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
           <Card>
@@ -101,13 +128,6 @@ const dispatch = useDispatch<AppDispatch>()
               <Grid item md={12} xs={12}>
                 <TableContainer component={Paper}>
                   <Table aria-label='a dense table' sx={{ minWidth: 650, size: 'small' }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell align='left'>Leave Type </TableCell>
-                        <TableCell align='left'>Days Available</TableCell>
-                        <TableCell align='left'>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
                     <TableBody>
                       <TableRow sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                         <TableCell component='th' scope='row'>
@@ -178,16 +198,13 @@ const dispatch = useDispatch<AppDispatch>()
                                 maxWidth: '100% !important'
                               }}
                             >
-                              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <Button variant='contained' disabled sx={{ mb: 5, mt: 2 }} >
+                              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                <Button variant='contained' disabled  >
                                   Cashout Leave
                                 </Button>
 
-                                <Button variant='contained' disabled sx={{ mb: 5 }}>
+                                <Button variant='contained' disabled sx={{ ml: 5 }}>
                                   Take Leave
-                                </Button>
-                                <Button variant='contained' disabled>
-                                  Cashout Bit.Leave
                                 </Button>
                               </Box>
                             </Grid>
@@ -202,6 +219,7 @@ const dispatch = useDispatch<AppDispatch>()
           </Card>
         </Grid>
       </Grid>
+      </>
     )
   }
 }

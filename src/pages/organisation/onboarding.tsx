@@ -4,7 +4,7 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import SignaturePad from 'react-signature-canvas';
 import React, { ReactNode, useEffect } from 'react';
-import { Box, BoxProps, Button, Card, CardContent, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
+import { Box, BoxProps, Button, Card, CardContent, CardHeader, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Radio, RadioGroup, styled, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import * as yup from 'yup'
 import { Controller, useForm } from 'react-hook-form';
@@ -969,7 +969,7 @@ const Onboarding = () => {
 		}
 	}
 
-	const getStepContentActiveStep3 = (step: number) => {
+	const getStepContentActiveKeyPayStep3 = (step: number) => {
 
 		switch (step) {
 			
@@ -1007,8 +1007,8 @@ const Onboarding = () => {
 	const renderContent = () => {
 		return getStepContent(activeStep)
 	}
-	const renderContentActiveStep3 = () => {
-		return getStepContentActiveStep3(activeStep)
+	const renderContentActiveKeyPayStep3 = () => {
+		return getStepContentActiveKeyPayStep3(activeStep)
 	}
 	return (
 
@@ -1042,11 +1042,17 @@ const Onboarding = () => {
 									{renderContent()}
 								</CardContent>
 							</Card>
-							{activeStep === 3 && <Card>
+							{activeStep === 3 && <><Card sx={{ marginBottom:5}}>
 								<CardContent>
-									{renderContentActiveStep3()}
+									{renderContentActiveKeyPayStep3()}
 								</CardContent>
-							</Card> }
+							</Card>
+							<Card>
+								<CardHeader title='Can&#39;t find your payroll'/>
+								<CardContent>
+								Please reach out to us if you can't see your payroll above. We are constantly adding new integrations.Email us at <Link href={'mailto:support@bitleave.co'} >support@bitleave.co</Link> 
+								</CardContent>
+							</Card></> }
 						</StepperContentWrapper>
 					</Grid>
 

@@ -83,7 +83,8 @@ const VerticalNavSectionTitle = (props: Props) => {
         sx={{
           ...(navCollapsed && !navHover
             ? { py: 4.75, px: (collapsedNavWidth - navigationBorderWidth - 22) / 8 }
-            : { pl: 0 })
+            : { pl: 0 }),
+            mt:'0 !important'
         }}
       >
         <Divider

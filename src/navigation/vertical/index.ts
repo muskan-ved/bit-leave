@@ -62,7 +62,7 @@ const navigation = (): VerticalNavItemsType => {
           icon: QueryStatsIcon,
           path: '/dashboard/stats', //User Dashboard
           action: 'read',
-          subject: 'dashboard'
+          subject: 'dashboardStats'
         },
         {
           title: 'My Leaves',
@@ -76,14 +76,14 @@ const navigation = (): VerticalNavItemsType => {
           icon: GridTripleDotsVerticalIcon,
           path: '/dashboard/organisation-view',
           action: 'read',
-          subject: 'orgChartView'
+          subject: 'dashboardOrgChartView'
         },
         {
           title: 'Scenarios',
           icon: ReceiptLongIcon,
           path: '/dashboard/scenarios', //User Dashboard
           action: 'read',
-          subject: 'dashboard'
+          subject: 'dashboardScenarios'
         },
       ]
     },    

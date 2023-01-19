@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 
 // ** MUI import
 import { useTheme } from '@mui/material/styles'
-import { Box, Card, CardContent, CardHeader, CircularProgress, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, CardHeader, CircularProgress, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 
 // ** Custom Components
 import TrendsChart from './trendsChart'
@@ -34,6 +34,8 @@ import { getInitials } from 'src/@core/utils/get-initials'
 // ** Context Imports
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
+// ** Icons Imports
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 interface QuickStatsType {
   stats: any
@@ -56,6 +58,10 @@ const Stats = () => {
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
 
   const dispatch = useDispatch<AppDispatch>()
+
+  const refreshbtn = async () => {
+    fetchEmpDataFromRedux()
+  }
 
   const fetchEmpDataFromRedux = async () => {
     setIsLoading(true)
@@ -294,6 +300,132 @@ const Stats = () => {
     }
   }
 
+  const trendsOptions: ApexOptions = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: {
+        show: false
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      show: false,
+      curve: 'straight'
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left'
+    },
+    grid: {
+      show: true,
+      xaxis: {
+        lines: {
+          show: true
+        }
+      }
+    },
+    colors: [ hexToRGBA(theme.palette.primary.light, 0.2),
+              hexToRGBA(theme.palette.primary.light, 0.4),
+              hexToRGBA(theme.palette.primary.light, 0.8)],
+    xaxis: {
+      categories: [
+        '7/12',
+        '8/12',
+        '9/12',
+        '10/12',
+        '11/12',
+        '12/12',
+        '13/12',
+        '14/12',
+        '15/12',
+        '16/12',
+        '17/12',
+        '18/12',
+        '19/12'
+      ]
+    },
+    fill: {
+      opacity: 1,
+      type: 'solid'
+    },
+    tooltip: {
+      shared: false
+    }
+  }
+
+  const trendsSeries = [
+    {
+      name: 'Visits',
+      data: [100, 120, 90, 170, 130, 160, 140, 240, 220, 180, 270, 280, 375]
+    },
+    {
+      name: 'Clicks',
+      data: [60, 80, 70, 110, 80, 100, 90, 180, 160, 140, 200, 220, 275]
+    },
+    {
+      name: 'Sales',
+      data: [20, 40, 30, 70, 40, 60, 50, 140, 120, 100, 140, 180, 220]
+    }
+  ]
+
+  const trendsOptions1: ApexOptions = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: {
+        show: false
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    stroke: {
+      show: false,
+      curve: 'straight'
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left'
+    },
+    grid: {
+      show: true,
+      xaxis: {
+        lines: {
+          show: true
+        }
+      }
+    },
+    colors: [ hexToRGBA(theme.palette.primary.light, 0.2),
+              hexToRGBA(theme.palette.primary.light, 0.4),
+              hexToRGBA(theme.palette.primary.light, 0.8)],
+    xaxis: {
+      categories: [
+        '13/12',
+        '14/12',
+        '15/12',
+        '16/12',
+        '17/12',
+        '18/12',
+        '19/12'
+      ]
+    },
+    fill: {
+      opacity: 1,
+      type: 'solid'
+    },
+    tooltip: {
+      shared: false
+    }
+  }
+
+  const trendsSeries1 = [
+    {
+      name: 'Visits',
+      data: [100, 120, 140, 180, 270, 280, 375]
+    }
+  ]
+
   const renderStats = () => {
     return (
       data &&
@@ -336,6 +468,26 @@ const Stats = () => {
 
   if (!isLoading && data && data?.profile?.onboarded) {
   return (
+    <>
+    <Grid container spacing={9}>
+    <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
+      <Box
+        component='img'
+        sx={{
+          width: '40px',
+          marginRight: '12px',
+          marginBottom: '-15px'
+        }}
+        alt='The Xero Connect logo.'
+        src='/images/cards/xero_icon.png'
+      />
+      <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
+        <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+        Refresh
+      </Button>
+      <Divider></Divider>
+    </Grid>
+  </Grid>
 	  <Grid container spacing={6}>
 	  {ability?.can('read', 'analytics') ? (
       <Grid item md={12} xs={12}>
@@ -348,15 +500,23 @@ const Stats = () => {
           </CardContent>
         </Card>
       </Grid>) : null}
-      <Grid item md={12} xs={12}>
+      <Grid item md={6} xs={12}>
         <Card>
           <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
           <CardContent>
-            <TrendsChart />
+            <TrendsChart options={trendsOptions} series={trendsSeries}/>
           </CardContent>
         </Card>
       </Grid>
-	  {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ? 
+      <Grid item md={6} xs={12}>
+        <Card>
+          <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
+          <CardContent>
+            <TrendsChart options={trendsOptions1} series={trendsSeries1}/>
+          </CardContent>
+        </Card>
+      </Grid>
+	  {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? 
 		(ability?.can('read', 'analytics') ? (
       <Grid item md={6} xs={12}>
         <Card>
@@ -370,15 +530,16 @@ const Stats = () => {
           </CardContent>
         </Card>
       </Grid>): null ): null}
-	  {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ? 
+	  {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? 
       <Grid item md={6} xs={12}>
         <Card>
           <CardHeader title='Leaves by Direct Reports 📈' subheader={<Divider></Divider>} />
           <CardContent>
-            {employees[0] === null || (!seriesData1 && !totalThresholdsLeaveWarning) ? (
+            {employees[0] === undefined || employees.length < 0 || (!seriesData1 && !totalThresholdsLeaveWarning) ? (
               <Typography variant='body2'>No data to display</Typography>
             ) : (
               <AnnualDirectReports series={series1} options={options1} />
+              
             )}
           </CardContent>
         </Card>
@@ -429,6 +590,7 @@ const Stats = () => {
             </Grid>
           ) : null}
     </Grid>
+    </>
   )
 }
 }
@@ -436,7 +598,7 @@ const Stats = () => {
 
 Stats.acl = {
 	action: 'read',
-	subject: 'dashboard'
+	subject: 'dashboardStats'
   }
   
   

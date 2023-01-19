@@ -119,7 +119,7 @@ const VerticalNavHeader = (props: Props) => {
 
   return (
     <MenuHeaderWrapper className='nav-header' sx={{ pl: menuHeaderPaddingLeft() }}>
-      {userVerticalNavMenuBranding ? (
+      {/* {userVerticalNavMenuBranding ? (
         userVerticalNavMenuBranding(props)
       ) : (
         <Link href='/' passHref>
@@ -128,9 +128,9 @@ const VerticalNavHeader = (props: Props) => {
             
           </StyledLink>
         </Link>
-      )}
+      )} 
 
-      {hidden ? (
+       {hidden ? (
         <IconButton
           disableRipple
           disableFocusRipple
@@ -146,6 +146,7 @@ const VerticalNavHeader = (props: Props) => {
           onClick={() => saveSettings({ ...settings, navCollapsed: !navCollapsed })}
           sx={{ p: 0, color: 'text.primary', backgroundColor: 'transparent !important' }}
         >
+
           {userMenuLockedIcon && userMenuUnlockedIcon ? (
             navCollapsed ? (
               userMenuUnlockedIcon
@@ -176,7 +177,7 @@ const VerticalNavHeader = (props: Props) => {
             </Box>
           )}
         </IconButton>
-      )}
+      )} */}
     </MenuHeaderWrapper>
   )
 }

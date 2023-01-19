@@ -70,14 +70,26 @@ const LayoutAppBar = (props: Props) => {
   }
 
   return (
-    <AppBar elevation={0} color='default' className='layout-navbar' position={appBar === 'fixed' ? 'sticky' : 'static'}>
+    <AppBar
+      elevation={0}
+      color='default'
+      className='layout-navbar'
+      position={appBar === 'fixed' ? 'sticky' : 'static'}
+      sx={{ zIndex: '5000 !important' }}
+    >
       <Toolbar
         className='navbar-content-container'
         sx={{
           ...(appBar === 'fixed' && scrollTrigger && { ...appBarFixedStyles() }),
-          ...(contentWidth === 'boxed' && {
-            '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
-          })
+          // ...(contentWidth === 'boxed' && {
+          //   '@media (min-width:1440px)': { maxWidth: `calc(1440px - ${theme.spacing(6)} * 2)` }
+          // }),
+          maxWidth: '100%',
+          position: 'fixed',
+          zIndex: '9999',
+          width: '100%',
+          left: 0,
+          padding: '0px 0.75rem !important'
         }}
       >
         {(userVerticalAppBarContent && userVerticalAppBarContent(props)) || null}
