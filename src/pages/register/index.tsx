@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode, useState, Fragment, MouseEvent } from 'react';
+import { ReactNode, useState, Fragment, MouseEvent } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -41,16 +41,8 @@ import { useSettings } from 'src/@core/hooks/useSettings'
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
 import * as gtag from '../../lib/gtag'
+import { useRouter } from 'next/router'
 
-
-const defaultValues = {
-  email: '',
-  username: '',
-  password: '',
-  companyname: '',
-  terms: false,
-  apiErrors: ''
-}
 interface FormData {
   email: string
   terms: boolean
@@ -115,6 +107,16 @@ const Register = () => {
   // ** States
   const [showPassword, setShowPassword] = useState<boolean>(false)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
+  const router = useRouter()
+
+  const defaultValues = {
+    email: router?.query ? router?.query?.email : '',
+    username: router?.query ? router?.query?.name : '',
+    password: '',
+    companyname: '',
+    terms: false,
+    apiErrors: ''
+  }
 
   // ** Hooks
   const theme = useTheme()
@@ -145,13 +147,13 @@ const Register = () => {
 
   const onSubmit = (data: FormData) => {
     const { email, username, password, companyname } = data
-   
-    setIsProcessing(true);
+
+    setIsProcessing(true)
     gtag.event({
       action: 'sing_up',
       category: 'register',
-      label: "sing_up",
-      value:'sing_up'
+      label: 'sing_up',
+      value: 'sing_up'
     })
     register({ email, username, password, companyname }, err => {
       if (err.email) {
@@ -178,7 +180,7 @@ const Register = () => {
           message: err.Message
         })
       }
-      setIsProcessing(false);
+      setIsProcessing(false)
     })
   }
 
@@ -208,7 +210,7 @@ const Register = () => {
             backgroundColor: 'background.paper'
           }}
         >
-
+			
           <BoxWrapper>
             <Box sx={{ mb: 6 }}>
               <TypographyStyled variant='h5'>Sign up to Bit.Leave 🚀</TypographyStyled>
@@ -254,7 +256,9 @@ const Register = () => {
                     />
                   )}
                 />
-                {errors.companyname && <FormHelperText sx={{ color: 'error.main' }}>{errors.companyname.message}</FormHelperText>}
+                {errors.companyname && (
+                  <FormHelperText sx={{ color: 'error.main' }}>{errors.companyname.message}</FormHelperText>
+                )}
               </FormControl>
               <FormControl fullWidth sx={{ mb: 4 }}>
                 <Controller
@@ -343,12 +347,15 @@ const Register = () => {
                                 variant='body2'
                                 component={MuiLink}
                                 sx={{ color: 'primary.main' }}
-                                onClick={(e: MouseEvent<HTMLElement>) => {e.preventDefault(),gtag.event({
-                                  action: 'privacy_policy_&_terms',
-                                  category: 'register',
-                                  label: "privacy_policy_&_terms",
-                                  value:'privacy_policy_&_terms'
-                                })}}
+                                onClick={(e: MouseEvent<HTMLElement>) => {
+                                  e.preventDefault(),
+                                    gtag.event({
+                                      action: 'privacy_policy_&_terms',
+                                      category: 'register',
+                                      label: 'privacy_policy_&_terms',
+                                      value: 'privacy_policy_&_terms'
+                                    })
+                                }}
                               >
                                 privacy policy & terms
                               </Typography>
@@ -363,19 +370,32 @@ const Register = () => {
                   <FormHelperText sx={{ mt: 0, color: 'error.main' }}>{errors.terms.message}</FormHelperText>
                 )}
               </FormControl>
-              <LoadingButton loading={isProcessing} fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
+              <LoadingButton
+                loading={isProcessing}
+                fullWidth
+                size='large'
+                type='submit'
+                variant='contained'
+                sx={{ mb: 7 }}
+              >
                 Sign up
               </LoadingButton>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 <Typography sx={{ mr: 2, color: 'text.secondary' }}>Already have an account?</Typography>
                 <Typography>
                   <Link passHref href='/login'>
-                    <Typography component={MuiLink} onClick={() =>{gtag.event({
-                                  action: 'log_in',
-                                  category: 'register',
-                                  label: "log_in",
-                                  value:'log_in'
-                                })}} sx={{ color: 'primary.main' }}>
+                    <Typography
+                      component={MuiLink}
+                      onClick={() => {
+                        gtag.event({
+                          action: 'log_in',
+                          category: 'register',
+                          label: 'log_in',
+                          value: 'log_in'
+                        })
+                      }}
+                      sx={{ color: 'primary.main' }}
+                    >
                       Log In
                     </Typography>
                   </Link>

@@ -184,17 +184,21 @@ const result = arrayUniqueByKey.filter((role: any) => {
     await dispatch(roleUpdate([payload]))
       .then(res => {
         if (res.payload !== undefined) {
-          toast.success('Role update')
+          toast.success('Role updated')
           setOpen(false)
           setLoading(false)
           fetchData()
           fetchEmpData()
-
+          
+        }
+        else{
+          toast.error('Sorry, the action cannot be completed at this time. Please contact us for any issues')
+          setLoading(false)
         }
       })
-      .catch(() => {
+      .catch((err) => {
         setLoading(false)
-        toast.error('Server Error')
+        toast.error('Sorry, the action cannot be completed at this time. Please contact us for any issues')
       })
 
   }

@@ -274,7 +274,7 @@ const VerticalNavLink = ({
         aria-expanded={open ? 'true' : undefined}
         disableElevation
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
+        // endIcon={<KeyboardArrowDownIcon />}
         sx={{ borderRadius: '0px',fontSize: '12px', padding: '0px', marginTop: '-5px', background: 'none',
          '&:hover': {
           backgroundColor: 'transparent !important'
@@ -283,7 +283,7 @@ const VerticalNavLink = ({
       >
         {item.title}
       </Button>
-      <StyledMenu
+      {/* <StyledMenu
         id="demo-customized-menu"
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
@@ -300,7 +300,8 @@ const VerticalNavLink = ({
           <OfficeBuildingMarkerOutline />
           Trial
         </MenuItem>
-      </StyledMenu> </>: null }
+      </StyledMenu> */}
+       </>: null }
               <Typography
                 {...((themeConfig.menuTextTruncate || (!themeConfig.menuTextTruncate && navCollapsed && !navHover)) && {
                   noWrap: true,

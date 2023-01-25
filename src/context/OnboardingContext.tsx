@@ -29,7 +29,7 @@ const OnboardingProvider = ({ children }: Props) => {
   const initOnboarding = async (): Promise<void> => {
     const path = router.asPath
     const onboarded = store.userOnboarded
-    if (path == '/login/' || path == '/login' || path == '/logout/' || path == '/register/' || path == `/confirm-password/${window.location.search}` || path == `/confirm-user/${window.location.search}` || path == '/forgot-password/') {
+    if (path == '/login/' || path == '/login' || path == '/logout/' || path == `/register/` || path == `/register/${window.location.search}` || path == `/confirm-password/${window.location.search}` || path == `/confirm-user/${window.location.search}` || path == '/forgot-password/' || path == '/xerosignup/' || path == `/thankyou/${window.location.search}`) {
       return;
     }
     setOnboarding(onboarded)

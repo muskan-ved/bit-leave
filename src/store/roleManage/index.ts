@@ -64,7 +64,7 @@ export const roleManagement = createAsyncThunk('role/manage',
          } else if (err.response?.status === 401 || err.message === "Network Error") {
            dispatch(userLogout())
          }
-        }
+      }
     }
   })
 

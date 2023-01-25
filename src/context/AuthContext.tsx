@@ -70,7 +70,7 @@ const AuthProvider = ({ children }: Props) => {
       setIsInitialized(true)
       const exist = window.location.href.includes("/actionApproval/")
       if (exist) {
-        //window.location.
+        
         localStorage.setItem('cashoutRequest', window.location.href)
       }
       const storedToken = window.localStorage.getItem(Auth.storageTokenKeyName)!
@@ -83,7 +83,10 @@ const AuthProvider = ({ children }: Props) => {
           dispatch(refreshUserState({ ...user }))
           setLoading(false)
         }
-      } else {
+      }else if (router.asPath === '/xerosignup/' || router.asPath === `/thankyou/${window.location.search}`) {
+        setLoading(false)
+        return ;
+      }else {
         setLoading(false)
         router.push('/login')
       }

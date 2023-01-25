@@ -13,6 +13,7 @@ import actionApproval from 'src/store/actionapproval'
 import roleManage from './roleManage'
 import notification from './notification'
 import setUPPost  from './setup'
+import xeroSignUp  from './xeroSignup'
 
 export const reducers = {
   onboarding,
@@ -25,7 +26,8 @@ export const reducers = {
   actionApproval,
   roleManage,
   notification,
-  setUPPost
+  setUPPost,
+  xeroSignUp
 
 }
 
