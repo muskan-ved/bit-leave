@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "src/store";
 import { listEmployee, postEmployeeOnboarding } from "src/store/employee";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { toast,ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 
 const defaultEmployeeOnboardingValue = {
   id: null
@@ -47,6 +49,8 @@ const EmployeeOnboardingDialog = (props: any) => {
     const result = await dispatch(postEmployeeOnboarding(data.id))
     if (result.payload?.data?.success == true) {
       props.handleClose()
+    }else{
+      toast.error('Sorry, the action cannot be completed at this time. Please contact us for any issues')
     }
     setprogress(false)
   }
@@ -94,6 +98,7 @@ const EmployeeOnboardingDialog = (props: any) => {
   return (
 
     <Dialog fullWidth={true} scroll={'paper'} fullScreen={fullScreen} maxWidth={maxWidth} open={props.open} onClose={props.close}>
+     <ToastContainer/>
       <DialogTitle>Information Needed</DialogTitle>
       <form style={{ overflowY: "auto", display: "flex", flexDirection: "column" }} key='cashoutform' onSubmit={handleEmployeeOnboardingSubmit(onEmployeeOnboardingSubmit, onError)}>
         <DialogContent>

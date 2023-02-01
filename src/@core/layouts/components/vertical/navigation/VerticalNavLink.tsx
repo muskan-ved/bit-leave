@@ -136,13 +136,16 @@ const VerticalNavLink = ({
   // ** Hooks
   const theme = useTheme()
   const router = useRouter()
+  const [navVisibleDropdown, setNavVisibleDropdown] = useState<Boolean>(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLElement>) => {
+    setNavVisibleDropdown(true)
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+    setNavVisibleDropdown(false)
   };
 
   // ** Vars
@@ -188,7 +191,7 @@ const VerticalNavLink = ({
       return false
     }
   }
-
+  
   return (
     <CanViewNavLink navLink={item} >
       <ListItem
@@ -220,9 +223,15 @@ const VerticalNavLink = ({
                 e.preventDefault()
                 e.stopPropagation()
               }
+             if(item.subject === "orgname") {
+               if (navVisible && navVisibleDropdown) {
+                 toggleNavVisibility()
+               }
+             }else{
               if (navVisible) {
                 toggleNavVisibility()
               }
+            }
             }}
             sx={{
               py: 2.25,

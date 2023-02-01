@@ -47,6 +47,7 @@ const AppBarContent = (props: Props) => {
     menuUnlockedIcon: userMenuUnlockedIcon,
     navHover
   } = props
+  const NavVisibleForSidebar =localStorage.getItem('navVisible') === 'true' ? true : false
   const [menuToggle, setMenuToggle] = useState<boolean>(true)
 
   // ** Hooks & Vars
@@ -76,7 +77,7 @@ const AppBarContent = (props: Props) => {
       }
     }
   }
-
+  
   const svgFillSecondary = () => {
     if (skin === 'semi-dark' && theme.palette.mode === 'light') {
       return `rgba(${theme.palette.customColors.dark}, 0.68)`
@@ -98,18 +99,19 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-        {(!hidden && menuToggle) || (!hidden && !menuToggle) || hidden && !menuToggle ? (
+        {(!hidden && menuToggle) || (!hidden && !menuToggle)  || hidden && !menuToggle && NavVisibleForSidebar? (
+          // when click of menu icon then it should rendered
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Link href='/' passHref>
               <StyledLink>
                 {
                   <svg
-                    id='svg'
-                    version='1.1'
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='150'
-                    height='45'
-                    viewBox='0, 0, 268,152.1951219512195'
+                  id='svg'
+                  version='1.1'
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='150'
+                  height='45'
+                  viewBox='0, 0, 268,152.1951219512195'
                   >
                     <g id='svgg'>
                       <path
@@ -147,6 +149,7 @@ const AppBarContent = (props: Props) => {
                 <Close fontSize='small' />
               </IconButton>
             ) : (
+              // web view icon
               <IconButton
                 disableRipple
                 disableFocusRipple
@@ -186,7 +189,8 @@ const AppBarContent = (props: Props) => {
             )}
           </Box>
         ) : null}
-        {hidden && menuToggle ? (
+        {hidden && menuToggle || hidden && !menuToggle && !NavVisibleForSidebar ? (
+          // mobile and tablet view 
           <IconButton
             color='inherit'
             onClick={() => {

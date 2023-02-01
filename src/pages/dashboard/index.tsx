@@ -64,6 +64,8 @@ import { loadEmployee } from 'src/store/employee';
 import CashoutDialog from './cashout';
 import * as gtag from '../../lib/gtag'
 import { loadOrganisation } from 'src/store/organisation'
+import { toast,ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // Styled Box component
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -298,6 +300,8 @@ const Dashboard = () => {
     if (empData.payload != null) {
       setData(empData.payload.data)
       setIsLoading(false)
+    }else{
+      toast.error('Unfortunately, there was an issue to load the data, please try again later')
     }
     setIsLoading(false)
   }
@@ -397,6 +401,7 @@ const Dashboard = () => {
     return (
       <>
         <Grid container spacing={9}>
+          <ToastContainer/>
           <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
             <Box
               component='img'

@@ -83,7 +83,7 @@ const AuthProvider = ({ children }: Props) => {
           dispatch(refreshUserState({ ...user }))
           setLoading(false)
         }
-      }else if (router.asPath === '/xerosignup/' || router.asPath === `/thankyou/${window.location.search}`) {
+      }else if (router.asPath === '/xerosignup' || router.asPath === '/xerosignup/' || router.asPath === `/thankyou/${window.location.search}` || router.asPath === `/thankyou`) {
         setLoading(false)
         return ;
       }else {
@@ -123,6 +123,7 @@ const AuthProvider = ({ children }: Props) => {
         window.localStorage.setItem(Auth.storageTokenKeyName, userClaims.idToken.jwtToken) //Temporary
         setUser({ ...userData })
         window.localStorage.setItem('userData', JSON.stringify(userData))
+        
         dispatch(refreshUserState(userData))
 
         const returnUrl = router.query.returnUrl

@@ -118,7 +118,10 @@ const VerticalLayout = (props: LayoutProps) => {
   }
 
   // ** Toggle Functions
-  const toggleNavVisibility = () => setNavVisible(!navVisible)
+  const toggleNavVisibility = () => {
+    setNavVisible(!navVisible)
+  localStorage.setItem('navVisible', `${!navVisible}`)
+}
 
   return (
     <>

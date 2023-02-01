@@ -126,6 +126,7 @@ const Thresholds = () => {
         })
     } else {
       //else statement
+      toast.error('Sorry, the action cannot be completed at this time. Please contact us for any issues')
     }
   }
 
