@@ -84,6 +84,25 @@ export const loadOrganisation = createAsyncThunk('organisations/load',
         }
     }
   })
+
+  export const payrollDisconnect = createAsyncThunk('payroll/disconnect',
+  async (params: void, { dispatch, getState }: Redux) => {
+    const token = localStorage.getItem("accessToken");
+    try{
+    const result = await axios
+      .delete(API.payrollDisconnectAPI, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    }catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401 ) {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
   
 const organisationSlice = createSlice({
   name: 'organisation',

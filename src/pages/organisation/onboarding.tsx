@@ -46,6 +46,7 @@ interface OnBoardingState {
 	approval: string,
 	signature: string,
 	tenantId: string,
+	tenantName: string,
 	connectionId : string,
 }
 
@@ -127,6 +128,7 @@ const Onboarding = () => {
 		approval: '',
 		signature: '',
 		tenantId:'',
+		tenantName:'',
 		connectionId:'',
 	});
 
@@ -376,11 +378,13 @@ const Onboarding = () => {
 
 	const onTenantIdSubmit = async (data:any) => {
 		
+		const getTenantName:any = tenantData.filter((tenantResult:any) => tenantResult.tenantId === data.tenantId);
 		const connectionIdFind:any = tenantData.find((res:any)=> res.tenantId === data.tenantId)
 
 		const stateData = {
 			...onBoarding,
 			 tenantId: data.tenantId,
+			 tenantName : getTenantName[0].tenantName,
 			 connectionId : (connectionIdFind ? connectionIdFind.connectionId : '') //TEMP
 		}
 		setOnBoardingState(stateData)

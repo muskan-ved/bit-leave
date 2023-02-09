@@ -160,200 +160,18 @@ const Stats = () => {
     }
   }
 
-  const series = [
-    {
-      name: 'Average Excess Days',
-      data: seriesData
-    }
-  ]
-
-  const series1 = [
-    {
-      name: 'Average Excess Days By Employee',
-      data: seriesData1
-    },
-    {
-      name: 'Thresholds Limit',
-      data: totalThresholdsLeaveWarning
-    }
-  ]
-
-  const options: ApexOptions = {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: { show: false }
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 8,
-        barHeight: '60%',
-        horizontal: true,
-        distributed: true,
-        startingShape: 'rounded'
-      }
-    },
-    grid: {
-      strokeDashArray: 8,
-      xaxis: {
-        lines: { show: true }
-      },
-      yaxis: {
-        lines: { show: false }
-      },
-      padding: {
-        top: -18,
-        left: 26,
-        right: 50,
-        bottom: 6
-      }
-    },
-    colors: [
-      hexToRGBA(theme.palette.primary.light, 1),
-      hexToRGBA(theme.palette.success.light, 1),
-      hexToRGBA(theme.palette.warning.light, 1),
-      hexToRGBA(theme.palette.info.light, 1),
-      hexToRGBA(theme.palette.error.light, 1)
-    ],
-    legend: { show: false },
-    states: {
-      hover: {
-        filter: { type: 'none' }
-      },
-      active: {
-        filter: { type: 'none' }
-      }
-    },
-    xaxis: {
-      axisTicks: { show: false },
-      axisBorder: { show: false },
-      categories: departments ? departments : []
-    },
-    yaxis: {
-      labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
-    }
+  const seriesForDirectReports = {
+    seriesData1,
+    totalThresholdsLeaveWarning
   }
 
-  const options1: ApexOptions = {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: { show: false }
-    },
-    markers: {
-      size: [6, 0],
-      colors: [hexToRGBA(theme.palette.primary.light, 1), '#fff']
-    },
-    annotations: {
-      yaxis: [
-        {
-          y: parseInt(`${totalThresholdsLeave}`, 10),
-          strokeDashArray: 0,
-          borderWidth: 3,
-          borderColor: hexToRGBA(theme.palette.error.light, 1)
-        }
-      ]
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 8,
-        barHeight: '60%',
-        horizontal: true,
-        distributed: true
-      }
-    },
-    grid: {
-      strokeDashArray: 8,
-      xaxis: {
-        lines: { show: true }
-      },
-      yaxis: {
-        lines: { show: false }
-      },
-      padding: {
-        top: -18,
-        left: 26,
-        right: 50,
-        bottom: 6
-      }
-    },
-    colors: [
-      hexToRGBA(theme.palette.primary.light, 1),
-      hexToRGBA(theme.palette.error.light, 1),
-      hexToRGBA(theme.palette.warning.light, 1),
-      hexToRGBA(theme.palette.info.light, 1),
-      hexToRGBA(theme.palette.success.light, 1)
-    ],
-    states: {
-      hover: {
-        filter: { type: 'none' }
-      },
-      active: {
-        filter: { type: 'none' }
-      }
-    },
-    xaxis: {
-      axisTicks: { show: false },
-      axisBorder: { show: false },
-      categories: employees
-    },
-    yaxis: {
-      labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
-    }
+  const optionsForDirectReports = {
+    totalThresholdsLeave,
+    employees
   }
 
-  const trendsOptions: ApexOptions = {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: {
-        show: false
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      show: false,
-      curve: 'straight'
-    },
-    legend: {
-      position: 'top',
-      horizontalAlign: 'left'
-    },
-    grid: {
-      show: true,
-      xaxis: {
-        lines: {
-          show: true
-        }
-      }
-    },
-    colors: [ hexToRGBA(theme.palette.primary.light, 0.2),
-              hexToRGBA(theme.palette.primary.light, 0.4),
-              hexToRGBA(theme.palette.primary.light, 0.8)],
-    xaxis: {
-      categories: [
-        '7/12',
-        '8/12',
-        '9/12',
-        '10/12',
-        '11/12',
-        '12/12',
-        '13/12',
-        '14/12',
-        '15/12',
-        '16/12',
-        '17/12',
-        '18/12',
-        '19/12'
-      ]
-    },
-    fill: {
-      opacity: 1,
-      type: 'solid'
-    },
-    tooltip: {
-      shared: false
-    }
-  }
+  const trendsOptions = ['7/12', '8/12', '9/12', '10/12', '11/12', '12/12', '13/12', '14/12', '15/12', '16/12', '17/12', '18/12', '19/12' ]
+
 
   const trendsSeries = [
     {
@@ -370,54 +188,7 @@ const Stats = () => {
     }
   ]
 
-  const trendsOptions1: ApexOptions = {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: {
-        show: false
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      show: false,
-      curve: 'straight'
-    },
-    legend: {
-      position: 'top',
-      horizontalAlign: 'left'
-    },
-    grid: {
-      show: true,
-      xaxis: {
-        lines: {
-          show: true
-        }
-      }
-    },
-    colors: [ hexToRGBA(theme.palette.primary.light, 0.2),
-              hexToRGBA(theme.palette.primary.light, 0.4),
-              hexToRGBA(theme.palette.primary.light, 0.8)],
-    xaxis: {
-      categories: [
-        '13/12',
-        '14/12',
-        '15/12',
-        '16/12',
-        '17/12',
-        '18/12',
-        '19/12'
-      ]
-    },
-    fill: {
-      opacity: 1,
-      type: 'solid'
-    },
-    tooltip: {
-      shared: false
-    }
-  }
+  const trendsOptions1 = [ '13/12', '14/12', '15/12', '16/12', '17/12', '18/12', '19/12' ]
 
   const trendsSeries1 = [
     {
@@ -525,7 +296,7 @@ const Stats = () => {
             {departments[0] === null || !seriesData ? (
               <Typography variant='body2'>No data to display</Typography>
             ) : (
-              <AnnualLeaveByDepartment series={series} options={options} />
+              <AnnualLeaveByDepartment type='bar' series={seriesData} options={departments ? departments : []} />
             )}
           </CardContent>
         </Card>
@@ -538,7 +309,7 @@ const Stats = () => {
             {employees[0] === undefined || employees.length < 0 || (!seriesData1 && !totalThresholdsLeaveWarning) ? (
               <Typography variant='body2'>No data to display</Typography>
             ) : (
-              <AnnualDirectReports series={series1} options={options1} />
+              <AnnualDirectReports type='line' series={seriesForDirectReports} options={optionsForDirectReports} />
               
             )}
           </CardContent>
@@ -595,11 +366,9 @@ const Stats = () => {
 }
 }
 
-
 Stats.acl = {
 	action: 'read',
 	subject: 'dashboardStats'
   }
-  
   
 export default Stats

@@ -39,11 +39,15 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 // ** Icons Imports
 import RefreshIcon from '@mui/icons-material/Refresh';
 
+// ** Import other page
+import CashoutDialog from '../cashout'
+import * as gtag from '../../../lib/gtag'
 
 const Leaves = () => {
 
   const [data, setData] = useState<employeeType | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
   
@@ -73,6 +77,20 @@ const dispatch = useDispatch<AppDispatch>()
       setData(employeeDetails?.employeeDetail?.data)
     }
   }, [])
+
+  const handleDialogClose = () => {
+    setDialogOpen(false)
+  }
+
+  const cashoutLeaveButtonClick = () => {
+    setDialogOpen(true)
+    gtag.event({
+      action: 'cashout_leave',
+      category: 'dashboard',
+      label: 'cashout_leave',
+      value: 'modal'
+    })
+  }
 
   function currencyFormat(num: any) {
     return '$' + num?.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -124,7 +142,6 @@ const dispatch = useDispatch<AppDispatch>()
           <Card>
             <CardHeader title='My Leave Details 📆​' subheader={<Divider></Divider>} />
             <CardContent>
-              <Divider></Divider>
               <Grid item md={12} xs={12}>
                 <TableContainer component={Paper}>
                   <Table aria-label='a dense table' sx={{ minWidth: 650, size: 'small' }}>
@@ -185,8 +202,7 @@ const dispatch = useDispatch<AppDispatch>()
                             </Grid>
                           </Grid>
                         </TableCell>
-                        <TableCell align='right'>
-                          <Grid container spacing={6}>
+                          <Grid container spacing={6} mt={11}>
                             <Grid
                               item
                               xs={12}
@@ -199,17 +215,17 @@ const dispatch = useDispatch<AppDispatch>()
                               }}
                             >
                               <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                <Button variant='contained' disabled  >
+                                <Button variant='contained' onClick={cashoutLeaveButtonClick}
+                                  disabled={!data.leaveDetails.canCashoutLeave}>
                                   Cashout Leave
                                 </Button>
 
-                                <Button variant='contained' disabled sx={{ ml: 5 }}>
+                                <Button variant='contained' sx={{ ml: 5 }}>
                                   Take Leave
                                 </Button>
                               </Box>
                             </Grid>
                           </Grid>
-                        </TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -219,6 +235,7 @@ const dispatch = useDispatch<AppDispatch>()
           </Card>
         </Grid>
       </Grid>
+      <CashoutDialog open={dialogOpen} handleClose={handleDialogClose}></CashoutDialog>
       </>
     )
   }

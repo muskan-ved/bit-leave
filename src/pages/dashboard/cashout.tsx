@@ -279,7 +279,7 @@ const CashoutDialog = (props: any) => {
     setActiveStep(0)
     resetCashoutDialog()
     setErrorMessage('')
-	router.push('/dashboard')
+	router.push('/dashboard/leaves/')
     props.handleClose()
   }
   gtag.event({

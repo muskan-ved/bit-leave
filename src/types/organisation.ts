@@ -7,3 +7,9 @@ export type organisation = {
   active:boolean|false,
   exit_date:Date|null,
 }
+
+export type payrollType = {
+  Payroll : string|null,
+  tenantName: string|null,
+  payrollTenantId : string|null,
+};

@@ -164,7 +164,7 @@ export const listEmployee = createAsyncThunk('emp/list',
   })
 
   export const allEmployeeList = createAsyncThunk('allEmp/list',
-  async (params: void, { dispatch, getState }: Redux) => {
+  async (_: void, { dispatch, getState }: Redux) => {
     const token = localStorage.getItem("accessToken");
     try{
     const result = await axios
@@ -173,6 +173,27 @@ export const listEmployee = createAsyncThunk('emp/list',
       })
     return result.data
     }catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+
+  export const loadSenarioData = createAsyncThunk('analytics',
+  async (_: void, { dispatch, getState }: Redux) => {
+    try{
+    const token = localStorage.getItem("accessToken");
+
+    const result = await axios
+      .get(API.scenariosAnalytics, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    } 
+    catch(err){
       if (axios.isAxiosError(err)) {
         if (!err?.response) {
          } else if (err.response?.status === 401 || err.message === "Network Error") {
@@ -206,6 +227,8 @@ const employeeSlice = createSlice({
     builder.addCase(listEmployee.fulfilled, (state, action) => {
     })
     builder.addCase(postEmployeeOnboarding.fulfilled, (state, action) => {
+    })
+    builder.addCase(loadSenarioData.fulfilled, (state, action) => {
     })
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       if(action.payload?.data){
