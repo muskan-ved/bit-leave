@@ -3,7 +3,24 @@ import { useContext, useEffect, useState } from 'react'
 
 // ** MUI import
 import { useTheme } from '@mui/material/styles'
-import { Box, Button, Card, CardContent, CardHeader, CircularProgress, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CircularProgress,
+  Divider,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
+} from '@mui/material'
 
 // ** Custom Components
 import TrendsChart from './trendsChart'
@@ -35,24 +52,24 @@ import { getInitials } from 'src/@core/utils/get-initials'
 import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 // ** Icons Imports
-import RefreshIcon from '@mui/icons-material/Refresh';
+import RefreshIcon from '@mui/icons-material/Refresh'
 
 interface QuickStatsType {
   stats: any
   title: string
   icon: string
+  id: string
 }
 
 const Stats = () => {
-
   const [data, setData] = useState<employeeType | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [organisationData, setOrgData] = useState<any>([])
   const [count, setCount] = useState(0)
   const ability = useContext(AbilityContext)
 
-  function currencyFormat(num: any) {
-    return '$' + num?.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  function currencyFormat(num: any, includeCents = true) {
+    return '$' + num?.toFixed(includeCents ? 2 : 0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
@@ -101,22 +118,26 @@ const Stats = () => {
     {
       stats: `${currencyFormat(data?.vitals?.averageSalary)}`,
       title: 'Average Salary in AUD',
-      icon: '/images/cards/user_icon.png'
+      icon: '/images/cards/user_icon.png',
+      id: 'average_salaryin_aud'
     },
     {
-      stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities)}`,
+      stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities, false)}`,
       title: 'Total Leave Liabilities',
-      icon: '/images/cards/total_leave_liabilities.png'
+      icon: '/images/cards/total_leave_liabilities.png',
+      id: 'total_leave_liabilities'
     },
     {
       stats: data?.vitals?.headCount,
       title: 'Organisational Headcount',
-      icon: '/images/cards/org_headcount.png'
+      icon: '/images/cards/org_headcount.png',
+      id: 'organisational_headcount'
     },
     {
       stats: data?.vitals?.leaveMobilised,
       title: 'Leave Mobilised (Days)',
-      icon: '/images/cards/leave_mobilised.png'
+      icon: '/images/cards/leave_mobilised.png',
+      id: 'leave_mobilised(days)'
     }
   ]
 
@@ -170,8 +191,21 @@ const Stats = () => {
     employees
   }
 
-  const trendsOptions = ['7/12', '8/12', '9/12', '10/12', '11/12', '12/12', '13/12', '14/12', '15/12', '16/12', '17/12', '18/12', '19/12' ]
-
+  const trendsOptions = [
+    '7/12',
+    '8/12',
+    '9/12',
+    '10/12',
+    '11/12',
+    '12/12',
+    '13/12',
+    '14/12',
+    '15/12',
+    '16/12',
+    '17/12',
+    '18/12',
+    '19/12'
+  ]
 
   const trendsSeries = [
     {
@@ -188,7 +222,7 @@ const Stats = () => {
     }
   ]
 
-  const trendsOptions1 = [ '13/12', '14/12', '15/12', '16/12', '17/12', '18/12', '19/12' ]
+  const trendsOptions1 = ['13/12', '14/12', '15/12', '16/12', '17/12', '18/12', '19/12']
 
   const trendsSeries1 = [
     {
@@ -201,19 +235,17 @@ const Stats = () => {
     return (
       data &&
       quickStats.map((item: QuickStatsType, index: number) => (
-        <>
-          <Grid item xs={12} sm={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <CustomAvatar src={item.icon} variant='rounded' color={'primary'} sx={{ mr: 4 }} />
-              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                  {item.stats}
-                </Typography>
-                <Typography variant='caption'>{item.title}</Typography>
-              </Box>
+        <Grid item xs={12} sm={3} key={item.id} >
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <CustomAvatar src={item.icon} variant='rounded' color={'primary'} sx={{ mr: 4 }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                {item.stats}
+              </Typography>
+              <Typography variant='caption'>{item.title}</Typography>
             </Box>
-          </Grid>
-        </>
+          </Box>
+        </Grid>
       ))
     )
   }
@@ -238,86 +270,98 @@ const Stats = () => {
   }
 
   if (!isLoading && data && data?.profile?.onboarded) {
-  return (
-    <>
-    <Grid container spacing={9}>
-    <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
-      <Box
-        component='img'
-        sx={{
-          width: '40px',
-          marginRight: '12px',
-          marginBottom: '-15px'
-        }}
-        alt='The Xero Connect logo.'
-        src='/images/cards/xero_icon.png'
-      />
-      <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
-        <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
-        Refresh
-      </Button>
-      <Divider></Divider>
-    </Grid>
-  </Grid>
-	  <Grid container spacing={6}>
-	  {ability?.can('read', 'analytics') ? (
-      <Grid item md={12} xs={12}>
-        <Card>
-          <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>} />
-          <CardContent>
-            <Grid container spacing={6}>
-              {renderStats()}
+    return (
+      <>
+        <Grid container spacing={9}>
+          <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
+            <Box
+              component='img'
+              sx={{
+                width: '40px',
+                marginRight: '12px',
+                marginBottom: '-15px'
+              }}
+              alt='The Xero Connect logo.'
+              src='/images/cards/xero_icon.png'
+            />
+            <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
+              <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+              Refresh
+            </Button>
+            <Divider></Divider>
+          </Grid>
+        </Grid>
+        <Grid container spacing={6}>
+          {ability?.can('read', 'analytics') ? (
+            <Grid item md={12} xs={12}>
+              <Card>
+                <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>} />
+                <CardContent>
+                  <Grid container spacing={6}>
+                    {renderStats()}
+                  </Grid>
+                </CardContent>
+              </Card>
             </Grid>
-          </CardContent>
-        </Card>
-      </Grid>) : null}
-      <Grid item md={6} xs={12}>
-        <Card>
-          <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
-          <CardContent>
-            <TrendsChart options={trendsOptions} series={trendsSeries}/>
-          </CardContent>
-        </Card>
-      </Grid>
-      <Grid item md={6} xs={12}>
-        <Card>
-          <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
-          <CardContent>
-            <TrendsChart options={trendsOptions1} series={trendsSeries1}/>
-          </CardContent>
-        </Card>
-      </Grid>
-	  {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? 
-		(ability?.can('read', 'analytics') ? (
-      <Grid item md={6} xs={12}>
-        <Card>
-          <CardHeader title='Average Leaves By Department 📈' subheader={<Divider></Divider>} />
-          <CardContent>
-            {departments[0] === null || !seriesData ? (
-              <Typography variant='body2'>No data to display</Typography>
-            ) : (
-              <AnnualLeaveByDepartment type='bar' series={seriesData} options={departments ? departments : []} />
-            )}
-          </CardContent>
-        </Card>
-      </Grid>): null ): null}
-	  {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? 
-      <Grid item md={6} xs={12}>
-        <Card>
-          <CardHeader title='Leaves by Direct Reports 📈' subheader={<Divider></Divider>} />
-          <CardContent>
-            {employees[0] === undefined || employees.length < 0 || (!seriesData1 && !totalThresholdsLeaveWarning) ? (
-              <Typography variant='body2'>No data to display</Typography>
-            ) : (
-              <AnnualDirectReports type='line' series={seriesForDirectReports} options={optionsForDirectReports} />
-              
-            )}
-          </CardContent>
-        </Card>
-      </Grid>
-	  : null}
+          ) : null}
+          <Grid item md={6} xs={12}>
+            <Card>
+              <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
+              <CardContent>
+                <TrendsChart options={trendsOptions} series={trendsSeries} />
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Card>
+              <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
+              <CardContent>
+                <TrendsChart options={trendsOptions1} series={trendsSeries1} />
+              </CardContent>
+            </Card>
+          </Grid>
+          {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+            ability?.can('read', 'analytics') ? (
+              <Grid item md={6} xs={12}>
+                <Card>
+                  <CardHeader title='Average Leave By Department 📈' subheader={<Divider></Divider>} />
+                  <CardContent>
+                    {departments[0] === null || !seriesData ? (
+                      <Typography variant='body2'>No data to display</Typography>
+                    ) : (
+                      <AnnualLeaveByDepartment
+                        type='bar'
+                        series={seriesData}
+                        options={departments ? departments : []}
+                      />
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ) : null
+          ) : null}
+          {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+            <Grid item md={6} xs={12}>
+              <Card>
+                <CardHeader title='Leave by Direct Reports 📈' subheader={<Divider></Divider>} />
+                <CardContent>
+                  {employees[0] === undefined ||
+                  employees.length < 0 ||
+                  (!seriesData1 && !totalThresholdsLeaveWarning) ? (
+                    <Typography variant='body2'>No data to display</Typography>
+                  ) : (
+                    <AnnualDirectReports
+                      type='line'
+                      series={seriesForDirectReports}
+                      options={optionsForDirectReports}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
 
-	  {ability?.can('read', 'analytics') ? (
+          {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
                 <CardHeader title='Top Annual Leave Balances In The Organisation 📊' subheader={<Divider></Divider>} />
@@ -360,15 +404,15 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-    </Grid>
-    </>
-  )
-}
+        </Grid>
+      </>
+    )
+  }
 }
 
 Stats.acl = {
-	action: 'read',
-	subject: 'dashboardStats'
-  }
-  
+  action: 'read',
+  subject: 'dashboardStats'
+}
+
 export default Stats

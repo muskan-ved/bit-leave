@@ -207,7 +207,7 @@ const Navigation = (props: Props) => {
           {userVerticalNavMenuContent ? (
             userVerticalNavMenuContent(props)
           ) : (
-            <List className='nav-items' sx={{ pt: 0, height: checkRoleForSideNavHeight, '& > :first-child': { mt: '0' } }}>
+            <List className='nav-items' sx={{ pt: 0, height: checkRoleForSideNavHeight, '& > :first-of-type': { mt: '0' } }}>
               <VerticalNavItems
                 groupActive={groupActive}
                 setGroupActive={setGroupActive}
