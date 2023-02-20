@@ -322,12 +322,12 @@ const ActionApproval = () =>{
                 </Grid>          
                 <Grid item xs={12}>
                   {!loading ?
-                  <Button variant='contained' onClick={() => handleApproveRejected(true)} disabled={empData?.profile?.role === 3}>Approved</Button>: 
+                  <Button variant='contained' onClick={() => handleApproveRejected(true)} disabled={empData?.role === 3}>Approved</Button>: 
                    <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
                   Approved
                   </LoadingButton>}
                   {!loading1 ?
-                  <Button variant='contained' onClick={() => handleApproveRejected(false)} disabled={empData?.profile?.role === 3} sx={{marginLeft:'10px'}}>Rejected</Button>:
+                  <Button variant='contained' onClick={() => handleApproveRejected(false)} disabled={empData?.role === 3} sx={{marginLeft:'10px'}}>Rejected</Button>:
                   <LoadingButton loading={loading1} size='large' type='submit' variant='contained' sx={{marginLeft:'10px'}} disabled>
                   Rejected
                   </LoadingButton>}

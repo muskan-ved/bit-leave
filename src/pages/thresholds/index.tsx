@@ -45,7 +45,7 @@ const Thresholds = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const fetchData = async () => {
-    const excessleave = await dispatch(getExcessLeave()).then(res => {
+    await dispatch(getExcessLeave()).then(res => {
       const data = res.payload?.data
       setLeaveNotification(data[0]?.organisationssettings?.[0].thrleavenotification)
       setLeaveWarning(data[0]?.organisationssettings?.[0].thrleavewarning)
@@ -236,7 +236,7 @@ const Thresholds = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                {!loading ? <Button type='submit' variant='contained' size='large' disabled={empData?.profile?.role === 3}>
+                {!loading ? <Button type='submit' variant='contained' size='large' disabled={empData?.role === 3}>
                   Update
                 </Button> :
                 <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>

@@ -36,7 +36,7 @@ const Home = () => {
   const fetchEmpData = async () => {
     const empData = await dispatch(loadEmployee())
     if (empData.payload != null) {
-      const roleData = empData.payload.data.profile.role;
+      const roleData = empData.payload.data.role;
       if (empData && roleData) {
         const homeRoute = getHomeRoute(roleData)
 

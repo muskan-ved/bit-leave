@@ -219,7 +219,7 @@ const Templates = () => {
               )}
             </TabPanel>
           )} <br />
-          {!loading ? <Button onClick={updateData} variant='contained' disabled={emppData?.profile?.role === 3} >Update</Button> : 
+          {!loading ? <Button onClick={updateData} variant='contained' disabled={emppData?.role === 3} >Update</Button> : 
            <LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
                   Update
             </LoadingButton>}

@@ -103,7 +103,7 @@ const Dashboard = () => {
     })
   }
   const takeLeaveButtonClick = () => {
-    window.open(data?.profile.hrisLogin)
+    // window.open(data?.hrisLogin)
     gtag.event({
       action: 'take_leave',
       category: 'dashboard',
@@ -117,20 +117,20 @@ const Dashboard = () => {
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays: number[] = []
     
-    if (data) {
-      for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-        avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)))
-      }
-      for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-        departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department)
-      }
-      for (let index = 0; index < data?.directReports?.length; index++) {
-        directReportsOfFullname.push(data?.directReports[index].fullname)
-      }
-    for (let index = 0; index < data?.directReports?.length; index++) {
-      directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)))
-    }
-  }
+  //   if (data) {
+  //     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
+  //       avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)))
+  //     }
+  //     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
+  //       departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department)
+  //     }
+  //     for (let index = 0; index < data?.directReports?.length; index++) {
+  //       directReportsOfFullname.push(data?.directReports[index].fullname)
+  //     }
+  //   for (let index = 0; index < data?.directReports?.length; index++) {
+  //     directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)))
+  //   }
+  // }
   
   const employees: string[] = directReportsOfFullname
   const departments: string[] = departmentsOfAverageExcessDays
@@ -336,22 +336,26 @@ const Dashboard = () => {
 
   const quickStats: QuickStatsType[] = [
     {
-      stats: `${currencyFormat(data?.vitals?.averageSalary)}`,
+      // stats: `${currencyFormat(data?.vitals?.averageSalary)}`,
+      stats:'',
       title: 'Average Salary in AUD',
       icon: '/images/cards/user_icon.png'
     },
     {
-      stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities)}`,
+      // stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities)}`,
+      stats:'',
       title: 'Total Leave Liabilities',
       icon: '/images/cards/total_leave_liabilities.png'
     },
     {
-      stats: data?.vitals?.headCount,
+      // stats: data?.vitals?.headCount,
+      stats:'',
       title: 'Organisational Headcount',
       icon: '/images/cards/org_headcount.png'
     },
     {
-      stats: data?.vitals?.leaveMobilised,
+      // stats: data?.vitals?.leaveMobilised,
+      stats:'',
       title: 'Leave Mobilised (Days)',
       icon: '/images/cards/leave_mobilised.png'
     }
@@ -359,7 +363,7 @@ const Dashboard = () => {
 
   if (isLoading && !data) return <CircularProgress color='success' />
 
-  if (!isLoading && data && Object.keys(data.leaveDetails)?.length == 0) {
+  if (!isLoading && data ) {
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -397,7 +401,7 @@ const Dashboard = () => {
     )
   }
 
-  if (!isLoading && data && data?.profile?.onboarded) {
+  if (!isLoading && data && data?.onboarded) {
     return (
       <>
         <Grid container spacing={9}>
@@ -439,11 +443,11 @@ const Dashboard = () => {
                   <StyledBox>
                     <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
                       <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                      <Typography variant='body2'>Job title : {data.profile.jobtitle} </Typography>
+                      <Typography variant='body2'>Job title : {data.jobtitle} </Typography>
                     </Box>
                     <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                       <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                      <Typography variant='body2'>Country : {data.profile.country} </Typography>
+                      <Typography variant='body2'>Country : {data.country} </Typography>
                     </Box>
                   </StyledBox>
                 </CardContent>
@@ -453,7 +457,7 @@ const Dashboard = () => {
         ) : null}
         <br />
         <Grid container spacing={6}>
-          {data.profile.role !== 3 ? (
+          {data.role !== 3 ? (
             <Grid item md={7} xs={12}>
               <Card>
                 <CardHeader title='Your Leave Details 🗓' subheader={<Divider></Divider>} />
@@ -466,7 +470,7 @@ const Dashboard = () => {
                         </CustomAvatar>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                           <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                            {data.leaveDetails.totalDays?.toFixed(2)}
+                            {/* {data.leaveDetails.totalDays?.toFixed(2)} */}
                           </Typography>
                           <Typography variant='caption'>Total Days</Typography>
                         </Box>
@@ -479,7 +483,7 @@ const Dashboard = () => {
                         </CustomAvatar>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                           <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                            {data.leaveDetails.excessDays?.toFixed(2)}
+                            {/* {data.leaveDetails.excessDays?.toFixed(2)} */}
                           </Typography>
                           <Typography variant='caption'>Excess Days</Typography>
                         </Box>
@@ -492,7 +496,7 @@ const Dashboard = () => {
                         </CustomAvatar>
                         <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                           <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                            {data?.leaveDetails?.cashoutValue ? currencyFormat(data?.leaveDetails?.cashoutValue) : ''}
+                            {/* {data?.leaveDetails?.cashoutValue ? currencyFormat(data?.leaveDetails?.cashoutValue) : ''} */}
                           </Typography>
                           <Typography variant='caption'>Cashout Value</Typography>
                         </Box>
@@ -501,7 +505,7 @@ const Dashboard = () => {
                   </Grid>
                   <br></br>
                   <Divider></Divider>
-                  <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography>
+                  {/* <Typography sx={{ color: 'secondary.main' }}>{data.leaveDetails.valueText}</Typography> */}
                   <br></br>
                   <Grid container spacing={1}>
                     <Grid item xs={4} sm={4}>
@@ -509,7 +513,8 @@ const Dashboard = () => {
                         <Button
                           variant='contained'
                           onClick={cashoutLeaveButtonClick}
-                          disabled={!data.leaveDetails.canCashoutLeave}
+                          
+                          // disabled={!data.leaveDetails.canCashoutLeave}
                         >
                           Cashout Leave
                         </Button>
@@ -535,25 +540,26 @@ const Dashboard = () => {
               </Card>
             </Grid>
           ) : null}
-          <Grid item md={data.profile.role !== 3 ? 5 : 12} xs={12} sx={{ display: 'inline-grid' }}>
+          <Grid item md={data.role !== 3 ? 5 : 12} xs={12} sx={{ display: 'inline-grid' }}>
             <Card>
               <CardHeader title='Your Team 👪' subheader={<Divider></Divider>} />
               <CardContent>
                 <StyledBox>
                   <Box sx={{ py: 1.25, mb: 6, display: 'flex', alignItems: 'center' }}>
                     <OfficeBuildingOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                    <Typography variant='body2'>Department : {data.profile.department} </Typography>
+                    <Typography variant='body2'>Department : {data.department} </Typography>
                   </Box>
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <AccountOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
                     <Typography variant='body2'>
-                      Manager : {data.profile.managerName ? data.profile.managerName : 'No manager assigned'}{' '}
+                      Manager : 
+                      {/* {data?.managerName ? data?.managerName : 'No manager assigned'}{' '} */}
                     </Typography>
                   </Box>
                   <br />
                   <Box sx={{ py: 1.25, display: 'flex', alignItems: 'center' }}>
                     <BagPersonalOutline sx={{ color: 'primary.main', mr: 2.5, fontSize: 'small' }} />
-                    <Typography variant='body2'>Number Direct Reports : {data.directReports?.length} </Typography>
+                    {/* <Typography variant='body2'>Number Direct Reports : {data.directReports?.length} </Typography> */}
                   </Box>
                 </StyledBox>
               </CardContent>
@@ -579,7 +585,7 @@ const Dashboard = () => {
                             <TableCell align='right'>Total Days</TableCell>
                           </TableRow>
                         </TableHead>
-                        <TableBody>
+                        {/* <TableBody>
                           {data &&
                             data.leavesByOrg.map((row: any, i: number) => (
                               <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
@@ -597,7 +603,7 @@ const Dashboard = () => {
                                 <TableCell align='right'>{row.excessDays?.toFixed(2)}</TableCell>
                               </TableRow>
                             ))}
-                        </TableBody>
+                        </TableBody> */}
                       </Table>
                     </TableContainer>
                   </Grid>
@@ -607,7 +613,7 @@ const Dashboard = () => {
           ) : null}
         </Grid>
         <br></br>
-        {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ? (
+        {/* {data.directReports?.length > 0 && data?.leavesByDepartment?.length > 0 ? (
           <Grid container spacing={6}>
             {ability?.can('read', 'analytics') ? (
               <Grid item md={6} xs={12}>
@@ -628,7 +634,7 @@ const Dashboard = () => {
               </Card>
             </Grid>
           </Grid>
-        ) : null}
+        ) : null} */}
 
         <CashoutDialog open={dialogOpen} handleClose={handleDialogClose}></CashoutDialog>
       </>

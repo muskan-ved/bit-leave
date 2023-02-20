@@ -6,12 +6,32 @@ export type employeeCashOut = {
 }
 
 export type employee = {
-  profile: profile | null,
-  team: team | null,
-  leaveDetail: leaveDetail | null,
-  cashoutOption: cashoutOption | null,
-  vitals: vitals | null,
-  employeeDetail : employeeDetail | null
+  avatar: string | null,
+  firstname: string | null,
+  lastname: string | null,
+  email: string | null,
+  role: number | null,
+  department: string | null,
+  country: string | null,
+  fullname: string | null,
+  jobtitle: string | null,
+  onboarded: boolean | false,
+  id: string | null,
+  orgs: Array<orgs> | null,
+  pages : Array<pages>,
+  cashoutOption:cashoutOption | null,
+
+}
+
+type pages = {
+  name: string,
+  category: string,
+  data: {} | [],
+}
+
+export type orgs = {
+  id: string | null,
+  name: string | null,
 }
 
 export type employeeDetail ={

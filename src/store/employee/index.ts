@@ -129,7 +129,8 @@ export const loadEmployee = createAsyncThunk('emp/load',
       .get(API.loadEmployee, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      const roleIdentifier = result.data.data.profile.role === 2 ? 'user' : result.data.data.profile.role === 3 ? 'viewer' : result.data.data.profile.role === 1 ? 'admin': data.role
+     
+      const roleIdentifier = result.data.data.role === 2 ? 'user' : result.data.data.role === 3 ? 'viewer' : result.data.data.role === 1 ? 'admin': data.role
       const mergeData = ({...data,'role':roleIdentifier})
       localStorage.setItem('userData',JSON.stringify(mergeData))
     return result.data
@@ -182,13 +183,13 @@ export const listEmployee = createAsyncThunk('emp/list',
     }
   })
 
-  export const loadSenarioData = createAsyncThunk('analytics',
+  export const loadDashboardAnalytics = createAsyncThunk('analytics',
   async (_: void, { dispatch, getState }: Redux) => {
     try{
     const token = localStorage.getItem("accessToken");
 
     const result = await axios
-      .get(API.scenariosAnalytics, {
+      .get(API.dashboardAnalytics, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
     return result.data
@@ -207,13 +208,21 @@ export const listEmployee = createAsyncThunk('emp/list',
 const employeeSlice = createSlice({
   name: 'employee',
   initialState: {
-    profile: null,
-    team: null,
-    leaveDetail: null,
-    cashoutOption: null,
-    vitals: null,
-    employeeDetail : null,
-  } as employee,
+    avatar: null,
+    firstname: null,
+    lastname: null,
+    email: null,
+    role: null,
+    department: null,
+    country: null,
+    fullname: null,
+    jobtitle: null,
+    onboarded: false,
+    id: null,
+    orgs: [],
+    pages : [],
+    cashoutOption:null
+} as employee,
   reducers: {
 
   },
@@ -228,34 +237,54 @@ const employeeSlice = createSlice({
     })
     builder.addCase(postEmployeeOnboarding.fulfilled, (state, action) => {
     })
-    builder.addCase(loadSenarioData.fulfilled, (state, action) => {
-    })
-    builder.addCase(loadEmployee.fulfilled, (state, action) => {
-      if(action.payload?.data){
-      var employee = action.payload.data
-      state.employeeDetail = {
-        data: action.payload.data
-      }
-      state.profile = {
-        id: employee.profile.id,
-        fullname: employee.profile.fullname,
-        onboarded: employee.profile.onboarded,
-      }
-      state.cashoutOption = {
-        daysAvailable: employee.cashoutOptions.daysAvailable,
-        cashoutAmount: employee.cashoutOptions.cashoutAmount,
-        hourlyRate: employee.cashoutOptions.hourlyRate
+    builder.addCase(loadDashboardAnalytics.fulfilled, (state, action) => {
+      const payloadData = action?.payload?.data?.pages
+      if(payloadData){
+        state.pages= payloadData
       }
 
-      state.team = {
-        department: employee.profile.department,
-        managerName: employee.profile.managerName
-      }
-      state.leaveDetail = {
-        excessDays: employee.leaveDetails.excessDays,
-        cashoutValue: employee.leaveDetails.cashoutValue,
-        valueText: employee.leaveDetails.valueText
-      }
+    })
+    builder.addCase(loadEmployee.fulfilled, (state, action) => {
+      const payloadData = action?.payload?.data
+      if(payloadData){
+
+        state.avatar= payloadData.avatar
+        state.firstname= payloadData.firstname
+        state.lastname= payloadData.lastname
+        state.email= payloadData.email
+        state.role= payloadData.role
+        state.department= payloadData.department
+        state.country= payloadData.country
+        state.fullname= payloadData.fullname
+        state.jobtitle= payloadData.jobtitle
+        state.onboarded= payloadData.onboarded
+        state.id= payloadData.id
+        state.orgs= payloadData.orgs
+      
+     // state.employeeDetail = {
+      //   data: action.payload.data
+      // }
+      // state.profile = {
+      //   id: employee.id,
+      //   fullname: employee.fullname,
+      //   onboarded: employee.onboarded,
+      // }
+      // state.cashoutOption = {
+      //   daysAvailable: employee.cashoutOptions.daysAvailable,
+      //   cashoutAmount: employee.cashoutOptions.cashoutAmount,
+      //   hourlyRate: employee.cashoutOptions.hourlyRate
+      // }
+
+      // state.team = {
+      //   department: employee.profile.department,
+      //   managerName: employee.profile.managerName
+      // }
+      // state.leaveDetail = {
+      //   excessDays: employee.leaveDetails.excessDays,
+      //   cashoutValue: employee.leaveDetails.cashoutValue,
+      //   valueText: employee.leaveDetails.valueText
+      // }
+      
     }
     })
 

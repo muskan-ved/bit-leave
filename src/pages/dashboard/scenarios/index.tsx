@@ -20,7 +20,7 @@ import { useDispatch ,useSelector} from 'react-redux'
 
 // ** Import redux store
 import { AppDispatch, RootState } from 'src/store';
-import { loadEmployee, loadSenarioData } from 'src/store/employee';
+import { loadEmployee, loadDashboardAnalytics } from 'src/store/employee';
 
 //  ** Import Toaster
 import { toast,ToastContainer } from 'react-toastify'
@@ -98,7 +98,7 @@ const Scenarios = () => {
   const handleSubmit = async (e: any) => {
     
 		setSubmitLoading(true)
-		const data = await dispatch(loadSenarioData())
+		const data = await dispatch(loadDashboardAnalytics())
     if (data.payload != null) {
       setAnalyticsData(data.payload.data)
       setSubmitLoading(false)

@@ -32,7 +32,7 @@ import CustomAvatar from 'src/@core/components/mui/avatar'
 import { employeeType } from 'src/types/dashboard'
 
 // API call
-import { loadEmployee } from 'src/store/employee'
+import { loadDashboardAnalytics } from 'src/store/employee'
 import { loadOrganisation } from 'src/store/organisation'
 
 // ** Redux Import
@@ -53,6 +53,8 @@ import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 // ** Icons Imports
 import RefreshIcon from '@mui/icons-material/Refresh'
+import AnnualLeavesByOrgs from './annualLeavesByOrganisation'
+import AnnualLeavesByUnassigned from './annualLeavesByUnassigned'
 
 interface QuickStatsType {
   stats: any
@@ -62,7 +64,7 @@ interface QuickStatsType {
 }
 
 const Stats = () => {
-  const [data, setData] = useState<employeeType | null>(null)
+  const [data, setData] = useState<any | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [organisationData, setOrgData] = useState<any>([])
   const [count, setCount] = useState(0)
@@ -70,6 +72,12 @@ const Stats = () => {
 
   function currencyFormat(num: any, includeCents = true) {
     return '$' + num?.toFixed(includeCents ? 2 : 0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  }
+
+  const userData = localStorage.getItem("userData")
+  let uData;
+  if (userData != null) {
+     uData = JSON.parse(userData)
   }
 
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
@@ -82,9 +90,10 @@ const Stats = () => {
 
   const fetchEmpDataFromRedux = async () => {
     setIsLoading(true)
-    const empData = await dispatch(loadEmployee())
+    const empData = await dispatch(loadDashboardAnalytics())
     if (empData.payload != null) {
-      setData(empData.payload.data)
+      const filterLeavesData  = empData.payload.data.pages.filter((p:any) => p.category === 'Stats')
+      setData(filterLeavesData[0]?.data)
       setIsLoading(false)
     }
     setIsLoading(false)
@@ -101,14 +110,12 @@ const Stats = () => {
   }
 
   useEffect(() => {
-    const ReduxCheckEmpData = employeeDetails?.employeeDetail?.data?.leavesByDepartment[0]
-    if (
-      (ReduxCheckEmpData?.department === null && ReduxCheckEmpData?.averageExcessDays === null) ||
-      employeeDetails?.employeeDetail === null
-    ) {
+    if (employeeDetails.email === null && employeeDetails.role === null) {
       fetchEmpDataFromRedux()
     } else {
-      setData(employeeDetails?.employeeDetail?.data)
+      const filterLeavesData  = employeeDetails.pages.filter((p:any) => p.category === 'Stats')
+      setData(filterLeavesData[0]?.data)
+
     }
     if (count != 1) setCount(1)
     fetchOrganisationData()
@@ -116,25 +123,25 @@ const Stats = () => {
 
   const quickStats: QuickStatsType[] = [
     {
-      stats: `${currencyFormat(data?.vitals?.averageSalary)}`,
+      stats: `${currencyFormat(data?.averageSalary)}`,
       title: 'Average Salary in AUD',
       icon: '/images/cards/user_icon.png',
       id: 'average_salaryin_aud'
     },
     {
-      stats: `${currencyFormat(data?.vitals?.totalLeaveLiabilities, false)}`,
+      stats: `${currencyFormat(data?.totalLeaveLiabilities, false)}`,
       title: 'Total Leave Liabilities',
       icon: '/images/cards/total_leave_liabilities.png',
       id: 'total_leave_liabilities'
     },
     {
-      stats: data?.vitals?.headCount,
+      stats: data?.headCount,
       title: 'Organisational Headcount',
       icon: '/images/cards/org_headcount.png',
       id: 'organisational_headcount'
     },
     {
-      stats: data?.vitals?.leaveMobilised,
+      stats: data?.leaveMobilised,
       title: 'Leave Mobilised (Days)',
       icon: '/images/cards/leave_mobilised.png',
       id: 'leave_mobilised(days)'
@@ -146,11 +153,17 @@ const Stats = () => {
   const avgExcessDays: number[] = [],
     departmentsOfAverageExcessDays: string[] = [],
     directReportsOfFullname: string[] = [],
-    directReportsOfExcessDays: number[] = []
+    directReportsOfExcessDays: number[] = [],
+    seriesDataForLeavesByOrganisation : number[] = [],
+    optionsDataForLeavesByOrganisation : string[] = [],
+    seriesDataForLeavesByUnassigned : number[] = [],
+    optionsDataForLeavesByUnassigned : string[] = [],
+    seriesDataForLiabilityTrends : number[] = [],
+    optionsDataForLiabilityTrends : string[] = []
 
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
-      avgExcessDays.push(Number(data?.leavesByDepartment[index].averageExcessDays?.toFixed(2)))
+      avgExcessDays.push(Number(data?.leavesByDepartment[index].excessDays?.toFixed(2)))
     }
     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
       departmentsOfAverageExcessDays.push(data?.leavesByDepartment[index].department)
@@ -161,13 +174,26 @@ const Stats = () => {
     for (let index = 0; index < data?.directReports?.length; index++) {
       directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)))
     }
+    for (let index = 0; index < data?.directReports?.length; index++) {
+      optionsDataForLeavesByOrganisation.push(data?.leavesByOrg[index].fullname)
+    }
+    for (let index = 0; index < data?.directReports?.length; index++) {
+      seriesDataForLeavesByOrganisation.push(Number(data?.leavesByOrg[index].excessDays?.toFixed(2)))
+    }
+    for (let index = 0; index < data?.directReports?.length; index++) {
+      optionsDataForLeavesByUnassigned.push(data?.leavesByUnassigned[index].fullname)
+    }
+    for (let index = 0; index < data?.directReports?.length; index++) {
+      seriesDataForLeavesByUnassigned.push(Number(data?.leavesByUnassigned[index].excessDays?.toFixed(2)))
+    }
+    for (let index = 0; index < data?.directReports?.length; index++) {
+      optionsDataForLiabilityTrends.push(data?.liabilityTrends[index].month)
+    }
+    for (let index = 0; index < data?.directReports?.length; index++) {
+      seriesDataForLiabilityTrends.push(Number(data?.liabilityTrends[index].leaveLiability?.toFixed(2)))
+    }
   }
 
-  const seriesData: number[] = avgExcessDays ? avgExcessDays : []
-  const seriesData1: number[] = directReportsOfExcessDays ? directReportsOfExcessDays : []
-
-  const employees: string[] = directReportsOfFullname
-  const departments: string[] = departmentsOfAverageExcessDays
 
   let totalThresholdsLeave: number[] = []
   const totalThresholdsLeaveWarning: number[] = []
@@ -176,60 +202,20 @@ const Stats = () => {
     totalThresholdsLeave = organisationData[0]?.organisationssettings[0]?.thrleavewarning
       ? organisationData[0]?.organisationssettings[0]?.thrleavewarning
       : 20
-    for (let i = 0; i < employees?.length; i++) {
+    for (let i = 0; i < directReportsOfFullname?.length; i++) {
       totalThresholdsLeaveWarning?.push(parseInt(`${totalThresholdsLeave}`, 10))
     }
   }
 
   const seriesForDirectReports = {
-    seriesData1,
+    directReportsOfExcessDays,
     totalThresholdsLeaveWarning
   }
 
   const optionsForDirectReports = {
     totalThresholdsLeave,
-    employees
+    directReportsOfFullname
   }
-
-  const trendsOptions = [
-    '7/12',
-    '8/12',
-    '9/12',
-    '10/12',
-    '11/12',
-    '12/12',
-    '13/12',
-    '14/12',
-    '15/12',
-    '16/12',
-    '17/12',
-    '18/12',
-    '19/12'
-  ]
-
-  const trendsSeries = [
-    {
-      name: 'Visits',
-      data: [100, 120, 90, 170, 130, 160, 140, 240, 220, 180, 270, 280, 375]
-    },
-    {
-      name: 'Clicks',
-      data: [60, 80, 70, 110, 80, 100, 90, 180, 160, 140, 200, 220, 275]
-    },
-    {
-      name: 'Sales',
-      data: [20, 40, 30, 70, 40, 60, 50, 140, 120, 100, 140, 180, 220]
-    }
-  ]
-
-  const trendsOptions1 = ['13/12', '14/12', '15/12', '16/12', '17/12', '18/12', '19/12']
-
-  const trendsSeries1 = [
-    {
-      name: 'Visits',
-      data: [100, 120, 140, 180, 270, 280, 375]
-    }
-  ]
 
   const renderStats = () => {
     return (
@@ -252,7 +238,7 @@ const Stats = () => {
 
   if (isLoading && !data) return <CircularProgress color='success' />
 
-  if (!isLoading && data && Object.keys(data.leaveDetails)?.length == 0) {
+  if (!isLoading && data && !uData?.userOnboarded) {
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -269,7 +255,7 @@ const Stats = () => {
     )
   }
 
-  if (!isLoading && data && data?.profile?.onboarded) {
+  if (!isLoading && data && uData?.userOnboarded) {
     return (
       <>
         <Grid container spacing={9}>
@@ -304,56 +290,93 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-          <Grid item md={6} xs={12}>
+          {data.liabilityTrends?.length > 0 ? 
+                   <Grid item md={6} xs={12}>
             <Card>
               <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
               <CardContent>
-                <TrendsChart options={trendsOptions} series={trendsSeries} />
+              {optionsDataForLiabilityTrends[0] === null || !seriesDataForLiabilityTrends ? (
+                      <Typography variant='body2'>No data to display</Typography>
+                    ) : (
+                <TrendsChart options={optionsDataForLiabilityTrends} series={seriesDataForLiabilityTrends} />)}
               </CardContent>
             </Card>
-          </Grid>
-          <Grid item md={6} xs={12}>
-            <Card>
-              <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
-              <CardContent>
-                <TrendsChart options={trendsOptions1} series={trendsSeries1} />
-              </CardContent>
-            </Card>
-          </Grid>
-          {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+          </Grid> : null
+          }
+         {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
             ability?.can('read', 'analytics') ? (
               <Grid item md={6} xs={12}>
                 <Card>
                   <CardHeader title='Average Leave By Department 📈' subheader={<Divider></Divider>} />
                   <CardContent>
-                    {departments[0] === null || !seriesData ? (
+                    {departmentsOfAverageExcessDays[0] === null || !avgExcessDays ? (
                       <Typography variant='body2'>No data to display</Typography>
                     ) : (
                       <AnnualLeaveByDepartment
                         type='bar'
-                        series={seriesData}
-                        options={departments ? departments : []}
+                        series={avgExcessDays}
+                        options={departmentsOfAverageExcessDays ? departmentsOfAverageExcessDays : []}
                       />
                     )}
                   </CardContent>
                 </Card>
               </Grid>
             ) : null
-          ) : null}
-          {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+          ) : null} 
+          {data.directReports?.length > 0 ? (
             <Grid item md={6} xs={12}>
               <Card>
                 <CardHeader title='Leave by Direct Reports 📈' subheader={<Divider></Divider>} />
                 <CardContent>
-                  {employees[0] === undefined ||
-                  employees.length < 0 ||
-                  (!seriesData1 && !totalThresholdsLeaveWarning) ? (
+                  {directReportsOfFullname[0] === undefined ||
+                  directReportsOfFullname.length < 0 ||
+                  (!directReportsOfExcessDays && !totalThresholdsLeaveWarning) ? (
                     <Typography variant='body2'>No data to display</Typography>
                   ) : (
                     <AnnualDirectReports
-                      type='line'
+                      type='scatter'
                       series={seriesForDirectReports}
                       options={optionsForDirectReports}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+            {data.leavesByOrg?.length > 0 ? (
+            <Grid item md={6} xs={12}>
+              <Card>
+                <CardHeader title='Leave by Organisations 📈' subheader={<Divider></Divider>} />
+                <CardContent>
+                  {optionsDataForLeavesByOrganisation[0] === undefined ||
+                  seriesDataForLeavesByOrganisation.length < 0 ||
+                  (!seriesDataForLeavesByOrganisation) ? (
+                    <Typography variant='body2'>No data to display</Typography>
+                  ) : (
+                    <AnnualLeavesByOrgs
+                      type='line'
+                      series={seriesDataForLeavesByOrganisation}
+                      options={optionsDataForLeavesByOrganisation}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+          {data.leavesByUnassigned?.length > 0 ? (
+            <Grid item md={6} xs={12}>
+              <Card>
+                <CardHeader title='Leave by Unassigned 📈' subheader={<Divider></Divider>} />
+                <CardContent>
+                  {optionsDataForLeavesByUnassigned[0] === undefined ||
+                  seriesDataForLeavesByUnassigned.length < 0 ||
+                  (!seriesDataForLeavesByUnassigned) ? (
+                    <Typography variant='body2'>No data to display</Typography>
+                  ) : (
+                    <AnnualLeavesByUnassigned
+                      type='line'
+                      series={seriesDataForLeavesByUnassigned}
+                      options={optionsDataForLeavesByUnassigned}
                     />
                   )}
                 </CardContent>
@@ -379,8 +402,8 @@ const Stats = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data &&
-                            data.leavesByOrg.map((row: any, i: number) => (
+                          {data && data.directReports.length > 0 ?
+                            data.directReports.map((row: any, i: number) => (
                               <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                                 <TableCell component='th' scope='row'>
                                   <CustomAvatar
@@ -395,7 +418,10 @@ const Stats = () => {
                                 <TableCell align='right'>{row.department}</TableCell>
                                 <TableCell align='right'>{row.excessDays?.toFixed(2)}</TableCell>
                               </TableRow>
-                            ))}
+                            )) : 
+                            <TableRow>
+                                <TableCell align='center' colSpan={4}>No record found</TableCell>
+                          </TableRow>}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -404,6 +430,8 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
+
+          
         </Grid>
       </>
     )

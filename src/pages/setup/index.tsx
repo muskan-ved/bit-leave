@@ -163,7 +163,7 @@ const Setup = () => {
               </Grid>
               <Grid item xs={12}>
                 {!isLoading ?
-                <Button type='submit' variant='contained' size='large' disabled={empData?.profile?.role === 3}>
+                <Button type='submit' variant='contained' size='large' disabled={empData?.role === 3}>
                 Create bit.leave
                 </Button>:
                 <LoadingButton loading={isLoading} type='submit' variant='contained' size='large' disabled>

@@ -35,6 +35,7 @@ const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 const StepperContentWrapper = styled(Box)<BoxProps>(({ theme }) => ({
 	padding: theme.spacing(7)
 }))
+
 interface OnBoardingState {
 	employeeAwardType: string,
 	thresholdLeaveNotification: number | null,
@@ -278,7 +279,7 @@ const Onboarding = () => {
 				</Typography>
 			</Grid>
 			<Grid item xs={12}>
-				<Button type='submit' variant="contained" onClick={onStart} disabled={empData?.profile.role === 3}>
+				<Button type='submit' variant="contained" onClick={onStart} disabled={empData?.role === 3}>
 					{activeStep === 0 ? 'Start' : 'Next'}
 				</Button>
 			</Grid>

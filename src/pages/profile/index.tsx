@@ -221,18 +221,6 @@ const Profile = () => {
 		}
 	}
 
-	const StyledTableCell = styled(TableCell)(({ theme }) => ({
-		[`&.${tableCellClasses.head}`]: {
-     
-	  backgroundColor: theme.palette.primary.main,
-		  color: theme.palette.common.black,
-		 
-		},
-		[`&.${tableCellClasses.body}`]: {
-		  fontSize: 14,
-		},
-	  }));
-
 	if (isLoading)
 		return (<CircularProgress color="success" />)
 
@@ -257,7 +245,7 @@ const Profile = () => {
 										type='string'
 										label='First Name'
 										name='First Name'
-										defaultValue={employeeData && employeeData.profile?.firstname}
+										defaultValue={employeeData && employeeData?.firstname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -274,7 +262,7 @@ const Profile = () => {
 										type='string'
 										label='Last Name'
 										name='Last Name'
-										defaultValue={employeeData && employeeData.profile?.lastname}
+										defaultValue={employeeData && employeeData?.lastname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -308,7 +296,7 @@ const Profile = () => {
 										type='string'
 										label='Full Name'
 										name='Full Name'
-										defaultValue={employeeData && employeeData.profile?.fullname}
+										defaultValue={employeeData && employeeData?.fullname}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -342,7 +330,7 @@ const Profile = () => {
 										type='string'
 										label='Email'
 										name='Email'
-										defaultValue={employeeData && employeeData.profile?.email}
+										defaultValue={employeeData && employeeData?.email}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -394,7 +382,7 @@ const Profile = () => {
 										type='string'
 										label='Manager Name'
 										name='Manager Name'
-										defaultValue={employeeData && employeeData.profile.managerName}
+										defaultValue={'managerName'}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -411,7 +399,7 @@ const Profile = () => {
 										type='string'
 										label='Department'
 										name='Department'
-										defaultValue={employeeData && employeeData.profile.department}
+										defaultValue={employeeData && employeeData?.department}
 										InputProps={{
 											readOnly: true,
 											startAdornment: (
@@ -437,7 +425,7 @@ const Profile = () => {
 					</Grid>
 					) })}
 					<Grid item xs={12}>
-					{!loading ? <Button type='submit' variant='contained' size='large' onClick={handleSubmitPersona}  disabled={employeeData?.profile?.role === 3 ? true : imageName === ''? true : false}>
+					{!loading ? <Button type='submit' variant='contained' size='large' onClick={handleSubmitPersona}  disabled={employeeData?.role === 3 ? true : imageName === ''? true : false}>
 						Update
 						</Button> :
 						<LoadingButton loading={loading} size='large' type='submit' variant='contained' disabled>
@@ -464,7 +452,7 @@ const Profile = () => {
 							The size of the Organisation logo should be 500*500.
 						</Typography>
 						<Box sx={{ ml: 3, pl: 3, pb: 4 }} className="btndivider">
-							<Button variant="contained" component="label" disabled={employeeData?.profile?.role === 3}>
+							<Button variant="contained" component="label" disabled={employeeData?.role === 3}>
 								Upload Organisation Logo
 								<input style={{ marginLeft: 60 }} type={"file"} id={"logo"} onChange={handleOnChange} onClick={(event:any)=> {event.target.value = null}} accept='image/*' hidden />
 							</Button>

@@ -12,6 +12,13 @@ const TrendsChart = ({options,series}:any) => {
 
   const theme = useTheme()
 
+  const trendsSeries = [
+    {
+      name: 'Month Trends',
+      data: series
+    }
+  ]
+
     const trendsOptions: ApexOptions = {
         chart: {
           parentHeightOffset: 0,
@@ -53,7 +60,7 @@ const TrendsChart = ({options,series}:any) => {
         }
     }
 
-    return (  <ReactApexcharts type='area' options={trendsOptions} series={series}  height={350} /> );
+    return (  <ReactApexcharts type='area' options={trendsOptions} series={trendsSeries}  height={294} /> );
 }
  
 export default TrendsChart;

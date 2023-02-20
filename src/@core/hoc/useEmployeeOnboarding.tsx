@@ -7,7 +7,7 @@ const useEmployeeOnboarding = () => {
   const EmployeeOnboarding = () => {
     const [isEmployeeOnboarded, setisEmployeeOnboarded] = useState(false)
     const employee = useSelector((state: RootState) => state.employee)
-    const isOnboarded = employee.profile?.onboarded
+    const isOnboarded = employee?.onboarded
     useEffect(() => {
         if (!isOnboarded) {
           setisEmployeeOnboarded(false)

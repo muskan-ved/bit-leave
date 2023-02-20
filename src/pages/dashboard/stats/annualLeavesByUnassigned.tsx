@@ -8,18 +8,14 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
 
-const AnnualDirectReports = ({type,series,options}:any) => {
+const AnnualLeavesByUnassigned = ({type,series,options}:any) => {
 
   const theme = useTheme()
 
     const series1 = [
         {
-          name: 'Average Excess Days By Employee',
-          data: series.directReportsOfExcessDays
-        },
-        {
-          name: 'Thresholds Limit',
-          data: series.totalThresholdsLeaveWarning
+          name: 'Leave by organization',
+          data: series
         }
       ]
 
@@ -35,21 +31,22 @@ const AnnualDirectReports = ({type,series,options}:any) => {
         annotations: {
           yaxis: [
             {
-              y: parseInt(`${options.totalThresholdsLeave}`, 10),
-              strokeDashArray: 0,
-              borderWidth: 3,
-              borderColor: hexToRGBA(theme.palette.error.light, 1)
+                strokeDashArray: 0,
             }
           ]
         },
         plotOptions: {
-          bar: {
-            borderRadius: 8,
+            bar: {
+                borderRadius: 8,
             barHeight: '60%',
             horizontal: true,
             distributed: true
-          }
-        },
+        }
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    
         grid: {
           strokeDashArray: 8,
           xaxis: {
@@ -83,15 +80,15 @@ const AnnualDirectReports = ({type,series,options}:any) => {
         xaxis: {
           axisTicks: { show: false },
           axisBorder: { show: false },
-          categories: options.directReportsOfFullname
+          categories: options
         },
         yaxis: {
           labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
-        }
+        },
       }
 
     return (
     <ReactApexcharts  type={type} height={294} series={series1} options={options1} /> );
 }
  
-export default AnnualDirectReports;
+export default AnnualLeavesByUnassigned;

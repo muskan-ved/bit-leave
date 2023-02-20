@@ -1,12 +1,13 @@
 import React, { Fragment, useEffect, useState } from "react";
 import randomcolor from "randomcolor";
-import { OrgView } from "src/store/organisation";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "src/store";
+import { AppDispatch, RootState } from "src/store";
 import { Box, Button, CircularProgress, Divider, Grid } from "@mui/material";
 
 // ** Icons Imports
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { loadDashboardAnalytics } from "src/store/employee";
+import { useSelector } from "react-redux";
 
 const Card = (props:any) => {
 
@@ -50,8 +51,15 @@ const Chart = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const dispatch = useDispatch<AppDispatch>()
 
+  const employeeDetails: any = useSelector((state: RootState) => state.employee)
+
   useEffect(() => {
-    fetchOrganisationData()
+    if (employeeDetails?.pages.length === 0 ) {
+      fetchOrganisationData()
+    } else {
+      const filterOrgViewData  = employeeDetails.pages.filter((p:any) => p.category === 'OrgView')
+      setOrgViewData(filterOrgViewData[0].data.employees)
+    }
   }, [])
 
   const refreshbtn = async () => {
@@ -60,9 +68,10 @@ const Chart = () => {
 
   const fetchOrganisationData = async () => {
     setIsLoading(true)
-    const orgViewData = await dispatch(OrgView())
+    const orgViewData = await dispatch(loadDashboardAnalytics())
     if (orgViewData.payload != null) {
-      setOrgViewData(orgViewData.payload.data.employees)
+      const filterOrgViewData  = orgViewData.payload.data.pages.filter((p:any) => p.category === 'OrgView')
+      setOrgViewData(filterOrgViewData[0].data.employees)
       setIsLoading(false)
     }
     setIsLoading(false)

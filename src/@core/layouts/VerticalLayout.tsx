@@ -76,7 +76,7 @@ const VerticalLayout = (props: LayoutProps) => {
   const fetchEmployee = async () => {
     const data = await dispatch(loadEmployee())
     if(data.payload?.data){
-      if(data.payload?.data.profile.onboarded==false){
+      if(data.payload?.data?.onboarded==false){
       //setDialogOpen(true)
       }
     }
@@ -103,7 +103,7 @@ const VerticalLayout = (props: LayoutProps) => {
     }
   }, [])
   useEffect(() => {
-    if (store.profile == null) {
+    if (store.email == null) {
       fetchEmployee()
     }
 

@@ -22,7 +22,7 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
     customColors: {
       dark: darkColor,
       main: mainColor,
-      light: lightColor,
+      light: lightColor,         
       darkBg: '#282A42',
       lightBg: '#F7F7F9',
       bodyBg: mode === 'light' ? '#F7F7F9' : '#282A42', // Same as palette.background.default but doesn't consider bordered skin
@@ -88,7 +88,7 @@ const DefaultPalette = (mode: PaletteMode, skin: Skin) => {
     text: {
       primary: `rgba(${mainColor}, 0.87)`,
       secondary: `rgba(${mainColor}, 0.68)`,
-      disabled: `rgba(${mainColor}, 0.38)`
+      disabled: `rgba(${mainColor}, 0.38)`,
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {

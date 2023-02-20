@@ -43,13 +43,30 @@ type directReport = {
   excessDays: number,
 }
 
-export type employeeType = {
-  id: number
-  profile: profile
-  leaveDetails: leaveDetails
-  leavesByOrg: Array<leavesbyOrg>
-  leavesByDepartment: Array<leavesbyDepartment>
-  directReports: Array<directReport>
-  vitals: vitals
-
+type orgs = {
+  id: string,
+  name: string,
 }
+
+export type employeeType = {
+  avatar: string,
+  firstname: string,
+  lastname: string,
+  email: string,
+  role: number,
+  department: string,
+  country: string,
+  fullname: string,
+  jobtitle: string,
+  onboarded: boolean,
+  id: string,
+  orgs: Array<orgs>,
+  pages : Array<pages>,
+}
+
+type pages = {
+  name: string,
+  category: string,
+  data: {} | [],
+}
+

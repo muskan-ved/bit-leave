@@ -262,7 +262,7 @@ const result = arrayUniqueByKey.filter((role: any) => {
                           </TableCell>
                           <TableCell align='left'>{row.roleName}</TableCell>
                           <TableCell align='right' >
-                            {empData?.profile?.role === 3 ?<i>
+                            {empData?.role === 3 ?<i>
                               <ModeEditOutlineOutlinedIcon />
                             </i>:<i onClick={() => handleRoleUpdate(row)}>
                               <ModeEditOutlineOutlinedIcon />
