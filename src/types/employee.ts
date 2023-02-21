@@ -29,6 +29,11 @@ type pages = {
   data: {} | [],
 }
 
+export type scenariosAnalytics = {
+  Headcount: number,
+  AverageSalary:number
+}
+
 export type orgs = {
   id: string | null,
   name: string | null,

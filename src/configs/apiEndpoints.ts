@@ -28,6 +28,7 @@ export default {
   allEmployeeList:`${BASE_URL}${process.env.NEXT_PUBLIC_ALL_EMPLOYEE_LIST}`,
   XeroRedirectURL:`${BASE_URL}${process.env.NEXT_PUBLIC_XERO_REDIRECT_URL}`,
   payrollDisconnectAPI : `${BASE_URL}${process.env.NEXT_PUBLIC_PAYROLL_DISCONNECT}`,
-  dashboardAnalytics : `${BASE_URL}${process.env.NEXT_PUBLIC_SCENARIOS_ANALYTICS}`,
+  dashboardAnalytics : `${BASE_URL}${process.env.NEXT_PUBLIC_DASHBOARD_ANALYTICS}`,
+  dashboardSenariosAnalytics : `${BASE_URL}${process.env.NEXT_PUBLIC_SCENARIOS_DASHBOARD_ANALYTICS}`,
   
 }

@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk, Dispatch } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 // ** Types Imports
-import { employeeCashOut, employee } from 'src/types/employee'
+import { employeeCashOut, employee, scenariosAnalytics } from 'src/types/employee'
 
 // ** Logout function
 import { userLogout } from '../user'
@@ -204,6 +204,27 @@ export const listEmployee = createAsyncThunk('emp/list',
     }
   })
 
+  export const loadDashboardSenariosAnalytics = createAsyncThunk('senario/analytics',
+  async (params: scenariosAnalytics, { dispatch, getState }: Redux) => {
+    try{
+    const token = localStorage.getItem("accessToken");
+
+    const result = await axios
+      .get(`${API.dashboardSenariosAnalytics}?headCount=${params.Headcount}&averageSalary=${params.AverageSalary} `, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+    return result.data
+    } 
+    catch(err){
+      if (axios.isAxiosError(err)) {
+        if (!err?.response) {
+         } else if (err.response?.status === 401 || err.message === "Network Error") {
+           dispatch(userLogout())
+         }
+        }
+    }
+  })
+
 
 const employeeSlice = createSlice({
   name: 'employee',
@@ -242,7 +263,8 @@ const employeeSlice = createSlice({
       if(payloadData){
         state.pages= payloadData
       }
-
+    })
+    builder.addCase(loadDashboardSenariosAnalytics.fulfilled, (state, action) => {
     })
     builder.addCase(loadEmployee.fulfilled, (state, action) => {
       const payloadData = action?.payload?.data
@@ -260,31 +282,6 @@ const employeeSlice = createSlice({
         state.onboarded= payloadData.onboarded
         state.id= payloadData.id
         state.orgs= payloadData.orgs
-      
-     // state.employeeDetail = {
-      //   data: action.payload.data
-      // }
-      // state.profile = {
-      //   id: employee.id,
-      //   fullname: employee.fullname,
-      //   onboarded: employee.onboarded,
-      // }
-      // state.cashoutOption = {
-      //   daysAvailable: employee.cashoutOptions.daysAvailable,
-      //   cashoutAmount: employee.cashoutOptions.cashoutAmount,
-      //   hourlyRate: employee.cashoutOptions.hourlyRate
-      // }
-
-      // state.team = {
-      //   department: employee.profile.department,
-      //   managerName: employee.profile.managerName
-      // }
-      // state.leaveDetail = {
-      //   excessDays: employee.leaveDetails.excessDays,
-      //   cashoutValue: employee.leaveDetails.cashoutValue,
-      //   valueText: employee.leaveDetails.valueText
-      // }
-      
     }
     })
 

@@ -19,7 +19,6 @@ import * as yup from 'yup'
 import {
   Card,
   CardContent,
-  CardHeader,
   Divider,
   FormHelperText,
   IconButton,
@@ -82,7 +81,7 @@ const CashoutDialog = (props: any) => {
     React.useState<ApiResult<cashoutResultModel>>(defaultCashoutApiResult)
   const [employeeContract, setemployeeContract] = React.useState('')
   const [loading, setloading] = React.useState(false)
-  const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null);
+  const [leaveBalanceAfterCashout, setleaveBalanceAfterCashout] = React.useState(null)
   const [toggleValue, setToggleValue] = React.useState(false)
   const [calculateData, setCalculateData] = React.useState<any>('')
   const [errMessage, setErrorMessage] = React.useState<any>('')
@@ -134,6 +133,8 @@ const CashoutDialog = (props: any) => {
   })
   const sigCanvas = React.useRef() as React.MutableRefObject<any>
   const store = useSelector((state: RootState) => state.employee)
+  const filterLeavesData: any = store.pages.filter((p: any) => p.category === 'MyLeaves')
+  const getCashoutOptions = filterLeavesData && filterLeavesData[0]?.data[0]
 
   const onCashOutSubmit = async (data: any) => {
     setloading(true)
@@ -147,8 +148,8 @@ const CashoutDialog = (props: any) => {
     gtag.event({
       action: 'cash_out_leave',
       category: 'dashboard',
-      label: "cash_out_leave",
-      value:'modal'
+      label: 'cash_out_leave',
+      value: 'modal'
     })
 
     const cashoutContractResponse = await dispatch(getCashOutContract(stateData))
@@ -183,8 +184,8 @@ const CashoutDialog = (props: any) => {
     gtag.event({
       action: 'sign_contract',
       category: 'dashboard',
-      label: "sign_contract",
-      value:'modal'
+      label: 'sign_contract',
+      value: 'modal'
     })
     const result = await dispatch(postEmployeeCashout(stateData))
     if (result.payload) {
@@ -214,8 +215,8 @@ const CashoutDialog = (props: any) => {
     gtag.event({
       action: 'signature_clear',
       category: 'dashboard',
-      label: "signature_clear",
-      value:'modal'
+      label: 'signature_clear',
+      value: 'modal'
     })
   }
 
@@ -231,7 +232,9 @@ const CashoutDialog = (props: any) => {
   }
   const onChangeCashOutDays = async (e: any) => {
     const daysAvalble =
-      store.cashoutOption != null && store.cashoutOption?.daysAvailable != null && store.cashoutOption?.daysAvailable
+      getCashoutOptions?.cashoutOptions != null &&
+      getCashoutOptions?.cashoutOptions?.daysAvailable != null &&
+      getCashoutOptions?.cashoutOptions?.daysAvailable
 
     if (e.target.value > daysAvalble) {
       setErrorMessage('Requested cashout days are greater than days available')
@@ -279,14 +282,14 @@ const CashoutDialog = (props: any) => {
     setActiveStep(0)
     resetCashoutDialog()
     setErrorMessage('')
-	router.push('/dashboard/leaves/')
+    router.push('/dashboard/leaves/')
     props.handleClose()
   }
   gtag.event({
     action: 'close_and_refresh_dashboard',
     category: 'dashboard',
-    label: "close_and_refresh_dashboard",
-    value:'moddal'
+    label: 'close_and_refresh_dashboard',
+    value: 'moddal'
   })
   const errorControl = () => {
     let i = 0
@@ -376,9 +379,9 @@ const CashoutDialog = (props: any) => {
                       label='Days Available'
                       name='Days Available'
                       value={
-                        store.cashoutOption != null &&
-                        store.cashoutOption?.daysAvailable != null &&
-                        store.cashoutOption?.daysAvailable.toFixed(2)
+                        getCashoutOptions?.cashoutOptions != null &&
+                        getCashoutOptions?.cashoutOptions?.daysAvailable != null &&
+                        getCashoutOptions?.cashoutOptions?.daysAvailable.toFixed(2)
                       }
                       InputProps={{
                         startAdornment: (
@@ -404,9 +407,11 @@ const CashoutDialog = (props: any) => {
                       label='Value (Before tax)'
                       name='Value (Before tax)'
                       value={
-                        store.cashoutOption != null &&
-                        store.cashoutOption?.cashoutAmount != null &&
-                        store.cashoutOption?.cashoutAmount.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+                        getCashoutOptions?.cashoutOptions != null &&
+                        getCashoutOptions?.cashoutOptions?.cashoutAmount != null &&
+                        getCashoutOptions?.cashoutOptions?.cashoutAmount
+                          .toFixed(2)
+                          .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
                       }
                       InputProps={{
                         startAdornment: (
@@ -620,7 +625,9 @@ const CashoutDialog = (props: any) => {
                   <Img alt='Congratulations Daisy' src={`/images/cards/success.jpg`} />
                 </StyledGrid>
                 <Grid item xs={12} sm={7}>
-                  <DialogContentText marginBottom={'20px'} fontWeight={'bold'}>Thank you for using bit.leave! 🎉</DialogContentText>
+                  <DialogContentText marginBottom={'20px'} fontWeight={'bold'}>
+                    Thank you for using bit.leave! 🎉
+                  </DialogContentText>
                   <DialogContentText marginBottom={'20px'}>
                     You will recieve a notification once your leave cash out has been approved, based on your
                     organisation's policy.

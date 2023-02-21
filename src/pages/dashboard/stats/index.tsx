@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 // ** MUI import
 import { useTheme } from '@mui/material/styles'
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -28,9 +29,6 @@ import AnnualLeaveByDepartment from './annualLeavesByDepartment'
 import AnnualDirectReports from './annualLeavesByDirectReports'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
-// ** Types Import
-import { employeeType } from 'src/types/dashboard'
-
 // API call
 import { loadDashboardAnalytics } from 'src/store/employee'
 import { loadOrganisation } from 'src/store/organisation'
@@ -41,11 +39,7 @@ import { useSelector, useDispatch } from 'react-redux'
 // ** Redux Store Import
 import { RootState, AppDispatch } from 'src/store'
 
-// ** Third Party Imports
-import { ApexOptions } from 'apexcharts'
-
 // ** Util Import
-import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { getInitials } from 'src/@core/utils/get-initials'
 
 // ** Context Imports
@@ -53,8 +47,6 @@ import { AbilityContext } from 'src/layouts/components/acl/Can'
 
 // ** Icons Imports
 import RefreshIcon from '@mui/icons-material/Refresh'
-import AnnualLeavesByOrgs from './annualLeavesByOrganisation'
-import AnnualLeavesByUnassigned from './annualLeavesByUnassigned'
 
 interface QuickStatsType {
   stats: any
@@ -74,10 +66,17 @@ const Stats = () => {
     return '$' + num?.toFixed(includeCents ? 2 : 0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 
-  const userData = localStorage.getItem("userData")
-  let uData;
+  const userData = localStorage.getItem('userData')
+  let uData
   if (userData != null) {
-     uData = JSON.parse(userData)
+    uData = JSON.parse(userData)
+  }
+
+  const graphHeadTextStyle = {
+    float: 'left',
+    lineHeight: 1.6,
+    fontWeight: 500,
+    fontSize: '1.25rem'
   }
 
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
@@ -92,7 +91,7 @@ const Stats = () => {
     setIsLoading(true)
     const empData = await dispatch(loadDashboardAnalytics())
     if (empData.payload != null) {
-      const filterLeavesData  = empData.payload.data.pages.filter((p:any) => p.category === 'Stats')
+      const filterLeavesData = empData.payload.data.pages.filter((p: any) => p.category === 'Stats')
       setData(filterLeavesData[0]?.data)
       setIsLoading(false)
     }
@@ -110,12 +109,11 @@ const Stats = () => {
   }
 
   useEffect(() => {
-    if (employeeDetails.email === null && employeeDetails.role === null) {
+    if (employeeDetails.pages.length === 0) {
       fetchEmpDataFromRedux()
     } else {
-      const filterLeavesData  = employeeDetails.pages.filter((p:any) => p.category === 'Stats')
+      const filterLeavesData = employeeDetails.pages.filter((p: any) => p.category === 'Stats')
       setData(filterLeavesData[0]?.data)
-
     }
     if (count != 1) setCount(1)
     fetchOrganisationData()
@@ -154,12 +152,10 @@ const Stats = () => {
     departmentsOfAverageExcessDays: string[] = [],
     directReportsOfFullname: string[] = [],
     directReportsOfExcessDays: number[] = [],
-    seriesDataForLeavesByOrganisation : number[] = [],
-    optionsDataForLeavesByOrganisation : string[] = [],
-    seriesDataForLeavesByUnassigned : number[] = [],
-    optionsDataForLeavesByUnassigned : string[] = [],
-    seriesDataForLiabilityTrends : number[] = [],
-    optionsDataForLiabilityTrends : string[] = []
+    seriesDataForLeavesByUnassigned: number[] = [],
+    optionsDataForLeavesByUnassigned: string[] = [],
+    seriesDataForLiabilityTrends: number[] = [],
+    optionsDataForLiabilityTrends: string[] = []
 
   if (data) {
     for (let index = 0; index < data?.leavesByDepartment?.length; index++) {
@@ -174,26 +170,19 @@ const Stats = () => {
     for (let index = 0; index < data?.directReports?.length; index++) {
       directReportsOfExcessDays.push(Number(data?.directReports[index].excessDays?.toFixed(2)))
     }
-    for (let index = 0; index < data?.directReports?.length; index++) {
-      optionsDataForLeavesByOrganisation.push(data?.leavesByOrg[index].fullname)
-    }
-    for (let index = 0; index < data?.directReports?.length; index++) {
-      seriesDataForLeavesByOrganisation.push(Number(data?.leavesByOrg[index].excessDays?.toFixed(2)))
-    }
-    for (let index = 0; index < data?.directReports?.length; index++) {
+    for (let index = 0; index < data?.leavesByUnassigned?.length; index++) {
       optionsDataForLeavesByUnassigned.push(data?.leavesByUnassigned[index].fullname)
     }
-    for (let index = 0; index < data?.directReports?.length; index++) {
+    for (let index = 0; index < data?.leavesByUnassigned?.length; index++) {
       seriesDataForLeavesByUnassigned.push(Number(data?.leavesByUnassigned[index].excessDays?.toFixed(2)))
     }
-    for (let index = 0; index < data?.directReports?.length; index++) {
+    for (let index = 0; index < data?.liabilityTrends?.length; index++) {
       optionsDataForLiabilityTrends.push(data?.liabilityTrends[index].month)
     }
-    for (let index = 0; index < data?.directReports?.length; index++) {
+    for (let index = 0; index < data?.liabilityTrends?.length; index++) {
       seriesDataForLiabilityTrends.push(Number(data?.liabilityTrends[index].leaveLiability?.toFixed(2)))
     }
   }
-
 
   let totalThresholdsLeave: number[] = []
   const totalThresholdsLeaveWarning: number[] = []
@@ -207,21 +196,11 @@ const Stats = () => {
     }
   }
 
-  const seriesForDirectReports = {
-    directReportsOfExcessDays,
-    totalThresholdsLeaveWarning
-  }
-
-  const optionsForDirectReports = {
-    totalThresholdsLeave,
-    directReportsOfFullname
-  }
-
   const renderStats = () => {
     return (
       data &&
       quickStats.map((item: QuickStatsType, index: number) => (
-        <Grid item xs={12} sm={3} key={item.id} >
+        <Grid item xs={12} sm={3} key={item.id}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar src={item.icon} variant='rounded' color={'primary'} sx={{ mr: 4 }} />
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -281,7 +260,20 @@ const Stats = () => {
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
-                <CardHeader title='Quick Stats ​​​​​​📊​' subheader={<Divider></Divider>} />
+                <CardHeader
+                  title={
+                    <>
+                      <Typography component={'span'} sx={graphHeadTextStyle}>
+                        Quick Stats
+                      </Typography>{' '}
+                      <Avatar
+                        src='/images/cards/quickStats.png'
+                        sx={{ borderRadius: 0, padding: '1px', position: 'relative', top: '-7px' }}
+                      />
+                    </>
+                  }
+                  subheader={<Divider></Divider>}
+                />
                 <CardContent>
                   <Grid container spacing={6}>
                     {renderStats()}
@@ -290,24 +282,51 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-          {data.liabilityTrends?.length > 0 ? 
-                   <Grid item md={6} xs={12}>
-            <Card>
-              <CardHeader title='Trends ​​​​​📈​​' subheader={<Divider></Divider>} />
-              <CardContent>
-              {optionsDataForLiabilityTrends[0] === null || !seriesDataForLiabilityTrends ? (
-                      <Typography variant='body2'>No data to display</Typography>
-                    ) : (
-                <TrendsChart options={optionsDataForLiabilityTrends} series={seriesDataForLiabilityTrends} />)}
-              </CardContent>
-            </Card>
-          </Grid> : null
-          }
-         {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+          {data.liabilityTrends?.length > 0 ? (
+            <Grid item md={6} xs={12}>
+              <Card>
+                <CardHeader
+                  title={
+                    <>
+                      <Typography component={'span'} sx={graphHeadTextStyle}>
+                        Leave Liability Trends
+                      </Typography>{' '}
+                      <Avatar
+                        src='/images/cards/trends.png'
+                        sx={{ borderRadius: 0, position: 'relative', top: '-8px' }}
+                      />
+                    </>
+                  }
+                  subheader={<Divider></Divider>}
+                />
+                <CardContent>
+                  {optionsDataForLiabilityTrends[0] === null || !seriesDataForLiabilityTrends ? (
+                    <Typography variant='body2'>No data to display</Typography>
+                  ) : (
+                    <TrendsChart options={optionsDataForLiabilityTrends} series={seriesDataForLiabilityTrends} />
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : null}
+          {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
             ability?.can('read', 'analytics') ? (
               <Grid item md={6} xs={12}>
                 <Card>
-                  <CardHeader title='Average Leave By Department 📈' subheader={<Divider></Divider>} />
+                  <CardHeader
+                    title={
+                      <>
+                        <Typography component={'span'} sx={graphHeadTextStyle}>
+                          Average Leave By Department
+                        </Typography>{' '}
+                        <Avatar
+                          src='/images/cards/trends.png'
+                          sx={{ borderRadius: 0, position: 'relative', top: '-8px' }}
+                        />
+                      </>
+                    }
+                    subheader={<Divider></Divider>}
+                  />
                   <CardContent>
                     {departmentsOfAverageExcessDays[0] === null || !avgExcessDays ? (
                       <Typography variant='body2'>No data to display</Typography>
@@ -322,11 +341,24 @@ const Stats = () => {
                 </Card>
               </Grid>
             ) : null
-          ) : null} 
+          ) : null}
           {data.directReports?.length > 0 ? (
             <Grid item md={6} xs={12}>
               <Card>
-                <CardHeader title='Leave by Direct Reports 📈' subheader={<Divider></Divider>} />
+                <CardHeader
+                  title={
+                    <>
+                      <Typography component={'span'} sx={graphHeadTextStyle}>
+                        Leave by Direct Reports
+                      </Typography>{' '}
+                      <Avatar
+                        src='/images/cards/directReport.png'
+                        sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+                      />
+                    </>
+                  }
+                  subheader={<Divider></Divider>}
+                />
                 <CardContent>
                   {directReportsOfFullname[0] === undefined ||
                   directReportsOfFullname.length < 0 ||
@@ -335,28 +367,10 @@ const Stats = () => {
                   ) : (
                     <AnnualDirectReports
                       type='scatter'
-                      series={seriesForDirectReports}
-                      options={optionsForDirectReports}
-                    />
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          ) : null}
-            {data.leavesByOrg?.length > 0 ? (
-            <Grid item md={6} xs={12}>
-              <Card>
-                <CardHeader title='Leave by Organisations 📈' subheader={<Divider></Divider>} />
-                <CardContent>
-                  {optionsDataForLeavesByOrganisation[0] === undefined ||
-                  seriesDataForLeavesByOrganisation.length < 0 ||
-                  (!seriesDataForLeavesByOrganisation) ? (
-                    <Typography variant='body2'>No data to display</Typography>
-                  ) : (
-                    <AnnualLeavesByOrgs
-                      type='line'
-                      series={seriesDataForLeavesByOrganisation}
-                      options={optionsDataForLeavesByOrganisation}
+                      series={directReportsOfExcessDays}
+                      options={directReportsOfFullname}
+                      seriesThresholds={totalThresholdsLeaveWarning}
+                      optionsThresholds={totalThresholdsLeave}
                     />
                   )}
                 </CardContent>
@@ -366,17 +380,32 @@ const Stats = () => {
           {data.leavesByUnassigned?.length > 0 ? (
             <Grid item md={6} xs={12}>
               <Card>
-                <CardHeader title='Leave by Unassigned 📈' subheader={<Divider></Divider>} />
+                <CardHeader
+                  title={
+                    <>
+                      <Typography component={'span'} sx={graphHeadTextStyle}>
+                        Leave by Unassigned Employee
+                      </Typography>{' '}
+                      <Avatar
+                        src='/images/cards/unassigned.png'
+                        sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+                      />
+                    </>
+                  }
+                  subheader={<Divider></Divider>}
+                />
                 <CardContent>
                   {optionsDataForLeavesByUnassigned[0] === undefined ||
                   seriesDataForLeavesByUnassigned.length < 0 ||
-                  (!seriesDataForLeavesByUnassigned) ? (
+                  !seriesDataForLeavesByUnassigned ? (
                     <Typography variant='body2'>No data to display</Typography>
                   ) : (
-                    <AnnualLeavesByUnassigned
-                      type='line'
+                    <AnnualDirectReports
+                      type='scatter'
                       series={seriesDataForLeavesByUnassigned}
                       options={optionsDataForLeavesByUnassigned}
+                      seriesThresholds={totalThresholdsLeaveWarning}
+                      optionsThresholds={totalThresholdsLeave}
                     />
                   )}
                 </CardContent>
@@ -387,7 +416,20 @@ const Stats = () => {
           {ability?.can('read', 'analytics') ? (
             <Grid item md={12} xs={12}>
               <Card>
-                <CardHeader title='Top Annual Leave Balances In The Organisation 📊' subheader={<Divider></Divider>} />
+                <CardHeader
+                  title={
+                    <>
+                      <Typography component={'span'} sx={graphHeadTextStyle}>
+                        Top Annual Leave Balances In The Organisation
+                      </Typography>{' '}
+                      <Avatar
+                        src='/images/cards/annualLeave.png'
+                        sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+                      />
+                    </>
+                  }
+                  subheader={<Divider></Divider>}
+                />
                 <CardContent>
                   <Divider></Divider>
                   <Grid item md={12} xs={12}>
@@ -402,7 +444,7 @@ const Stats = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data && data.directReports.length > 0 ?
+                          {data && data.directReports.length > 0 ? (
                             data.directReports.map((row: any, i: number) => (
                               <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                                 <TableCell component='th' scope='row'>
@@ -418,10 +460,14 @@ const Stats = () => {
                                 <TableCell align='right'>{row.department}</TableCell>
                                 <TableCell align='right'>{row.excessDays?.toFixed(2)}</TableCell>
                               </TableRow>
-                            )) : 
+                            ))
+                          ) : (
                             <TableRow>
-                                <TableCell align='center' colSpan={4}>No record found</TableCell>
-                          </TableRow>}
+                              <TableCell align='center' colSpan={4}>
+                                No record found
+                              </TableCell>
+                            </TableRow>
+                          )}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -430,8 +476,6 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-
-          
         </Grid>
       </>
     )

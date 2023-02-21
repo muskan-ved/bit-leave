@@ -8,90 +8,100 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 // ** Third Party Imports
 import { ApexOptions } from 'apexcharts'
 
-const AnnualDirectReports = ({type,series,options}:any) => {
-
+const AnnualDirectReports = ({ type, series, options, seriesThresholds, optionsThresholds }: any) => {
   const theme = useTheme()
 
-    const series1 = [
+  const series1 = [
+    {
+      name: 'Average Excess Days By Employee',
+      data: series
+    },
+    {
+      name: 'Thresholds Limit',
+      data: seriesThresholds
+    }
+  ]
+
+  const options1: ApexOptions = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false }
+    },
+    markers: {
+      size: [6, 0],
+      colors: [hexToRGBA(theme.palette.primary.light, 1), '#fff']
+    },
+    annotations: {
+      yaxis: [
         {
-          name: 'Average Excess Days By Employee',
-          data: series.directReportsOfExcessDays
-        },
-        {
-          name: 'Thresholds Limit',
-          data: series.totalThresholdsLeaveWarning
+          y: parseInt(`${optionsThresholds}`, 10),
+          strokeDashArray: 0,
+          borderWidth: 3,
+          borderColor: hexToRGBA(theme.palette.error.light, 1)
         }
       ]
-
-      const options1: ApexOptions = {
-        chart: {
-          parentHeightOffset: 0,
-          toolbar: { show: false }
-        },
-        markers: {
-          size: [6, 0],
-          colors: [hexToRGBA(theme.palette.primary.light, 1), '#fff']
-        },
-        annotations: {
-          yaxis: [
-            {
-              y: parseInt(`${options.totalThresholdsLeave}`, 10),
-              strokeDashArray: 0,
-              borderWidth: 3,
-              borderColor: hexToRGBA(theme.palette.error.light, 1)
-            }
-          ]
-        },
-        plotOptions: {
-          bar: {
-            borderRadius: 8,
-            barHeight: '60%',
-            horizontal: true,
-            distributed: true
-          }
-        },
-        grid: {
-          strokeDashArray: 8,
-          xaxis: {
-            lines: { show: true }
-          },
-          yaxis: {
-            lines: { show: false }
-          },
-          padding: {
-            top: -18,
-            left: 26,
-            right: 50,
-            bottom: 6
-          }
-        },
-        colors: [
-          hexToRGBA(theme.palette.primary.light, 1),
-          hexToRGBA(theme.palette.error.light, 1),
-          hexToRGBA(theme.palette.warning.light, 1),
-          hexToRGBA(theme.palette.info.light, 1),
-          hexToRGBA(theme.palette.success.light, 1)
-        ],
-        states: {
-          hover: {
-            filter: { type: 'none' }
-          },
-          active: {
-            filter: { type: 'none' }
-          }
-        },
-        xaxis: {
-          axisTicks: { show: false },
-          axisBorder: { show: false },
-          categories: options.directReportsOfFullname
-        },
-        yaxis: {
-          labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        barHeight: '60%',
+        horizontal: true,
+        distributed: true
+      }
+    },
+    grid: {
+      strokeDashArray: 8,
+      xaxis: {
+        lines: { show: true }
+      },
+      yaxis: {
+        lines: { show: false }
+      },
+      padding: {
+        top: -18,
+        left: 26,
+        right: 50,
+        bottom: 6
+      }
+    },
+    colors: [
+      hexToRGBA(theme.palette.primary.light, 1),
+      hexToRGBA(theme.palette.error.light, 1),
+      hexToRGBA(theme.palette.warning.light, 1),
+      hexToRGBA(theme.palette.info.light, 1),
+      hexToRGBA(theme.palette.success.light, 1)
+    ],
+    states: {
+      hover: {
+        filter: { type: 'none' }
+      },
+      active: {
+        filter: { type: 'none' }
+      }
+    },
+    xaxis: {
+      axisTicks: { show: false },
+      axisBorder: { show: false },
+      categories: options,
+      title: {
+        text: 'Leave By Employee',
+        style: {
+          fontFamily: 'Helvetica, Arial, sans-serif'
         }
       }
+    },
+    yaxis: {
+      labels: { align: theme.direction === 'rtl' ? 'right' : 'left' },
+      title: {
+        text: 'Leave By Department',
+        style: {
+          fontFamily: 'Helvetica, Arial, sans-serif'
+        }
+      }
+    }
+  }
 
-    return (
-    <ReactApexcharts  type={type} height={294} series={series1} options={options1} /> );
+  return <ReactApexcharts type={type} height={294} series={series1} options={options1} />
 }
- 
-export default AnnualDirectReports;
+
+export default AnnualDirectReports

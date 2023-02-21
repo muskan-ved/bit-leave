@@ -9,7 +9,6 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { ApexOptions } from 'apexcharts'
 
 const AnnualLeaveByDepartment = ({ type, series, options }: any) => {
-
   const theme = useTheme()
 
   const seriesData = [
@@ -19,7 +18,7 @@ const AnnualLeaveByDepartment = ({ type, series, options }: any) => {
     }
   ]
 
-  const optionData : ApexOptions = {
+  const optionData: ApexOptions = {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false }
@@ -65,12 +64,25 @@ const AnnualLeaveByDepartment = ({ type, series, options }: any) => {
       }
     },
     xaxis: {
+      title: {
+        text: 'Average Excess Days By Employee',
+        style: {
+          fontFamily: 'Helvetica, Arial, sans-serif'
+        },
+        offsetY: 15
+      },
       axisTicks: { show: false },
       axisBorder: { show: false },
       categories: options
     },
     yaxis: {
-      labels: { align: theme.direction === 'rtl' ? 'right' : 'left' }
+      labels: { align: theme.direction === 'rtl' ? 'right' : 'left', offsetX: 8 },
+      title: {
+        text: 'Leave By Department',
+        style: {
+          fontFamily: 'Helvetica, Arial, sans-serif'
+        }
+      }
     }
   }
 
