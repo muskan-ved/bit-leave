@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Thank you page</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- <link rel="stylesheet" href="./thankyou.css"> -->
+</head>
+<style>
+body{
+    background-color:#F7F7F9;
+    margin:0px;
+}
+
+.thankyoupage-logo{   
+    position: relative;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    padding: 0rem 1.5rem!important;
+    min-height: 64px!important;
+}
+
+.right-logo{
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    box-shadow: 0px 4px 8px -4px rgb(76 78 100 / 42%);
+    background-image: none;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    position: sticky;
+    z-index: 1100;
+    top: 0;
+    left: auto;
+    right: 0;
+    background-color: #F5F5F5;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+
+   .thankyou-wrapper {margin: 50px 0 0; color: #616476; background: url(../images/pages/misc-mask-light.png) no-repeat bottom center; background-size: 100%; min-height: 950px; width: 100%; position: relative; text-align: center;font-family:Arial, Helvetica, sans-serif;}
+   .ball-icon {background: url(../images/pages/misc-401-object.png) no-repeat left; width: 212px; height: 165px; position: absolute; left:300px; bottom:160px;}
+   .thankyou-img{margin: 60px 0 0;}
+   .thankyou-img img{max-height: 520px; height: auto; max-width: 100%;}
+   .auto-container{max-width: 1200px; margin: 0 auto; padding: 0 15px !important;}
+   .thankyou-wrapper h1 {color: #616476; font-size:70px; font-weight: bold; margin:0 0 15px; padding: 0;}
+   .thankyou-wrapper h5{font-size: 16px; font-weight: 600; margin: 0 0 15px;}
+   .thankyou-wrapper p{color: #82859c; font-size: 15px; margin: 0;}
+   .green-btn{border-radius: 10px; padding:10px 20px; text-transform: uppercase; color: #000; margin:10px 0 0; background-color: #00ceaa; text-decoration: none; transition: all ease 0.3s; display: inline-block; font-size: 15px; font-weight: 600;border: none;
+    cursor: pointer;}
+   .green-btn:hover{background-color: #666; color: #fff;}
+   
+   /* ==========================================================================
+      Media Queries
+      ========================================================================== */
+   @media(max-width:767px) {
+      .ball-icon {left: 10px; bottom:0; background-size: 100px; width: 100px; height: 100px;}
+   }
+
+</style>
+
+
+<body>
+    <div class="header-thankyou">
+        <div class="right-logo">
+              <img src='../images/bitleaveLogo.png' class="thankyoupage-logo" height="52px" width="134px"/>
+        </div>
+    </div>
+  <!-- Main Wrapper : Start -->
+  <section class="thankyou-wrapper">
+    <div class="ball-icon"></div>
+    <div class="auto-container">
+      <div class="thankyou-text">
+        <h1>Thankyou</h1>
+        <h5>Connection to Xero established! 🔐 </h5>
+      <button type="button" class="green-btn" onclick='window.close()'>Close the tab</button>
+
+      </div>
+      <div class="thankyou-img">
+        <img src="../images/pages/thankyou.png" alt="" />
+      </div>
+    </div>
+  </section>
+  <!-- Main Wrapper : End -->
+</body>
+
+</html>

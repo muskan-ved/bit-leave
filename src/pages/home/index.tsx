@@ -76,7 +76,7 @@ const Home = () => {
       router.push(url)
 
     } else {
-      router.push('/dashboard')
+      router.push('/dashboard/stats/')
       gtag.event({
         action: 'go_to_dashboard',
         category: 'home',

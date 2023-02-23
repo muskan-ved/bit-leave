@@ -275,7 +275,7 @@ const Onboarding = () => {
 					Let's Get Started
 				</Typography>
 				<Typography variant="body1" component="div" gutterBottom>
-					Our onboarding process placeholder
+					Welcome to bit.leave!
 				</Typography>
 			</Grid>
 			<Grid item xs={12}>

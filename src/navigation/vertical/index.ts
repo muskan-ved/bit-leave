@@ -65,7 +65,7 @@ const navigation = (): VerticalNavItemsType => {
           subject: 'dashboardStats'
         },
         {
-          title: 'My Leaves',
+          title: 'My Leave',
           icon: CalendarMonthIcon,
           path: '/dashboard/leaves', //User Dashboard
           action: 'read',

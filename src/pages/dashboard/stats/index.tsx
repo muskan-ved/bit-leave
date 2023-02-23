@@ -63,7 +63,8 @@ const Stats = () => {
   const ability = useContext(AbilityContext)
 
   function currencyFormat(num: any, includeCents = true) {
-    return '$' + num?.toFixed(includeCents ? 2 : 0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    //return '$' + num?.toFixed(includeCents ? 2 : 0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return '$' + num?.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 
   const userData = localStorage.getItem('userData')
@@ -122,7 +123,7 @@ const Stats = () => {
   const quickStats: QuickStatsType[] = [
     {
       stats: `${currencyFormat(data?.averageSalary)}`,
-      title: 'Average Salary in AUD',
+      title: 'Average Base Salary',
       icon: '/images/cards/user_icon.png',
       id: 'average_salaryin_aud'
     },
