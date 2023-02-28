@@ -141,7 +141,7 @@ const Stats = () => {
     },
     {
       stats: data?.leaveMobilised,
-      title: 'Leave Mobilised (Days)',
+      title: 'Average Annual Leave Days Per Employee',
       icon: '/images/cards/leave_mobilised.png',
       id: 'leave_mobilised(days)'
     }
