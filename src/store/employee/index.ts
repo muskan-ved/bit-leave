@@ -210,7 +210,7 @@ export const listEmployee = createAsyncThunk('emp/list',
     const token = localStorage.getItem("accessToken");
 
     const result = await axios
-      .get(`${API.dashboardSenariosAnalytics}?headCount=${params.Headcount}&averageSalary=${params.AverageSalary} `, {
+      .post(`${API.dashboardSenariosAnalytics}`,params, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
     return result.data

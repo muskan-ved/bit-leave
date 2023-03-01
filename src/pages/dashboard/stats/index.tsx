@@ -12,8 +12,13 @@ import {
   CardHeader,
   CircularProgress,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -30,7 +35,7 @@ import AnnualDirectReports from './annualLeavesByDirectReports'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // API call
-import { loadDashboardAnalytics } from 'src/store/employee'
+import { loadDashboardAnalytics, loadEmployee } from 'src/store/employee'
 import { loadOrganisation } from 'src/store/organisation'
 
 // ** Redux Import
@@ -60,10 +65,12 @@ const Stats = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [organisationData, setOrgData] = useState<any>([])
   const [count, setCount] = useState(0)
+  const [employeeData, setemployeeData] = useState<any>('')
+  const [orgName, setOrgName] = useState<any>('')
+
   const ability = useContext(AbilityContext)
 
-  function currencyFormat(num: any, includeCents = true) {
-    //return '$' + num?.toFixed(includeCents ? 2 : 0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  function currencyFormat(num: any) {
     return '$' + num?.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 
@@ -109,8 +116,17 @@ const Stats = () => {
     setIsLoading(false)
   }
 
+  const fetchUserData = async () => {
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setemployeeData(empData.payload.data)
+      setOrgName(empData?.payload?.data?.orgs[0]?.name)
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
-    if (employeeDetails.pages.length === 0) {
+    if (employeeDetails?.pages?.length === 0) {
       fetchEmpDataFromRedux()
     } else {
       const filterLeavesData = employeeDetails.pages.filter((p: any) => p.category === 'Stats')
@@ -118,6 +134,7 @@ const Stats = () => {
     }
     if (count != 1) setCount(1)
     fetchOrganisationData()
+    fetchUserData()
   }, [])
 
   const quickStats: QuickStatsType[] = [
@@ -128,7 +145,7 @@ const Stats = () => {
       id: 'average_salaryin_aud'
     },
     {
-      stats: `${currencyFormat(data?.totalLeaveLiabilities, false)}`,
+      stats: `${currencyFormat(data?.totalLeaveLiabilities)}`,
       title: 'Total Leave Liabilities',
       icon: '/images/cards/total_leave_liabilities.png',
       id: 'total_leave_liabilities'
@@ -140,14 +157,18 @@ const Stats = () => {
       id: 'organisational_headcount'
     },
     {
-      stats: data?.leaveMobilised,
+      stats: `${currencyFormat(data?.leaveMobilised)}`,
       title: 'Average Annual Leave Days Per Employee',
+      icon: '/images/cards/leave_mobilised.png',
+      id: 'leave_mobilised(days)'
+    },
+    {
+      stats: `${currencyFormat(data?.totalLeaveLiabilitiesDays)}`,
+      title: 'Leave Liabilities in Days',
       icon: '/images/cards/leave_mobilised.png',
       id: 'leave_mobilised(days)'
     }
   ]
-
-  const theme = useTheme()
 
   const avgExcessDays: number[] = [],
     departmentsOfAverageExcessDays: string[] = [],
@@ -201,7 +222,7 @@ const Stats = () => {
     return (
       data &&
       quickStats.map((item: QuickStatsType, index: number) => (
-        <Grid item xs={12} sm={3} key={item.id}>
+        <Grid item xs={12} sm={4} md={2.4} lg={2.4} key={item.id}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar src={item.icon} variant='rounded' color={'primary'} sx={{ mr: 4 }} />
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -214,6 +235,10 @@ const Stats = () => {
         </Grid>
       ))
     )
+  }
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setOrgName(event.target.value)
   }
 
   if (isLoading && !data) return <CircularProgress color='success' />
@@ -239,22 +264,38 @@ const Stats = () => {
     return (
       <>
         <Grid container spacing={9}>
-          <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
-            <Box
-              component='img'
-              sx={{
-                width: '40px',
-                marginRight: '12px',
-                marginBottom: '-15px'
-              }}
-              alt='The Xero Connect logo.'
-              src='/images/cards/xero_icon.png'
-            />
-            <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
-              <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
-              Refresh
-            </Button>
-            <Divider></Divider>
+          <Grid item xs={12} mb={5}>
+          <FormControl sx={{ minWidth: 120 }} size='small'>
+            <InputLabel id='demo-simple-select-readonly-label'>Organisation</InputLabel>
+            <Select
+              labelId='demo-simple-select-readonly-label'
+              id='demo-simple-select-readonly'
+              value={orgName}
+              label='Organisationte'
+              onChange={handleChange}
+              sx={{ fontSize: '13px' }}
+            >
+              {employeeData?.orgs?.map((itemorg: any) => {
+                return <MenuItem value={itemorg.name}>{itemorg.name}</MenuItem>
+              })}
+            </Select>
+          </FormControl>
+          <Button variant='contained' onClick={refreshbtn} disabled={isLoading} sx={{ float: 'right', mr: '4px' }}>
+            <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+            Refresh
+          </Button>
+          <Box
+            component='img'
+            sx={{
+              width: '40px',
+              marginRight: '12px',
+              marginBottom: '-15px',
+              float: 'right'
+            }}
+            alt='The Xero Connect logo.'
+            src='/images/cards/xero_icon.png'
+          />
+          <Divider></Divider>
           </Grid>
         </Grid>
         <Grid container spacing={6}>
@@ -283,7 +324,7 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-          {data.liabilityTrends?.length > 0 ? (
+          {data?.liabilityTrends?.length > 0 ? (
             <Grid item md={6} xs={12}>
               <Card>
                 <CardHeader
@@ -310,7 +351,7 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-          {data.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+          {data?.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
             ability?.can('read', 'analytics') ? (
               <Grid item md={6} xs={12}>
                 <Card>
@@ -343,7 +384,7 @@ const Stats = () => {
               </Grid>
             ) : null
           ) : null}
-          {data.directReports?.length > 0 ? (
+          {data?.directReports?.length > 0 ? (
             <Grid item md={6} xs={12}>
               <Card>
                 <CardHeader
@@ -362,7 +403,7 @@ const Stats = () => {
                 />
                 <CardContent>
                   {directReportsOfFullname[0] === undefined ||
-                  directReportsOfFullname.length < 0 ||
+                  directReportsOfFullname?.length < 0 ||
                   (!directReportsOfExcessDays && !totalThresholdsLeaveWarning) ? (
                     <Typography variant='body2'>No data to display</Typography>
                   ) : (
@@ -378,7 +419,7 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-          {data.leavesByUnassigned?.length > 0 ? (
+          {data?.leavesByUnassigned?.length > 0 ? (
             <Grid item md={6} xs={12}>
               <Card>
                 <CardHeader
@@ -397,7 +438,7 @@ const Stats = () => {
                 />
                 <CardContent>
                   {optionsDataForLeavesByUnassigned[0] === undefined ||
-                  seriesDataForLeavesByUnassigned.length < 0 ||
+                  seriesDataForLeavesByUnassigned?.length < 0 ||
                   !seriesDataForLeavesByUnassigned ? (
                     <Typography variant='body2'>No data to display</Typography>
                   ) : (
@@ -445,8 +486,8 @@ const Stats = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {data && data.directReports.length > 0 ? (
-                            data.directReports.map((row: any, i: number) => (
+                          {data && data?.leavesByOrg?.length > 0 ? (
+                            data?.leavesByOrg.map((row: any, i: number) => (
                               <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                                 <TableCell component='th' scope='row'>
                                   <CustomAvatar

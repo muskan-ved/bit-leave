@@ -20,7 +20,6 @@ import {
   InputAdornment,
   CircularProgress,
   Tabs,
-  Chip
 } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 
@@ -32,7 +31,6 @@ import Tab from '@mui/material/Tab'
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import BusinessIcon from '@mui/icons-material/Business'
-import ApartmentIcon from '@mui/icons-material/Apartment'
 
 // ** Redux Import
 import { useDispatch } from 'react-redux'
@@ -85,7 +83,8 @@ const Profile = () => {
 
   const userData = localStorage.getItem('userData')
 
-  const getTabList = ['Profile Detail', 'Team', 'Avatar', 'Organization']
+  const getTabList = ['Profile Detail', 'Avatar']
+  
   const personaList = [
     '/images/avatars/one.png',
     '/images/avatars/two.png',
@@ -381,75 +380,7 @@ const Profile = () => {
                 </Grid>
               </CardContent>
             </TabPanel>
-            {/* <TabPanel value={value} index={1}>
-						<CardContent>
-							<Box sx={{  width: '100%' }} >
-							<TableContainer component={Paper}>
-								<Table sx={{ minWidth: 650 }} aria-label="simple table">
-									<TableHead>
-									<TableRow >
-										<StyledTableCell>Full Name</StyledTableCell>
-										<StyledTableCell align="right">Department</StyledTableCell>
-									</TableRow>
-									</TableHead>
-									<TableBody>
-									{employeeData && employeeData?.directReports?.directReports?.map((row:any,i:number) => (
-										<TableRow
-										key={i}
-										sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-										>
-										<StyledTableCell component="th" scope="row">{row.fullname}</StyledTableCell>
-										<StyledTableCell align="right">{row.department}</StyledTableCell>
-										</TableRow>
-									))}
-									</TableBody>
-								</Table>
-								</TableContainer>
-							</Box>
-							
-						</CardContent>
-					</TabPanel> */}
             <TabPanel value={value} index={1}>
-              <CardContent>
-                <Grid container spacing={5}>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      type='string'
-                      label='Manager Name'
-                      name='Manager Name'
-                      defaultValue={'managerName'}
-                      InputProps={{
-                        readOnly: true,
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <PersonOutlineIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      type='string'
-                      label='Department'
-                      name='Department'
-                      defaultValue={employeeData && employeeData?.department}
-                      InputProps={{
-                        readOnly: true,
-                        startAdornment: (
-                          <InputAdornment position='start'>
-                            <ApartmentIcon />
-                          </InputAdornment>
-                        )
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </TabPanel>
-            <TabPanel value={value} index={2}>
               {/* <CardHeader title='Choose your avatar​​'/> */}
               <CardContent>
                 <Typography variant='body2' sx={{ marginBottom: '20px' }}>
@@ -485,20 +416,6 @@ const Profile = () => {
                         Update
                       </LoadingButton>
                     )}
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              <CardContent>
-                <Typography variant='body2' sx={{ marginBottom: '20px' }}>
-                  Your Organisations
-                </Typography>
-                <Grid container spacing={5}>
-                  <Grid item xs={12}>
-                    {employeeData?.orgs?.map((item: any) => {
-                      return <Chip key={item.id} label={item.name} variant='outlined' />
-                    })}
                   </Grid>
                 </Grid>
               </CardContent>

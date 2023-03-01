@@ -30,8 +30,14 @@ type pages = {
 }
 
 export type scenariosAnalytics = {
-  Headcount: number,
-  AverageSalary:number
+  headcount: number,
+  averageValue: number,
+  annualLeaveLiabilities: number,
+  averageLeaveBalance: number,
+  forecast:number,
+  projectedHeadcount:number,
+  salaryIncrease :number,
+  averageLeaveDays:number
 }
 
 export type orgs = {

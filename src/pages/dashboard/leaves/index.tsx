@@ -8,8 +8,13 @@ import {
   CardHeader,
   CircularProgress,
   Divider,
+  FormControl,
   Grid,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -28,7 +33,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 // ** Redux Store Import
 import { RootState, AppDispatch } from 'src/store'
-import { loadDashboardAnalytics } from 'src/store/employee'
+import { loadDashboardAnalytics, loadEmployee } from 'src/store/employee'
 
 // ** Custom Components
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -44,6 +49,8 @@ const Leaves = () => {
   const [data, setData] = useState<any | []>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
+  const [employeeData, setemployeeData] = useState<any>('')
+  const [orgName, setOrgName] = useState<any>('')
 
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
   const userData = localStorage.getItem('userData')
@@ -54,6 +61,15 @@ const Leaves = () => {
 
   const refreshbtn = async () => {
     fetchEmpData()
+  }
+
+  const fetchUserData = async () => {
+    const empData = await dispatch(loadEmployee())
+    if (empData.payload != null) {
+      setemployeeData(empData.payload.data)
+      setOrgName(empData?.payload?.data?.orgs[0]?.name)
+    }
+    setIsLoading(false)
   }
 
   const fetchEmpData = async () => {
@@ -76,6 +92,7 @@ const Leaves = () => {
       const filterLeavesData = employeeDetails.pages.filter((p: any) => p.category === 'MyLeaves')
       setData(filterLeavesData[0].data)
     }
+    fetchUserData()
   }, [])
 
   const handleDialogClose = () => {
@@ -93,7 +110,11 @@ const Leaves = () => {
   }
 
   function currencyFormat(num: any) {
-    return '$' + num?.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return '$' + num?.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  }
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setOrgName(event.target.value)
   }
 
   if (isLoading && !data) return <CircularProgress color='success' />
@@ -119,21 +140,38 @@ const Leaves = () => {
     return (
       <>
         <Grid container spacing={9}>
-          <Grid item xs={12} mb={5} sx={{ textAlign: 'right' }}>
+          <Grid item xs={12} mb={5}>
+            <FormControl sx={{ minWidth: 120 }} size='small'>
+              <InputLabel id='demo-simple-select-readonly-label'>Organisation</InputLabel>
+              <Select
+                labelId='demo-simple-select-readonly-label'
+                id='demo-simple-select-readonly'
+                value={orgName}
+                label='Organisationte'
+                onChange={handleChange}
+                sx={{ fontSize: '13px' }}
+              >
+                {employeeData?.orgs?.map((itemorg: any) => {
+                  return <MenuItem value={itemorg.name}>{itemorg.name}</MenuItem>
+                })}
+              </Select>
+            </FormControl>
+
+            <Button variant='contained' onClick={refreshbtn} disabled={isLoading} sx={{ float: 'right', mr: '4px' }}>
+              <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+              Refresh
+            </Button>
             <Box
               component='img'
               sx={{
                 width: '40px',
                 marginRight: '12px',
-                marginBottom: '-15px'
+                marginBottom: '-15px',
+                float: 'right'
               }}
               alt='The Xero Connect logo.'
               src='/images/cards/xero_icon.png'
             />
-            <Button variant='contained' onClick={refreshbtn} disabled={isLoading}>
-              <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
-              Refresh
-            </Button>
             <Divider></Divider>
           </Grid>
         </Grid>
@@ -163,9 +201,6 @@ const Leaves = () => {
                     <Table aria-label='a dense table' sx={{ minWidth: 650, size: 'small' }}>
                       <TableBody>
                         {data.map((item: any, i: number) => {
-                          const correctMBIcon = item.isCashable ? 4 : 0
-                          const correctMBValue = item.isCashable ? 7 : 0
-                          const correctMBText = item.isCashable ? 10 : 0
                           return (
                             <TableRow key={i} sx={{ '&:last-of-type  td, &:last-of-type  th': { border: 0 } }}>
                               <TableCell component='th' scope='row'>
@@ -173,60 +208,57 @@ const Leaves = () => {
                               </TableCell>
                               <TableCell align='right'>
                                 <Grid container spacing={6}>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    sm={4}
-                                    sx={{
-                                      display: 'flex',
-                                      flexDirection: 'row',
-                                      flexBasis: '100% !important',
-                                      maxWidth: '100% !important'
-                                    }}
-                                  >
-                                    <Box>
-                                      <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4, mb: 4 }}>
+                                  <Grid item xs={12} sm={4} sx={{ justifyContent: 'right' }}>
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                      <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
                                         <HomeLightbulbOutline />
                                       </CustomAvatar>
-                                      <CustomAvatar
-                                        skin='light'
-                                        variant='rounded'
-                                        color={'error'}
-                                        sx={{ mr: 4, mb: correctMBIcon }}
-                                      >
-                                        <AccountAlertOutline />
-                                      </CustomAvatar>
+                                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                                          {item?.totalDays}
+                                        </Typography>
+                                        <Typography variant='caption'>Days</Typography>
+                                      </Box>
+                                    </Box>
+                                  </Grid>
+                                  <Grid item xs={12} sm={4}>
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                                       {item.isCashable ? (
-                                        <CustomAvatar skin='light' variant='rounded' color={'success'} sx={{ mr: 4 }}>
-                                          <CurrencyUsd />
-                                        </CustomAvatar>
+                                        <>
+                                          {' '}
+                                          <CustomAvatar skin='light' variant='rounded' color={'error'} sx={{ mr: 4 }}>
+                                            <AccountAlertOutline />
+                                          </CustomAvatar>
+                                          <Box
+                                            sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'right' }}
+                                          >
+                                            <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                                              {item?.excessDays}
+                                            </Typography>
+                                            <Typography variant='caption'>Excess Days</Typography>
+                                          </Box>
+                                        </>
                                       ) : null}
                                     </Box>
-
-                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                      <Typography variant='h6' sx={{ fontWeight: 600, mr: 4, mb: 7 }}>
-                                        {item?.totalDays?.toFixed(2)}
-                                      </Typography>
-                                      <Typography variant='h6' sx={{ fontWeight: 600, mr: 4, mb: correctMBValue }}>
-                                        {item?.excessDays?.toFixed(2)}
-                                      </Typography>
+                                  </Grid>
+                                  <Grid item xs={12} sm={4}>
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                                       {item.isCashable ? (
-                                        <Typography variant='h6' sx={{ fontWeight: 600, mr: 4 }}>
-                                          {item?.cashoutValue ? currencyFormat(item?.cashoutValue) : '0.00'}
-                                        </Typography>
-                                      ) : null}
-                                    </Box>
-                                    <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
-                                      <Typography variant='caption' sx={{ mr: 4, mb: 12, width: '100%', mt: 2 }}>
-                                        Total Days
-                                      </Typography>
-                                      <Typography variant='caption' sx={{ mr: 4, mb: correctMBText, width: '100%' }}>
-                                        Excess Days
-                                      </Typography>
-                                      {item.isCashable ? (
-                                        <Typography variant='caption' sx={{ mr: 4, width: '100%' }}>
-                                          Cashout Value
-                                        </Typography>
+                                        <>
+                                          <CustomAvatar skin='light' variant='rounded' color={'success'} sx={{ mr: 4 }}>
+                                            <CurrencyUsd />
+                                          </CustomAvatar>
+                                          <Box
+                                            sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'right' }}
+                                          >
+                                            <Typography variant='h6' sx={{ fontWeight: 600 }}>
+                                              {item?.cashoutValue ? currencyFormat(item?.cashoutValue) : '0'}
+                                            </Typography>
+                                            <Typography variant='caption' sx={{ mr: 4, width: '100%' }}>
+                                              Cashout Value
+                                            </Typography>
+                                          </Box>
+                                        </>
                                       ) : null}
                                     </Box>
                                   </Grid>
@@ -242,16 +274,18 @@ const Leaves = () => {
                                       display: 'flex',
                                       flexDirection: 'row',
                                       flexBasis: '100% !important',
-                                      maxWidth: '100% !important'
+                                      maxWidth: '100% !important',
+                                      width: '100%',
+                                      justifyContent: 'flex-end'
                                     }}
                                   >
-                                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                                       {item.isCashable ? (
                                         <Button
                                           variant='contained'
                                           onClick={cashoutLeaveButtonClick}
                                           disabled={!item.canCashoutLeave}
-                                          sx={{ color: `rgba(${'0,0,0'}, 0.87) !important` }}
+                                          sx={{ color: `rgba(${'0,0,0'}, 0.87) !important`, mt: 2, mb: 2 }}
                                         >
                                           Cashout Leave
                                         </Button>
@@ -262,7 +296,7 @@ const Leaves = () => {
                                       <Button
                                         component='a'
                                         variant='contained'
-                                        sx={{ ml: 5, color: `rgba(${'0,0,0'}, 0.87) !important` }}
+                                        sx={{ ml: 5, color: `rgba(${'0,0,0'}, 0.87) !important`, mt: 2, mb: 2 }}
                                         target='_blank'
                                         href={item.applyLink}
                                       >
