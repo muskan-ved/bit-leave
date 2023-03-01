@@ -157,13 +157,13 @@ const Stats = () => {
       id: 'organisational_headcount'
     },
     {
-      stats: `${currencyFormat(data?.leaveMobilised)}`,
+      stats: data?.leaveMobilised.toFixed(0),
       title: 'Average Annual Leave Days Per Employee',
       icon: '/images/cards/leave_mobilised.png',
       id: 'leave_mobilised(days)'
     },
     {
-      stats: `${currencyFormat(data?.totalLeaveLiabilitiesDays)}`,
+      stats: data?.totalLeaveLiabilitiesDays.toFixed(0),
       title: 'Leave Liabilities in Days',
       icon: '/images/cards/leave_mobilised.png',
       id: 'leave_mobilised(days)'
