@@ -121,7 +121,7 @@ const Chart = () => {
               sx={{ fontSize: '13px' }}
             >
               {employeeData?.orgs?.map((itemorg: any) => {
-                return <MenuItem value={itemorg.name}>{itemorg.name}</MenuItem>
+                return <MenuItem key={itemorg.id} value={itemorg.name}>{itemorg.name}</MenuItem>
               })}
             </Select>
           </FormControl>
