@@ -2,7 +2,6 @@
 import { useContext, useEffect, useState } from 'react'
 
 // ** MUI import
-import { useTheme } from '@mui/material/styles'
 import {
   Avatar,
   Box,
@@ -67,7 +66,6 @@ const Stats = () => {
   const [count, setCount] = useState(0)
   const [employeeData, setemployeeData] = useState<any>('')
   const [orgName, setOrgName] = useState<any>('')
-
   const ability = useContext(AbilityContext)
 
   function currencyFormat(num: any) {
@@ -161,12 +159,6 @@ const Stats = () => {
       title: 'Average Annual Leave Days Per Employee',
       icon: '/images/cards/leave_mobilised.png',
       id: 'leave_mobilised(days)'
-    },
-    {
-      stats: data?.totalLeaveLiabilitiesDays.toFixed(0),
-      title: 'Leave Liabilities in Days',
-      icon: '/images/cards/leave_mobilised.png',
-      id: 'leave_mobilised(days)'
     }
   ]
 
@@ -222,7 +214,7 @@ const Stats = () => {
     return (
       data &&
       quickStats.map((item: QuickStatsType, index: number) => (
-        <Grid item xs={12} sm={4} md={2.4} lg={2.4} key={item.id}>
+        <Grid item xs={12} sm={6} md={3} lg={3} key={item.id}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar src={item.icon} variant='rounded' color={'primary'} sx={{ mr: 4 }} />
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -265,41 +257,45 @@ const Stats = () => {
       <>
         <Grid container spacing={9}>
           <Grid item xs={12} mb={5}>
-          <FormControl sx={{ minWidth: 120 }} size='small'>
-            <InputLabel id='demo-simple-select-readonly-label'>Organisation</InputLabel>
-            <Select
-              labelId='demo-simple-select-readonly-label'
-              id='demo-simple-select-readonly'
-              value={orgName}
-              label='Organisationte'
-              onChange={handleChange}
-              sx={{ fontSize: '13px' }}
-            >
-              {employeeData?.orgs?.map((itemorg: any) => {
-                return <MenuItem key={itemorg.id} value={itemorg.name}>{itemorg.name}</MenuItem>
-              })}
-            </Select>
-          </FormControl>
-          <Button variant='contained' onClick={refreshbtn} disabled={isLoading} sx={{ float: 'right', mr: '4px' }}>
-            <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
-            Refresh
-          </Button>
-          <Box
-            component='img'
-            sx={{
-              width: '40px',
-              marginRight: '12px',
-              marginBottom: '-15px',
-              float: 'right'
-            }}
-            alt='The Xero Connect logo.'
-            src='/images/cards/xero_icon.png'
-          />
-          <Divider></Divider>
+            <FormControl sx={{ minWidth: 120 }} size='small'>
+              <InputLabel id='demo-simple-select-readonly-label'>Organisation</InputLabel>
+              <Select
+                labelId='demo-simple-select-readonly-label'
+                id='demo-simple-select-readonly'
+                value={orgName}
+                label='Organisationte'
+                onChange={handleChange}
+                sx={{ fontSize: '13px' }}
+              >
+                {employeeData?.orgs?.map((itemorg: any) => {
+                  return (
+                    <MenuItem key={itemorg.id} value={itemorg.name}>
+                      {itemorg.name}
+                    </MenuItem>
+                  )
+                })}
+              </Select>
+            </FormControl>
+            <Button variant='contained' onClick={refreshbtn} disabled={isLoading} sx={{ float: 'right', mr: '4px' }}>
+              <RefreshIcon sx={{ fontSize: '1.1rem', mr: '4px' }} />
+              Refresh
+            </Button>
+            <Box
+              component='img'
+              sx={{
+                width: '40px',
+                marginRight: '12px',
+                marginBottom: '-15px',
+                float: 'right'
+              }}
+              alt='The Xero Connect logo.'
+              src='/images/cards/xero_icon.png'
+            />
+            <Divider></Divider>
           </Grid>
         </Grid>
         <Grid container spacing={6}>
-          {ability?.can('read', 'analytics') ? (
+          {ability?.can('read', 'dashboard') ? (
             <Grid item md={12} xs={12}>
               <Card>
                 <CardHeader
@@ -324,34 +320,36 @@ const Stats = () => {
               </Card>
             </Grid>
           ) : null}
-          {data?.liabilityTrends?.length > 0 ? (
-            <Grid item md={6} xs={12}>
-              <Card>
-                <CardHeader
-                  title={
-                    <>
-                      <Typography component={'span'} sx={graphHeadTextStyle}>
-                        Leave Liability Trends
-                      </Typography>{' '}
-                      <Avatar
-                        src='/images/cards/trends.png'
-                        sx={{ borderRadius: 0, position: 'relative', top: '-8px' }}
-                      />
-                    </>
-                  }
-                  subheader={<Divider></Divider>}
-                />
-                <CardContent>
-                  {optionsDataForLiabilityTrends[0] === null || !seriesDataForLiabilityTrends ? (
-                    <Typography variant='body2'>No data to display</Typography>
-                  ) : (
-                    <TrendsChart options={optionsDataForLiabilityTrends} series={seriesDataForLiabilityTrends} />
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
+          {ability?.can('read', 'analytics') ? (
+            data?.liabilityTrends?.length > 0 ? (
+              <Grid item md={6} xs={12}>
+                <Card>
+                  <CardHeader
+                    title={
+                      <>
+                        <Typography component={'span'} sx={graphHeadTextStyle}>
+                          Leave Liability Trends
+                        </Typography>{' '}
+                        <Avatar
+                          src='/images/cards/trends.png'
+                          sx={{ borderRadius: 0, position: 'relative', top: '-8px' }}
+                        />
+                      </>
+                    }
+                    subheader={<Divider></Divider>}
+                  />
+                  <CardContent>
+                    {optionsDataForLiabilityTrends[0] === null || !seriesDataForLiabilityTrends ? (
+                      <Typography variant='body2'>No data to display</Typography>
+                    ) : (
+                      <TrendsChart options={optionsDataForLiabilityTrends} series={seriesDataForLiabilityTrends} />
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ) : null
           ) : null}
-          {data?.directReports?.length > 0 || data?.leavesByDepartment?.length > 0 ? (
+          {data?.leavesByDepartment?.length > 0 ? (
             ability?.can('read', 'analytics') ? (
               <Grid item md={6} xs={12}>
                 <Card>
@@ -384,75 +382,79 @@ const Stats = () => {
               </Grid>
             ) : null
           ) : null}
-          {data?.directReports?.length > 0 ? (
-            <Grid item md={6} xs={12}>
-              <Card>
-                <CardHeader
-                  title={
-                    <>
-                      <Typography component={'span'} sx={graphHeadTextStyle}>
-                        Leave by Direct Reports
-                      </Typography>{' '}
-                      <Avatar
-                        src='/images/cards/directReport.png'
-                        sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+          {ability?.can('read', 'dashboard') ? (
+            data?.directReports?.length === 0 ? (
+              <Grid item md={6} xs={12}>
+                <Card>
+                  <CardHeader
+                    title={
+                      <>
+                        <Typography component={'span'} sx={graphHeadTextStyle}>
+                          Leave by Direct Reports
+                        </Typography>{' '}
+                        <Avatar
+                          src='/images/cards/directReport.png'
+                          sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+                        />
+                      </>
+                    }
+                    subheader={<Divider></Divider>}
+                  />
+                  <CardContent>
+                    {directReportsOfFullname[0] === undefined ||
+                    directReportsOfFullname?.length < 0 ||
+                    (!directReportsOfExcessDays && !totalThresholdsLeaveWarning) ? (
+                      <Typography variant='body2'>No data to display</Typography>
+                    ) : (
+                      <AnnualDirectReports
+                        type='scatter'
+                        series={directReportsOfExcessDays}
+                        options={directReportsOfFullname}
+                        seriesThresholds={totalThresholdsLeaveWarning}
+                        optionsThresholds={totalThresholdsLeave}
                       />
-                    </>
-                  }
-                  subheader={<Divider></Divider>}
-                />
-                <CardContent>
-                  {directReportsOfFullname[0] === undefined ||
-                  directReportsOfFullname?.length < 0 ||
-                  (!directReportsOfExcessDays && !totalThresholdsLeaveWarning) ? (
-                    <Typography variant='body2'>No data to display</Typography>
-                  ) : (
-                    <AnnualDirectReports
-                      type='scatter'
-                      series={directReportsOfExcessDays}
-                      options={directReportsOfFullname}
-                      seriesThresholds={totalThresholdsLeaveWarning}
-                      optionsThresholds={totalThresholdsLeave}
-                    />
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ) : null
           ) : null}
-          {data?.leavesByUnassigned?.length > 0 ? (
-            <Grid item md={6} xs={12}>
-              <Card>
-                <CardHeader
-                  title={
-                    <>
-                      <Typography component={'span'} sx={graphHeadTextStyle}>
-                        Leave by Unassigned Employee
-                      </Typography>{' '}
-                      <Avatar
-                        src='/images/cards/unassigned.png'
-                        sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+          {ability?.can('read', 'analytics') ? (
+            data?.leavesByUnassigned?.length > 0 ? (
+              <Grid item md={6} xs={12}>
+                <Card>
+                  <CardHeader
+                    title={
+                      <>
+                        <Typography component={'span'} sx={graphHeadTextStyle}>
+                          Leave by Unassigned Employee
+                        </Typography>{' '}
+                        <Avatar
+                          src='/images/cards/unassigned.png'
+                          sx={{ borderRadius: 0, position: 'relative', padding: '7px', top: '-8px' }}
+                        />
+                      </>
+                    }
+                    subheader={<Divider></Divider>}
+                  />
+                  <CardContent>
+                    {optionsDataForLeavesByUnassigned[0] === undefined ||
+                    seriesDataForLeavesByUnassigned?.length < 0 ||
+                    !seriesDataForLeavesByUnassigned ? (
+                      <Typography variant='body2'>No data to display</Typography>
+                    ) : (
+                      <AnnualDirectReports
+                        type='scatter'
+                        series={seriesDataForLeavesByUnassigned}
+                        options={optionsDataForLeavesByUnassigned}
+                        seriesThresholds={totalThresholdsLeaveWarning}
+                        optionsThresholds={totalThresholdsLeave}
                       />
-                    </>
-                  }
-                  subheader={<Divider></Divider>}
-                />
-                <CardContent>
-                  {optionsDataForLeavesByUnassigned[0] === undefined ||
-                  seriesDataForLeavesByUnassigned?.length < 0 ||
-                  !seriesDataForLeavesByUnassigned ? (
-                    <Typography variant='body2'>No data to display</Typography>
-                  ) : (
-                    <AnnualDirectReports
-                      type='scatter'
-                      series={seriesDataForLeavesByUnassigned}
-                      options={optionsDataForLeavesByUnassigned}
-                      seriesThresholds={totalThresholdsLeaveWarning}
-                      optionsThresholds={totalThresholdsLeave}
-                    />
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ) : null
           ) : null}
 
           {ability?.can('read', 'analytics') ? (
@@ -526,7 +528,7 @@ const Stats = () => {
 
 Stats.acl = {
   action: 'read',
-  subject: 'dashboardStats'
+  subject: 'dashboard'
 }
 
 export default Stats

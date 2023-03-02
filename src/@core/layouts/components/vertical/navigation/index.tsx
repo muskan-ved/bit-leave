@@ -91,8 +91,8 @@ const Navigation = (props: Props) => {
     }
     const url = `https://bl-org-assets.s3.ap-southeast-2.amazonaws.com/${OrgId}/logo`
     http.open('HEAD', url, true)
-	http.setRequestHeader( 'Access-Control-Allow-Origin', '*');
-	http.setRequestHeader( 'Content-Type', 'application/json' );
+    http.setRequestHeader('Access-Control-Allow-Origin', '*')
+    http.setRequestHeader('Content-Type', 'application/json')
     http.onreadystatechange = function () {
       if (this.readyState == this.DONE) {
         if (this.status === 200) {
@@ -172,12 +172,12 @@ const Navigation = (props: Props) => {
 
   const ScrollWrapper = hidden ? Box : PerfectScrollbar
 
-  const userData = window.localStorage.getItem("userData")
-  let data;
+  const userData = window.localStorage.getItem('userData')
+  let data
   if (userData != null) {
-      data = JSON.parse(userData)
-    }  
-  const checkRoleForSideNavHeight = (data?.role === 'user' ? '89vh' :  '110vh' )
+    data = JSON.parse(userData)
+  }
+  const checkRoleForSideNavHeight = data?.role === 'user' ? '89vh' : '130vh'
   return (
     <Drawer {...props}>
       <VerticalNavHeader {...props} />
@@ -207,7 +207,10 @@ const Navigation = (props: Props) => {
           {userVerticalNavMenuContent ? (
             userVerticalNavMenuContent(props)
           ) : (
-            <List className='nav-items' sx={{ pt: 0, height: checkRoleForSideNavHeight, '& > :first-of-type': { mt: '0' } }}>
+            <List
+              className='nav-items'
+              sx={{ pt: 0, height: checkRoleForSideNavHeight, '& > :first-of-type': { mt: '0' } }}
+            >
               <VerticalNavItems
                 groupActive={groupActive}
                 setGroupActive={setGroupActive}

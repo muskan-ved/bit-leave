@@ -67,6 +67,10 @@ const AnnualLeaveByDepartment = ({ type, series, options }: any) => {
       title: {
         text: 'Average Excess Days By Employee',
         style: {
+          color:
+            theme.palette.mode === 'light'
+              ? `rgba(${theme.palette.customColors.light}, 0.87)`
+              : `rgba(${theme.palette.customColors.dark}, 0.87)`,
           fontFamily: 'Helvetica, Arial, sans-serif'
         },
         offsetY: 15
@@ -80,6 +84,10 @@ const AnnualLeaveByDepartment = ({ type, series, options }: any) => {
       title: {
         text: 'Leave By Department',
         style: {
+          color:
+            theme.palette.mode === 'light'
+              ? `rgba(${theme.palette.customColors.light}, 0.87)`
+              : `rgba(${theme.palette.customColors.dark}, 0.87)`,
           fontFamily: 'Helvetica, Arial, sans-serif'
         }
       }

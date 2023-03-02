@@ -53,6 +53,10 @@ const TrendsChart = ({ options, series }: any) => {
       title: {
         text: 'Months',
         style: {
+          color:
+            theme.palette.mode === 'light'
+              ? `rgba(${theme.palette.customColors.light}, 0.87)`
+              : `rgba(${theme.palette.customColors.dark}, 0.87)`,
           fontFamily: 'Helvetica, Arial, sans-serif'
         }
       },
@@ -62,6 +66,10 @@ const TrendsChart = ({ options, series }: any) => {
       title: {
         text: 'Leave Liability in $',
         style: {
+          color:
+            theme.palette.mode === 'light'
+              ? `rgba(${theme.palette.customColors.light}, 0.87)`
+              : `rgba(${theme.palette.customColors.dark}, 0.87)`,
           fontFamily: 'Helvetica, Arial, sans-serif'
         }
       }

@@ -34,7 +34,6 @@ import { loadDashboardAnalytics, loadDashboardSenariosAnalytics, loadEmployee } 
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-
 const Scenarios = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [analyticsData, setAnalyticsData] = useState<any>('')
@@ -177,7 +176,11 @@ const Scenarios = () => {
               sx={{ fontSize: '13px' }}
             >
               {employeeData?.orgs?.map((itemorg: any) => {
-                return <MenuItem key={itemorg.id} value={itemorg.name}>{itemorg.name}</MenuItem>
+                return (
+                  <MenuItem key={itemorg.id} value={itemorg.name}>
+                    {itemorg.name}
+                  </MenuItem>
+                )
               })}
             </Select>
           </FormControl>
@@ -258,7 +261,7 @@ const Scenarios = () => {
             <Grid item sm={6} xs={6} md={6} lg={6}>
               <TextField
                 id='HeadCount'
-                label='HeadCount'
+                label='Your headcount will be'
                 type='number'
                 value={data.HeadCount}
                 onChange={e => {
@@ -277,10 +280,10 @@ const Scenarios = () => {
 
             <Grid item sm={6} xs={6} md={6} lg={6}>
               <FormControl sx={{ m: 1 }} variant='outlined' fullWidth>
-                <InputLabel htmlFor='SalaryIncrease'>Salary Increase</InputLabel>
+                <InputLabel htmlFor='SalaryIncrease'>Salary will increase by</InputLabel>
                 <OutlinedInput
                   id='SalaryIncrease'
-                  label='Salary Increase'
+                  label='Salary will increase by'
                   value={data.SalaryIncrease}
                   type='number'
                   onChange={e => {
@@ -296,7 +299,7 @@ const Scenarios = () => {
             <Grid item sm={6} xs={6} md={6} lg={6}>
               <TextField
                 id='AverageLeaveDays'
-                label='Average Leave Days'
+                label='Average amount of leave days used per employee'
                 type='number'
                 value={data.AverageLeaveDays}
                 onChange={e => {
@@ -315,17 +318,11 @@ const Scenarios = () => {
 
             <Grid item sm={12} xs={12} md={12} lg={12}>
               {!submitLoading ? (
-                <Button variant='contained' size='large' onClick={handleSubmit} sx={{ p: '14.8px 58px !important' }}>
+                <Button variant='contained' size='large' disabled={employeeDetails?.role === 3} onClick={handleSubmit}>
                   Apply
                 </Button>
               ) : (
-                <LoadingButton
-                  variant='contained'
-                  loading={submitLoading}
-                  size='large'
-                  disabled
-                  sx={{ p: '14.8px 58px !important' }}
-                >
+                <LoadingButton variant='contained' loading={submitLoading} size='large' disabled>
                   Apply
                 </LoadingButton>
               )}
@@ -334,11 +331,15 @@ const Scenarios = () => {
             {analyticsData ? (
               <Grid item sm={12} xs={12} md={12} lg={12}>
                 <Box sx={{ float: 'left' }}>
-                  <Typography variant='subtitle2'>Your Projected Annual Leave Liabilities</Typography>
+                  <Typography variant='subtitle1' fontWeight={600}>
+                    Your Projected Annual Leave Liabilities
+                  </Typography>
                 </Box>
 
                 <Box sx={{ float: 'right', textAlign: 'right' }}>
-                  <Typography variant='body2'>${analyticsData.projectedAnnualLeaveLiabilities}</Typography>
+                  <Typography variant='subtitle2'>
+                    ${analyticsData.projectedAnnualLeaveLiabilities.toFixed(2)}
+                  </Typography>
                 </Box>
               </Grid>
             ) : null}

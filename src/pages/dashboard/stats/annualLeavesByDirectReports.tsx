@@ -86,6 +86,10 @@ const AnnualDirectReports = ({ type, series, options, seriesThresholds, optionsT
       title: {
         text: 'Leave By Employee',
         style: {
+          color:
+            theme.palette.mode === 'light'
+              ? `rgba(${theme.palette.customColors.light}, 0.87)`
+              : `rgba(${theme.palette.customColors.dark}, 0.87)`,
           fontFamily: 'Helvetica, Arial, sans-serif'
         }
       }
@@ -95,6 +99,10 @@ const AnnualDirectReports = ({ type, series, options, seriesThresholds, optionsT
       title: {
         text: 'Leave By Department',
         style: {
+          color:
+            theme.palette.mode === 'light'
+              ? `rgba(${theme.palette.customColors.light}, 0.87)`
+              : `rgba(${theme.palette.customColors.dark}, 0.87)`,
           fontFamily: 'Helvetica, Arial, sans-serif'
         }
       }

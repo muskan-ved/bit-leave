@@ -134,7 +134,7 @@ const CashoutDialog = (props: any) => {
   const sigCanvas = React.useRef() as React.MutableRefObject<any>
   const store = useSelector((state: RootState) => state.employee)
   const filterLeavesData: any = store.pages.filter((p: any) => p.category === 'MyLeaves')
-  const getCashoutOptions = filterLeavesData && filterLeavesData[0]?.data[0]
+  const getCashoutOptions = filterLeavesData && filterLeavesData[0]?.data.filter((p: any) => p.name === 'Annual Leave')
 
   const onCashOutSubmit = async (data: any) => {
     setloading(true)
@@ -232,9 +232,10 @@ const CashoutDialog = (props: any) => {
   }
   const onChangeCashOutDays = async (e: any) => {
     const daysAvalble =
-      getCashoutOptions?.cashoutOptions != null &&
-      getCashoutOptions?.cashoutOptions?.daysAvailable != null &&
-      getCashoutOptions?.cashoutOptions?.daysAvailable
+      getCashoutOptions.length > 0 &&
+      getCashoutOptions[0]?.cashoutOptions != null &&
+      getCashoutOptions[0]?.cashoutOptions?.daysAvailable != null &&
+      getCashoutOptions[0]?.cashoutOptions?.daysAvailable
 
     if (e.target.value > daysAvalble) {
       setErrorMessage('Requested cashout days are greater than days available')
@@ -379,9 +380,11 @@ const CashoutDialog = (props: any) => {
                       label='Days Available'
                       name='Days Available'
                       value={
-                        getCashoutOptions?.cashoutOptions != null &&
-                        getCashoutOptions?.cashoutOptions?.daysAvailable != null &&
-                        getCashoutOptions?.cashoutOptions?.daysAvailable.toFixed(2)
+                        getCashoutOptions &&
+                        getCashoutOptions.length > 0 &&
+                        getCashoutOptions[0]?.cashoutOptions != null &&
+                        getCashoutOptions[0]?.cashoutOptions?.daysAvailable != null &&
+                        getCashoutOptions[0]?.cashoutOptions?.daysAvailable.toFixed(0)
                       }
                       InputProps={{
                         startAdornment: (
@@ -407,9 +410,11 @@ const CashoutDialog = (props: any) => {
                       label='Value (Before tax)'
                       name='Value (Before tax)'
                       value={
-                        getCashoutOptions?.cashoutOptions != null &&
-                        getCashoutOptions?.cashoutOptions?.cashoutAmount != null &&
-                        getCashoutOptions?.cashoutOptions?.cashoutAmount
+                        getCashoutOptions &&
+                        getCashoutOptions.length > 0 &&
+                        getCashoutOptions[0]?.cashoutOptions != null &&
+                        getCashoutOptions[0]?.cashoutOptions?.cashoutAmount != null &&
+                        getCashoutOptions[0]?.cashoutOptions?.cashoutAmount
                           .toFixed(2)
                           .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
                       }

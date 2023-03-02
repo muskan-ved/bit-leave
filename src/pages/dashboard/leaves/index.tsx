@@ -51,6 +51,7 @@ const Leaves = () => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const [employeeData, setemployeeData] = useState<any>('')
   const [orgName, setOrgName] = useState<any>('')
+  const [cashoutOptionsData, setCashoutOptions] = useState<any>('')
 
   const employeeDetails: any = useSelector((state: RootState) => state.employee)
   const userData = localStorage.getItem('userData')
@@ -78,6 +79,9 @@ const Leaves = () => {
 
     if (empData.payload != null) {
       const filterLeavesData = empData.payload.data.pages.filter((p: any) => p.category === 'MyLeaves')
+      const getCashoutOptions =
+        filterLeavesData && filterLeavesData[0]?.data.filter((p: any) => p.name === 'Annual Leave')
+      setCashoutOptions(getCashoutOptions && getCashoutOptions[0])
       setData(filterLeavesData[0].data)
       setIsLoading(false)
     }
@@ -90,6 +94,9 @@ const Leaves = () => {
       fetchEmpData()
     } else {
       const filterLeavesData = employeeDetails.pages.filter((p: any) => p.category === 'MyLeaves')
+      const getCashoutOptions =
+        filterLeavesData && filterLeavesData[0]?.data.filter((p: any) => p.name === 'Annual Leave')
+      setCashoutOptions(getCashoutOptions && getCashoutOptions[0])
       setData(filterLeavesData[0].data)
     }
     fetchUserData()
@@ -110,7 +117,7 @@ const Leaves = () => {
   }
 
   function currencyFormat(num: any) {
-    return '$' + num?.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return '$' + num?.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
   }
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -136,6 +143,9 @@ const Leaves = () => {
     )
   }
 
+  const cashoutLeaveButtonColor =
+    employeeData && employeeData.role === 3 ? 'transparent' : `rgba(${'0,0,0'}, 0.87) !important`
+
   if (!isLoading && data && uData?.userOnboarded) {
     return (
       <>
@@ -152,7 +162,11 @@ const Leaves = () => {
                 sx={{ fontSize: '13px' }}
               >
                 {employeeData?.orgs?.map((itemorg: any) => {
-                  return <MenuItem key={itemorg.id} value={itemorg.name}>{itemorg.name}</MenuItem>
+                  return (
+                    <MenuItem key={itemorg.id} value={itemorg.name}>
+                      {itemorg.name}
+                    </MenuItem>
+                  )
                 })}
               </Select>
             </FormControl>
@@ -181,16 +195,50 @@ const Leaves = () => {
               <CardHeader
                 title={
                   <>
-                    <Typography
-                      component={'span'}
-                      sx={{ float: 'left', lineHeight: 1.6, marginRight: '10px', fontWeight: 500, fontSize: '1.25rem' }}
-                    >
-                      My Leave Details
-                    </Typography>{' '}
-                    <Avatar
-                      src='/images/cards/calendar.png'
-                      sx={{ borderRadius: 0, position: 'relative', padding: '5px', top: '-8px' }}
-                    />
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                      <Box>
+                        <Typography
+                          component={'span'}
+                          sx={{
+                            float: 'left',
+                            lineHeight: 1.6,
+                            marginRight: '10px',
+                            fontWeight: 500,
+                            fontSize: '1.25rem',
+                            mt: 1,
+                            mb: 1
+                          }}
+                        >
+                          My Leave Details
+                        </Typography>{' '}
+                        <Avatar
+                          src='/images/cards/calendar.png'
+                          sx={{ borderRadius: 0, position: 'relative', padding: '5px', top: '-8px', mt: 1, mb: 1 }}
+                        />
+                      </Box>
+                      <Box sx={{ float: 'left' }}>
+                        {cashoutOptionsData?.isCashable ? (
+                          <Button
+                            variant='contained'
+                            onClick={cashoutLeaveButtonClick}
+                            disabled={!cashoutOptionsData.canCashoutLeave || (employeeData.role === 3 ? true : false)}
+                            sx={{ color: cashoutLeaveButtonColor, mt: 1 }}
+                          >
+                            Cashout Leave
+                          </Button>
+                        ) : null}
+
+                        <Button
+                          component='a'
+                          variant='contained'
+                          sx={{ ml: 5, color: `rgba(${'0,0,0'}, 0.87) !important`, mt: 1 }}
+                          target='_blank'
+                          href={cashoutOptionsData?.applyLink}
+                        >
+                          Take Leave
+                        </Button>
+                      </Box>
+                    </Box>
                   </>
                 }
                 subheader={<Divider></Divider>}
@@ -209,31 +257,29 @@ const Leaves = () => {
                               <TableCell align='right'>
                                 <Grid container spacing={6}>
                                   <Grid item xs={12} sm={4} sx={{ justifyContent: 'right' }}>
-                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}>
                                       <CustomAvatar skin='light' variant='rounded' color={'info'} sx={{ mr: 4 }}>
                                         <HomeLightbulbOutline />
                                       </CustomAvatar>
-                                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                      <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                                         <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                                          {item?.totalDays}
+                                          {parseInt(item?.totalDays)}
                                         </Typography>
                                         <Typography variant='caption'>Days</Typography>
                                       </Box>
                                     </Box>
                                   </Grid>
                                   <Grid item xs={12} sm={4}>
-                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}>
                                       {item.isCashable ? (
                                         <>
                                           {' '}
                                           <CustomAvatar skin='light' variant='rounded' color={'error'} sx={{ mr: 4 }}>
                                             <AccountAlertOutline />
                                           </CustomAvatar>
-                                          <Box
-                                            sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'right' }}
-                                          >
+                                          <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                                             <Typography variant='h6' sx={{ fontWeight: 600 }}>
-                                              {item?.excessDays}
+                                              {parseInt(item?.excessDays)}
                                             </Typography>
                                             <Typography variant='caption'>Excess Days</Typography>
                                           </Box>
@@ -242,15 +288,13 @@ const Leaves = () => {
                                     </Box>
                                   </Grid>
                                   <Grid item xs={12} sm={4}>
-                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                                    <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-start' }}>
                                       {item.isCashable ? (
                                         <>
                                           <CustomAvatar skin='light' variant='rounded' color={'success'} sx={{ mr: 4 }}>
                                             <CurrencyUsd />
                                           </CustomAvatar>
-                                          <Box
-                                            sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'right' }}
-                                          >
+                                          <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
                                             <Typography variant='h6' sx={{ fontWeight: 600 }}>
                                               {item?.cashoutValue ? currencyFormat(item?.cashoutValue) : '0'}
                                             </Typography>
@@ -260,48 +304,6 @@ const Leaves = () => {
                                           </Box>
                                         </>
                                       ) : null}
-                                    </Box>
-                                  </Grid>
-                                </Grid>
-                              </TableCell>
-                              <TableCell align='right'>
-                                <Grid container spacing={4}>
-                                  <Grid
-                                    item
-                                    xs={12}
-                                    sm={4}
-                                    sx={{
-                                      display: 'flex',
-                                      flexDirection: 'row',
-                                      flexBasis: '100% !important',
-                                      maxWidth: '100% !important',
-                                      width: '100%',
-                                      justifyContent: 'flex-end'
-                                    }}
-                                  >
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-                                      {item.isCashable ? (
-                                        <Button
-                                          variant='contained'
-                                          onClick={cashoutLeaveButtonClick}
-                                          disabled={!item.canCashoutLeave}
-                                          sx={{ color: `rgba(${'0,0,0'}, 0.87) !important`, mt: 2, mb: 2 }}
-                                        >
-                                          Cashout Leave
-                                        </Button>
-                                      ) : (
-                                        ''
-                                      )}
-
-                                      <Button
-                                        component='a'
-                                        variant='contained'
-                                        sx={{ ml: 5, color: `rgba(${'0,0,0'}, 0.87) !important`, mt: 2, mb: 2 }}
-                                        target='_blank'
-                                        href={item.applyLink}
-                                      >
-                                        Take Leave
-                                      </Button>
                                     </Box>
                                   </Grid>
                                 </Grid>
