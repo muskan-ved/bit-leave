@@ -124,9 +124,9 @@ const Leaves = () => {
     setOrgName(event.target.value)
   }
 
-  if (isLoading && !data) return <CircularProgress color='success' />
+  if (isLoading && !employeeData) return <CircularProgress color='success' />
 
-  if (!isLoading && data && !uData?.userOnboarded) {
+  if (!isLoading && employeeData && !employeeData?.onboarded) {
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -146,7 +146,7 @@ const Leaves = () => {
   const cashoutLeaveButtonColor =
     employeeData && employeeData.role === 3 ? 'transparent' : `rgba(${'0,0,0'}, 0.87) !important`
 
-  if (!isLoading && data && uData?.userOnboarded) {
+  if (!isLoading && employeeData && employeeData?.onboarded) {
     return (
       <>
         <Grid container spacing={9}>

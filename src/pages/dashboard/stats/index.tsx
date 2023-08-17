@@ -233,9 +233,10 @@ const Stats = () => {
     setOrgName(event.target.value)
   }
 
-  if (isLoading && !data) return <CircularProgress color='success' />
+  if (isLoading && !employeeData) return <CircularProgress color='success' />
 
-  if (!isLoading && data && !uData?.userOnboarded) {
+  if (!isLoading && !employeeData?.onboarded) {
+    
     return (
       <Grid container spacing={6}>
         <Grid item md={12} xs={12}>
@@ -252,7 +253,7 @@ const Stats = () => {
     )
   }
 
-  if (!isLoading && data && uData?.userOnboarded) {
+  if (!isLoading && employeeData?.onboarded) {
     return (
       <>
         <Grid container spacing={9}>
@@ -382,8 +383,8 @@ const Stats = () => {
               </Grid>
             ) : null
           ) : null}
-          {ability?.can('read', 'dashboard') ? (
-            data?.directReports?.length === 0 ? (
+            {ability?.can('read', 'dashboard') ? (
+              data?.directReports ? (
               <Grid item md={6} xs={12}>
                 <Card>
                   <CardHeader
@@ -401,9 +402,7 @@ const Stats = () => {
                     subheader={<Divider></Divider>}
                   />
                   <CardContent>
-                    {directReportsOfFullname[0] === undefined ||
-                    directReportsOfFullname?.length < 0 ||
-                    (!directReportsOfExcessDays && !totalThresholdsLeaveWarning) ? (
+                    {data?.directReports?.length === 0 || (!directReportsOfExcessDays && !totalThresholdsLeaveWarning) ? (
                       <Typography variant='body2'>No data to display</Typography>
                     ) : (
                       <AnnualDirectReports
@@ -417,8 +416,8 @@ const Stats = () => {
                   </CardContent>
                 </Card>
               </Grid>
-            ) : null
-          ) : null}
+              ): null
+          ) : null} 
           {ability?.can('read', 'analytics') ? (
             data?.leavesByUnassigned?.length > 0 ? (
               <Grid item md={6} xs={12}>

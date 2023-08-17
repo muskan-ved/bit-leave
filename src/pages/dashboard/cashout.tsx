@@ -19,6 +19,7 @@ import * as yup from 'yup'
 import {
   Card,
   CardContent,
+  CircularProgress,
   Divider,
   FormHelperText,
   IconButton,
@@ -231,7 +232,8 @@ const CashoutDialog = (props: any) => {
     return ''
   }
   const onChangeCashOutDays = async (e: any) => {
-    const daysAvalble =
+    setcalculateAmount(null);
+      const daysAvalble =
       getCashoutOptions.length > 0 &&
       getCashoutOptions[0]?.cashoutOptions != null &&
       getCashoutOptions[0]?.cashoutOptions?.daysAvailable != null &&
@@ -248,17 +250,19 @@ const CashoutDialog = (props: any) => {
     if (e.target.value !== '') {
       setloading(true)
       setToggleValue(true)
+
+      setTimeout(async() => {
       const result = await dispatch(calculateEmployeeCashout(parseInt(e.target.value)))
       if (result.payload != null) {
         if (result.payload.cashoutAmount != null) {
           setCalculateData(result.payload)
-          setcalculateAmount(result.payload.cashoutAmount)
-          setleaveBalanceAfterCashout(result.payload.leaveBalanceAfterCashout)
-        } else if (result?.payload?.response?.data?.errors?.[0]?.message) {
-          setcalculateAmount(null)
-        }
-      } else {
-        const errortoDisplay: error[] = [
+            setcalculateAmount(result.payload.cashoutAmount);
+            setleaveBalanceAfterCashout(result.payload.leaveBalanceAfterCashout)
+          } else if (result?.payload?.response?.data?.errors?.[0]?.message) {
+            setcalculateAmount(null)
+          }
+        } else {
+          const errortoDisplay: error[] = [
           {
             message: 'Some error occured while processing your cashout.',
             code: ''
@@ -269,6 +273,7 @@ const CashoutDialog = (props: any) => {
           data: null
         })
       }
+    },3000)
       setloading(false)
     }
   }
@@ -455,7 +460,6 @@ const CashoutDialog = (props: any) => {
                       {errMessage}
                     </FormHelperText>
                   )}
-
                   {toggleValue && calculateAmount && errMessage === '' ? (
                     <Controller
                       rules={{ required: true }}
@@ -477,7 +481,7 @@ const CashoutDialog = (props: any) => {
                       )}
                     />
                   ) : (
-                    ''
+                    toggleValue && calculateAmount === null && errMessage === ''? <Box sx={{textAlign: 'center',marginTop: '30px'}}><CircularProgress color='success' /></Box> :''
                   )}
                   {toggleValue && calculateAmount && errMessage === ''
                     ? cashOutErrors.cashoutreason && (
